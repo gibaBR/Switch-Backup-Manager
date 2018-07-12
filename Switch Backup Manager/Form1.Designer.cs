@@ -51,6 +51,8 @@
             this.olvColumn11 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumn12 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.contextMenuLocalList = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.showInExplorerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem20 = new System.Windows.Forms.ToolStripSeparator();
             this.trimFilesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.autoRenameFilesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem96 = new System.Windows.Forms.ToolStripSeparator();
@@ -130,6 +132,8 @@
             this.olvColumnGameRevisionSD = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnMasterKeySD = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.contextMenuStripSDCard = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.showInExplorerToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem21 = new System.Windows.Forms.ToolStripSeparator();
             this.trimFilesToolStripMenuItemTrimSD = new System.Windows.Forms.ToolStripMenuItem();
             this.autoRenameFilesToolStripMenuItemRenameSD = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem18 = new System.Windows.Forms.ToolStripSeparator();
@@ -533,14 +537,28 @@
             // contextMenuLocalList
             // 
             this.contextMenuLocalList.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.showInExplorerToolStripMenuItem,
+            this.toolStripMenuItem20,
             this.trimFilesToolStripMenuItem,
             this.autoRenameFilesToolStripMenuItem,
             this.toolStripMenuItem96,
             this.copyFilesToolStripMenuItem2,
             this.moveFilesToToolStripMenuItem});
             this.contextMenuLocalList.Name = "contextMenuLocalList";
-            this.contextMenuLocalList.Size = new System.Drawing.Size(168, 98);
+            this.contextMenuLocalList.Size = new System.Drawing.Size(168, 126);
             this.contextMenuLocalList.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuLocalList_Opening);
+            // 
+            // showInExplorerToolStripMenuItem
+            // 
+            this.showInExplorerToolStripMenuItem.Name = "showInExplorerToolStripMenuItem";
+            this.showInExplorerToolStripMenuItem.Size = new System.Drawing.Size(167, 22);
+            this.showInExplorerToolStripMenuItem.Text = "Show in explorer";
+            this.showInExplorerToolStripMenuItem.Click += new System.EventHandler(this.showInExplorerToolStripMenuItem_Click);
+            // 
+            // toolStripMenuItem20
+            // 
+            this.toolStripMenuItem20.Name = "toolStripMenuItem20";
+            this.toolStripMenuItem20.Size = new System.Drawing.Size(164, 6);
             // 
             // trimFilesToolStripMenuItem
             // 
@@ -1185,14 +1203,28 @@
             // contextMenuStripSDCard
             // 
             this.contextMenuStripSDCard.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.showInExplorerToolStripMenuItem1,
+            this.toolStripMenuItem21,
             this.trimFilesToolStripMenuItemTrimSD,
             this.autoRenameFilesToolStripMenuItemRenameSD,
             this.toolStripMenuItem18,
             this.copyToFolderToolStripMenuItem,
             this.moveToFolderToolStripMenuItem});
             this.contextMenuStripSDCard.Name = "contextMenuStripSDCard";
-            this.contextMenuStripSDCard.Size = new System.Drawing.Size(168, 98);
+            this.contextMenuStripSDCard.Size = new System.Drawing.Size(168, 126);
             this.contextMenuStripSDCard.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStripSDCard_Opening);
+            // 
+            // showInExplorerToolStripMenuItem1
+            // 
+            this.showInExplorerToolStripMenuItem1.Name = "showInExplorerToolStripMenuItem1";
+            this.showInExplorerToolStripMenuItem1.Size = new System.Drawing.Size(167, 22);
+            this.showInExplorerToolStripMenuItem1.Text = "Show in explorer";
+            this.showInExplorerToolStripMenuItem1.Click += new System.EventHandler(this.showInExplorerToolStripMenuItem1_Click);
+            // 
+            // toolStripMenuItem21
+            // 
+            this.toolStripMenuItem21.Name = "toolStripMenuItem21";
+            this.toolStripMenuItem21.Size = new System.Drawing.Size(164, 6);
             // 
             // trimFilesToolStripMenuItemTrimSD
             // 
@@ -2637,6 +2669,10 @@
         private System.Windows.Forms.ToolStripMenuItem regionToolStripMenuItemRegionScene;
         private System.Windows.Forms.ToolStripMenuItem releaseGroupToolStripMenuItemReleaseGroupScene;
         private System.Windows.Forms.ToolStripMenuItem cartSizeToolStripMenuItemCartSizeScene;
+        private System.Windows.Forms.ToolStripMenuItem showInExplorerToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripMenuItem20;
+        private System.Windows.Forms.ToolStripMenuItem showInExplorerToolStripMenuItem1;
+        private System.Windows.Forms.ToolStripSeparator toolStripMenuItem21;
     }
 }
 

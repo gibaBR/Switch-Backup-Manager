@@ -1909,5 +1909,43 @@ namespace Switch_Backup_Manager
         {
             MessageBox.Show(Properties.Resources.EN_Soon);
         }
+
+        private void showInExplorerToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if ((OLVLocalFiles.Items.Count > 0) && (OLVLocalFiles.SelectedItems.Count == 1))
+            {
+                FileData data = (FileData)OLVLocalFiles.SelectedObject;
+                if (data != null)
+                {
+                    System.Diagnostics.Process.Start("explorer.exe", Path.GetDirectoryName(data.FilePath));
+                } else
+                {
+                    MessageBox.Show("Select one item from the list.");
+                }
+            } else
+            {
+                MessageBox.Show("Select one item from the list.");
+            }
+        }
+
+        private void showInExplorerToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            if ((OLV_SDCard.Items.Count > 0) && (OLV_SDCard.SelectedItems.Count == 1))
+            {
+                FileData data = (FileData)OLV_SDCard.SelectedObject;
+                if (data != null)
+                {
+                    System.Diagnostics.Process.Start("explorer.exe", Path.GetDirectoryName(data.FilePath));
+                }
+                else
+                {
+                    MessageBox.Show("Select one item from the list.");
+                }
+            }
+            else
+            {
+                MessageBox.Show("Select one item from the list.");
+            }
+        }
     }
 }

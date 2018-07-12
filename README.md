@@ -18,6 +18,7 @@ Complete Switch Backups management tool
 
 ## Changelog
 * 1.0 - Initial release
+* 1.0.1 - Corrects a bug with invalid file names
 
 ## Source & Binaries
 * [GitHub](https://github.com/gibaBR/Switch-Backup-Manager/archive/master.zip)

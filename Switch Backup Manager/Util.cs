@@ -153,7 +153,8 @@ namespace Switch_Backup_Manager
 
             if (file != null)
             {
-                string newFileName = Path.GetDirectoryName(file.FilePath) + "\\" +file.GameName;
+                Regex illegalInFileName = new Regex(@"[\\/:*?""<>|]");
+                string newFileName = Path.GetDirectoryName(file.FilePath) + "\\" + illegalInFileName.Replace(file.GameName, "");
 
                 if (File.Exists(newFileName+".xci"))
                 {
@@ -169,21 +170,11 @@ namespace Switch_Backup_Manager
                     newFileName += ".xci";
                     System.IO.File.Move(file.FilePath, newFileName);
                 }
-
-
+                
                 file.FileName = Path.GetFileNameWithoutExtension(newFileName);
                 file.FileNameWithExt = Path.GetFileName(newFileName);
                 file.FilePath = newFileName;
 
-
-                /*
-                FileStream fileStream = new FileStream(@file.FilePath, FileMode.Open, FileAccess.Write);
-                fileStream.SetLength(file.UsedSpaceBytes);
-                fileStream.Close();
-                file.ROMSizeBytes = file.UsedSpaceBytes;
-                file.ROMSize = file.UsedSpace;
-                file.IsTrimmed = true;
-                */
                 result = true;
             }
             return result;

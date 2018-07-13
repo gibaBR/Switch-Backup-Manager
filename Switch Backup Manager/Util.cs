@@ -27,10 +27,13 @@ namespace Switch_Backup_Manager
         public const string NSWDB_DOWNLOAD_SITE = "http://nswdb.com/xml.php";
         public const string LOCAL_FILES_DB = "SBM_Local.xml";
         public const string CACHE_FOLDER = "cache";
+        public const string LOG_FILE = "sbm.log";       
 
         public static byte[] NcaHeaderEncryptionKey1_Prod;
         public static byte[] NcaHeaderEncryptionKey2_Prod;
         public static string Mkey;
+        public static Logger logger;
+        public static string log_Level = "info";
 
         private static string[] Language = new string[16]
         {
@@ -331,6 +334,8 @@ namespace Switch_Backup_Manager
         public static void LoadSettings()
         {
             ini = new IniFile((AppDomain.CurrentDomain.BaseDirectory) + INI_FILE);
+            logger = new Logger();
+
             string keys_file = ini.IniReadValue("Config", "keys_file");
             if (keys_file.Trim() == "")
             {
@@ -339,6 +344,13 @@ namespace Switch_Backup_Manager
             } else
             {
                 KEYS_FILE = keys_file;
+            }
+
+            log_Level = ini.IniReadValue("Log", "log_level");
+            if (log_Level.Trim() == "")
+            {
+                ini.IniWriteValue("Log", "log_level", "info");
+                log_Level = "info";
             }
 
             //Searches for keys.txt
@@ -550,20 +562,36 @@ namespace Switch_Backup_Manager
         public static Dictionary<string, FileData> AddFilesFromFolder(string path)
         {
             Dictionary<string, FileData> dictionary = new Dictionary<string, FileData>();
-            if (Directory.Exists(path) && path.Trim() != "")
+            try
             {
-                List<string> files = Util.GetXCIsInFolder(path);
-                int filesCount = files.Count();
-                int i = 0;
-                foreach (string file in files)
+                if (Directory.Exists(path) && path.Trim() != "")
                 {
-                    FileData data = Util.GetFileData(file);
-                    FrmMain.progressCurrentfile = data.FilePath;
-                    dictionary.Add(data.TitleID, data);
-
-                    i++;
-                    FrmMain.progressPercent = (int)(i * 100) / filesCount;
-                }               
+                    List<string> files = Util.GetXCIsInFolder(path);
+                    int filesCount = files.Count();
+                    int i = 0;
+                    logger.Info("Adding "+ filesCount +" files on local database");
+                    
+                    foreach (string file in files)
+                    {
+                        FileData data = Util.GetFileData(file);
+                        logger.Info("Including file " + data.FilePath + ", TitleID: " + data.TitleID);
+                        FrmMain.progressCurrentfile = data.FilePath;
+                        try
+                        {
+                            dictionary.Add(data.TitleID, data);
+                        } catch (ArgumentException ex)
+                        {
+                            logger.Error("TitleID " + data.TitleID + " is already on database");
+                        }
+                            
+                        i++;
+                        FrmMain.progressPercent = (int)(i * 100) / filesCount;
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                logger.Error(e.StackTrace);
             }
             return dictionary;
         }
@@ -863,12 +891,18 @@ namespace Switch_Backup_Manager
                 PFS0.PFS0_Headers[0] = new PFS0.PFS0_Header(array3);
                 PFS0.PFS0_Entry[] array8;
                 array8 = new PFS0.PFS0_Entry[PFS0.PFS0_Headers[0].FileCount];
+//                logger.Info("PFS0.PFS0_Headers[0].FileCount: " + Convert.ToString(PFS0.PFS0_Headers[0].FileCount));
                 for (int m = 0; m < PFS0.PFS0_Headers[0].FileCount; m++)
                 {
                     fileStream.Position = PFS0Offset + 16 + 24 * m;
                     fileStream.Read(array4, 0, 24);
                     array8[m] = new PFS0.PFS0_Entry(array4);
                     PFS0Size += array8[m].Size;
+
+                    if (m == 1) //Dump of TitleID 01009AA000FAA000 reports more than 10000000 files here, so it breaks the program. Standard is to have only 2 files
+                    {
+                        continue;
+                    }
                 }
                 for (int n = 0; n < PFS0.PFS0_Headers[0].FileCount; n++)
                 {
@@ -880,6 +914,12 @@ namespace Switch_Backup_Manager
                     }
                     array8[n].Name = new string(chars.ToArray());
                     chars.Clear();
+
+                    if (n == 1) //Dump of TitleID 01009AA000FAA000 reports more than 10000000 files here, so it breaks the program. Standard is to have only 2 files
+                    {
+                        continue;
+                    }
+
                 }
                 //fileStream.Close();
 

@@ -22,7 +22,6 @@ namespace Switch_Backup_Manager
         private Dictionary<string, FileData> SDCardList;
         private Dictionary<string, FileData> SDCardListSelectedItems;
 
-        private FormWindowState currentWindowState;
         private bool updateCbxRemoveableFiles;
         private bool updateFileListAfterMove;
 

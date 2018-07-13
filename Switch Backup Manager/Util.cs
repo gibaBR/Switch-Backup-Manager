@@ -632,28 +632,79 @@ namespace Switch_Backup_Manager
 
             int filesCount = dictionary_.Count();
             int i = 0;
-
             foreach (FileData data in dictionary_.Values)
             {
-                FrmMain.progressCurrentfile = data.FilePath;
+                string file_extension = Path.GetExtension(data.FilePath);
                 if (operation == "copy")
                 {
-                    FileSystem.CopyFile(data.FilePath, destiny + data.FileNameWithExt, UIOption.AllDialogs);
+                    if (file_extension.ToLower() == ".xc0") //Split Files
+                    {
+                        List<string> list = GetSplitedXCIsFiles(data.FilePath);
+                        filesCount += list.Count - 1;
+                        foreach (string file_path in list)
+                        {
+                            FrmMain.progressCurrentfile = file_path;
+                            FileSystem.CopyFile(file_path, destiny + Path.GetFileName(file_path), UIOption.AllDialogs);
+                            i++;
+                        }                        
+                    } else
+                    {
+                        FrmMain.progressCurrentfile = data.FilePath;
+                        FileSystem.CopyFile(data.FilePath, destiny + data.FileNameWithExt, UIOption.AllDialogs);
+                        i++;
+                    }
                 } else if (operation == "move")
                 {
-                    FileSystem.MoveFile(data.FilePath, destiny + data.FileNameWithExt, UIOption.AllDialogs);
+                    if (file_extension.ToLower() == ".xc0") //Split Files
+                    {
+                        List<string> list = GetSplitedXCIsFiles(data.FilePath);
+                        filesCount += list.Count - 1;
+                        foreach (string file_path in list)
+                        {
+                            FrmMain.progressCurrentfile = file_path;
+                            FileSystem.MoveFile(file_path, destiny + Path.GetFileName(file_path), UIOption.AllDialogs);
+                            i++;
+                        }
+                    }
+                    else
+                    {
+                        FrmMain.progressCurrentfile = data.FilePath;
+                        FileSystem.MoveFile(data.FilePath, destiny + data.FileNameWithExt, UIOption.AllDialogs);
+                        i++;
+                    }
                 }
 
-                i++;
+                //i++;
                 FrmMain.progressPercent = (int)(i * 100) / filesCount;
             }
 
             return result;
         }
 
+        private static MultiStream GetFileStream(string path)
+        {
+            MultiStream mStream = new MultiStream();
+
+            if (Path.GetExtension(path).ToLower() == ".xc0") //Split Files
+            {
+                List<string> split_files = GetSplitedXCIsFiles(path);
+                foreach (string filePath in split_files)
+                {
+                    mStream.AddStream(new FileStream(filePath, FileMode.Open, FileAccess.Read));
+                }
+            }
+            else
+            {
+                mStream.AddStream(new FileStream(path, FileMode.Open, FileAccess.Read));
+            }
+
+            return mStream;
+        }
+
         public static bool CheckXCI(string file)
         {
-            FileStream fileStream = new FileStream(file, FileMode.Open, FileAccess.Read);
+            MultiStream fileStream = GetFileStream(file);
+
             byte[] array = new byte[61440];
             byte[] array2 = new byte[16];
             fileStream.Read(array, 0, 61440);
@@ -666,6 +717,7 @@ namespace Switch_Backup_Manager
             fileStream.Read(array2, 0, 16);
             HFS0.HFS0_Headers[0] = new HFS0.HFS0_Header(array2);
             fileStream.Close();
+
             return true;
         }
 
@@ -675,13 +727,15 @@ namespace Switch_Backup_Manager
             //Basic Info
             result.FilePath = filepath;
             result.FileName = Path.GetFileNameWithoutExtension(filepath);
-            result.FileNameWithExt = Path.GetFileName(filepath);
+            result.FileNameWithExt = Path.GetFileName(filepath);            
 
             if (CheckXCI(filepath))
             {
+                MultiStream fileStream = GetFileStream(filepath);
+
                 //Get File Size
                 string[] array_fs = new string[5] { "B", "KB", "MB", "GB", "TB" };
-                double num_fs = (double)new FileInfo(filepath).Length;
+                double num_fs = (double)fileStream.Length;
                 int num2_fs = 0;
                 result.ROMSizeBytes = (long)num_fs;
 
@@ -704,7 +758,7 @@ namespace Switch_Backup_Manager
                 result.UsedSpace = $"{num3_fs:0.##} {array_fs[num2_fs]}";
 
                 result.IsTrimmed = (result.UsedSpaceBytes == result.ROMSizeBytes);
-                result.CartSize = GetCapacity(XCI.XCI_Headers[0].CardSize1);                
+                result.CartSize = GetCapacity(XCI.XCI_Headers[0].CardSize1);
 
                 //Load Deep File Info (Probably we should clean it a bit more)
                 string actualHash;
@@ -720,7 +774,6 @@ namespace Switch_Backup_Manager
                 long PFS0Offset = -1;
                 long PFS0Size = -1;
 
-                FileStream fileStream = new FileStream(filepath, FileMode.Open, FileAccess.Read);
                 HFS0.HSF0_Entry[] array = new HFS0.HSF0_Entry[HFS0.HFS0_Headers[0].FileCount];
                 fileStream.Position = XCI.XCI_Headers[0].HFS0OffsetPartition + 16 + 64 * HFS0.HFS0_Headers[0].FileCount;
 
@@ -828,8 +881,7 @@ namespace Switch_Backup_Manager
                     array8[n].Name = new string(chars.ToArray());
                     chars.Clear();
                 }
-                fileStream.Close();
-
+                //fileStream.Close();
 
                 NCA.NCA_Headers[0] = new NCA.NCA_Header(DecryptNCAHeader(filepath, gameNcaOffset));
                 result.TitleID = "0" + NCA.NCA_Headers[0].TitleID.ToString("X");
@@ -839,12 +891,99 @@ namespace Switch_Backup_Manager
                 //Extra Info Is Got Here
                 if (getMKey())
                 {
-
-                    using (fileStream = File.OpenRead(filepath))
+                    //fileStream = GetFileStream(filepath);
+                    for (int si = 0; si < SecureSize.Length; si++)
                     {
-                        for (int si = 0; si < SecureSize.Length; si++)
+                        if (SecureSize[si] > 0x4E20000) continue;
+                        try
                         {
-                            if (SecureSize[si] > 0x4E20000) continue;
+                            File.Delete("meta");
+                            Directory.Delete("data", true);
+                        }
+                        catch { }
+
+                        using (FileStream fileStream2 = File.OpenWrite("meta"))
+                        {
+                            fileStream.Position = SecureOffset[si];
+                            byte[] buffer = new byte[8192];
+                            num = SecureSize[si];
+                            int num2;
+                            while ((num2 = fileStream.Read(buffer, 0, 8192)) > 0 && num > 0)
+                            {
+                                fileStream2.Write(buffer, 0, num2);
+                                num -= num2;
+                            }
+                            fileStream2.Close();
+                        }
+
+                        Process process = new Process();
+                        process.StartInfo = new ProcessStartInfo
+                        {
+                            WindowStyle = ProcessWindowStyle.Hidden,
+                            FileName = "hactool.exe",
+                            Arguments = "-k keys.txt --romfsdir=data meta"
+                        };
+                        process.Start();
+                        process.WaitForExit();
+
+                        if (File.Exists("data\\control.nacp"))
+                        {
+                            byte[] source = File.ReadAllBytes("data\\control.nacp");
+                            NACP.NACP_Datas[0] = new NACP.NACP_Data(source.Skip(0x3000).Take(0x1000).ToArray());
+
+                            result.Region_Icon = new Dictionary<string, string>();
+                            result.Languagues = new List<string>();
+                            for (int i = 0; i < NACP.NACP_Strings.Length; i++)
+                            {
+                                NACP.NACP_Strings[i] = new NACP.NACP_String(source.Skip(i * 0x300).Take(0x300).ToArray());
+
+                                if (NACP.NACP_Strings[i].Check != 0)
+                                {
+
+                                    //CB_RegionName.Items.Add(Language[i]);
+                                    string icon_filename = "data\\icon_" + Language[i].Replace(" ", "") + ".dat";
+                                    string icon_titleID_filename = CACHE_FOLDER + "\\icon_" + result.TitleID + "_" + Language[i].Replace(" ", "") + ".bmp";
+
+                                    if (File.Exists(icon_filename))
+                                    {
+                                        try
+                                        {
+                                            File.Copy(icon_filename, icon_titleID_filename, true);
+                                        }
+                                        catch (System.IO.IOException)
+                                        {
+                                            //File in use?
+                                        }
+                                        result.Region_Icon.Add(Language[i], icon_titleID_filename);
+                                        result.Languagues.Add(Language[i]);
+                                    }
+                                }
+                            }
+                            result.GameRevision = NACP.NACP_Datas[0].GameVer.Replace("\0", ""); ;
+                            result.ProductCode = NACP.NACP_Datas[0].GameProd.Replace("\0", ""); ;
+
+                            for (int z = 0; z < NACP.NACP_Strings.Length; z++)
+                            {
+                                if (NACP.NACP_Strings[z].GameName.Replace("\0", "") != "")
+                                {
+                                    result.GameName = NACP.NACP_Strings[z].GameName.Replace("\0", "");
+                                    break;
+                                }
+                            }
+
+                            for (int z = 0; z < NACP.NACP_Strings.Length; z++)
+                            {
+                                if (NACP.NACP_Strings[z].GameAuthor.Replace("\0", "") != "")
+                                {
+                                    result.Developer = NACP.NACP_Strings[z].GameAuthor.Replace("\0", "");
+                                    break;
+                                }
+                            }
+
+                            if (result.ProductCode == "")
+                            {
+                                result.ProductCode = "No Prod. ID";
+                            }
                             try
                             {
                                 File.Delete("meta");
@@ -852,116 +991,14 @@ namespace Switch_Backup_Manager
                             }
                             catch { }
 
-                            using (FileStream fileStream2 = File.OpenWrite("meta"))
-                            {
-                                fileStream.Position = SecureOffset[si];
-                                byte[] buffer = new byte[8192];
-                                num = SecureSize[si];
-                                int num2;
-                                while ((num2 = fileStream.Read(buffer, 0, 8192)) > 0 && num > 0)
-                                {
-                                    fileStream2.Write(buffer, 0, num2);
-                                    num -= num2;
-                                }
-                                fileStream2.Close();
-                            }
-
-                            Process process = new Process();
-                            process.StartInfo = new ProcessStartInfo
-                            {
-                                WindowStyle = ProcessWindowStyle.Hidden,
-                                FileName = "hactool.exe",
-                                Arguments = "-k keys.txt --romfsdir=data meta"
-                            };
-                            process.Start();
-                            process.WaitForExit();
-
-                            if (File.Exists("data\\control.nacp"))
-                            {
-                                byte[] source = File.ReadAllBytes("data\\control.nacp");
-                                NACP.NACP_Datas[0] = new NACP.NACP_Data(source.Skip(0x3000).Take(0x1000).ToArray());
-
-                                result.Region_Icon = new Dictionary<string, string>();
-                                result.Languagues = new List<string>();
-                                for (int i = 0; i < NACP.NACP_Strings.Length; i++)
-                                {
-                                    NACP.NACP_Strings[i] = new NACP.NACP_String(source.Skip(i * 0x300).Take(0x300).ToArray());
-
-                                    if (NACP.NACP_Strings[i].Check != 0)
-                                    {
-                                        
-                                        //CB_RegionName.Items.Add(Language[i]);
-                                        string icon_filename = "data\\icon_" + Language[i].Replace(" ", "") + ".dat";
-                                        string icon_titleID_filename = CACHE_FOLDER+"\\icon_" + result.TitleID + "_" + Language[i].Replace(" ", "") + ".bmp";
-                                        
-                                        if (File.Exists(icon_filename))
-                                        {
-                                            try
-                                            {
-                                                File.Copy(icon_filename, icon_titleID_filename, true);
-                                            } catch (System.IO.IOException)
-                                            {
-                                                //File in use?
-                                            }
-                                            result.Region_Icon.Add(Language[i], icon_titleID_filename);
-                                            result.Languagues.Add(Language[i]);
-                                        }
-
-                                        /* 
-                                         * This Saves every image into the XML as String. Too much memory, huge XML file.
-                                        if (File.Exists(icon_filename))
-                                        {
-                                            using (Bitmap original = new Bitmap(icon_filename))
-                                            {                                                
-                                                result.Region_Icon.Add(Language[i], BitMapToString(original)); //This Saves every image into the XML as String. Too much memory, huge XML file.
-                                                Icons[i] = new Bitmap(original);
-                                                //PB_GameIcon.BackgroundImage = Icons[i];
-                                            }
-                                        }
-                                        */
-                                    }
-                                }
-                                result.GameRevision = NACP.NACP_Datas[0].GameVer.Replace("\0", ""); ;
-                                result.ProductCode = NACP.NACP_Datas[0].GameProd.Replace("\0", ""); ;
-
-                                for (int z = 0; z < NACP.NACP_Strings.Length; z++)
-                                {
-                                    if (NACP.NACP_Strings[z].GameName.Replace("\0", "") != "")
-                                    {
-                                        result.GameName = NACP.NACP_Strings[z].GameName.Replace("\0", "");
-                                        break;
-                                    }                                    
-                                }
-
-                                for (int z = 0; z < NACP.NACP_Strings.Length; z++)
-                                {
-                                    if (NACP.NACP_Strings[z].GameAuthor.Replace("\0", "") != "")
-                                    {
-                                        result.Developer = NACP.NACP_Strings[z].GameAuthor.Replace("\0", "");
-                                        break;
-                                    }
-                                }
-
-                                if (result.ProductCode == "")
-                                {
-                                    result.ProductCode = "No Prod. ID";
-                                }
-                                try
-                                {
-                                    File.Delete("meta");
-                                    Directory.Delete("data", true);
-                                }
-                                catch { }
-
-                                //CB_RegionName.SelectedIndex = 0;
-                                break;
-                            }
+                            //CB_RegionName.SelectedIndex = 0;
+                            break;
                         }
-                        fileStream.Close();
                     }
+                    fileStream.Close();
                 }
                 result.Cardtype = GetCardTypeFromScene(result.TitleID);
-            }            
+            }
             return result;
         }
 
@@ -1105,6 +1142,30 @@ namespace Switch_Backup_Manager
                 {
                     list.Add(f);
                 }
+
+                foreach (string f in Directory.GetFiles(folder, "*.xc0", System.IO.SearchOption.AllDirectories))
+                {
+                    list.Add(f);
+                }
+            }
+            catch (System.Exception execpt)
+            {
+                Console.WriteLine(execpt.Message);
+            }
+
+            return list;
+        }
+
+        public static List<string> GetSplitedXCIsFiles(string firstFile)
+        {
+            List<string> list = new List<string>();
+
+            try
+            {
+                foreach (string f in Directory.GetFiles(Path.GetDirectoryName(firstFile), Path.GetFileNameWithoutExtension(firstFile)+".xc*", System.IO.SearchOption.AllDirectories))
+                {
+                    list.Add(f);
+                }
             }
             catch (System.Exception execpt)
             {
@@ -1143,7 +1204,7 @@ namespace Switch_Backup_Manager
             byte[] array = new byte[3072];
             if (File.Exists(selectedFile))
             {
-                FileStream fileStream = new FileStream(selectedFile, FileMode.Open, FileAccess.Read);
+                MultiStream fileStream = GetFileStream(selectedFile);
                 fileStream.Position = offset;
                 fileStream.Read(array, 0, 3072);
                 File.WriteAllBytes(selectedFile + ".tmp", array);
@@ -1252,7 +1313,6 @@ namespace Switch_Backup_Manager
             string result;
             double _bytes = bytes;
             string[] array_fs = new string[5] { "B", "KB", "MB", "GB", "TB" };
-            //double num_fs = (double)new FileInfo(filepath).Length;
             int num2_fs = 0;
 
             while (_bytes >= 1024.0 && num2_fs < array_fs.Length - 1)

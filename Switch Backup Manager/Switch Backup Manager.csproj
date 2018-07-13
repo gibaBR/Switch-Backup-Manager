@@ -84,6 +84,7 @@
     </Compile>
     <Compile Include="HFS0.cs" />
     <Compile Include="IniFile.cs" />
+    <Compile Include="MultiStream.cs" />
     <Compile Include="NACP.cs" />
     <Compile Include="NCA.cs" />
     <Compile Include="PFS0.cs" />

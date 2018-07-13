@@ -469,6 +469,7 @@
             // 
             this.localRomSizeColumn.AspectName = "ROMSizeBytes";
             this.localRomSizeColumn.Text = "ROM size";
+            this.localRomSizeColumn.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.localRomSizeColumn.UseInitialLetterForGroup = true;
             this.localRomSizeColumn.Width = 65;
             // 
@@ -476,6 +477,7 @@
             // 
             this.localUsedSpaceColumn.AspectName = "UsedSpaceBytes";
             this.localUsedSpaceColumn.Text = "Used space";
+            this.localUsedSpaceColumn.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.localUsedSpaceColumn.UseInitialLetterForGroup = true;
             this.localUsedSpaceColumn.Width = 73;
             // 
@@ -483,12 +485,14 @@
             // 
             this.olvColumnIsTrimmed.AspectName = "IsTrimmed";
             this.olvColumnIsTrimmed.Text = "Trimmed";
+            this.olvColumnIsTrimmed.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.olvColumnIsTrimmed.UseInitialLetterForGroup = true;
             // 
             // olvColumn6
             // 
             this.olvColumn6.AspectName = "CartSize";
             this.olvColumn6.Text = "Cart size";
+            this.olvColumn6.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.olvColumn6.UseInitialLetterForGroup = true;
             // 
             // olvColumnLanguagesLocal
@@ -1135,6 +1139,7 @@
             // 
             this.olvColumnROMSizeSD.AspectName = "ROMSizeBytes";
             this.olvColumnROMSizeSD.Text = "ROM size";
+            this.olvColumnROMSizeSD.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.olvColumnROMSizeSD.UseInitialLetterForGroup = true;
             this.olvColumnROMSizeSD.Width = 65;
             // 
@@ -1142,6 +1147,7 @@
             // 
             this.olvColumnUsedSpaceSD.AspectName = "UsedSpaceBytes";
             this.olvColumnUsedSpaceSD.Text = "Used space";
+            this.olvColumnUsedSpaceSD.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.olvColumnUsedSpaceSD.UseInitialLetterForGroup = true;
             this.olvColumnUsedSpaceSD.Width = 73;
             // 
@@ -1149,12 +1155,14 @@
             // 
             this.olvColumnIsTrimmedSD.AspectName = "IsTrimmed";
             this.olvColumnIsTrimmedSD.Text = "Trimmed";
+            this.olvColumnIsTrimmedSD.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.olvColumnIsTrimmedSD.UseInitialLetterForGroup = true;
             // 
             // olvColumnCartSizeSD
             // 
             this.olvColumnCartSizeSD.AspectName = "CartSize";
             this.olvColumnCartSizeSD.Text = "Cart size";
+            this.olvColumnCartSizeSD.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.olvColumnCartSizeSD.UseInitialLetterForGroup = true;
             // 
             // olvColumnLanguagesSD
@@ -2348,7 +2356,6 @@
             // backgroundWorkerAddFilesFromDirectory
             // 
             this.backgroundWorkerAddFilesFromDirectory.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorkerAddFiles_DoWork);
-            this.backgroundWorkerAddFilesFromDirectory.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.backgroundWorkerAddFiles_ProgressChanged);
             this.backgroundWorkerAddFilesFromDirectory.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backgroundWorkerAddFiles_RunWorkerCompleted);
             // 
             // timer1
@@ -2380,7 +2387,7 @@
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "FrmMain";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Switch Backup Manager v1.0.1";
+            this.Text = "Switch Backup Manager v1.0.2";
             this.splitContainer1.Panel1.ResumeLayout(false);
             this.splitContainer1.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();

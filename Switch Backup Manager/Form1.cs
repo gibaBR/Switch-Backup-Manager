@@ -129,9 +129,8 @@ namespace Switch_Backup_Manager
                 }
             };
 
-
-            //this.olvColumnIsTrimmed.AspectToStringConverter = delegate (object cellValue) { return (cellValue == "true") ? "No" : "Yes"; };
-
+            this.olvColumnIsTrimmed.AspectToStringConverter = delegate (object x) { return ((bool)x == true) ? "Yes" : "No"; };
+            this.olvColumnIsTrimmedSD.AspectToStringConverter = delegate (object x) { return ((bool)x == true) ? "Yes" : "No"; };
         }
 
         public void UpdateSceneReleasesList()
@@ -420,8 +419,6 @@ namespace Switch_Backup_Manager
 
         private void folderToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            //MessageBox.Show("It can take some time to add a large library but once added, it will be fast, I promisse :)");
-
             CommonOpenFileDialog dialog = new CommonOpenFileDialog();
             dialog.IsFolderPicker = true;
             dialog.RestoreDirectory = true;
@@ -430,7 +427,6 @@ namespace Switch_Backup_Manager
             {                
                 string selectedPath = dialog.FileName;
                 menuLocalFiles.Enabled = false;
-                //OLVLocalFiles.Enabled = false;
                 if (!backgroundWorkerAddFilesFromDirectory.IsBusy)
                 {
                     toolStripStatusFilesOperation.Text = Properties.Resources.EN_FileOperationScraping;
@@ -602,17 +598,12 @@ namespace Switch_Backup_Manager
             Util.AppendFileDataDictionaryToXML(Util.AddFilesFromFolder((string)e.Argument));
         }
 
-        private void backgroundWorkerAddFiles_ProgressChanged(object sender, ProgressChangedEventArgs e)
-        {
-            //Does not work... USing Timer instead
-            //toolStripProgressAddingFiles.Value = progressPercent;
-        }
-
         private void backgroundWorkerAddFiles_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             timer1.Enabled = false;
             toolStripStatusFilesOperation.Visible = false;
             toolStripProgressAddingFiles.Visible = false;
+            toolStripStatusLabelGame.Text = "";
             toolStripStatusLabelGame.Visible = false;
             menuLocalFiles.Enabled = true;
             //OLVLocalFiles.Enabled = true;
@@ -1114,7 +1105,7 @@ namespace Switch_Backup_Manager
         private void filesToolStripMenuItem_Click(object sender, EventArgs e)
         {            
             OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.Filter = "XCI Files (*.XCI)|*.xci";
+            openFileDialog.Filter = "XCI Files (*.XCI;*.XC0)|*.xci;*.xc0";
             openFileDialog.Multiselect = true;
             openFileDialog.Title = "Switch Backup Manager - Add Files";
             openFileDialog.RestoreDirectory = true;
@@ -1147,13 +1138,14 @@ namespace Switch_Backup_Manager
             timer1.Enabled = false;
             toolStripStatusFilesOperation.Visible = false;
             toolStripProgressAddingFiles.Visible = false;
+            toolStripStatusLabelGame.Text = "";
             toolStripStatusLabelGame.Visible = false;
             menuLocalFiles.Enabled = true;
             //OLVLocalFiles.Enabled = true;
             UpdateLocalGamesList();
 
             //Its so fast that I dont think it needs a message
-            //MessageBox.Show("Done");
+            MessageBox.Show("Done");
         }
 
         private void RemoveSelectedFiles()
@@ -1208,6 +1200,7 @@ namespace Switch_Backup_Manager
             timer1.Enabled = false;
             toolStripStatusFilesOperation.Visible = false;
             toolStripProgressAddingFiles.Visible = false;
+            toolStripStatusLabelGame.Text = "";
             toolStripStatusLabelGame.Visible = false;
             menuLocalFiles.Enabled = true;
             menuSDFiles.Enabled = true;
@@ -1253,6 +1246,7 @@ namespace Switch_Backup_Manager
             timer1.Enabled = false;
             toolStripStatusFilesOperation.Visible = false;
             toolStripProgressAddingFiles.Visible = false;
+            toolStripStatusLabelGame.Text = "";
             toolStripStatusLabelGame.Visible = false;
             menuSDFiles.Enabled = true;
             //cbxRemoveableDrives_SelectedIndexChanged(this, new EventArgs());
@@ -1379,7 +1373,7 @@ namespace Switch_Backup_Manager
                 {
                     foreach (FileData data in LocalFilesListSelectedItems.Values)
                     {
-                        totalBytesSelectedFiles += data.UsedSpaceBytes;
+                        totalBytesSelectedFiles += data.ROMSizeBytes;
                     }
                 }
                 else
@@ -1408,7 +1402,6 @@ namespace Switch_Backup_Manager
                 {
                     updateCbxRemoveableFiles = true;
                     menuLocalFiles.Enabled = false;
-                    //OLVLocalFiles.Enabled = false;
                     toolStripStatusFilesOperation.Text = Properties.Resources.EN_FileOperationCopy;
                     toolStripStatusFilesOperation.Visible = true;
                     toolStripProgressAddingFiles.Visible = true;
@@ -1437,7 +1430,7 @@ namespace Switch_Backup_Manager
                 {
                     foreach (FileData data in LocalFilesListSelectedItems.Values)
                     {
-                        totalBytesSelectedFiles += data.UsedSpaceBytes;
+                        totalBytesSelectedFiles += data.ROMSizeBytes;
                     }
                 }
                 else
@@ -1788,7 +1781,7 @@ namespace Switch_Backup_Manager
 
         private void contextMenuStripSDCard_Opening(object sender, CancelEventArgs e)
         {
-            if (SDCardListSelectedItems.Count == 0)
+            if (SDCardListSelectedItems == null || SDCardListSelectedItems.Count == 0)
             {
                 e.Cancel = true;
             }

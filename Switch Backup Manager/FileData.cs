@@ -32,5 +32,6 @@ namespace Switch_Backup_Manager
         public string Firmware { get; set; }
         public string Cardtype { get; set; }
         public string Region { get; set; }
+        public bool IsSplit { get; set; }
     }
 }

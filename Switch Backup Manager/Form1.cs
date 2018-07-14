@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml.Linq;
+using BrightIdeasSoftware;
 using Microsoft.WindowsAPICodePack.Dialogs;
 
 namespace Switch_Backup_Manager
@@ -43,6 +44,28 @@ namespace Switch_Backup_Manager
             SceneReleasesList = new Dictionary<string, FileData>();
             SDCardList = new Dictionary<string, FileData>();
 
+            foreach (ColumnHeader column in OLVLocalFiles.Columns)
+            {
+                cbxFilterLocal.Items.Add(column.Text);
+            }
+            cbxFilterLocal.SelectedIndex = cbxFilterLocal.Items.IndexOf("Game title");
+            OLVLocalFiles.UseFiltering = true;
+            textBoxFilterLocal.Select();
+
+            foreach (ColumnHeader column in OLV_SDCard.Columns)
+            {
+                cbxFilterSD.Items.Add(column.Text);
+            }
+            cbxFilterSD.SelectedIndex = cbxFilterSD.Items.IndexOf("Game title");
+            OLV_SDCard.UseFiltering = true;
+
+            foreach (ColumnHeader column in OLVSceneList.Columns)
+            {
+                cbxFilterScene.Items.Add(column.Text);
+            }
+            cbxFilterScene.SelectedIndex = cbxFilterScene.Items.IndexOf("Game name");
+            OLVSceneList.UseFiltering = true;
+
             SetupOLVs();
 
             UpdateSceneReleasesList();
@@ -51,12 +74,15 @@ namespace Switch_Backup_Manager
 
         private void SetupOLVs()
         {
+            OLVLocalFiles.OwnerDraw = true;
+            OLV_SDCard.OwnerDraw = true;
+            OLVSceneList.OwnerDraw = true;
             noneToolStripMenuItem1.Checked = true;
             OLVLocalFiles.SetObjects(LocalFilesList.Values);
             OLVSceneList.SetObjects(SceneReleasesList.Values);
             sizeColumnROMSizeScene.AspectToStringConverter = delegate (object x) { return Util.BytesToGB((long)x); };
-            localRomSizeColumn.AspectToStringConverter = delegate (object x) { return Util.BytesToGB((long)x); };
-            localUsedSpaceColumn.AspectToStringConverter = delegate (object x) { return Util.BytesToGB((long)x); };
+            olvColumnROMSizeLocal.AspectToStringConverter = delegate (object x) { return Util.BytesToGB((long)x); };
+            olvColumnUsedSpaceLocal.AspectToStringConverter = delegate (object x) { return Util.BytesToGB((long)x); };
             olvColumnROMSizeSD.AspectToStringConverter = delegate (object x) { return Util.BytesToGB((long)x); };
             olvColumnUsedSpaceSD.AspectToStringConverter = delegate (object x) { return Util.BytesToGB((long)x); };
 
@@ -128,7 +154,7 @@ namespace Switch_Backup_Manager
                 }
             };
 
-            this.olvColumnIsTrimmed.AspectToStringConverter = delegate (object x) { return ((bool)x == true) ? "Yes" : "No"; };
+            this.olvColumnIsTrimmedLocal.AspectToStringConverter = delegate (object x) { return ((bool)x == true) ? "Yes" : "No"; };
             this.olvColumnIsTrimmedSD.AspectToStringConverter = delegate (object x) { return ((bool)x == true) ? "Yes" : "No"; };
         }
 
@@ -275,19 +301,19 @@ namespace Switch_Backup_Manager
                             break;
                         case "gametitle":
                             OLVLocalFiles.ShowGroups = true;
-                            OLVLocalFiles.BuildGroups(olvColumn2, SortOrder.Ascending);
+                            OLVLocalFiles.BuildGroups(olvColumnGameNameLocal, SortOrder.Ascending);
                             break;
                         case "developer":
                             OLVLocalFiles.ShowGroups = true;
-                            OLVLocalFiles.BuildGroups(olvColumn10, SortOrder.Ascending);
+                            OLVLocalFiles.BuildGroups(olvColumnDeveloperLocal, SortOrder.Ascending);
                             break;
                         case "trimmed":
                             OLVLocalFiles.ShowGroups = true;
-                            OLVLocalFiles.BuildGroups(olvColumnIsTrimmed, SortOrder.Ascending);
+                            OLVLocalFiles.BuildGroups(olvColumnIsTrimmedLocal, SortOrder.Ascending);
                             break;
                         case "cartsize":
                             OLVLocalFiles.ShowGroups = true;
-                            OLVLocalFiles.BuildGroups(olvColumn6, SortOrder.Ascending);
+                            OLVLocalFiles.BuildGroups(olvColumnCartSizeLocal, SortOrder.Ascending);
                             break;
                         case "type":
                             OLVLocalFiles.ShowGroups = true;
@@ -295,7 +321,7 @@ namespace Switch_Backup_Manager
                             break;
                         case "masterkeyrevision":
                             OLVLocalFiles.ShowGroups = true;
-                            OLVLocalFiles.BuildGroups(olvColumn12, SortOrder.Ascending);
+                            OLVLocalFiles.BuildGroups(olvColumnMasterKeyLocal, SortOrder.Ascending);
                             break;
                     }
                     break;
@@ -1084,7 +1110,7 @@ namespace Switch_Backup_Manager
         private void objectListView1_FormatCell(object sender, BrightIdeasSoftware.FormatCellEventArgs e)
         {
             //Highlights when not trimmed
-            if (e.ColumnIndex == this.olvColumnIsTrimmed.Index)
+            if (e.ColumnIndex == this.olvColumnIsTrimmedLocal.Index)
             {
                 FileData data = (FileData)e.Model;
                 if (!data.IsTrimmed)
@@ -1938,6 +1964,187 @@ namespace Switch_Backup_Manager
             {
                 MessageBox.Show("Select one item from the list.");
             }
+        }
+
+        private void textBoxFilterLocal_TextChanged(object sender, EventArgs e)
+        {
+            TextMatchFilter filterText = TextMatchFilter.Contains(OLVLocalFiles, textBoxFilterLocal.Text);
+
+            switch (cbxFilterLocal.Text)
+            {
+                case "Title ID":
+                    filterText.Columns = new[] { olvColumnTitleIDLocal };
+                    break;
+                case "ROM size":
+                    filterText.Columns = new[] { olvColumnROMSizeLocal };
+                    break;
+                case "Game title":
+                    filterText.Columns = new[] { olvColumnGameNameLocal };
+                    break;
+                case "Used space":
+                    filterText.Columns = new[] { olvColumnUsedSpaceLocal };
+                    break;
+                case "Cart size":
+                    filterText.Columns = new[] { olvColumnCartSizeLocal };
+                    break;
+                case "Languages":
+                    filterText.Columns = new[] { olvColumnLanguagesLocal };
+                    break;
+                case "Card type":
+                    filterText.Columns = new[] { olvColumnCardTypeLocal };
+                    break;
+                case "Filename":
+                    filterText.Columns = new[] { olvColumnFilePathLocal };
+                    break;
+                case "Developer":
+                    filterText.Columns = new[] { olvColumnDeveloperLocal };
+                    break;
+                case "Game revision":
+                    filterText.Columns = new[] { olvColumnGameRevisionLocal };
+                    break;
+                case "Masterkey revision":
+                    filterText.Columns = new[] { olvColumnMasterKeyLocal };
+                    break;
+                case "Trimmed":
+                    filterText.Columns = new[] { olvColumnIsTrimmedLocal };
+                    break;                    
+                default:
+                    filterText = null;
+                    break;
+            }
+            
+            OLVLocalFiles.ModelFilter = new CompositeAllFilter(new List<IModelFilter> { filterText });
+            OLVLocalFiles.DefaultRenderer = new HighlightTextRenderer(filterText);
+//            SumarizeLocalGamesList("local");
+        }
+
+        private void btnClearFilter_Click(object sender, EventArgs e)
+        {
+            textBoxFilterLocal.Clear();
+        }
+
+        private void cbxFilterLocal_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            textBoxFilterLocal_TextChanged(sender, e);
+        }
+
+        private void cbxFilterSD_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            textBoxFilterSD_TextChanged(sender, e);
+        }
+
+        private void textBoxFilterSD_TextChanged(object sender, EventArgs e)
+        {
+            TextMatchFilter filterText = TextMatchFilter.Contains(OLV_SDCard, textBoxFilterSD.Text);
+
+            switch (cbxFilterSD.Text)
+            {
+                case "Title ID":
+                    filterText.Columns = new[] { olvColumnTitleIDSD };
+                    break;
+                case "Game title":
+                    filterText.Columns = new[] { olvColumnGameNameSD };
+                    break;
+                case "ROM size":
+                    filterText.Columns = new[] { olvColumnROMSizeSD };
+                    break;
+                case "Used space":
+                    filterText.Columns = new[] { olvColumnUsedSpaceSD };
+                    break;
+                case "Trimmed":
+                    filterText.Columns = new[] { olvColumnIsTrimmedSD };
+                    break;
+                case "Cart size":
+                    filterText.Columns = new[] { olvColumnCartSizeSD };
+                    break;
+                case "Languages":
+                    filterText.Columns = new[] { olvColumnLanguagesSD };
+                    break;
+                case "Card type":
+                    filterText.Columns = new[] { olvColumnCardTypeSD };
+                    break;
+                case "Filename":
+                    filterText.Columns = new[] { olvColumnFilePathSD };
+                    break;
+                case "Developer":
+                    filterText.Columns = new[] { olvColumnDeveloperSD };
+                    break;
+                case "Game revision":
+                    filterText.Columns = new[] { olvColumnGameRevisionSD };
+                    break;
+                case "Masterkey revision":
+                    filterText.Columns = new[] { olvColumnMasterKeySD };
+                    break;
+                default:
+                    filterText = null;
+                    break;
+            }
+
+            OLV_SDCard.ModelFilter = new CompositeAllFilter(new List<IModelFilter> { filterText });
+            OLV_SDCard.DefaultRenderer = new HighlightTextRenderer(filterText);
+            //            SumarizeLocalGamesList("local");
+        }
+
+        private void btnClearFilterSD_Click(object sender, EventArgs e)
+        {
+            textBoxFilterSD.Clear();
+        }
+
+        private void cbxFilterScene_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            textBoxFilterScene_TextChanged(sender, e);
+        }
+
+        private void textBoxFilterScene_TextChanged(object sender, EventArgs e)
+        {
+            TextMatchFilter filterText = TextMatchFilter.Contains(OLVSceneList, textBoxFilterScene.Text);
+
+            switch (cbxFilterScene.Text)
+            {
+                case "Title ID":
+                    filterText.Columns = new[] { olvColumnTitleIDScene };
+                    break;
+                case "Game name":
+                    filterText.Columns = new[] { olvColumnGameNameScene };
+                    break;
+                case "ROM size":
+                    filterText.Columns = new[] { olvColumnROMSizeSD };
+                    break;
+                case "Trimmed size":
+                    filterText.Columns = new[] { sizeColumnROMSizeScene };
+                    break;
+                case "Developer":
+                    filterText.Columns = new[] { olvColumnDeveloperScene };
+                    break;
+                case "Region":
+                    filterText.Columns = new[] { columnSceneRegionScene };
+                    break;
+                case "Languages":
+                    filterText.Columns = new[] { olvColumnLanguagesScene };
+                    break;
+                case "Release group":
+                    filterText.Columns = new[] { olvColumnGroupScene };
+                    break;
+                case "Cart size":
+                    filterText.Columns = new[] { olvColumnCartSizeScene };
+                    break;
+                case "Serial number":
+                    filterText.Columns = new[] { olvColumnSerialScene };
+                    break;
+                case "Firmware":
+                    filterText.Columns = new[] { olvColumnFirmwareScene };
+                    break;
+                case "Card type":
+                    filterText.Columns = new[] { olvColumnCardTypeScene };
+                    break;
+                default:
+                    filterText = null;
+                    break;
+            }
+
+            OLVSceneList.ModelFilter = new CompositeAllFilter(new List<IModelFilter> { filterText });
+            OLVSceneList.DefaultRenderer = new HighlightTextRenderer(filterText);
+            //            SumarizeLocalGamesList("local");
         }
     }
 }

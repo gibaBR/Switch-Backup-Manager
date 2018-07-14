@@ -119,6 +119,7 @@ namespace Switch_Backup_Manager
         {
             int filesCount = files.Count();
             int i = 0;
+            logger.Info("Starting autorename " + source + " files.");
 
             if (source == "local")
             {
@@ -148,6 +149,7 @@ namespace Switch_Backup_Manager
                     FrmMain.progressPercent = (int)(i * 100) / filesCount;
                 }
             }
+            logger.Info("Finished autorename " + source + " files.");
         }
 
         private static bool AutoRenameXCIFile(FileData file)
@@ -156,27 +158,51 @@ namespace Switch_Backup_Manager
 
             if (file != null)
             {
-                Regex illegalInFileName = new Regex(@"[\\/:*?""<>|]");
+                string extension = Path.GetExtension(file.FilePath);
+                Regex illegalInFileName = new Regex(@"[\\/:*?""<>|™®]");
                 string newFileName = Path.GetDirectoryName(file.FilePath) + "\\" + illegalInFileName.Replace(file.GameName, "");
-
-                if (File.Exists(newFileName+".xci"))
+                string newFileName_ = "";
+                if (File.Exists(newFileName+extension))
                 {
-                    /*
-                    newFileName += "_" + file.TitleID + ".xci";
-                    if (!File.Exists(newFileName))
-                    {
-                        System.IO.File.Move(file.FilePath, newFileName);
-                    } 
-                    */
+                    logger.Warning("File " + illegalInFileName.Replace(file.GameName, "") + extension + " already exists at destination path. Ignoring this file!");
                 } else
                 {
-                    newFileName += ".xci";
-                    System.IO.File.Move(file.FilePath, newFileName);
+                    if (extension.ToLower() == ".xci")
+                    {
+                        logger.Info("Old name: " + file.FileNameWithExt + ". New name: " + illegalInFileName.Replace(file.GameName, "") + extension);
+                        newFileName += extension;
+                        try
+                        {
+                            System.IO.File.Move(file.FilePath, newFileName);
+                        } catch (Exception e)
+                        {
+                            logger.Error("Failed to rename file.\n" + e.StackTrace);
+                        }                        
+                    } else
+                    {
+                        List<string> splited_files = GetSplitedXCIsFiles(file.FilePath);
+                        newFileName_ = newFileName + extension;
+
+                        foreach (string splited_file in splited_files)
+                        {
+                            string extension_ = Path.GetExtension(splited_file);
+                            logger.Info("Old name: " + Path.GetFileName(splited_file) + ". New name: " + illegalInFileName.Replace(file.GameName, "") + extension_);
+                            newFileName = Path.GetDirectoryName(file.FilePath) + "\\" + illegalInFileName.Replace(file.GameName, "") + extension_;
+                            try
+                            {
+                                System.IO.File.Move(splited_file, newFileName);
+                            }
+                            catch (Exception e)
+                            {
+                                logger.Error("Failed to rename file.\n" + e.StackTrace);
+                            }
+                        }
+                    }
                 }
                 
-                file.FileName = Path.GetFileNameWithoutExtension(newFileName);
-                file.FileNameWithExt = Path.GetFileName(newFileName);
-                file.FilePath = newFileName;
+                file.FileName = Path.GetFileNameWithoutExtension(newFileName_);
+                file.FileNameWithExt = Path.GetFileName(newFileName_);
+                file.FilePath = newFileName_;
 
                 result = true;
             }

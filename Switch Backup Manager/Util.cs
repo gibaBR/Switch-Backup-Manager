@@ -68,7 +68,7 @@ namespace Switch_Backup_Manager
             if (file != null)
             {
                 if (!file.IsTrimmed)
-                {
+                {                    
                     FileStream fileStream = new FileStream(@file.FilePath, FileMode.Open, FileAccess.Write);
                     fileStream.SetLength(file.UsedSpaceBytes);
                     fileStream.Close();
@@ -160,28 +160,30 @@ namespace Switch_Backup_Manager
             {
                 string extension = Path.GetExtension(file.FilePath);
                 Regex illegalInFileName = new Regex(@"[\\/:*?""<>|™®]");
-                string newFileName = Path.GetDirectoryName(file.FilePath) + "\\" + illegalInFileName.Replace(file.GameName, "");
+                string newFileName = Path.GetDirectoryName(file.FilePath) + "\\" + illegalInFileName.Replace(file.GameName, "") + extension;
                 string newFileName_ = "";
-                if (File.Exists(newFileName+extension))
+                if (File.Exists(newFileName))
                 {
                     logger.Warning("File " + illegalInFileName.Replace(file.GameName, "") + extension + " already exists at destination path. Ignoring this file!");
+                    return false;
                 } else
                 {
                     if (extension.ToLower() == ".xci")
                     {
                         logger.Info("Old name: " + file.FileNameWithExt + ". New name: " + illegalInFileName.Replace(file.GameName, "") + extension);
-                        newFileName += extension;
+                        //newFileName += extension;
                         try
                         {
                             System.IO.File.Move(file.FilePath, newFileName);
                         } catch (Exception e)
                         {
                             logger.Error("Failed to rename file.\n" + e.StackTrace);
+                            return false;
                         }                        
                     } else
                     {
                         List<string> splited_files = GetSplitedXCIsFiles(file.FilePath);
-                        newFileName_ = newFileName + extension;
+                        newFileName_ = newFileName;
 
                         foreach (string splited_file in splited_files)
                         {
@@ -197,12 +199,13 @@ namespace Switch_Backup_Manager
                                 logger.Error("Failed to rename file.\n" + e.StackTrace);
                             }
                         }
+                        newFileName = newFileName_;
                     }
                 }
                 
-                file.FileName = Path.GetFileNameWithoutExtension(newFileName_);
-                file.FileNameWithExt = Path.GetFileName(newFileName_);
-                file.FilePath = newFileName_;
+                file.FileName = Path.GetFileNameWithoutExtension(newFileName);
+                file.FileNameWithExt = Path.GetFileName(newFileName);
+                file.FilePath = newFileName;
 
                 result = true;
             }

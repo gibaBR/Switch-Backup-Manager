@@ -12,13 +12,23 @@ Complete Switch Backups management tool
 
 ## Requirements
 * .NET 4.6
+
+## Screenshots
+
 ![main](https://i.imgur.com/7D7MXPK.png)
+
 ![main](https://i.imgur.com/5RipVQI.png)
+
 ![main](https://i.imgur.com/eHKzI2R.png)
 
 ## Changelog
 * 1.0 - Initial release
 * 1.0.1 - Corrects a bug with invalid file names
+
+* 1.0.3
+  - Solves issue #2 where program doesnt add any files when you try to add two files with the same TitleID;
+  - Adds some log information to help track errors;
+  - Known bug: backups of Title 01009AA000FAA000 seems not to work for now. This backup will not be added to the list.
 
 ## Source & Binaries
 * [GitHub](https://github.com/gibaBR/Switch-Backup-Manager/archive/master.zip)

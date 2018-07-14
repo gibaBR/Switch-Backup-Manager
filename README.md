@@ -30,6 +30,11 @@ Complete Switch Backups management tool
   - Adds some log information to help track errors;
   - Known bug: backups of Title 01009AA000FAA000 seems not to work for now. This backup will not be added to the list.
 
+* 1.0.4
+  - Adds filter to the games lists
+  - Autorename now removes others special chars that may cause problems with SX OS like " ™ " and " ® "
+  - Bug when trying to rename splited files was resolved
+
 ## Source & Binaries
 * [GitHub](https://github.com/gibaBR/Switch-Backup-Manager/archive/master.zip)
 * [Release 1.0](https://github.com/gibaBR/Switch-Backup-Manager/files/2188652/Switch.Backup.Manager.v1.0.zip)

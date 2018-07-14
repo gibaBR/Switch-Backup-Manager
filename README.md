@@ -12,8 +12,13 @@ Complete Switch Backups management tool
 
 ## Requirements
 * .NET 4.6
+
+##Screenshots
+
 ![main](https://i.imgur.com/7D7MXPK.png)
+
 ![main](https://i.imgur.com/5RipVQI.png)
+
 ![main](https://i.imgur.com/eHKzI2R.png)
 
 ## Changelog

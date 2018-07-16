@@ -68,14 +68,26 @@ namespace Switch_Backup_Manager
             if (file != null)
             {
                 if (!file.IsTrimmed)
-                {                    
-                    FileStream fileStream = new FileStream(@file.FilePath, FileMode.Open, FileAccess.Write);
-                    fileStream.SetLength(file.UsedSpaceBytes);
-                    fileStream.Close();
+                {
+                    logger.Info("Trimming file "+file.FileNameWithExt+". Old size: "+Convert.ToString(file.ROMSizeBytes)+". New size: "+Convert.ToString(file.UsedSpaceBytes));
+                    try
+                    {
+                        FileStream fileStream = new FileStream(@file.FilePath, FileMode.Open, FileAccess.Write);
+                        fileStream.SetLength(file.UsedSpaceBytes);
+                        fileStream.Close();
+                    } catch (Exception e)
+                    {
+                        logger.Error("Error trimming file " + file.FilePath + "\n" + e.StackTrace);
+                        return false;
+                    }
+
                     file.ROMSizeBytes = file.UsedSpaceBytes;
                     file.ROMSize = file.UsedSpace;
                     file.IsTrimmed = true;
                     result = true;
+                } else
+                {
+                    logger.Info("File was already trimmed");
                 }
             }
             return result;
@@ -85,6 +97,7 @@ namespace Switch_Backup_Manager
         {
             int filesCount = files.Count();
             int i = 0;
+            logger.Info("Starting trimming " + source + " files.");
 
             if (source == "local")
             {
@@ -113,6 +126,7 @@ namespace Switch_Backup_Manager
                     FrmMain.progressPercent = (int)(i * 100) / filesCount;
                 }
             }
+            logger.Info("Finished trimming " + source + " files.");
         }
 
         public static void AutoRenameXCIFiles(Dictionary<string, FileData> files, string source) //source possible values: "local", "sdcard"
@@ -239,16 +253,20 @@ namespace Switch_Backup_Manager
         public static void RemoveMissingFilesFromXML(XDocument xml)
         {
             XDocument xml_ = XDocument.Load(@LOCAL_FILES_DB);
-
+            logger.Info("Start removing missing files from local database");
+            int i = 0;
             foreach (XElement xe in xml_.Descendants("Game"))
             {
                 if (!File.Exists(xe.Element("FilePath").Value))
                 {
                     RemoveTitleIDFromXML(xe.Attribute("TitleID").Value);
-                }                
+                    logger.Info(xe.Element("FilePath").Value + " removed.");
+                }
+                i++;
             }
 
             XML_Local.Save(@LOCAL_FILES_DB);
+            logger.Info("Finished removing missing files from local database. " + i + " files removed.");
         }
 
         public static bool IsTitleIDOnXML(string titleID)
@@ -599,7 +617,8 @@ namespace Switch_Backup_Manager
                     int filesCount = files.Count();
                     int i = 0;
                     logger.Info("Adding "+ filesCount +" files on local database");
-                    
+                    Stopwatch sw = Stopwatch.StartNew();
+
                     foreach (string file in files)
                     {
                         FileData data = Util.GetFileData(file);
@@ -616,6 +635,9 @@ namespace Switch_Backup_Manager
                         i++;
                         FrmMain.progressPercent = (int)(i * 100) / filesCount;
                     }
+                    sw.Stop();
+
+                    logger.Info("Finished adding files. Total time was " + sw.Elapsed.ToString("mm\\:ss\\.ff") + ".");
                 }
             }
             catch (Exception e)
@@ -930,7 +952,7 @@ namespace Switch_Backup_Manager
 
                     if (m == 1) //Dump of TitleID 01009AA000FAA000 reports more than 10000000 files here, so it breaks the program. Standard is to have only 2 files
                     {
-                        continue;
+                        break;
                     }
                 }
                 for (int n = 0; n < PFS0.PFS0_Headers[0].FileCount; n++)
@@ -946,7 +968,7 @@ namespace Switch_Backup_Manager
 
                     if (n == 1) //Dump of TitleID 01009AA000FAA000 reports more than 10000000 files here, so it breaks the program. Standard is to have only 2 files
                     {
-                        continue;
+                        break;
                     }
 
                 }

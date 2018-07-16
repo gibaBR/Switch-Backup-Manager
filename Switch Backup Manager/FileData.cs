@@ -26,6 +26,7 @@ namespace Switch_Backup_Manager
         public string MasterKeyRevision { get; set; }
         public Dictionary<string, string> Region_Icon { get; set; }
         public List<string> Languagues { get; set; }
+        public string Languages_resumed { get; set; }
         public bool IsTrimmed { get; set; }
         public string Group { get; set; }
         public string Serial { get; set; }

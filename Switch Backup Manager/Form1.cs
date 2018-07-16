@@ -1925,7 +1925,10 @@ namespace Switch_Backup_Manager
 
         private void optionsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            MessageBox.Show(Properties.Resources.EN_Soon);
+            var configForm = new FormConfigs();
+            configForm.StartPosition = FormStartPosition.CenterParent;
+            configForm.ShowDialog(this);
+            //MessageBox.Show(Properties.Resources.EN_Soon);
         }
 
         private void showInExplorerToolStripMenuItem_Click(object sender, EventArgs e)

@@ -16,9 +16,9 @@ using System.Text.RegularExpressions;
 
 namespace Switch_Backup_Manager
 {
-    internal static class Util        
+    internal static class Util
     {
-        public const string INI_FILE="sbm.ini";
+        public const string INI_FILE = "sbm.ini";
         public static string KEYS_FILE = "keys.txt";
         public const string KEYS_DOWNLOAD_SITE = "https://pastebin.com/raw/ekSH9R8t";
         public const string HACTOOL_FILE = "hactool.exe";
@@ -27,13 +27,14 @@ namespace Switch_Backup_Manager
         public const string NSWDB_DOWNLOAD_SITE = "http://nswdb.com/xml.php";
         public const string LOCAL_FILES_DB = "SBM_Local.xml";
         public const string CACHE_FOLDER = "cache";
-        public const string LOG_FILE = "sbm.log";       
+        public const string LOG_FILE = "sbm.log";
 
         public static byte[] NcaHeaderEncryptionKey1_Prod;
         public static byte[] NcaHeaderEncryptionKey2_Prod;
         public static string Mkey;
         public static Logger logger;
         public static string log_Level = "info";
+        public static string autoRenamingPattern = "{gamename}";
 
         private static string[] Language = new string[16]
         {
@@ -55,11 +56,44 @@ namespace Switch_Backup_Manager
             "???"
         };
 
+        public static string[] AutoRenamingTags = new string[8]
+        {
+            "{gamename}",
+            "{titleid}",
+            "{developer}",
+            "{trimmed}",
+            "{revision}",
+            "{releasegroup}",
+            "{region}",
+            "{firmware}"
+        };
+
         private static Image[] Icons = new Image[16];
 
         public static IniFile ini;
         public static XDocument XML_Local;
         public static XDocument XML_NSWDB;
+
+        public static string GetRenamingString(FileData data, string pattern) {
+            string result ="";
+
+            if (data != null)
+            {
+                result = pattern;
+                result = result.Replace(AutoRenamingTags[0], data.GameName);
+                result = result.Replace(AutoRenamingTags[1], data.TitleID);
+                result = result.Replace(AutoRenamingTags[2], data.Developer);
+                result = result.Replace(AutoRenamingTags[3], (data.IsTrimmed ? "Trimmed" : "Full ROM"));
+                result = result.Replace(AutoRenamingTags[4], data.GameRevision);
+                result = result.Replace(AutoRenamingTags[5], data.Group);
+                result = result.Replace(AutoRenamingTags[6], data.Region);
+                result = result.Replace(AutoRenamingTags[7], data.Firmware);
+
+                result += Path.GetExtension(data.FilePath);
+            }
+
+            return result;
+        }
 
         public static bool TrimXCIFile(FileData file)
         {
@@ -174,27 +208,30 @@ namespace Switch_Backup_Manager
             {
                 string extension = Path.GetExtension(file.FilePath);
                 Regex illegalInFileName = new Regex(@"[\\/:*?""<>|™®]");
-                string newFileName = Path.GetDirectoryName(file.FilePath) + "\\" + illegalInFileName.Replace(file.GameName, "") + extension;
+                string newFileName = Path.GetDirectoryName(file.FilePath) + "\\" + illegalInFileName.Replace(GetRenamingString(file, autoRenamingPattern), "");
                 string newFileName_ = "";
                 if (File.Exists(newFileName))
                 {
-                    logger.Warning("File " + illegalInFileName.Replace(file.GameName, "") + extension + " already exists at destination path. Ignoring this file!");
+                    logger.Warning("File " + illegalInFileName.Replace(GetRenamingString(file, autoRenamingPattern), "") + " already exists at destination path. Ignoring this file!");
                     return false;
-                } else
+                }
+                else
                 {
                     if (extension.ToLower() == ".xci")
                     {
-                        logger.Info("Old name: " + file.FileNameWithExt + ". New name: " + illegalInFileName.Replace(file.GameName, "") + extension);
+                        logger.Info("Old name: " + file.FileNameWithExt + ". New name: " + illegalInFileName.Replace(GetRenamingString(file, autoRenamingPattern), ""));
                         //newFileName += extension;
                         try
                         {
                             System.IO.File.Move(file.FilePath, newFileName);
-                        } catch (Exception e)
+                        }
+                        catch (Exception e)
                         {
                             logger.Error("Failed to rename file.\n" + e.StackTrace);
                             return false;
-                        }                        
-                    } else
+                        }
+                    }
+                    else
                     {
                         List<string> splited_files = GetSplitedXCIsFiles(file.FilePath);
                         newFileName_ = newFileName;
@@ -202,8 +239,8 @@ namespace Switch_Backup_Manager
                         foreach (string splited_file in splited_files)
                         {
                             string extension_ = Path.GetExtension(splited_file);
-                            logger.Info("Old name: " + Path.GetFileName(splited_file) + ". New name: " + illegalInFileName.Replace(file.GameName, "") + extension_);
-                            newFileName = Path.GetDirectoryName(file.FilePath) + "\\" + illegalInFileName.Replace(file.GameName, "") + extension_;
+                            logger.Info("Old name: " + Path.GetFileName(splited_file) + ". New name: " + illegalInFileName.Replace(GetRenamingString(file, autoRenamingPattern), "").Replace(extension,"") + extension_);
+                            newFileName = Path.GetDirectoryName(file.FilePath) + "\\" + illegalInFileName.Replace(GetRenamingString(file, autoRenamingPattern), "").Replace(extension, "") + extension_;
                             try
                             {
                                 System.IO.File.Move(splited_file, newFileName);
@@ -216,7 +253,7 @@ namespace Switch_Backup_Manager
                         newFileName = newFileName_;
                     }
                 }
-                
+
                 file.FileName = Path.GetFileNameWithoutExtension(newFileName);
                 file.FileNameWithExt = Path.GetFileName(newFileName);
                 file.FilePath = newFileName;
@@ -284,6 +321,22 @@ namespace Switch_Backup_Manager
             return result;
         }
 
+        private static void GetExtraInfoFromScene(FileData data)
+        {
+            XElement element = XML_NSWDB.Descendants("release")
+                .FirstOrDefault(el => (string)el.Element("titleid") == data.TitleID);
+
+            if (element != null)
+            {
+                data.Cardtype = element.Element("card").Value;
+                data.Group = element.Element("group").Value;
+                data.Serial = element.Element("serial").Value;
+                data.Firmware = element.Element("firmware").Value;
+                data.Region = element.Element("region").Value;
+                data.Languages_resumed = element.Element("languages").Value;
+            }
+        }
+        /*
         public static string GetCardTypeFromScene(string titleID)
         {
             string result = "";
@@ -298,7 +351,7 @@ namespace Switch_Backup_Manager
 
             return result;
         }
-
+        */
         public static bool WriteFileDataToXML(FileData data)
         {
             bool result = true;
@@ -331,7 +384,12 @@ namespace Switch_Backup_Manager
                            new XElement("MasterKeyRevision", data.MasterKeyRevision),
                            new XElement("Region_Icon", data.Region_Icon),
                            new XElement("Languagues", languages),
-                           new XElement("IsTrimmed", data.IsTrimmed)
+                           new XElement("IsTrimmed", data.IsTrimmed),
+                           new XElement("Group", data.Group),
+                           new XElement("Serial", data.Serial),
+                           new XElement("Firmware", data.Firmware),
+                           new XElement("Region", data.Region),
+                           new XElement("Languages_resumed", data.Languages_resumed)
                    );
                 XML_Local.Root.Add(element);
                 XML_Local.Save(@LOCAL_FILES_DB);
@@ -398,6 +456,13 @@ namespace Switch_Backup_Manager
             {
                 ini.IniWriteValue("Log", "log_level", "info");
                 log_Level = "info";
+            }
+
+            autoRenamingPattern = ini.IniReadValue("AutoRenaming", "pattern");
+            if (log_Level.Trim() == "")
+            {
+                ini.IniWriteValue("AutoRenaming", "pattern", "{gamename}");
+                autoRenamingPattern = "{gamename}";
             }
 
             //Searches for keys.txt
@@ -636,7 +701,6 @@ namespace Switch_Backup_Manager
                         FrmMain.progressPercent = (int)(i * 100) / filesCount;
                     }
                     sw.Stop();
-
                     logger.Info("Finished adding files. Total time was " + sw.Elapsed.ToString("mm\\:ss\\.ff") + ".");
                 }
             }
@@ -654,17 +718,34 @@ namespace Switch_Backup_Manager
         public static Dictionary<string, FileData> AddFiles(string[] files)
         {
             Dictionary<string, FileData> dictionary = new Dictionary<string, FileData>();
-
-            int filesCount = files.Count();
-            int i = 0;
-            foreach (string file in files)
+            try
             {
-                FileData data = Util.GetFileData(file);
-                FrmMain.progressCurrentfile = data.FilePath;
-                dictionary.Add(data.TitleID, data);
+                int filesCount = files.Count();
+                int i = 0;
+                logger.Info("Adding " + filesCount + " files on local database");
+                Stopwatch sw = Stopwatch.StartNew();
 
-                i++;
-                FrmMain.progressPercent = (int)(i * 100) / filesCount;
+                foreach (string file in files)
+                {
+                    FileData data = Util.GetFileData(file);
+                    FrmMain.progressCurrentfile = data.FilePath;
+                    try
+                    {
+                        dictionary.Add(data.TitleID, data);
+                    }
+                    catch (ArgumentException ex)
+                    {
+                        logger.Error("TitleID " + data.TitleID + " is already on database");
+                    }
+
+                    i++;
+                    FrmMain.progressPercent = (int)(i * 100) / filesCount;
+                }
+                sw.Stop();
+                logger.Info("Finished adding files. Total time was " + sw.Elapsed.ToString("mm\\:ss\\.ff") + ".");
+            } catch (Exception e)
+            {
+                logger.Error(e.StackTrace);
             }
 
             return dictionary;
@@ -1088,7 +1169,8 @@ namespace Switch_Backup_Manager
                     }
                     fileStream.Close();
                 }
-                result.Cardtype = GetCardTypeFromScene(result.TitleID);
+                //result.Cardtype = GetCardTypeFromScene(result.TitleID);
+                GetExtraInfoFromScene(result);
             }
             return result;
         }
@@ -1096,46 +1178,80 @@ namespace Switch_Backup_Manager
         public static FileData GetFileData(XElement xe)
         {
             FileData result = new FileData();
-            result.TitleID = xe.Attribute("TitleID").Value;
-            result.CartSize = xe.Element("CartSize").Value;
-            result.Cardtype = xe.Element("CardType").Value;
-            result.Developer = xe.Element("Developer").Value;
-            result.FileName = xe.Element("FileName").Value;
-            result.FileNameWithExt = xe.Element("FileNameWithExt").Value;
-            result.FilePath = xe.Element("FilePath").Value;
-            result.GameName = xe.Element("GameName").Value;
-            result.GameRevision = xe.Element("GameRevision").Value;
-            result.IsTrimmed = (xe.Element("IsTrimmed").Value == "true") ? true : false;
 
-            string languages_ = xe.Element("Languagues").Value;
-            string[] languages_array = languages_.Split(",".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
-            List<string> languages = new List<string>();
-            for (int i = 0; i < languages_array.Length; i++)
+            try
             {
-                languages.Add(languages_array[i]);
+                result.TitleID = xe.Attribute("TitleID").Value;
+                result.CartSize = xe.Element("CartSize").Value;
+                //result.Cardtype = xe.Element("CardType").Value;
+                result.Developer = xe.Element("Developer").Value;
+                result.FileName = xe.Element("FileName").Value;
+                result.FileNameWithExt = xe.Element("FileNameWithExt").Value;
+                result.FilePath = xe.Element("FilePath").Value;
+                result.GameName = xe.Element("GameName").Value;
+                result.GameRevision = xe.Element("GameRevision").Value;
+                result.IsTrimmed = (xe.Element("IsTrimmed").Value == "true") ? true : false;
+
+                string languages_ = xe.Element("Languagues").Value;
+                string[] languages_array = languages_.Split(",".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
+                List<string> languages = new List<string>();
+                for (int i = 0; i < languages_array.Length; i++)
+                {
+                    languages.Add(languages_array[i]);
+                }
+                result.Languagues = languages;
+
+                result.MasterKeyRevision = xe.Element("MasterKeyRevision").Value;
+                result.ProductCode = xe.Element("ProductCode").Value;
+                result.ROMSize = xe.Element("ROMSize").Value;
+                result.ROMSizeBytes = Convert.ToInt64(xe.Element("ROMSizeBytes").Value);
+                result.SDKVersion = xe.Element("SDKVersion").Value;
+                result.UsedSpace = xe.Element("UsedSpace").Value;
+                result.UsedSpaceBytes = Convert.ToInt64(xe.Element("UsedSpaceBytes").Value);
+
+                //result.Region_Icon = xe.Element("Region_Icon").Value;
+                Dictionary<string, string> Region_Icon = new Dictionary<string, string>();
+                //string regionIcons = xe.Element("Region_Icon").Value;
+                string[] regionIcons = xe.Element("Region_Icon").Value.Split("[".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
+                for (int i = 0; i < regionIcons.Length; i++)
+                {
+                    int ind_e = regionIcons[i].IndexOf(",");
+                    string region = regionIcons[i].Substring(0, ind_e);
+                    string icon = regionIcons[i].Substring(ind_e + 2, (regionIcons[i].Length - ind_e - 3)).Trim();
+                    Region_Icon.Add(region, icon);
+                }
+                result.Region_Icon = Region_Icon;
+
+                //Info from scene
+                if (xe.Element("CardType") != null)
+                {
+                    result.Cardtype = xe.Element("CardType").Value;
+                }
+                if (xe.Element("Group") != null)
+                {
+                    result.Group = xe.Element("Group").Value;
+                }
+                if (xe.Element("Serial") != null)
+                {
+                    result.Serial = xe.Element("Serial").Value;
+                }
+                if (xe.Element("Firmware") != null)
+                {
+                    result.Firmware = xe.Element("Firmware").Value;
+                }
+                if (xe.Element("Region") != null)
+                {
+                    result.Region = xe.Element("Region").Value;
+                }
+                if (xe.Element("Languages_resumed") != null)
+                {
+                    result.Languages_resumed = xe.Element("Languages_resumed").Value;
+                }                
             }
-            result.Languagues = languages;
-
-            result.MasterKeyRevision = xe.Element("MasterKeyRevision").Value;
-            result.ProductCode = xe.Element("ProductCode").Value;
-            result.ROMSize = xe.Element("ROMSize").Value;
-            result.ROMSizeBytes = Convert.ToInt64(xe.Element("ROMSizeBytes").Value);
-            result.SDKVersion = xe.Element("SDKVersion").Value;
-            result.UsedSpace = xe.Element("UsedSpace").Value;
-            result.UsedSpaceBytes = Convert.ToInt64(xe.Element("UsedSpaceBytes").Value);
-
-            //result.Region_Icon = xe.Element("Region_Icon").Value;
-            Dictionary<string, string> Region_Icon = new Dictionary<string, string>();
-            //string regionIcons = xe.Element("Region_Icon").Value;
-            string[] regionIcons = xe.Element("Region_Icon").Value.Split("[".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
-            for (int i = 0; i < regionIcons.Length; i++)
+            catch (Exception ex)
             {
-                int ind_e = regionIcons[i].IndexOf(",");
-                string region = regionIcons[i].Substring(0, ind_e);
-                string icon = regionIcons[i].Substring(ind_e+2, (regionIcons[i].Length - ind_e - 3)).Trim();
-                Region_Icon.Add(region, icon);
+                logger.Error(ex.StackTrace);
             }
-            result.Region_Icon = Region_Icon;
 
             return result;
         }

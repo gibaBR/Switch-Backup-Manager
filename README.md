@@ -22,18 +22,28 @@ Complete Switch Backups management tool
 ![main](https://i.imgur.com/eHKzI2R.png)
 
 ## Changelog
-* 1.0 - Initial release
-* 1.0.1 - Corrects a bug with invalid file names
+
+v 1.0.5
+* You can now configure the autorename pattern using tags
+* Preparing for next release, when more info will be retrieved from "scene" database
+* **IMPORTANT: Its a good idea to redo your local database as on next release there will be required information 
+  **that starts to be stored on this version (1.0.5). This way the transition will be smoother.**
+* Some more code refactoring
+
+* 1.0.4
+  - Adds filter to the games lists
+  - Autorename now removes others special chars that may cause problems with SX OS like " ™ " and " ® "
+  - ~~Bug when trying to rename splited files was resolved~~
 
 * 1.0.3
   - Solves issue #2 where program doesnt add any files when you try to add two files with the same TitleID;
   - Adds some log information to help track errors;
   - Known bug: backups of Title 01009AA000FAA000 seems not to work for now. This backup will not be added to the list.
 
-* 1.0.4
-  - Adds filter to the games lists
-  - Autorename now removes others special chars that may cause problems with SX OS like " ™ " and " ® "
-  - Bug when trying to rename splited files was resolved
+* 1.0.1 - Corrects a bug with invalid file names
+
+* 1.0 - Initial release
+
 
 ## Source & Binaries
 * [GitHub](https://github.com/gibaBR/Switch-Backup-Manager/archive/master.zip)

@@ -23,12 +23,12 @@ Complete Switch Backups management tool
 
 ## Changelog
 
-v 1.0.5
-* You can now configure the autorename pattern using tags
-* Preparing for next release, when more info will be retrieved from "scene" database
-* **IMPORTANT: Its a good idea to redo your local database as on next release there will be required information 
-  **that starts to be stored on this version (1.0.5). This way the transition will be smoother.**
-* Some more code refactoring
+* 1.0.5
+  - You can now configure the autorename pattern using tags
+  - Preparing for next release, when more info will be retrieved from "scene" database
+  - **IMPORTANT: Its a good idea to redo your local database as on next release there will be required information**
+    **that starts to be stored on this version (1.0.5). This way the transition will be smoother.**
+  - Some more code refactoring
 
 * 1.0.4
   - Adds filter to the games lists

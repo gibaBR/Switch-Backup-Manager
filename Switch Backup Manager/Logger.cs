@@ -131,7 +131,7 @@ namespace Switch_Backup_Manager
             }
             catch
             {
-                throw;
+                //throw;
             }
         }
 

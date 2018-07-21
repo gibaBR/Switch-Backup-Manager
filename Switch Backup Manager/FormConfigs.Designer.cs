@@ -29,15 +29,17 @@
         private void InitializeComponent()
         {
             this.panel1 = new System.Windows.Forms.Panel();
+            this.btnApply = new System.Windows.Forms.Button();
+            this.btnCancel = new System.Windows.Forms.Button();
+            this.btnOK = new System.Windows.Forms.Button();
             this.panel2 = new System.Windows.Forms.Panel();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.tabPage2 = new System.Windows.Forms.TabPage();
-            this.btnOK = new System.Windows.Forms.Button();
-            this.btnCancel = new System.Windows.Forms.Button();
-            this.btnApply = new System.Windows.Forms.Button();
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.rbRenamingGameNameRegionFirmware = new System.Windows.Forms.RadioButton();
+            this.rbRenamingGameNameRegion = new System.Windows.Forms.RadioButton();
             this.lblExample = new System.Windows.Forms.Label();
             this.rbRenamingCustom = new System.Windows.Forms.RadioButton();
             this.rbRenamingTitleIDGameNameReleaseGroup = new System.Windows.Forms.RadioButton();
@@ -47,14 +49,19 @@
             this.cbxTags = new System.Windows.Forms.ComboBox();
             this.rbRenamingTitleIDGameName = new System.Windows.Forms.RadioButton();
             this.rbRenamingGameName = new System.Windows.Forms.RadioButton();
-            this.rbRenamingGameNameRegion = new System.Windows.Forms.RadioButton();
-            this.rbRenamingGameNameRegionFirmware = new System.Windows.Forms.RadioButton();
+            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.cbScrapXCIOnSD = new System.Windows.Forms.CheckBox();
+            this.cbScrapNSPOnSD = new System.Windows.Forms.CheckBox();
+            this.cbScrapLayerFSOnSD = new System.Windows.Forms.CheckBox();
+            this.cbAutoUpdateScene = new System.Windows.Forms.CheckBox();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.tabControl1.SuspendLayout();
+            this.tabPage1.SuspendLayout();
             this.tabPage3.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.gbCustom.SuspendLayout();
+            this.groupBox2.SuspendLayout();
             this.SuspendLayout();
             // 
             // panel1
@@ -67,6 +74,35 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(617, 36);
             this.panel1.TabIndex = 1;
+            // 
+            // btnApply
+            // 
+            this.btnApply.Location = new System.Drawing.Point(530, 6);
+            this.btnApply.Name = "btnApply";
+            this.btnApply.Size = new System.Drawing.Size(75, 23);
+            this.btnApply.TabIndex = 2;
+            this.btnApply.Text = "&Apply";
+            this.btnApply.UseVisualStyleBackColor = true;
+            // 
+            // btnCancel
+            // 
+            this.btnCancel.Location = new System.Drawing.Point(447, 6);
+            this.btnCancel.Name = "btnCancel";
+            this.btnCancel.Size = new System.Drawing.Size(75, 23);
+            this.btnCancel.TabIndex = 1;
+            this.btnCancel.Text = "&Cancel";
+            this.btnCancel.UseVisualStyleBackColor = true;
+            this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
+            // 
+            // btnOK
+            // 
+            this.btnOK.Location = new System.Drawing.Point(364, 6);
+            this.btnOK.Name = "btnOK";
+            this.btnOK.Size = new System.Drawing.Size(75, 23);
+            this.btnOK.TabIndex = 0;
+            this.btnOK.Text = "&OK";
+            this.btnOK.UseVisualStyleBackColor = true;
+            this.btnOK.Click += new System.EventHandler(this.btnOK_Click);
             // 
             // panel2
             // 
@@ -91,6 +127,8 @@
             // 
             // tabPage1
             // 
+            this.tabPage1.Controls.Add(this.cbAutoUpdateScene);
+            this.tabPage1.Controls.Add(this.groupBox2);
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
@@ -108,35 +146,6 @@
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Visual";
             this.tabPage2.UseVisualStyleBackColor = true;
-            // 
-            // btnOK
-            // 
-            this.btnOK.Location = new System.Drawing.Point(364, 6);
-            this.btnOK.Name = "btnOK";
-            this.btnOK.Size = new System.Drawing.Size(75, 23);
-            this.btnOK.TabIndex = 0;
-            this.btnOK.Text = "&OK";
-            this.btnOK.UseVisualStyleBackColor = true;
-            this.btnOK.Click += new System.EventHandler(this.btnOK_Click);
-            // 
-            // btnCancel
-            // 
-            this.btnCancel.Location = new System.Drawing.Point(447, 6);
-            this.btnCancel.Name = "btnCancel";
-            this.btnCancel.Size = new System.Drawing.Size(75, 23);
-            this.btnCancel.TabIndex = 1;
-            this.btnCancel.Text = "&Cancel";
-            this.btnCancel.UseVisualStyleBackColor = true;
-            this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
-            // 
-            // btnApply
-            // 
-            this.btnApply.Location = new System.Drawing.Point(530, 6);
-            this.btnApply.Name = "btnApply";
-            this.btnApply.Size = new System.Drawing.Size(75, 23);
-            this.btnApply.TabIndex = 2;
-            this.btnApply.Text = "&Apply";
-            this.btnApply.UseVisualStyleBackColor = true;
             // 
             // tabPage3
             // 
@@ -165,6 +174,28 @@
             this.groupBox1.TabIndex = 1;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Choose pattern";
+            // 
+            // rbRenamingGameNameRegionFirmware
+            // 
+            this.rbRenamingGameNameRegionFirmware.AutoSize = true;
+            this.rbRenamingGameNameRegionFirmware.Location = new System.Drawing.Point(19, 75);
+            this.rbRenamingGameNameRegionFirmware.Name = "rbRenamingGameNameRegionFirmware";
+            this.rbRenamingGameNameRegionFirmware.Size = new System.Drawing.Size(176, 17);
+            this.rbRenamingGameNameRegionFirmware.TabIndex = 6;
+            this.rbRenamingGameNameRegionFirmware.Text = "Game name (Region) (Firmware)";
+            this.rbRenamingGameNameRegionFirmware.UseVisualStyleBackColor = true;
+            this.rbRenamingGameNameRegionFirmware.CheckedChanged += new System.EventHandler(this.rbRenamingGameNameRegionFirmware_CheckedChanged);
+            // 
+            // rbRenamingGameNameRegion
+            // 
+            this.rbRenamingGameNameRegion.AutoSize = true;
+            this.rbRenamingGameNameRegion.Location = new System.Drawing.Point(19, 52);
+            this.rbRenamingGameNameRegion.Name = "rbRenamingGameNameRegion";
+            this.rbRenamingGameNameRegion.Size = new System.Drawing.Size(125, 17);
+            this.rbRenamingGameNameRegion.TabIndex = 5;
+            this.rbRenamingGameNameRegion.Text = "Game name (Region)";
+            this.rbRenamingGameNameRegion.UseVisualStyleBackColor = true;
+            this.rbRenamingGameNameRegion.CheckedChanged += new System.EventHandler(this.rbRenamingGameNameRegion_CheckedChanged);
             // 
             // lblExample
             // 
@@ -269,27 +300,58 @@
             this.rbRenamingGameName.UseVisualStyleBackColor = true;
             this.rbRenamingGameName.CheckedChanged += new System.EventHandler(this.rbRenamingGameName_CheckedChanged);
             // 
-            // rbRenamingGameNameRegion
+            // groupBox2
             // 
-            this.rbRenamingGameNameRegion.AutoSize = true;
-            this.rbRenamingGameNameRegion.Location = new System.Drawing.Point(19, 52);
-            this.rbRenamingGameNameRegion.Name = "rbRenamingGameNameRegion";
-            this.rbRenamingGameNameRegion.Size = new System.Drawing.Size(125, 17);
-            this.rbRenamingGameNameRegion.TabIndex = 5;
-            this.rbRenamingGameNameRegion.Text = "Game name (Region)";
-            this.rbRenamingGameNameRegion.UseVisualStyleBackColor = true;
-            this.rbRenamingGameNameRegion.CheckedChanged += new System.EventHandler(this.rbRenamingGameNameRegion_CheckedChanged);
+            this.groupBox2.Controls.Add(this.cbScrapLayerFSOnSD);
+            this.groupBox2.Controls.Add(this.cbScrapNSPOnSD);
+            this.groupBox2.Controls.Add(this.cbScrapXCIOnSD);
+            this.groupBox2.Location = new System.Drawing.Point(10, 17);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Size = new System.Drawing.Size(588, 100);
+            this.groupBox2.TabIndex = 1;
+            this.groupBox2.TabStop = false;
+            this.groupBox2.Text = "Show on SD card";
             // 
-            // rbRenamingGameNameRegionFirmware
+            // cbScrapXCIOnSD
             // 
-            this.rbRenamingGameNameRegionFirmware.AutoSize = true;
-            this.rbRenamingGameNameRegionFirmware.Location = new System.Drawing.Point(19, 75);
-            this.rbRenamingGameNameRegionFirmware.Name = "rbRenamingGameNameRegionFirmware";
-            this.rbRenamingGameNameRegionFirmware.Size = new System.Drawing.Size(176, 17);
-            this.rbRenamingGameNameRegionFirmware.TabIndex = 6;
-            this.rbRenamingGameNameRegionFirmware.Text = "Game name (Region) (Firmware)";
-            this.rbRenamingGameNameRegionFirmware.UseVisualStyleBackColor = true;
-            this.rbRenamingGameNameRegionFirmware.CheckedChanged += new System.EventHandler(this.rbRenamingGameNameRegionFirmware_CheckedChanged);
+            this.cbScrapXCIOnSD.AutoSize = true;
+            this.cbScrapXCIOnSD.Location = new System.Drawing.Point(17, 25);
+            this.cbScrapXCIOnSD.Name = "cbScrapXCIOnSD";
+            this.cbScrapXCIOnSD.Size = new System.Drawing.Size(99, 17);
+            this.cbScrapXCIOnSD.TabIndex = 1;
+            this.cbScrapXCIOnSD.Text = "XCI Files (carts)";
+            this.cbScrapXCIOnSD.UseVisualStyleBackColor = true;
+            // 
+            // cbScrapNSPOnSD
+            // 
+            this.cbScrapNSPOnSD.AutoSize = true;
+            this.cbScrapNSPOnSD.Location = new System.Drawing.Point(17, 48);
+            this.cbScrapNSPOnSD.Name = "cbScrapNSPOnSD";
+            this.cbScrapNSPOnSD.Size = new System.Drawing.Size(113, 17);
+            this.cbScrapNSPOnSD.TabIndex = 2;
+            this.cbScrapNSPOnSD.Text = "NSP Files (e-shop)";
+            this.cbScrapNSPOnSD.UseVisualStyleBackColor = true;
+            // 
+            // cbScrapLayerFSOnSD
+            // 
+            this.cbScrapLayerFSOnSD.AutoSize = true;
+            this.cbScrapLayerFSOnSD.Enabled = false;
+            this.cbScrapLayerFSOnSD.Location = new System.Drawing.Point(17, 71);
+            this.cbScrapLayerFSOnSD.Name = "cbScrapLayerFSOnSD";
+            this.cbScrapLayerFSOnSD.Size = new System.Drawing.Size(166, 17);
+            this.cbScrapLayerFSOnSD.TabIndex = 3;
+            this.cbScrapLayerFSOnSD.Text = "Installed e-shop titles (layer fs)";
+            this.cbScrapLayerFSOnSD.UseVisualStyleBackColor = true;
+            // 
+            // cbAutoUpdateScene
+            // 
+            this.cbAutoUpdateScene.AutoSize = true;
+            this.cbAutoUpdateScene.Location = new System.Drawing.Point(10, 124);
+            this.cbAutoUpdateScene.Name = "cbAutoUpdateScene";
+            this.cbAutoUpdateScene.Size = new System.Drawing.Size(206, 17);
+            this.cbAutoUpdateScene.TabIndex = 2;
+            this.cbAutoUpdateScene.Text = "Automatic update scene list on startup";
+            this.cbAutoUpdateScene.UseVisualStyleBackColor = true;
             // 
             // FormConfigs
             // 
@@ -308,11 +370,15 @@
             this.panel1.ResumeLayout(false);
             this.panel2.ResumeLayout(false);
             this.tabControl1.ResumeLayout(false);
+            this.tabPage1.ResumeLayout(false);
+            this.tabPage1.PerformLayout();
             this.tabPage3.ResumeLayout(false);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.gbCustom.ResumeLayout(false);
             this.gbCustom.PerformLayout();
+            this.groupBox2.ResumeLayout(false);
+            this.groupBox2.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -340,5 +406,10 @@
         private System.Windows.Forms.RadioButton rbRenamingGameName;
         private System.Windows.Forms.RadioButton rbRenamingGameNameRegion;
         private System.Windows.Forms.RadioButton rbRenamingGameNameRegionFirmware;
+        private System.Windows.Forms.GroupBox groupBox2;
+        private System.Windows.Forms.CheckBox cbScrapLayerFSOnSD;
+        private System.Windows.Forms.CheckBox cbScrapNSPOnSD;
+        private System.Windows.Forms.CheckBox cbScrapXCIOnSD;
+        private System.Windows.Forms.CheckBox cbAutoUpdateScene;
     }
 }

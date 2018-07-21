@@ -18,6 +18,8 @@ namespace Switch_Backup_Manager
     {
         private Dictionary<string, FileData> LocalFilesList;
         private Dictionary<string, FileData> LocalFilesListSelectedItems;
+        private Dictionary<string, FileData> LocalNSPFilesList;
+        private Dictionary<string, FileData> LocalNSPFilesListSelectedItems;
         private Dictionary<string, FileData> SceneReleasesList;
         private Dictionary<string, FileData> SceneReleasesSelectedItems;
         private Dictionary<string, FileData> SDCardList;
@@ -25,6 +27,10 @@ namespace Switch_Backup_Manager
 
         private bool updateCbxRemoveableFiles;
         private bool updateFileListAfterMove;
+        private string clipboardInfoEShop;
+        private string clipboardInfoLocal;
+        private string clipboardInfoSD;
+        private string clipboardInfoScene;
 
         //To update Statusbar wheile adding files
         public static int progressPercent = 0;
@@ -41,6 +47,7 @@ namespace Switch_Backup_Manager
 
             Util.LoadSettings();
             LocalFilesList = new Dictionary<string, FileData>();
+            LocalNSPFilesList = new Dictionary<string, FileData>();
             SceneReleasesList = new Dictionary<string, FileData>();
             SDCardList = new Dictionary<string, FileData>();
 
@@ -63,13 +70,23 @@ namespace Switch_Backup_Manager
             {
                 cbxFilterScene.Items.Add(column.Text);
             }
-            cbxFilterScene.SelectedIndex = cbxFilterScene.Items.IndexOf("Game name");
+            cbxFilterScene.SelectedIndex = cbxFilterScene.Items.IndexOf("Game title");
             OLVSceneList.UseFiltering = true;
+
+            foreach (ColumnHeader column in OLVEshop.Columns)
+            {
+                cbxFilterEshop.Items.Add(column.Text);
+            }
+            cbxFilterEshop.SelectedIndex = cbxFilterEshop.Items.IndexOf("Game title");
+            OLVEshop.UseFiltering = true;
 
             SetupOLVs();
 
             UpdateSceneReleasesList();
             UpdateLocalGamesList();
+            UpdateLocalNSPGamesList();
+
+            tabControl1_SelectedIndexChanged(this, new EventArgs());
         }
 
         private void SetupOLVs()
@@ -78,13 +95,17 @@ namespace Switch_Backup_Manager
             OLV_SDCard.OwnerDraw = true;
             OLVSceneList.OwnerDraw = true;
             noneToolStripMenuItem1.Checked = true;
+
             OLVLocalFiles.SetObjects(LocalFilesList.Values);
             OLVSceneList.SetObjects(SceneReleasesList.Values);
+            OLVEshop.SetObjects(LocalNSPFilesList.Values);
+
             sizeColumnROMSizeScene.AspectToStringConverter = delegate (object x) { return Util.BytesToGB((long)x); };
             olvColumnROMSizeLocal.AspectToStringConverter = delegate (object x) { return Util.BytesToGB((long)x); };
             olvColumnUsedSpaceLocal.AspectToStringConverter = delegate (object x) { return Util.BytesToGB((long)x); };
             olvColumnROMSizeSD.AspectToStringConverter = delegate (object x) { return Util.BytesToGB((long)x); };
             olvColumnUsedSpaceSD.AspectToStringConverter = delegate (object x) { return Util.BytesToGB((long)x); };
+            olvColumnROMSizeEshop.AspectToStringConverter = delegate (object x) { return Util.BytesToGB((long)x); };
 
             olvColumnLanguagesLocal.AspectToStringConverter = delegate (object x) {
                 string result = "";
@@ -94,6 +115,16 @@ namespace Switch_Backup_Manager
                 }
                 result = result.Remove(result.Length - 2);
                 return result; 
+            };
+
+            olvColumnLanguagesEShop.AspectToStringConverter = delegate (object x) {
+                string result = "";
+                foreach (string language in (List<string>)x)
+                {
+                    result += language + ", ";
+                }
+                result = result.Remove(result.Length - 2);
+                return result;
             };
 
             olvColumnLanguagesSD.AspectToStringConverter = delegate (object x) {
@@ -168,18 +199,22 @@ namespace Switch_Backup_Manager
 
         public void UpdateSDCardList()
         {
-            SDCardList = Util.GetFileDataCollection(cbxRemoveableDrives.SelectedItem.ToString());
+            //Support for NSP files on SD Card for Now is VERY slow. But we can put it as an option on .INI
+            if (Util.ScrapXCIOnSDCard & Util.ScrapNSPOnSDCard)
+            {
+                SDCardList = Util.GetFileDataCollectionAll(cbxRemoveableDrives.SelectedItem.ToString());
+            } else if (Util.ScrapNSPOnSDCard)
+            {
+                SDCardList = Util.GetFileDataCollectionNSP(cbxRemoveableDrives.SelectedItem.ToString());
+            } else if (Util.ScrapXCIOnSDCard)
+            {
+                SDCardList = Util.GetFileDataCollection(cbxRemoveableDrives.SelectedItem.ToString());
+            }
+
+            //SDCardList = Util.GetFileDataCollection(cbxRemoveableDrives.SelectedItem.ToString());
             OLV_SDCard.SetObjects(SDCardList.Values);
             SDCardListSelectedItems = new Dictionary<string, FileData>();
             SumarizeLocalGamesList("sdcard");
-/*
-            BeginInvoke((MethodInvoker)delegate {
-                SDCardList = Util.GetFileDataCollection(cbxRemoveableDrives.SelectedItem.ToString());
-                OLV_SDCard.SetObjects(SDCardList.Values);
-                SDCardListSelectedItems = new Dictionary<string, FileData>();
-                SumarizeLocalGamesList("sdcard");
-            });
-*/
         }
 
         public void UpdateLocalGamesList()
@@ -188,6 +223,14 @@ namespace Switch_Backup_Manager
             OLVLocalFiles.SetObjects(LocalFilesList.Values);
             LocalFilesListSelectedItems = new Dictionary<string, FileData>();
             SumarizeLocalGamesList("local");
+        }
+
+        public void UpdateLocalNSPGamesList()
+        {
+            LocalNSPFilesList = Util.LoadXMLToFileDataDictionary(Util.XML_NSP_Local);
+            OLVEshop.SetObjects(LocalNSPFilesList.Values);
+            LocalNSPFilesListSelectedItems = new Dictionary<string, FileData>();
+            SumarizeLocalGamesList("eshop");
         }
 
         /// <summary>
@@ -219,6 +262,14 @@ namespace Switch_Backup_Manager
                     break;
                 case ("scene"):
                     foreach (KeyValuePair<string, FileData> entry in SceneReleasesList)
+                    {
+                        FileData data = entry.Value;
+                        size += Convert.ToInt64(data.ROMSizeBytes);
+                        count++;
+                    }
+                    break;
+                case ("eshop"):
+                    foreach (KeyValuePair<string, FileData> entry in LocalNSPFilesList)
                     {
                         FileData data = entry.Value;
                         size += Convert.ToInt64(data.ROMSizeBytes);
@@ -391,7 +442,26 @@ namespace Switch_Backup_Manager
                             OLVSceneList.ShowGroups = true;
                             OLVSceneList.BuildGroups(olvColumnGroupScene, SortOrder.Ascending);
                             break;
-
+                    }
+                    break;
+                case "eshop":
+                    switch (groupby)
+                    {
+                        case "none":
+                            OLVEshop.ShowGroups = false;
+                            break;
+                        case "gametitle":
+                            OLVEshop.ShowGroups = true;
+                            OLVEshop.BuildGroups(olvColumnGameNameScene, SortOrder.Ascending);
+                            break;
+                        case "developer":
+                            OLVEshop.ShowGroups = true;
+                            OLVEshop.BuildGroups(olvColumnDeveloperEShop, SortOrder.Ascending);
+                            break;
+                        case "masterkeyrevision":
+                            OLVEshop.ShowGroups = true;
+                            OLVEshop.BuildGroups(olvColumnMasterKeyRevisionEShop, SortOrder.Ascending);
+                            break;
                     }
                     break;
             }
@@ -461,7 +531,8 @@ namespace Switch_Backup_Manager
                     toolStripStatusLabelGame.Visible = true;
                     toolStripProgressAddingFiles.Value = 0;
                     timer1.Enabled = true;
-                    backgroundWorkerAddFilesFromDirectory.RunWorkerAsync(selectedPath);
+                    object[] parameters = { selectedPath, "xci" }; //0: FilesList (string[]), 1: FileType ("xci", "nsp") 
+                    backgroundWorkerAddFilesFromDirectory.RunWorkerAsync(parameters);
                 }
             }
         }
@@ -542,10 +613,9 @@ namespace Switch_Backup_Manager
                 case 2: //Scene
                     SumarizeLocalGamesList("scene");
                     break;
-                case 3:
-
+                case 3: //Eshop
+                    SumarizeLocalGamesList("eshop");
                     break;
-
             }
         }
 
@@ -616,11 +686,24 @@ namespace Switch_Backup_Manager
                 }
             }
         }
-
+        
         private void backgroundWorkerAddFiles_DoWork(object sender, DoWorkEventArgs e)
         {
             BackgroundWorker worker = sender as BackgroundWorker;
-            Util.AppendFileDataDictionaryToXML(Util.AddFilesFromFolder((string)e.Argument));
+
+            object[] parameters = e.Argument as object[];
+
+            string folder = (string)parameters[0];
+            string fileType = (string)parameters[1];
+            if (fileType == "xci")
+            {
+                Util.AppendFileDataDictionaryToXML(Util.AddFilesFromFolder(folder, fileType));
+            }
+            else
+            {
+                Util.AppendFileDataDictionaryToXML(Util.AddFilesFromFolder(folder, fileType), Util.LOCAL_NSP_FILES_DB);
+            }
+            e.Result = fileType;
         }
 
         private void backgroundWorkerAddFiles_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
@@ -631,8 +714,18 @@ namespace Switch_Backup_Manager
             toolStripStatusLabelGame.Text = "";
             toolStripStatusLabelGame.Visible = false;
             menuLocalFiles.Enabled = true;
-            //OLVLocalFiles.Enabled = true;
-            UpdateLocalGamesList();
+
+            string fileType = e.Result as string;
+            if (fileType == "xci")
+            {
+                UpdateLocalGamesList();
+                menuLocalFiles.Enabled = true;
+            }
+            else
+            {
+                UpdateLocalNSPGamesList();
+                menuEShop.Enabled = true;
+            }
 
             MessageBox.Show("Done");
         }
@@ -650,7 +743,7 @@ namespace Switch_Backup_Manager
             noneToolStripMenuItem1.Checked = true;
         }
 
-        private void ClearGroupingMenuChecks(string local) //local options: "local", "sdcard", "scene" 
+        private void ClearGroupingMenuChecks(string local) //local options: "local", "sdcard", "scene", "eshop" 
         {
             switch (local)
             {
@@ -683,7 +776,12 @@ namespace Switch_Backup_Manager
                     cartSizeToolStripMenuItemCartSizeScene.Checked = false;
                     toolStripMenuItemGroupTypeScene.Checked = false;
                     break;
-
+                case "eshop":
+                    toolStripMenuItemGroupingNoneEShop.Checked = false;
+                    toolStripMenuItemGroupingGameTitleEShop.Checked = false;
+                    toolStripMenuItemGroupingDeveloperEShop.Checked = false;
+                    toolStripMenuItemGroupingMasterKeyEShop.Checked = false;
+                    break;
             }
         }
 
@@ -1123,7 +1221,6 @@ namespace Switch_Backup_Manager
             if (e.ColumnIndex == this.columnSceneRegionScene.Index)
             {
                 e.SubItem.Text = "";
-
             }
         }
 
@@ -1147,7 +1244,9 @@ namespace Switch_Backup_Manager
                     toolStripStatusLabelGame.Visible = true;
                     toolStripProgressAddingFiles.Value = 0;
                     timer1.Enabled = true;
-                    backgroundWorkerAddFile.RunWorkerAsync(openFileDialog.FileNames);
+                    object[] parameters = { openFileDialog.FileNames, "xci" }; //0: FilesList (string[]), 1: FileType ("xci", "nsp") 
+                    backgroundWorkerAddFile.RunWorkerAsync(parameters);
+                    //backgroundWorkerAddFile.RunWorkerAsync(openFileDialog.FileNames);
                 }
             }
         }
@@ -1155,7 +1254,19 @@ namespace Switch_Backup_Manager
         private void backgroundWorkerAddFile_DoWork(object sender, DoWorkEventArgs e)
         {
             BackgroundWorker worker = sender as BackgroundWorker;
-            Util.AppendFileDataDictionaryToXML(Util.AddFiles((string[])e.Argument));
+
+            object[] parameters = e.Argument as object[];
+
+            string [] filesList = (string[])parameters[0];
+            string fileType = (string)parameters[1];
+            if (fileType == "xci")
+            {
+                Util.AppendFileDataDictionaryToXML(Util.AddFiles(filesList, fileType));
+            } else
+            {
+                Util.AppendFileDataDictionaryToXML(Util.AddFiles(filesList, fileType), Util.LOCAL_NSP_FILES_DB);
+            }
+            e.Result = fileType;
         }
 
         private void backgroundWorkerAddFile_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
@@ -1165,40 +1276,64 @@ namespace Switch_Backup_Manager
             toolStripProgressAddingFiles.Visible = false;
             toolStripStatusLabelGame.Text = "";
             toolStripStatusLabelGame.Visible = false;
-            menuLocalFiles.Enabled = true;
-            //OLVLocalFiles.Enabled = true;
-            UpdateLocalGamesList();
+
+            string fileType = e.Result as string;
+            if (fileType == "xci")
+            {
+                menuLocalFiles.Enabled = true;
+                UpdateLocalGamesList();
+            } else
+            {
+                menuEShop.Enabled = true;
+                UpdateLocalNSPGamesList();
+            }
 
             //Its so fast that I dont think it needs a message
             MessageBox.Show("Done");
         }
 
-        private void RemoveSelectedFiles()
+        private void RemoveSelectedFiles(string list)
         {
-            if (LocalFilesListSelectedItems.Count() > 0)
+            if (list == "eshop")
             {
-                Util.RemoveFileDataDictionaryFromXML(LocalFilesListSelectedItems);
-                LocalFilesListSelectedItems.Clear();
-                OLVLocalFiles.SelectedItems.Clear();
-                UpdateLocalGamesList();
-                //MessageBox.Show("Done");
+                if (LocalNSPFilesListSelectedItems.Count() > 0)
+                {
+                    Util.RemoveFileDataDictionaryFromXML(LocalNSPFilesListSelectedItems, Util.LOCAL_NSP_FILES_DB);
+                    LocalNSPFilesListSelectedItems.Clear();
+                    OLVEshop.SelectedItems.Clear();
+                    UpdateLocalNSPGamesList();
+                }
+                else
+                {
+                    MessageBox.Show("No files selected!");
+                }
             }
             else
             {
-                MessageBox.Show("No files selected!");
+                if (LocalFilesListSelectedItems.Count() > 0)
+                {
+                    Util.RemoveFileDataDictionaryFromXML(LocalFilesListSelectedItems, Util.LOCAL_FILES_DB);
+                    LocalFilesListSelectedItems.Clear();
+                    OLVLocalFiles.SelectedItems.Clear();
+                    UpdateLocalGamesList();
+                }
+                else
+                {
+                    MessageBox.Show("No files selected!");
+                }
             }
         }
 
         private void selectedToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            RemoveSelectedFiles();
+            RemoveSelectedFiles("local");
         }
 
         private void objectListView1_KeyDown(object sender, KeyEventArgs e)
         {            
             if (e.KeyCode == System.Windows.Forms.Keys.Delete)
             {
-                RemoveSelectedFiles();
+                RemoveSelectedFiles("local");
             }                
         }
 
@@ -1216,8 +1351,9 @@ namespace Switch_Backup_Manager
             Dictionary<string, FileData> filesList = (Dictionary<string, FileData>)parameters[0];
             string destinyPath = (string)parameters[1];
             string operation = (string)parameters[2];
+            string source = (string)parameters[3];
 
-            Util.CopyFilesOnDictionaryToFolder(filesList, destinyPath, operation);
+            Util.CopyFilesOnDictionaryToFolder(filesList, destinyPath, operation);            
         }
 
         private void backgroundWorkerCopyFiles_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
@@ -1229,6 +1365,7 @@ namespace Switch_Backup_Manager
             toolStripStatusLabelGame.Visible = false;
             menuLocalFiles.Enabled = true;
             menuSDFiles.Enabled = true;
+            menuEShop.Enabled = true;
 
             //OLVLocalFiles.Enabled = false;
             if (updateCbxRemoveableFiles)
@@ -1242,7 +1379,9 @@ namespace Switch_Backup_Manager
             }
             if (updateFileListAfterMove)
             {
-                Util.RemoveFileDataDictionaryFromXML(LocalFilesListSelectedItems);
+                //Util.RemoveFileDataDictionaryFromXML(LocalFilesListSelectedItems, Util.LOCAL_FILES_DB);
+                Util.RemoveMissingFilesFromXML(Util.XML_Local, Util.LOCAL_FILES_DB);
+                Util.RemoveMissingFilesFromXML(Util.XML_NSP_Local, Util.LOCAL_NSP_FILES_DB);
                 updateFileListAfterMove = false;
             }
             LocalFilesListSelectedItems.Clear();
@@ -1294,7 +1433,7 @@ namespace Switch_Backup_Manager
 
         private void updateToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Util.RemoveMissingFilesFromXML(Util.XML_Local);
+            Util.RemoveMissingFilesFromXML(Util.XML_Local, Util.LOCAL_FILES_DB);
             UpdateLocalGamesList();
             MessageBox.Show("Done.");
         }
@@ -1309,7 +1448,7 @@ namespace Switch_Backup_Manager
 
         private void updateLocalDatabaseToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Util.RemoveMissingFilesFromXML(Util.XML_Local);
+            Util.RemoveMissingFilesFromXML(Util.XML_Local, Util.LOCAL_FILES_DB);
             UpdateLocalGamesList();
             MessageBox.Show("Done.");
         }
@@ -1444,6 +1583,124 @@ namespace Switch_Backup_Manager
             }
         }
 
+        private void OperationCopySelectedFilesFromLocalEShopListToSDCard()
+        {
+            long totalBytesSelectedFiles = 0;
+            long spaceAvailableOnSDCard = 0;
+
+            if (cbxRemoveableDrives.Items.Count > 0 && cbxRemoveableDrives.SelectedIndex > -1)
+            {
+                if (LocalNSPFilesListSelectedItems.Count > 0)
+                {
+                    foreach (FileData data in LocalNSPFilesListSelectedItems.Values)
+                    {
+                        totalBytesSelectedFiles += data.ROMSizeBytes;
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("No files selected");
+                    return;
+                }
+
+                var driveList = DriveInfo.GetDrives();
+                foreach (DriveInfo drive in driveList)
+                {
+                    if (drive.DriveType == DriveType.Removable && drive.Name == cbxRemoveableDrives.SelectedItem.ToString())
+                    {
+                        spaceAvailableOnSDCard = drive.TotalFreeSpace;
+                    }
+                }
+
+                //Do we have enought free space on destiny?
+                if (totalBytesSelectedFiles > spaceAvailableOnSDCard)
+                {
+                    MessageBox.Show("The selected SD card doesn't have enought space available!");
+                    return;
+                }
+
+                if (!backgroundWorkerCopyFiles.IsBusy)
+                {
+                    updateCbxRemoveableFiles = true;
+                    menuEShop.Enabled = false;
+                    toolStripStatusFilesOperation.Text = Properties.Resources.EN_FileOperationCopy;
+                    toolStripStatusFilesOperation.Visible = true;
+                    toolStripProgressAddingFiles.Visible = true;
+                    toolStripStatusLabelGame.Text = "";
+                    toolStripStatusLabelGame.Visible = true;
+                    toolStripProgressAddingFiles.Value = 0;
+                    progressPercent = 0;
+                    progressCurrentfile = "";
+                    timer1.Enabled = true;
+                    object[] parameters = { LocalNSPFilesListSelectedItems, cbxRemoveableDrives.Text, "copy", "eshop" }; //0: FilesList (Dictionary), 1: DestinyPath (string), 2: Operation("copy","move"), 3: source ("local", "sdcard", "eshop") 
+                    backgroundWorkerCopyFiles.RunWorkerAsync(parameters);
+                }
+            }
+            else
+            {
+                MessageBox.Show("Please, first select a SD card from the list.");
+            }
+        }
+
+        private void OperationMoveSelectedFilesFromLocalEShopListToSDCard()
+        {
+            long totalBytesSelectedFiles = 0;
+            long spaceAvailableOnSDCard = 0;
+
+            if (cbxRemoveableDrives.Items.Count > 0 && cbxRemoveableDrives.SelectedIndex > -1)
+            {
+                if (LocalNSPFilesListSelectedItems.Count > 0)
+                {
+                    foreach (FileData data in LocalNSPFilesListSelectedItems.Values)
+                    {
+                        totalBytesSelectedFiles += data.ROMSizeBytes;
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("No files selected");
+                    return;
+                }
+
+                var driveList = DriveInfo.GetDrives();
+                foreach (DriveInfo drive in driveList)
+                {
+                    if (drive.DriveType == DriveType.Removable && drive.Name == cbxRemoveableDrives.SelectedItem.ToString())
+                    {
+                        spaceAvailableOnSDCard = drive.TotalFreeSpace;
+                    }
+                }
+
+                //Do we have enought free space on destiny?
+                if (totalBytesSelectedFiles > spaceAvailableOnSDCard)
+                {
+                    MessageBox.Show("The selected SD card doesn't have enought space available!");
+                    return;
+                }
+
+                if (!backgroundWorkerCopyFiles.IsBusy)
+                {
+                    updateCbxRemoveableFiles = true;
+                    menuEShop.Enabled = false;
+                    toolStripStatusFilesOperation.Text = Properties.Resources.EN_FileOperationCopy;
+                    toolStripStatusFilesOperation.Visible = true;
+                    toolStripProgressAddingFiles.Visible = true;
+                    toolStripStatusLabelGame.Text = "";
+                    toolStripStatusLabelGame.Visible = true;
+                    toolStripProgressAddingFiles.Value = 0;
+                    progressPercent = 0;
+                    progressCurrentfile = "";
+                    timer1.Enabled = true;
+                    object[] parameters = { LocalNSPFilesListSelectedItems, cbxRemoveableDrives.Text, "move", "eshop" }; //0: FilesList (Dictionary), 1: DestinyPath (string), 2: Operation("copy","move"), 3: source ("local", "sdcard", "eshop") 
+                    backgroundWorkerCopyFiles.RunWorkerAsync(parameters);
+                }
+            }
+            else
+            {
+                MessageBox.Show("Please, first select a SD card from the list.");
+            }
+        }
+
         private void OperationMoveSelectedFilesFromLocalListToSDCard()
         {
             long totalBytesSelectedFiles = 0;
@@ -1500,6 +1757,80 @@ namespace Switch_Backup_Manager
             else
             {
                 MessageBox.Show("Please, first select a SD card from the list.");
+            }
+        }
+
+        private void OperationCopySelectedFilesFromEshopListToFolder()
+        {
+            if (LocalNSPFilesListSelectedItems.Count > 0)
+            {
+                CommonOpenFileDialog dialog = new CommonOpenFileDialog();
+                dialog.IsFolderPicker = true;
+
+                if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
+                {
+                    dialog.RestoreDirectory = true;
+                    string destination = dialog.FileName + @"\";
+
+                    if (!backgroundWorkerCopyFiles.IsBusy)
+                    {
+                        menuEShop.Enabled = false;
+                        toolStripStatusFilesOperation.Text = Properties.Resources.EN_FileOperationCopy;
+                        toolStripStatusFilesOperation.Visible = true;
+                        toolStripProgressAddingFiles.Visible = true;
+                        toolStripStatusLabelGame.Text = "";
+                        toolStripStatusLabelGame.Visible = true;
+                        toolStripProgressAddingFiles.Value = 0;
+                        progressCurrentfile = "";
+                        progressPercent = 0;
+                        timer1.Enabled = true;
+                        object[] parameters = { LocalNSPFilesListSelectedItems, destination, "copy", "eshop" }; //0: FilesList (Dictionary), 1: DestinyPath (string), 2: Operation("copy","move"), 3: source ("local", "sdcard") 
+                        backgroundWorkerCopyFiles.RunWorkerAsync(parameters);
+                    }
+                }
+            }
+            else
+            {
+                MessageBox.Show("No files selected");
+                return;
+            }
+        }
+
+        private void OperationMoveSelectedFilesFromEshopListToFolder()
+        {
+            if (LocalNSPFilesListSelectedItems.Count > 0)
+            {
+                CommonOpenFileDialog dialog = new CommonOpenFileDialog();
+                dialog.IsFolderPicker = true;
+
+                if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
+                {
+                    dialog.RestoreDirectory = true;
+                    string destination = dialog.FileName + @"\";
+
+                    if (!backgroundWorkerCopyFiles.IsBusy)
+                    {
+                        updateFileListAfterMove = true;
+                        menuEShop.Enabled = false;
+                        //OLVLocalFiles.Enabled = false;
+                        toolStripStatusFilesOperation.Text = Properties.Resources.EN_FileOperationMove;
+                        toolStripStatusFilesOperation.Visible = true;
+                        toolStripProgressAddingFiles.Visible = true;
+                        toolStripStatusLabelGame.Text = "";
+                        toolStripStatusLabelGame.Visible = true;
+                        toolStripProgressAddingFiles.Value = 0;
+                        progressPercent = 0;
+                        progressCurrentfile = "";
+                        timer1.Enabled = true;
+                        object[] parameters = { LocalNSPFilesListSelectedItems, destination, "move", "eshop" }; //0: FilesList (Dictionary), 1: DestinyPath (string), 2: Operation("copy","move"), 3: source ("local", "sdcard", "eshop") 
+                        backgroundWorkerCopyFiles.RunWorkerAsync(parameters);
+                    }
+                }
+            }
+            else
+            {
+                MessageBox.Show("No files selected");
+                return;
             }
         }
 
@@ -1688,6 +2019,21 @@ namespace Switch_Backup_Manager
             }
         }
 
+        private void OperationRenameSelectedLocalEShopFiles()
+        {
+            if (LocalNSPFilesListSelectedItems.Count > 0)
+            {
+                RenameSelectedFiles(LocalNSPFilesListSelectedItems, "eshop");
+                OLVEshop.RefreshSelectedObjects();
+                MessageBox.Show("Done");
+            }
+            else
+            {
+                MessageBox.Show("No files selected");
+                return;
+            }
+        }
+
         private void OperationRenameSelectedSDCardFiles()
         {
             if (SDCardListSelectedItems.Count > 0)
@@ -1703,7 +2049,7 @@ namespace Switch_Backup_Manager
             }
         }
 
-        private void RenameSelectedFiles(Dictionary<string, FileData> localFilesListSelectedItems, string source) //source possible values: "local", "sdcard"
+        private void RenameSelectedFiles(Dictionary<string, FileData> localFilesListSelectedItems, string source) //source possible values: "local", "sdcard", "eshop"
         {
             Util.AutoRenameXCIFiles(localFilesListSelectedItems, source);
         }
@@ -2107,7 +2453,7 @@ namespace Switch_Backup_Manager
                 case "Title ID":
                     filterText.Columns = new[] { olvColumnTitleIDScene };
                     break;
-                case "Game name":
+                case "Game title":
                     filterText.Columns = new[] { olvColumnGameNameScene };
                     break;
                 case "ROM size":
@@ -2148,6 +2494,451 @@ namespace Switch_Backup_Manager
             OLVSceneList.ModelFilter = new CompositeAllFilter(new List<IModelFilter> { filterText });
             OLVSceneList.DefaultRenderer = new HighlightTextRenderer(filterText);
             //            SumarizeLocalGamesList("local");
+        }
+
+        private void filesToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "NSP Files (*.NSP)|*.nsp";
+            openFileDialog.Multiselect = true;
+            openFileDialog.Title = "Switch Backup Manager - Add Files";
+            openFileDialog.RestoreDirectory = true;
+            if (openFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                if (!backgroundWorkerAddFile.IsBusy)
+                {
+                    menuEShop.Enabled = false;
+                    toolStripStatusFilesOperation.Text = Properties.Resources.EN_FileOperationScraping;
+                    toolStripStatusFilesOperation.Visible = true;
+                    toolStripProgressAddingFiles.Visible = true;
+                    toolStripStatusLabelGame.Text = "";
+                    toolStripStatusLabelGame.Visible = true;
+                    toolStripProgressAddingFiles.Value = 0;
+                    timer1.Enabled = true;
+                    object[] parameters = { openFileDialog.FileNames, "nsp" }; //0: FilesList (string[]), 1: FileType ("xci", "nsp") 
+                    backgroundWorkerAddFile.RunWorkerAsync(parameters);
+                }
+            }
+        }
+
+        private void OLVEshop_ItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e)
+        {
+            if (OLVEshop.SelectedItems.Count == 0)
+            {
+                LocalNSPFilesListSelectedItems.Clear();
+                ClearGameInformation();
+                toolStripStatusLabel1.Text = "0 Selected (0MB)";
+            }
+            else
+            {
+                if (updateFileListAfterMove) //To prevent user changing selection during file operations...
+                {
+                    return;
+                }
+
+                if (e.IsSelected)
+                {
+                    ListView.SelectedListViewItemCollection selectedItems = OLVEshop.SelectedItems;
+                    //string FirstTitleIDSelected = selectedItems[selectedItems.Count-1].Text;
+                    //DisplayGameInformation(FirstTitleIDSelected);
+
+                    LocalNSPFilesListSelectedItems.Clear();
+                    string titleID = selectedItems[0].Text;
+
+                    int count = 0;
+                    long size = 0;
+                    foreach (ListViewItem item in selectedItems)
+                    {
+                        titleID = item.Text;
+                        FileData data = Util.GetFileData(titleID, LocalNSPFilesList);
+                        LocalNSPFilesListSelectedItems.Add(titleID, data);
+                        count++;
+                        size += Convert.ToInt64(data.UsedSpaceBytes);
+                    }
+
+                    toolStripStatusLabel1.Text = Convert.ToString(count) + " Selected (" + Util.BytesToGB(size) + ")";
+                    //Display information of the first selected item
+                    DisplayGameInformation(titleID, LocalNSPFilesList, "eshop");
+                }
+                else
+                {
+                    ListView.SelectedListViewItemCollection selectedItems = OLVEshop.SelectedItems;
+                    int count = 0;
+                    long size = 0;
+                    LocalNSPFilesListSelectedItems.Clear();
+                    foreach (ListViewItem item in selectedItems)
+                    {
+                        string titleID = item.Text;
+                        FileData data = Util.GetFileData(titleID, LocalNSPFilesList);
+                        LocalNSPFilesListSelectedItems.Add(titleID, data);
+                        count++;
+                        size += Convert.ToInt64(data.UsedSpaceBytes);
+                    }
+
+                    toolStripStatusLabel1.Text = Convert.ToString(count) + " Selected (" + Util.BytesToGB(size) + ")";
+
+                }
+            }
+
+        }
+
+        private void OLVEshop_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == System.Windows.Forms.Keys.Delete)
+            {
+                RemoveSelectedFiles("eshop");
+            }
+        }
+
+        private void folderToolStripMenuItem4_Click(object sender, EventArgs e)
+        {
+            CommonOpenFileDialog dialog = new CommonOpenFileDialog();
+            dialog.IsFolderPicker = true;
+            dialog.RestoreDirectory = true;
+
+            if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
+            {
+                string selectedPath = dialog.FileName;
+                menuEShop.Enabled = false;
+                if (!backgroundWorkerAddFilesFromDirectory.IsBusy)
+                {
+                    toolStripStatusFilesOperation.Text = Properties.Resources.EN_FileOperationScraping;
+                    toolStripStatusFilesOperation.Visible = true;
+                    toolStripProgressAddingFiles.Visible = true;
+                    toolStripStatusLabelGame.Text = "";
+                    toolStripStatusLabelGame.Visible = true;
+                    toolStripProgressAddingFiles.Value = 0;
+                    timer1.Enabled = true;
+                    object[] parameters = { selectedPath, "nsp" }; //0: FilesList (string[]), 1: FileType ("xci", "nsp") 
+                    backgroundWorkerAddFilesFromDirectory.RunWorkerAsync(parameters);
+                }
+            }
+        }
+
+        private void toolStripMenuItemSelectAllEshop_Click(object sender, EventArgs e)
+        {
+            OLVEshop.Select();
+            OLVEshop.SelectAll();
+        }
+
+        private void toolStripMenuItemSelectNoneEShop_Click(object sender, EventArgs e)
+        {
+            OLVEshop.SelectedItems.Clear();
+        }
+
+        private void toolStripMenuItemSelectInvertEShop_Click(object sender, EventArgs e)
+        {
+            InvertSelection(OLVEshop);
+        }
+
+        private void toolStripMenuItemSelectSDCardItemsOnSDEShop_Click(object sender, EventArgs e)
+        {
+            if (cbxRemoveableDrives.Items.Count > 0 && cbxRemoveableDrives.SelectedIndex > -1)
+            {
+                Dictionary<string, FileData> list = ContainsLists(SDCardList, LocalNSPFilesList);
+                FileData dummy;
+                OLVEshop.Select();
+                OLVEshop.HideSelection = false;
+                OLVEshop.SelectedItems.Clear();
+                foreach (ListViewItem item in OLVEshop.Items)
+                {
+                    if (list.TryGetValue(item.SubItems[0].Text, out dummy))
+                    {
+                        item.Selected = true;
+                    }
+                }
+            }
+            else
+            {
+                MessageBox.Show("Please, first select a SD card from the list.");
+            }
+
+        }
+
+        private void toolStripMenuItemSelectSDCardItemsNotOnSDCardEShop_Click(object sender, EventArgs e)
+        {
+            if (cbxRemoveableDrives.Items.Count > 0 && cbxRemoveableDrives.SelectedIndex > -1)
+            {
+                Dictionary<string, FileData> list = DiffLists(LocalNSPFilesList, SDCardList);
+                FileData dummy;
+                OLVEshop.Select();
+                OLVEshop.HideSelection = false;
+                OLVEshop.SelectedItems.Clear();
+                foreach (ListViewItem item in OLVEshop.Items)
+                {
+                    if (list.TryGetValue(item.SubItems[0].Text, out dummy))
+                    {
+                        item.Selected = true;
+                    }
+                }
+            }
+            else
+            {
+                MessageBox.Show("Please, first select a SD card from the list.");
+            }
+        }
+
+        private void toolStripMenuItemGroupingNoneEShop_Click(object sender, EventArgs e)
+        {
+            ClearGroupingMenuChecks("eshop");
+            ChangeGroupOnFileList("eshop", "none");
+            toolStripMenuItemGroupingNoneEShop.Checked = true;
+
+        }
+
+        private void toolStripMenuItemGroupingGameTitleEShop_Click(object sender, EventArgs e)
+        {
+            ClearGroupingMenuChecks("eshop");
+            ChangeGroupOnFileList("eshop", "gametitle");
+            toolStripMenuItemGroupingGameTitleEShop.Checked = true;
+        }
+
+        private void toolStripMenuItemGroupingDeveloperEShop_Click(object sender, EventArgs e)
+        {
+            ClearGroupingMenuChecks("eshop");
+            ChangeGroupOnFileList("eshop", "developer");
+            toolStripMenuItemGroupingDeveloperEShop.Checked = true;
+        }
+
+        private void toolStripMenuItemGroupingMasterKeyEShop_Click(object sender, EventArgs e)
+        {
+            ClearGroupingMenuChecks("eshop");
+            ChangeGroupOnFileList("eshop", "masterkeyrevision");
+            toolStripMenuItemGroupingMasterKeyEShop.Checked = true;
+        }
+
+        private void toolStripMenuItemRemoveSelectedEShop_Click(object sender, EventArgs e)
+        {
+            RemoveSelectedFiles("eshop");
+        }
+
+        private void toolStripMenuItemCopyFilesToSDEShop_Click(object sender, EventArgs e)
+        {
+            OperationCopySelectedFilesFromLocalEShopListToSDCard();
+        }
+
+        private void toolStripMenuItemMoveFilesToSDEShop_Click(object sender, EventArgs e)
+        {
+            OperationMoveSelectedFilesFromLocalEShopListToSDCard();
+        }
+
+        private void toolStripMenuItemCopyFilesToFolderEShop_Click(object sender, EventArgs e)
+        {
+            OperationCopySelectedFilesFromEshopListToFolder();
+        }
+
+        private void updateEshopLocalDatabaseToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Util.RemoveMissingFilesFromXML(Util.XML_NSP_Local, Util.LOCAL_NSP_FILES_DB);
+            UpdateLocalNSPGamesList();
+            MessageBox.Show("Done.");
+        }
+
+        private void toolStripMenuItemMoveFilesToFolderEShop_Click(object sender, EventArgs e)
+        {
+            OperationMoveSelectedFilesFromEshopListToFolder();
+        }
+
+        private void toolStripMenuItemEShopShowInExplorer_Click(object sender, EventArgs e)
+        {
+            if ((OLVEshop.Items.Count > 0) && (OLVEshop.SelectedItems.Count == 1))
+            {
+                FileData data = (FileData)OLVEshop.SelectedObject;
+                if (data != null)
+                {
+                    System.Diagnostics.Process.Start("explorer.exe", Path.GetDirectoryName(data.FilePath));
+                }
+                else
+                {
+                    MessageBox.Show("Select one item from the list.");
+                }
+            }
+            else
+            {
+                MessageBox.Show("Select one item from the list.");
+            }
+        }
+
+        private void toolStripMenuItemEShopAutoRename_Click(object sender, EventArgs e)
+        {
+            OperationRenameSelectedLocalEShopFiles();
+        }
+
+        private void sDCardToolStripMenuItem4_Click(object sender, EventArgs e)
+        {
+            OperationCopySelectedFilesFromLocalEShopListToSDCard();
+        }
+
+        private void folderToolStripMenuItem5_Click(object sender, EventArgs e)
+        {
+            OperationCopySelectedFilesFromEshopListToFolder();
+        }
+
+        private void sDCardToolStripMenuItem5_Click(object sender, EventArgs e)
+        {
+            OperationMoveSelectedFilesFromLocalEShopListToSDCard();
+        }
+
+        private void folderToolStripMenuItem6_Click(object sender, EventArgs e)
+        {
+            OperationMoveSelectedFilesFromEshopListToFolder();
+        }
+
+        private void OLVEshop_CellOver(object sender, CellOverEventArgs e)
+        {
+            if (e.Item != null)
+            {
+                string value = "";
+                if (e.Item.GetSubItem(e.ColumnIndex) != null)
+                {
+                    value = e.Item.GetSubItem(e.ColumnIndex).Text;
+                }
+                clipboardInfoEShop = value;
+            }            
+        }
+
+        private void OLVSceneList_CellOver(object sender, CellOverEventArgs e)
+        {
+            if (e.Item != null)
+            {
+                string value = "";
+                if (e.Item.GetSubItem(e.ColumnIndex) != null)
+                {
+                    value = e.Item.GetSubItem(e.ColumnIndex).Text;
+                }
+                clipboardInfoScene = value;
+            }
+        }
+
+        private void OLV_SDCard_CellOver(object sender, CellOverEventArgs e)
+        {
+            if (e.Item != null)
+            {
+                string value = "";
+                if (e.Item.GetSubItem(e.ColumnIndex) != null)
+                {
+                    value = e.Item.GetSubItem(e.ColumnIndex).Text;
+                }
+                clipboardInfoSD = value;
+            }            
+        }
+
+        private void OLVLocalFiles_CellOver(object sender, CellOverEventArgs e)
+        {
+            if (e.Item != null)
+            {
+                string value = "";
+                if (e.Item.GetSubItem(e.ColumnIndex) != null)
+                {
+                    value = e.Item.GetSubItem(e.ColumnIndex).Text;
+                }
+                clipboardInfoLocal = value;
+            }
+        }
+
+        private void copyInfoToClipboardToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (clipboardInfoEShop != "")
+            {
+                Clipboard.SetText(clipboardInfoEShop);
+            }            
+        }
+
+        private void copyInfoToClipboardToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            if (clipboardInfoLocal != "")
+            {
+                Clipboard.SetText(clipboardInfoLocal);
+            }            
+        }
+
+        private void copyInfoToClipboardToolStripMenuItem2_Click(object sender, EventArgs e)
+        {
+            if (clipboardInfoSD != "")
+            {
+                Clipboard.SetText(clipboardInfoSD);
+            }
+        }
+
+        private void copyInfoToClipboardToolStripMenuItem3_Click(object sender, EventArgs e)
+        {
+            if (clipboardInfoScene != "")
+            {
+                Clipboard.SetText(clipboardInfoScene);
+            }            
+        }
+
+        private void contextMenuStripScene_Opening(object sender, CancelEventArgs e)
+        {
+            if (SceneReleasesSelectedItems == null || SceneReleasesSelectedItems.Count == 0)
+            {
+                e.Cancel = true;
+            }
+        }
+
+        private void contextMenuStripEShop_Opening(object sender, CancelEventArgs e)
+        {
+            if (LocalNSPFilesListSelectedItems == null || LocalNSPFilesListSelectedItems.Count == 0)
+            {
+                e.Cancel = true;
+            }
+        }
+
+        private void cbxFilterEshop_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            textBoxFilterEShop_TextChanged(sender, e);
+        }
+
+        private void textBoxFilterEShop_TextChanged(object sender, EventArgs e)
+        {
+            TextMatchFilter filterText = TextMatchFilter.Contains(OLVEshop, textBoxFilterEShop.Text);
+
+            switch (cbxFilterEshop.Text)
+            {
+                case "Title ID":
+                    filterText.Columns = new[] { olvColumnTitleIDEShop };
+                    break;
+                case "Game title":
+                    filterText.Columns = new[] { olvColumnGameNameScene };
+                    break;
+                case "ROM size":
+                    filterText.Columns = new[] { olvColumnROMSizeEshop };
+                    break;
+                case "Languages":
+                    filterText.Columns = new[] { olvColumnLanguagesEShop };
+                    break;
+                case "Filename":
+                    filterText.Columns = new[] { olvColumnFilePathEShop };
+                    break;
+                case "Developer":
+                    filterText.Columns = new[] { olvColumnDeveloperEShop };
+                    break;
+                case "Game revision":
+                    filterText.Columns = new[] { olvColumnGameRevisionEShop };
+                    break;
+                case "Masterkey revision":
+                    filterText.Columns = new[] { olvColumnMasterKeyRevisionEShop };
+                    break;
+                case "Distribution":
+                    filterText.Columns = new[] { olvColumnDistributionType };
+                    break;
+                default:
+                    filterText = null;
+                    break;
+            }
+
+            OLVEshop.ModelFilter = new CompositeAllFilter(new List<IModelFilter> { filterText });
+            OLVEshop.DefaultRenderer = new HighlightTextRenderer(filterText);
+        }
+
+        private void btnClearFilterScene_Click(object sender, EventArgs e)
+        {
+            textBoxFilterScene.Clear();
+        }
+
+        private void btnClearFilterEShop_Click(object sender, EventArgs e)
+        {
+            textBoxFilterEShop.Clear();
         }
     }
 }

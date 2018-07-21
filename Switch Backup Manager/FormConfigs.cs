@@ -20,7 +20,7 @@ namespace Switch_Backup_Manager
             InitializeComponent();
 
             //Hide tabs not ready
-            tabControl1.TabPages.Remove(tabPage1);
+            //tabControl1.TabPages.Remove(tabPage1);
             tabControl1.TabPages.Remove(tabPage2);
 
             //This is Just an example, to put in the Label
@@ -48,6 +48,16 @@ namespace Switch_Backup_Manager
         {
             Util.autoRenamingPattern = this.autoRenamingPattern;
             Util.ini.IniWriteValue("AutoRenaming", "pattern", this.autoRenamingPattern);
+
+            Util.ScrapXCIOnSDCard = this.cbScrapXCIOnSD.Checked;
+            Util.ScrapNSPOnSDCard = this.cbScrapNSPOnSD.Checked;
+            Util.ScrapInstalledEshopSDCard = this.cbScrapLayerFSOnSD.Checked;
+            Util.ini.IniWriteValue("SD", "scrapXCI", cbScrapXCIOnSD.Checked ? "true" : "false");
+            Util.ini.IniWriteValue("SD", "scrapNSP", cbScrapNSPOnSD.Checked ? "true" : "false");
+            Util.ini.IniWriteValue("SD", "scrapInstalledNSP", cbScrapLayerFSOnSD.Checked ? "true" : "false");
+
+            Util.AutoUpdateNSDBOnStartup = this.cbAutoUpdateScene.Checked;
+            Util.ini.IniWriteValue("Config", "autoUpdateNSWDB", cbAutoUpdateScene.Checked ? "true" : "false");
         }
 
         public void LoadConfig()
@@ -75,6 +85,11 @@ namespace Switch_Backup_Manager
                     rbRenamingCustom.Checked = true;                    
                     break;
             }
+
+            this.cbAutoUpdateScene.Checked = Util.AutoUpdateNSDBOnStartup;
+            this.cbScrapLayerFSOnSD.Checked = Util.ScrapInstalledEshopSDCard;
+            this.cbScrapNSPOnSD.Checked = Util.ScrapNSPOnSDCard;
+            this.cbScrapXCIOnSD.Checked = Util.ScrapXCIOnSDCard;
         }
 
         private void rbRenamingGameName_CheckedChanged(object sender, EventArgs e)

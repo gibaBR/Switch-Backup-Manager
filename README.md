@@ -23,6 +23,13 @@ Complete Switch Backups management tool
 
 ## Changelog
 
+* 1.0.6
+  - Support for NSP (e-shop) files. Very experimental as it is very slow to scrap big files.
+  - More configurations on File->Options menu
+  - Auto update scene list on startup (optional)
+  - Now you can copy any game information to clipboard (mouse over cell)
+  - Some more code refactoring (if you had some problem adding files, please try again now)
+
 * 1.0.5
   - You can now configure the autorename pattern using tags
   - Preparing for next release, when more info will be retrieved from "scene" database
@@ -47,6 +54,6 @@ Complete Switch Backups management tool
 
 ## Source & Binaries
 * [GitHub](https://github.com/gibaBR/Switch-Backup-Manager/archive/master.zip)
-* [Release 1.0.5](https://github.com/gibaBR/Switch-Backup-Manager/releases/tag/v1.0.5)
+* [Release 1.0.6](https://github.com/gibaBR/Switch-Backup-Manager/releases/tag/v1.0.6)
 
 

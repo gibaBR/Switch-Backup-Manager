@@ -58,8 +58,8 @@ namespace Switch_Backup_Manager
             "Portuguese",
             "Russian",
             "Korean",
-            "Taiwanese",
-            "Chinese",
+            "Taiwanese", //This is Taiwanese but their titles comes in Traditional Chinese (http://blipretro.com/notes-on-the-taiwanese-nintendo-switch/)
+            "Traditional Chinese",
             "???"
         };
 
@@ -384,12 +384,35 @@ namespace Switch_Backup_Manager
 
             if (element != null)
             {
-                data.Cardtype = element.Element("card").Value;
-                data.Group = element.Element("group").Value;
-                data.Serial = element.Element("serial").Value;
-                data.Firmware = element.Element("firmware").Value;
-                data.Region = element.Element("region").Value;
-                data.Languages_resumed = element.Element("languages").Value;
+                //Try to get game name from scene releases as value retrieved from .XCI could use foreign language (Chinese!) and it may not be recognized by switch
+                if (element.Element("name") != null && element.Element("name").Value.Trim() != "")
+                {
+                    data.GameName = element.Element("name").Value;
+                }         
+                if (element.Element("card") != null)
+                {
+                    data.Cardtype = element.Element("card").Value;
+                }
+                if (element.Element("group") != null)
+                {
+                    data.Group = element.Element("group").Value;
+                }
+                if (element.Element("serial") != null)
+                {
+                    data.Serial = element.Element("serial").Value;
+                }
+                if (element.Element("firmware") != null)
+                {
+                    data.Firmware = element.Element("firmware").Value;
+                }
+                if (element.Element("region") != null)
+                {
+                    data.Region = element.Element("region").Value;
+                }
+                if (element.Element("languages") != null)
+                {
+                    data.Languages_resumed = element.Element("languages").Value;
+                }                               
             } else
             {
                 if (data.DistributionType == "Download")
@@ -403,57 +426,69 @@ namespace Switch_Backup_Manager
         {
             bool result = true;
 
-            //Try to find the game. If exists, do nothing. If not, Append
-            if (!IsTitleIDOnXML(data.TitleID, xml))
+            try
             {
-                string languages = "";
-                foreach (string language in data.Languagues)
+                //Try to find the game. If exists, do nothing. If not, Append
+                if (!IsTitleIDOnXML(data.TitleID, xml))
                 {
-                    languages += language + ","; 
+                    string languages = "";
+                    foreach (string language in data.Languagues)
+                    {
+                        languages += language + ",";
+                    }
+                    if (languages.Trim().Length > 1)
+                    {
+                        languages = languages.Remove(languages.Length - 1);
+                    }
+
+
+                    XElement element = new XElement("Game", new XAttribute("TitleID", data.TitleID),
+                               new XElement("FilePath", data.FilePath),
+                               new XElement("FileName", data.FileName),
+                               new XElement("FileNameWithExt", data.FileNameWithExt),
+                               new XElement("ROMSize", data.ROMSize),
+                               new XElement("ROMSizeBytes", data.ROMSizeBytes),
+                               new XElement("UsedSpace", data.UsedSpace),
+                               new XElement("UsedSpaceBytes", data.UsedSpaceBytes),
+                               new XElement("GameName", data.GameName),
+                               new XElement("Developer", data.Developer),
+                               new XElement("GameRevision", data.GameRevision),
+                               new XElement("ProductCode", data.ProductCode),
+                               new XElement("SDKVersion", data.SDKVersion),
+                               new XElement("CartSize", data.CartSize),
+                               new XElement("CardType", data.Cardtype),
+                               new XElement("MasterKeyRevision", data.MasterKeyRevision),
+                               new XElement("Region_Icon", data.Region_Icon),
+                               new XElement("Languagues", languages),
+                               new XElement("IsTrimmed", data.IsTrimmed),
+                               new XElement("Group", data.Group),
+                               new XElement("Serial", data.Serial),
+                               new XElement("Firmware", data.Firmware),
+                               new XElement("Region", data.Region),
+                               new XElement("Languages_resumed", data.Languages_resumed),
+                               new XElement("Distribution_Type", data.DistributionType)
+                       );
+                    if (xml == LOCAL_FILES_DB)
+                    {
+                        XML_Local.Root.Add(element);
+                        XML_Local.Save(@xml);
+                    }
+                    else
+                    {
+                        XML_NSP_Local.Root.Add(element);
+                        XML_NSP_Local.Save(@xml);
+                    }
                 }
-                languages = languages.Remove(languages.Length-1);
-
-                XElement element = new XElement("Game", new XAttribute("TitleID", data.TitleID),
-                           new XElement("FilePath", data.FilePath),
-                           new XElement("FileName", data.FileName),
-                           new XElement("FileNameWithExt", data.FileNameWithExt),
-                           new XElement("ROMSize", data.ROMSize),
-                           new XElement("ROMSizeBytes", data.ROMSizeBytes),
-                           new XElement("UsedSpace", data.UsedSpace),
-                           new XElement("UsedSpaceBytes", data.UsedSpaceBytes),
-                           new XElement("GameName", data.GameName),
-                           new XElement("Developer", data.Developer),
-                           new XElement("GameRevision", data.GameRevision),
-                           new XElement("ProductCode", data.ProductCode),
-                           new XElement("SDKVersion", data.SDKVersion),
-                           new XElement("CartSize", data.CartSize),
-                           new XElement("CardType", data.Cardtype),
-                           new XElement("MasterKeyRevision", data.MasterKeyRevision),
-                           new XElement("Region_Icon", data.Region_Icon),
-                           new XElement("Languagues", languages),
-                           new XElement("IsTrimmed", data.IsTrimmed),
-                           new XElement("Group", data.Group),
-                           new XElement("Serial", data.Serial),
-                           new XElement("Firmware", data.Firmware),
-                           new XElement("Region", data.Region),
-                           new XElement("Languages_resumed", data.Languages_resumed),
-                           new XElement("Distribution_Type", data.DistributionType)
-                   );
-                if (xml == LOCAL_FILES_DB)
+                else
                 {
-                    XML_Local.Root.Add(element);
-                    XML_Local.Save(@xml);
-                } else
-                {
-                    XML_NSP_Local.Root.Add(element);
-                    XML_NSP_Local.Save(@xml);
-                }                                
+                    //Nothing to do?
+                }
             }
-            else
+            catch (Exception e)
             {
-                //Nothing to do?
+                logger.Error("Problem writing Title ID " + data.TitleID + " on xml");
+                logger.Error(e.Message + "\n" + e.StackTrace);
             }
-
             return result;
         }
 
@@ -1217,7 +1252,8 @@ namespace Switch_Backup_Manager
             //Basic Info
             result.FilePath = filepath;
             result.FileName = Path.GetFileNameWithoutExtension(filepath);
-            result.FileNameWithExt = Path.GetFileName(filepath);            
+            result.FileNameWithExt = Path.GetFileName(filepath);
+            result.DistributionType = "Cartridge";
 
             if (CheckXCI(filepath))
             {
@@ -1353,7 +1389,7 @@ namespace Switch_Backup_Manager
                 PFS0.PFS0_Headers[0] = new PFS0.PFS0_Header(array3);
                 PFS0.PFS0_Entry[] array8;
                 array8 = new PFS0.PFS0_Entry[PFS0.PFS0_Headers[0].FileCount];
-//                logger.Info("PFS0.PFS0_Headers[0].FileCount: " + Convert.ToString(PFS0.PFS0_Headers[0].FileCount));
+
                 for (int m = 0; m < PFS0.PFS0_Headers[0].FileCount; m++)
                 {
                     fileStream.Position = PFS0Offset + 16 + 24 * m;
@@ -1383,7 +1419,6 @@ namespace Switch_Backup_Manager
                     }
 
                 }
-                //fileStream.Close();
 
                 NCA.NCA_Headers[0] = new NCA.NCA_Header(DecryptNCAHeader(filepath, gameNcaOffset));
                 result.TitleID = "0" + NCA.NCA_Headers[0].TitleID.ToString("X");
@@ -1441,10 +1476,16 @@ namespace Switch_Backup_Manager
 
                                 if (NACP.NACP_Strings[i].Check != 0)
                                 {
-
-                                    //CB_RegionName.Items.Add(Language[i]);
                                     string icon_filename = "data\\icon_" + Language[i].Replace(" ", "") + ".dat";
                                     string icon_titleID_filename = CACHE_FOLDER + "\\icon_" + result.TitleID + "_" + Language[i].Replace(" ", "") + ".bmp";
+
+                                    if (i == 13) //Taiwanese titles are localized as Traditional Chinese
+                                    {
+                                        if (!File.Exists(icon_filename)) { //If no taiwanese icon is found... Use Traditional Chinese
+                                            icon_filename = "data\\icon_" + Language[14].Replace(" ", "") + ".dat";
+                                            icon_titleID_filename = CACHE_FOLDER + "\\icon_" + result.TitleID + "_" + Language[14].Replace(" ", "") + ".bmp";
+                                        }
+                                    }
 
                                     if (File.Exists(icon_filename))
                                     {
@@ -1452,9 +1493,9 @@ namespace Switch_Backup_Manager
                                         {
                                             File.Copy(icon_filename, icon_titleID_filename, true);
                                         }
-                                        catch (System.IO.IOException)
+                                        catch (System.IO.IOException e)
                                         {
-                                            //File in use?
+                                            logger.Error(e.StackTrace); //File in use?
                                         }
                                         result.Region_Icon.Add(Language[i], icon_titleID_filename);
                                         result.Languagues.Add(Language[i]);
@@ -1493,13 +1534,11 @@ namespace Switch_Backup_Manager
                             }
                             catch { }
 
-                            //CB_RegionName.SelectedIndex = 0;
                             break;
                         }
                     }
                     fileStream.Close();
                 }
-                //result.Cardtype = GetCardTypeFromScene(result.TitleID);
                 GetExtraInfoFromScene(result);
             }
             return result;

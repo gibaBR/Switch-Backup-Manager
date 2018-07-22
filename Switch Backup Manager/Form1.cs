@@ -113,7 +113,10 @@ namespace Switch_Backup_Manager
                 {
                     result += language + ", ";
                 }
-                result = result.Remove(result.Length - 2);
+                if (result.Trim().Length > 1)
+                {
+                    result = result.Remove(result.Length - 2);
+                }                
                 return result; 
             };
 
@@ -123,7 +126,10 @@ namespace Switch_Backup_Manager
                 {
                     result += language + ", ";
                 }
-                result = result.Remove(result.Length - 2);
+                if (result.Trim().Length > 1)
+                {
+                    result = result.Remove(result.Length - 2);
+                }
                 return result;
             };
 
@@ -133,7 +139,10 @@ namespace Switch_Backup_Manager
                 {
                     result += language + ", ";
                 }
-                result = result.Remove(result.Length - 2);
+                if (result.Trim().Length > 1)
+                {
+                    result = result.Remove(result.Length - 2);
+                }
                 return result;
             };
 
@@ -143,7 +152,10 @@ namespace Switch_Backup_Manager
                 {
                     result += language + ", ";
                 }
-                result = result.Remove(result.Length - 2);
+                if (result.Trim().Length > 1)
+                {
+                    result = result.Remove(result.Length - 2);
+                }
                 return result;
             };
 
@@ -287,7 +299,7 @@ namespace Switch_Backup_Manager
 
             if (sourceList == "local" || sourceList == "sdcard")
             {
-                if (data != null && File.Exists(AppDomain.CurrentDomain.BaseDirectory + data.Region_Icon.First().Value))
+                if (data != null && data.Region_Icon.Count > 0 && File.Exists(AppDomain.CurrentDomain.BaseDirectory + data.Region_Icon.First().Value))
                 {
                     PB_GameIcon.BackgroundImage = Image.FromFile(AppDomain.CurrentDomain.BaseDirectory + data.Region_Icon.First().Value);
                 }
@@ -300,7 +312,7 @@ namespace Switch_Backup_Manager
             {
                 if (data != null)
                 {
-                    if (File.Exists(AppDomain.CurrentDomain.BaseDirectory + data.Region_Icon.First().Value))
+                    if (data.Region_Icon.Count > 0 && File.Exists(AppDomain.CurrentDomain.BaseDirectory + data.Region_Icon.First().Value))
                     {
                         PB_GameIcon.BackgroundImage = Image.FromFile(AppDomain.CurrentDomain.BaseDirectory + data.Region_Icon.First().Value);
                     }
@@ -2576,10 +2588,8 @@ namespace Switch_Backup_Manager
                     }
 
                     toolStripStatusLabel1.Text = Convert.ToString(count) + " Selected (" + Util.BytesToGB(size) + ")";
-
                 }
             }
-
         }
 
         private void OLVEshop_KeyDown(object sender, KeyEventArgs e)

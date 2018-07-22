@@ -23,6 +23,10 @@ Complete Switch Backups management tool
 
 ## Changelog
 
+* 1.0.7
+  - Fixed  an error where title has Taiwanese as its only language (TitleID 0100D7700AF88000)
+  - Game titles name are now retrieved from scene list as its more  user friendly (no more chinese names that causes problems when loading on switch)
+
 * 1.0.6
   - Support for NSP (e-shop) files. Very experimental as it is very slow to scrap big files.
   - More configurations on File->Options menu
@@ -54,6 +58,6 @@ Complete Switch Backups management tool
 
 ## Source & Binaries
 * [GitHub](https://github.com/gibaBR/Switch-Backup-Manager/archive/master.zip)
-* [Release 1.0.6](https://github.com/gibaBR/Switch-Backup-Manager/releases/tag/v1.0.6)
+* [Release 1.0.7](https://github.com/gibaBR/Switch-Backup-Manager/releases/tag/v1.0.7)
 
 

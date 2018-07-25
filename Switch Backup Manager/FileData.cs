@@ -9,6 +9,11 @@ namespace Switch_Backup_Manager
 {
     class FileData
     {
+        public FileData () //Default constructor
+        {
+            this.IdScene = 0;
+        }
+
         public string FilePath { get; set; }
         public string FileName { get; set; }
         public string FileNameWithExt { get; set; }
@@ -25,7 +30,7 @@ namespace Switch_Backup_Manager
         public string CartSize { get; set; }
         public string MasterKeyRevision { get; set; }
         public Dictionary<string, string> Region_Icon { get; set; }
-        public List<string> Languagues { get; set; }
+        public List<string> Languages { get; set; }
         public string Languages_resumed { get; set; }
         public bool IsTrimmed { get; set; }
         public string Group { get; set; }
@@ -35,5 +40,6 @@ namespace Switch_Backup_Manager
         public string Region { get; set; }
         public bool IsSplit { get; set; }
         public string DistributionType { get; set; }
+        public int IdScene { get; set; }
     }
 }

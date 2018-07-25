@@ -19,6 +19,9 @@ namespace Switch_Backup_Manager
 {
     internal static class Util
     {
+        public const string VERSION = "1.0.8";   //Actual application version
+        public const string MIN_DB_Version = "1.0.8"; //This is the minimum version of the DB that can work
+
         public const string INI_FILE = "sbm.ini";
         public static string KEYS_FILE = "keys.txt";
         public const string KEYS_DOWNLOAD_SITE = "https://pastebin.com/raw/ekSH9R8t";
@@ -35,7 +38,7 @@ namespace Switch_Backup_Manager
         public static byte[] NcaHeaderEncryptionKey2_Prod;
         public static string Mkey;
         public static Logger logger;
-        public static string log_Level = "info";
+        public static string log_Level = "debug";
         public static string autoRenamingPattern = "{gamename}";
 
         public static bool AutoUpdateNSDBOnStartup = false;
@@ -63,7 +66,7 @@ namespace Switch_Backup_Manager
             "???"
         };
 
-        public static string[] AutoRenamingTags = new string[8]
+        public static string[] AutoRenamingTags = new string[10]
         {
             "{gamename}",
             "{titleid}",
@@ -72,7 +75,9 @@ namespace Switch_Backup_Manager
             "{revision}",
             "{releasegroup}",
             "{region}",
-            "{firmware}"
+            "{firmware}",
+            "{languages}",
+            "{sceneid}"
         };
 
         private static Image[] Icons = new Image[16];
@@ -81,6 +86,98 @@ namespace Switch_Backup_Manager
         public static XDocument XML_Local;
         public static XDocument XML_NSWDB;
         public static XDocument XML_NSP_Local;
+
+        private static List<string> ListDirectoriesToUpdate()
+        {
+            List<string> list = new List<string>();
+            for (int i = 0; i <= 5; i++)
+            {
+                string value = ini.IniReadValue("AutoScan", "Folder_0" + (i + 1));
+                if (value.Trim() != "")
+                {
+                    int ind = value.IndexOf("?");
+                    if (value.Substring(ind + 1, 1) == "1")
+                    {
+                        list.Add(value.Substring(0, ind));
+                    }
+                }
+            }
+
+            return list;
+        }
+
+        private static int UpdateDirectory(string dir)
+        {
+            int added_files = 0;
+            XDocument xml_local = XDocument.Load(LOCAL_FILES_DB);
+            XDocument xml__nsp = XDocument.Load(LOCAL_FILES_DB);
+
+            //XCI Files (Includding splitted files)
+            List<string> files_xci = GetXCIsInFolder(dir);
+            List<string> files_nsp = GetNSPsInFolder(dir);
+
+            int i = 0;
+            foreach (string file in files_xci) //XCI Files
+            {
+                bool found = false;
+                foreach (XElement xe in xml_local.Descendants("Game"))
+                {
+                    if (xe.Element("FilePath").Value == file) //File is already on XML. Go to next one.
+                    {
+                        found = true;
+                        break;
+                    }
+                }
+                i++;
+
+                if (!found) //File is not on XML. Add it.
+                {
+                    FileData data = GetFileData(file);
+                    if (WriteFileDataToXML(data, LOCAL_FILES_DB))
+                    {
+                        added_files++;
+                    }                    
+                }
+            }
+
+            foreach (string file in files_nsp) //NSP Files
+            {
+                bool found = false;
+                foreach (XElement xe in XML_NSP_Local.Descendants("Game"))
+                {
+                    if (xe.Element("FilePath").Value == file) //File is already on XML. Go to next one.
+                    {
+                        found = true;
+                        break;
+                    }
+                }
+                i++;
+
+                if (!found) //File is not on XML. Add it.
+                {
+                    FileData data = GetFileDataNSP(file);
+                    if (WriteFileDataToXML(data, LOCAL_NSP_FILES_DB))
+                    {
+                        added_files++;
+                    }
+                }
+            }
+
+            return added_files;
+        }
+
+        public static void UpdateDirectories()
+        {
+            RemoveMissingFilesFromXML(XML_Local, LOCAL_FILES_DB);
+            RemoveMissingFilesFromXML(XML_NSP_Local, LOCAL_NSP_FILES_DB);
+
+            foreach (string dir in ListDirectoriesToUpdate())
+            {
+                logger.Info("Searchng for new files on " + dir);
+                int added_files = UpdateDirectory(dir);
+                logger.Info("Finished search for new files on " + dir + ". " + added_files + " files added.");
+            }
+        }
 
         public static string GetRenamingString(FileData data, string pattern) {
             string result ="";
@@ -96,6 +193,8 @@ namespace Switch_Backup_Manager
                 result = result.Replace(AutoRenamingTags[5], data.Group);
                 result = result.Replace(AutoRenamingTags[6], data.Region);
                 result = result.Replace(AutoRenamingTags[7], data.Firmware);
+                result = result.Replace(AutoRenamingTags[8], data.Languages_resumed);
+                result = result.Replace(AutoRenamingTags[9], Convert.ToString(data.IdScene));
 
                 result += Path.GetExtension(data.FilePath);
             }
@@ -320,7 +419,13 @@ namespace Switch_Backup_Manager
                 element.Element("CardType").Value = file.Cardtype;
                 element.Element("MasterKeyRevision").Value = file.MasterKeyRevision;
                 element.Element("IsTrimmed").Value = Convert.ToString(file.IsTrimmed).ToLower();
-                
+                element.Element("Group").Value = file.Group;
+                element.Element("Serial").Value = file.Serial;
+                element.Element("Firmware").Value = file.Firmware;
+                element.Element("Region").Value = file.Region;
+                element.Element("Languages_resumed").Value = file.Languages_resumed;
+                element.Element("Distribution_Type").Value = file.DistributionType;
+                element.Element("ID_Scene").Value = (file.IdScene > 0 ? Convert.ToString(file.IdScene) : ""); ;
                 element.Element("Distribution_Type").Value = file.DistributionType;
             }
         }
@@ -339,8 +444,8 @@ namespace Switch_Backup_Manager
                 {
                     RemoveTitleIDFromXML(xe.Attribute("TitleID").Value, @source_xml);
                     logger.Info(xe.Element("FilePath").Value + " removed.");
-                }
-                i++;
+                    i++;
+                }                
             }
 
             if (source_xml == LOCAL_FILES_DB)
@@ -412,7 +517,11 @@ namespace Switch_Backup_Manager
                 if (element.Element("languages") != null)
                 {
                     data.Languages_resumed = element.Element("languages").Value;
-                }                               
+                }                 
+                if (element.Element("id") != null)
+                {
+                    data.IdScene = element.Element("id").Value == "" ? 0 : Convert.ToInt32(element.Element("id").Value);
+                }
             } else
             {
                 if (data.DistributionType == "Download")
@@ -424,64 +533,89 @@ namespace Switch_Backup_Manager
 
         public static bool WriteFileDataToXML(FileData data, string xml)
         {
-            bool result = true;
+            bool result = false;
 
             try
             {
-                //Try to find the game. If exists, do nothing. If not, Append
-                if (!IsTitleIDOnXML(data.TitleID, xml))
+                if (data != null)
                 {
-                    string languages = "";
-                    foreach (string language in data.Languagues)
+                    logger.Debug("searching for " + data.TitleID + " on database.");
+                    //Try to find the game. If exists, do nothing. If not, Append
+                    if (!IsTitleIDOnXML(data.TitleID, xml))
                     {
-                        languages += language + ",";
-                    }
-                    if (languages.Trim().Length > 1)
-                    {
-                        languages = languages.Remove(languages.Length - 1);
-                    }
+                        logger.Debug(data.TitleID + " not found on database. Adding...");
+                        string languages = "";
+                        if (data.Languages != null)
+                        {
+                            foreach (string language in data.Languages)
+                            {
+                                languages += language + ",";
+                            }
+                            if (languages.Trim().Length > 1)
+                            {
+                                try
+                                {
+                                    languages = languages.Remove(languages.Length - 1);
+                                } catch (Exception e)
+                                {
+                                    logger.Debug("Exception on languages.Remove for Title ID " + data.TitleID);
+                                    languages = "";
+                                }                                
+                            }
+                        } else
+                        {
+                            logger.Debug("data.Languages was null for Title ID " + data.TitleID);
+                        }
 
-
-                    XElement element = new XElement("Game", new XAttribute("TitleID", data.TitleID),
-                               new XElement("FilePath", data.FilePath),
-                               new XElement("FileName", data.FileName),
-                               new XElement("FileNameWithExt", data.FileNameWithExt),
-                               new XElement("ROMSize", data.ROMSize),
-                               new XElement("ROMSizeBytes", data.ROMSizeBytes),
-                               new XElement("UsedSpace", data.UsedSpace),
-                               new XElement("UsedSpaceBytes", data.UsedSpaceBytes),
-                               new XElement("GameName", data.GameName),
-                               new XElement("Developer", data.Developer),
-                               new XElement("GameRevision", data.GameRevision),
-                               new XElement("ProductCode", data.ProductCode),
-                               new XElement("SDKVersion", data.SDKVersion),
-                               new XElement("CartSize", data.CartSize),
-                               new XElement("CardType", data.Cardtype),
-                               new XElement("MasterKeyRevision", data.MasterKeyRevision),
-                               new XElement("Region_Icon", data.Region_Icon),
-                               new XElement("Languagues", languages),
-                               new XElement("IsTrimmed", data.IsTrimmed),
-                               new XElement("Group", data.Group),
-                               new XElement("Serial", data.Serial),
-                               new XElement("Firmware", data.Firmware),
-                               new XElement("Region", data.Region),
-                               new XElement("Languages_resumed", data.Languages_resumed),
-                               new XElement("Distribution_Type", data.DistributionType)
-                       );
-                    if (xml == LOCAL_FILES_DB)
-                    {
-                        XML_Local.Root.Add(element);
-                        XML_Local.Save(@xml);
+                        XElement element = new XElement("Game", new XAttribute("TitleID", data.TitleID),
+                                   new XElement("FilePath", data.FilePath),
+                                   new XElement("FileName", data.FileName),
+                                   new XElement("FileNameWithExt", data.FileNameWithExt),
+                                   new XElement("ROMSize", data.ROMSize),
+                                   new XElement("ROMSizeBytes", data.ROMSizeBytes),
+                                   new XElement("UsedSpace", data.UsedSpace),
+                                   new XElement("UsedSpaceBytes", data.UsedSpaceBytes),
+                                   new XElement("GameName", data.GameName),
+                                   new XElement("Developer", data.Developer),
+                                   new XElement("GameRevision", data.GameRevision),
+                                   new XElement("ProductCode", data.ProductCode),
+                                   new XElement("SDKVersion", data.SDKVersion),
+                                   new XElement("CartSize", data.CartSize),
+                                   new XElement("CardType", data.Cardtype),
+                                   new XElement("MasterKeyRevision", data.MasterKeyRevision),
+                                   new XElement("Region_Icon", data.Region_Icon),
+                                   new XElement("Languages", languages),
+                                   new XElement("IsTrimmed", data.IsTrimmed),
+                                   new XElement("Group", data.Group),
+                                   new XElement("Serial", data.Serial),
+                                   new XElement("Firmware", data.Firmware),
+                                   new XElement("Region", data.Region),
+                                   new XElement("Languages_resumed", data.Languages_resumed),
+                                   new XElement("Distribution_Type", data.DistributionType),
+                                   new XElement("ID_Scene", data.IdScene)
+                           );
+                        if (xml == LOCAL_FILES_DB)
+                        {
+                            logger.Debug("Adding element...");
+                            XML_Local.Root.Add(element);
+                            logger.Debug("Saving xml "+@xml);
+                            XML_Local.Save(@xml);
+                            logger.Debug("xml saved...");
+                        }
+                        else
+                        {
+                            logger.Debug("Adding element...");
+                            XML_NSP_Local.Root.Add(element);
+                            logger.Debug("Saving xml " + @xml);
+                            XML_NSP_Local.Save(@xml);
+                            logger.Debug("xml saved...");
+                        }
+                        result = true;
                     }
                     else
                     {
-                        XML_NSP_Local.Root.Add(element);
-                        XML_NSP_Local.Save(@xml);
+                        logger.Info(data.TitleID + " was already on database. Ignoring.");
                     }
-                }
-                else
-                {
-                    //Nothing to do?
                 }
             }
             catch (Exception e)
@@ -519,8 +653,51 @@ namespace Switch_Backup_Manager
                 } catch { System.ArgumentException ex; }
                 {
                     //If TitleID is already on the list, ignore
+                }                
+            }
+
+            return result;
+        }
+
+        private static bool checkDBVersion(string xml)
+        {
+            bool result = false;
+            int ver_db  = 0;
+            int ver_min = Convert.ToInt32(VERSION.Replace(".", "")); //Ex 1.0.8 -> 108
+
+            //Check if DB is on minimum version
+            XDocument xml_temp = XDocument.Load(xml);
+
+            void saveXML() //Local Function to avoid code replication.
+            {
+                if (MessageBox.Show("Your "+ xml + " is outdated and needs to be created again. \nDo you want to make a backup?", "Switch Backup Manager", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                {
+                    try
+                    {
+                        File.Copy(xml, xml + ".old", true);
+                    } catch (Exception e)
+                    {
+                        logger.Error("Could not backup " + xml + "\n" + e.StackTrace);
+                    }
+                    
                 }
-                
+                xml_temp = new XDocument(new XComment("List games"),
+                new XElement("Games", new XAttribute("Date", DateTime.Now.ToString()), new XAttribute("Version", VERSION)));
+                xml_temp.Declaration = new XDeclaration("1.0", "utf-8", "true");
+                xml_temp.Save(xml);
+            }
+
+            if (xml_temp.Element("Games").Attribute("Version") != null)
+            {
+                ver_db = Convert.ToInt32(xml_temp.Element("Games").Attribute("Version").Value.Replace(".", ""));
+                if (ver_db < ver_min)
+                {
+                    saveXML();
+                }
+            }
+            else
+            { //If version tag not found on XML, means its too old. Delete!
+                saveXML();
             }
 
             return result;
@@ -547,6 +724,7 @@ namespace Switch_Backup_Manager
                 ini.IniWriteValue("Log", "log_level", "info");
                 log_Level = "info";
             }
+            log_Level = "debug"; //Force debug on log, for now...
 
             autoRenamingPattern = ini.IniReadValue("AutoRenaming", "pattern");
             if (autoRenamingPattern.Trim() == "")
@@ -607,34 +785,34 @@ namespace Switch_Backup_Manager
             if (scrapNSP != "") { ScrapNSPOnSDCard = (scrapNSP == "true"); } else { ini.IniWriteValue("SD", "scrapNSP", "true"); };
             if (scrapInstalledNSP != "") { ScrapInstalledEshopSDCard = (scrapInstalledNSP == "true"); } else { ini.IniWriteValue("SD", "scrapInstalledNSP", "false"); };
 
-
             XML_NSWDB = XDocument.Load(@NSWDB_FILE);
 
             //Searches for local dabases (xml) and loads it
             if (!File.Exists(LOCAL_FILES_DB))
             {
-                XML_Local = new XDocument(new XComment("List of local games"),
-                    new XElement("Games", new XAttribute("Date", DateTime.Now.ToString())));
+                XML_Local = new XDocument(new XComment("List games"),
+                    new XElement("Games", new XAttribute("Date", DateTime.Now.ToString()), new XAttribute("Version", VERSION)));
                 XML_Local.Declaration = new XDeclaration("1.0", "utf-8", "true");
                 XML_Local.Save(@LOCAL_FILES_DB);
             } else
             {
+                checkDBVersion(@LOCAL_FILES_DB);               
                 XML_Local = XDocument.Load(@LOCAL_FILES_DB);
             }
 
             //Searches for local NSP dabases (xml) and loads it
             if (!File.Exists(LOCAL_NSP_FILES_DB))
             {
-                XML_NSP_Local = new XDocument(new XComment("List of local NSP games"),
-                    new XElement("Games", new XAttribute("Date", DateTime.Now.ToString())));
+                XML_NSP_Local = new XDocument(new XComment("List games"),
+                    new XElement("Games", new XAttribute("Date", DateTime.Now.ToString()), new XAttribute("Version", VERSION)));
                 XML_NSP_Local.Declaration = new XDeclaration("1.0", "utf-8", "true");
                 XML_NSP_Local.Save(@LOCAL_NSP_FILES_DB);
             }
             else
             {
+                checkDBVersion(@LOCAL_NSP_FILES_DB);
                 XML_NSP_Local = XDocument.Load(@LOCAL_NSP_FILES_DB);
             }
-
 
             //Create cache directory
             if (!Directory.Exists(CACHE_FOLDER))
@@ -823,7 +1001,7 @@ namespace Switch_Backup_Manager
                             data = Util.GetFileDataNSP(file);
                         }
 
-                        logger.Info("Including file " + data.FilePath + ", TitleID: " + data.TitleID);
+                        logger.Info("Scraping file " + data.FilePath + ", TitleID: " + data.TitleID);
                         FrmMain.progressCurrentfile = data.FilePath;
                         try
                         {
@@ -1148,7 +1326,7 @@ namespace Switch_Backup_Manager
                 NACP.NACP_Datas[0] = new NACP.NACP_Data(source.Skip(0x3000).Take(0x1000).ToArray());
 
                 data.Region_Icon = new Dictionary<string, string>();
-                data.Languagues = new List<string>();
+                data.Languages = new List<string>();
 
                 for (int i = 0; i < NACP.NACP_Strings.Length; i++)
                 {
@@ -1171,7 +1349,7 @@ namespace Switch_Backup_Manager
                                 //File in use?
                             }
                             data.Region_Icon.Add(Language[i], icon_titleID_filename);
-                            data.Languagues.Add(Language[i]);
+                            data.Languages.Add(Language[i]);
                         }
                     }
                 }
@@ -1469,7 +1647,7 @@ namespace Switch_Backup_Manager
                             NACP.NACP_Datas[0] = new NACP.NACP_Data(source.Skip(0x3000).Take(0x1000).ToArray());
 
                             result.Region_Icon = new Dictionary<string, string>();
-                            result.Languagues = new List<string>();
+                            result.Languages = new List<string>();
                             for (int i = 0; i < NACP.NACP_Strings.Length; i++)
                             {
                                 NACP.NACP_Strings[i] = new NACP.NACP_String(source.Skip(i * 0x300).Take(0x300).ToArray());
@@ -1498,7 +1676,7 @@ namespace Switch_Backup_Manager
                                             logger.Error(e.StackTrace); //File in use?
                                         }
                                         result.Region_Icon.Add(Language[i], icon_titleID_filename);
-                                        result.Languagues.Add(Language[i]);
+                                        result.Languages.Add(Language[i]);
                                     }
                                 }
                             }
@@ -1561,14 +1739,14 @@ namespace Switch_Backup_Manager
                 result.GameRevision = xe.Element("GameRevision").Value;
                 result.IsTrimmed = (xe.Element("IsTrimmed").Value == "true") ? true : false;
 
-                string languages_ = xe.Element("Languagues").Value;
+                string languages_ = xe.Element("Languages").Value;
                 string[] languages_array = languages_.Split(",".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
                 List<string> languages = new List<string>();
                 for (int i = 0; i < languages_array.Length; i++)
                 {
                     languages.Add(languages_array[i]);
                 }
-                result.Languagues = languages;
+                result.Languages = languages;
 
                 result.MasterKeyRevision = xe.Element("MasterKeyRevision").Value;
                 result.ProductCode = xe.Element("ProductCode").Value;
@@ -1620,6 +1798,10 @@ namespace Switch_Backup_Manager
                 {
                     result.DistributionType = xe.Element("Distribution_Type").Value;
                 }
+                if (xe.Element("ID_Scene") != null)
+                {
+                    result.IdScene = xe.Element("ID_Scene").Value.Trim() == "" ? 0 : Convert.ToInt32(xe.Element("ID_Scene").Value);
+                }
             }
             catch (Exception ex)
             {
@@ -1670,6 +1852,8 @@ namespace Switch_Backup_Manager
             result.Cardtype = xe.Element("card").Value;
             result.ROMSizeBytes = Convert.ToInt64(xe.Element("trimmedsize").Value);
             result.Region = xe.Element("region").Value;
+            result.Languages_resumed = xe.Element("languages").Value;
+            result.IdScene = Convert.ToInt32(xe.Element("id").Value);
 
             List<string> languages = new List<string>();
             string[] languages_ = xe.Element("languages").Value.Split(",".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
@@ -1678,7 +1862,7 @@ namespace Switch_Backup_Manager
                 languages.Add(languages_[i]);
             }
 
-            result.Languagues = languages;
+            result.Languages = languages;
             return result;
         }
 

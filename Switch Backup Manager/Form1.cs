@@ -40,6 +40,7 @@ namespace Switch_Backup_Manager
         {
             InitializeComponent();
 
+            this.Text = "Switch Backup Manager v"+Util.VERSION;
             //Need to think a way of auto resizing columns based on screen resolution to ocupy all space available
             //this.Width = Screen.PrimaryScreen.Bounds.Width;
 
@@ -81,6 +82,8 @@ namespace Switch_Backup_Manager
             OLVEshop.UseFiltering = true;
 
             SetupOLVs();
+
+            Util.UpdateDirectories();
 
             UpdateSceneReleasesList();
             UpdateLocalGamesList();
@@ -2286,7 +2289,6 @@ namespace Switch_Backup_Manager
             var configForm = new FormConfigs();
             configForm.StartPosition = FormStartPosition.CenterParent;
             configForm.ShowDialog(this);
-            //MessageBox.Show(Properties.Resources.EN_Soon);
         }
 
         private void showInExplorerToolStripMenuItem_Click(object sender, EventArgs e)

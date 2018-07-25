@@ -35,6 +35,11 @@
             this.panel2 = new System.Windows.Forms.Panel();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.cbAutoUpdateScene = new System.Windows.Forms.CheckBox();
+            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.cbScrapLayerFSOnSD = new System.Windows.Forms.CheckBox();
+            this.cbScrapNSPOnSD = new System.Windows.Forms.CheckBox();
+            this.cbScrapXCIOnSD = new System.Windows.Forms.CheckBox();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
@@ -49,19 +54,19 @@
             this.cbxTags = new System.Windows.Forms.ComboBox();
             this.rbRenamingTitleIDGameName = new System.Windows.Forms.RadioButton();
             this.rbRenamingGameName = new System.Windows.Forms.RadioButton();
-            this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.cbScrapXCIOnSD = new System.Windows.Forms.CheckBox();
-            this.cbScrapNSPOnSD = new System.Windows.Forms.CheckBox();
-            this.cbScrapLayerFSOnSD = new System.Windows.Forms.CheckBox();
-            this.cbAutoUpdateScene = new System.Windows.Forms.CheckBox();
+            this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.checkedListBoxAutoScanFolders = new System.Windows.Forms.CheckedListBox();
+            this.btnAddFolderAutoScan = new System.Windows.Forms.Button();
+            this.btnRemFolderAutoScan = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
+            this.groupBox2.SuspendLayout();
             this.tabPage3.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.gbCustom.SuspendLayout();
-            this.groupBox2.SuspendLayout();
+            this.groupBox3.SuspendLayout();
             this.SuspendLayout();
             // 
             // panel1
@@ -127,6 +132,7 @@
             // 
             // tabPage1
             // 
+            this.tabPage1.Controls.Add(this.groupBox3);
             this.tabPage1.Controls.Add(this.cbAutoUpdateScene);
             this.tabPage1.Controls.Add(this.groupBox2);
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
@@ -136,6 +142,59 @@
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "General";
             this.tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // cbAutoUpdateScene
+            // 
+            this.cbAutoUpdateScene.AutoSize = true;
+            this.cbAutoUpdateScene.Location = new System.Drawing.Point(6, 257);
+            this.cbAutoUpdateScene.Name = "cbAutoUpdateScene";
+            this.cbAutoUpdateScene.Size = new System.Drawing.Size(206, 17);
+            this.cbAutoUpdateScene.TabIndex = 2;
+            this.cbAutoUpdateScene.Text = "Automatic update scene list on startup";
+            this.cbAutoUpdateScene.UseVisualStyleBackColor = true;
+            // 
+            // groupBox2
+            // 
+            this.groupBox2.Controls.Add(this.cbScrapLayerFSOnSD);
+            this.groupBox2.Controls.Add(this.cbScrapNSPOnSD);
+            this.groupBox2.Controls.Add(this.cbScrapXCIOnSD);
+            this.groupBox2.Location = new System.Drawing.Point(10, 17);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Size = new System.Drawing.Size(588, 100);
+            this.groupBox2.TabIndex = 1;
+            this.groupBox2.TabStop = false;
+            this.groupBox2.Text = "Show on SD card";
+            // 
+            // cbScrapLayerFSOnSD
+            // 
+            this.cbScrapLayerFSOnSD.AutoSize = true;
+            this.cbScrapLayerFSOnSD.Enabled = false;
+            this.cbScrapLayerFSOnSD.Location = new System.Drawing.Point(17, 71);
+            this.cbScrapLayerFSOnSD.Name = "cbScrapLayerFSOnSD";
+            this.cbScrapLayerFSOnSD.Size = new System.Drawing.Size(166, 17);
+            this.cbScrapLayerFSOnSD.TabIndex = 3;
+            this.cbScrapLayerFSOnSD.Text = "Installed e-shop titles (layer fs)";
+            this.cbScrapLayerFSOnSD.UseVisualStyleBackColor = true;
+            // 
+            // cbScrapNSPOnSD
+            // 
+            this.cbScrapNSPOnSD.AutoSize = true;
+            this.cbScrapNSPOnSD.Location = new System.Drawing.Point(17, 48);
+            this.cbScrapNSPOnSD.Name = "cbScrapNSPOnSD";
+            this.cbScrapNSPOnSD.Size = new System.Drawing.Size(113, 17);
+            this.cbScrapNSPOnSD.TabIndex = 2;
+            this.cbScrapNSPOnSD.Text = "NSP Files (e-shop)";
+            this.cbScrapNSPOnSD.UseVisualStyleBackColor = true;
+            // 
+            // cbScrapXCIOnSD
+            // 
+            this.cbScrapXCIOnSD.AutoSize = true;
+            this.cbScrapXCIOnSD.Location = new System.Drawing.Point(17, 25);
+            this.cbScrapXCIOnSD.Name = "cbScrapXCIOnSD";
+            this.cbScrapXCIOnSD.Size = new System.Drawing.Size(99, 17);
+            this.cbScrapXCIOnSD.TabIndex = 1;
+            this.cbScrapXCIOnSD.Text = "XCI Files (carts)";
+            this.cbScrapXCIOnSD.UseVisualStyleBackColor = true;
             // 
             // tabPage2
             // 
@@ -200,9 +259,9 @@
             // lblExample
             // 
             this.lblExample.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblExample.Location = new System.Drawing.Point(11, 327);
+            this.lblExample.Location = new System.Drawing.Point(11, 315);
             this.lblExample.Name = "lblExample";
-            this.lblExample.Size = new System.Drawing.Size(566, 23);
+            this.lblExample.Size = new System.Drawing.Size(566, 46);
             this.lblExample.TabIndex = 1;
             this.lblExample.Text = "Super Mario Odyssey.xci";
             this.lblExample.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -300,58 +359,47 @@
             this.rbRenamingGameName.UseVisualStyleBackColor = true;
             this.rbRenamingGameName.CheckedChanged += new System.EventHandler(this.rbRenamingGameName_CheckedChanged);
             // 
-            // groupBox2
+            // groupBox3
             // 
-            this.groupBox2.Controls.Add(this.cbScrapLayerFSOnSD);
-            this.groupBox2.Controls.Add(this.cbScrapNSPOnSD);
-            this.groupBox2.Controls.Add(this.cbScrapXCIOnSD);
-            this.groupBox2.Location = new System.Drawing.Point(10, 17);
-            this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(588, 100);
-            this.groupBox2.TabIndex = 1;
-            this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "Show on SD card";
+            this.groupBox3.Controls.Add(this.btnRemFolderAutoScan);
+            this.groupBox3.Controls.Add(this.btnAddFolderAutoScan);
+            this.groupBox3.Controls.Add(this.checkedListBoxAutoScanFolders);
+            this.groupBox3.Location = new System.Drawing.Point(10, 123);
+            this.groupBox3.Name = "groupBox3";
+            this.groupBox3.Size = new System.Drawing.Size(588, 128);
+            this.groupBox3.TabIndex = 3;
+            this.groupBox3.TabStop = false;
+            this.groupBox3.Text = "Folders to scan at startup";
             // 
-            // cbScrapXCIOnSD
+            // checkedListBoxAutoScanFolders
             // 
-            this.cbScrapXCIOnSD.AutoSize = true;
-            this.cbScrapXCIOnSD.Location = new System.Drawing.Point(17, 25);
-            this.cbScrapXCIOnSD.Name = "cbScrapXCIOnSD";
-            this.cbScrapXCIOnSD.Size = new System.Drawing.Size(99, 17);
-            this.cbScrapXCIOnSD.TabIndex = 1;
-            this.cbScrapXCIOnSD.Text = "XCI Files (carts)";
-            this.cbScrapXCIOnSD.UseVisualStyleBackColor = true;
+            this.checkedListBoxAutoScanFolders.FormattingEnabled = true;
+            this.checkedListBoxAutoScanFolders.Location = new System.Drawing.Point(7, 20);
+            this.checkedListBoxAutoScanFolders.Name = "checkedListBoxAutoScanFolders";
+            this.checkedListBoxAutoScanFolders.Size = new System.Drawing.Size(537, 94);
+            this.checkedListBoxAutoScanFolders.TabIndex = 0;
             // 
-            // cbScrapNSPOnSD
+            // btnAddFolderAutoScan
             // 
-            this.cbScrapNSPOnSD.AutoSize = true;
-            this.cbScrapNSPOnSD.Location = new System.Drawing.Point(17, 48);
-            this.cbScrapNSPOnSD.Name = "cbScrapNSPOnSD";
-            this.cbScrapNSPOnSD.Size = new System.Drawing.Size(113, 17);
-            this.cbScrapNSPOnSD.TabIndex = 2;
-            this.cbScrapNSPOnSD.Text = "NSP Files (e-shop)";
-            this.cbScrapNSPOnSD.UseVisualStyleBackColor = true;
+            this.btnAddFolderAutoScan.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnAddFolderAutoScan.Location = new System.Drawing.Point(550, 20);
+            this.btnAddFolderAutoScan.Name = "btnAddFolderAutoScan";
+            this.btnAddFolderAutoScan.Size = new System.Drawing.Size(32, 28);
+            this.btnAddFolderAutoScan.TabIndex = 3;
+            this.btnAddFolderAutoScan.Text = "+";
+            this.btnAddFolderAutoScan.UseVisualStyleBackColor = true;
+            this.btnAddFolderAutoScan.Click += new System.EventHandler(this.btnAddFolderAutoScan_Click);
             // 
-            // cbScrapLayerFSOnSD
+            // btnRemFolderAutoScan
             // 
-            this.cbScrapLayerFSOnSD.AutoSize = true;
-            this.cbScrapLayerFSOnSD.Enabled = false;
-            this.cbScrapLayerFSOnSD.Location = new System.Drawing.Point(17, 71);
-            this.cbScrapLayerFSOnSD.Name = "cbScrapLayerFSOnSD";
-            this.cbScrapLayerFSOnSD.Size = new System.Drawing.Size(166, 17);
-            this.cbScrapLayerFSOnSD.TabIndex = 3;
-            this.cbScrapLayerFSOnSD.Text = "Installed e-shop titles (layer fs)";
-            this.cbScrapLayerFSOnSD.UseVisualStyleBackColor = true;
-            // 
-            // cbAutoUpdateScene
-            // 
-            this.cbAutoUpdateScene.AutoSize = true;
-            this.cbAutoUpdateScene.Location = new System.Drawing.Point(10, 124);
-            this.cbAutoUpdateScene.Name = "cbAutoUpdateScene";
-            this.cbAutoUpdateScene.Size = new System.Drawing.Size(206, 17);
-            this.cbAutoUpdateScene.TabIndex = 2;
-            this.cbAutoUpdateScene.Text = "Automatic update scene list on startup";
-            this.cbAutoUpdateScene.UseVisualStyleBackColor = true;
+            this.btnRemFolderAutoScan.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnRemFolderAutoScan.Location = new System.Drawing.Point(550, 54);
+            this.btnRemFolderAutoScan.Name = "btnRemFolderAutoScan";
+            this.btnRemFolderAutoScan.Size = new System.Drawing.Size(32, 28);
+            this.btnRemFolderAutoScan.TabIndex = 4;
+            this.btnRemFolderAutoScan.Text = "-";
+            this.btnRemFolderAutoScan.UseVisualStyleBackColor = true;
+            this.btnRemFolderAutoScan.Click += new System.EventHandler(this.btnRemFolderAutoScan_Click);
             // 
             // FormConfigs
             // 
@@ -364,21 +412,22 @@
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "FormConfigs";
+            this.ShowIcon = false;
             this.ShowInTaskbar = false;
             this.Text = "Options";
-            this.TopMost = true;
             this.panel1.ResumeLayout(false);
             this.panel2.ResumeLayout(false);
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.tabPage1.PerformLayout();
+            this.groupBox2.ResumeLayout(false);
+            this.groupBox2.PerformLayout();
             this.tabPage3.ResumeLayout(false);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.gbCustom.ResumeLayout(false);
             this.gbCustom.PerformLayout();
-            this.groupBox2.ResumeLayout(false);
-            this.groupBox2.PerformLayout();
+            this.groupBox3.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -411,5 +460,9 @@
         private System.Windows.Forms.CheckBox cbScrapNSPOnSD;
         private System.Windows.Forms.CheckBox cbScrapXCIOnSD;
         private System.Windows.Forms.CheckBox cbAutoUpdateScene;
+        private System.Windows.Forms.GroupBox groupBox3;
+        private System.Windows.Forms.Button btnRemFolderAutoScan;
+        private System.Windows.Forms.Button btnAddFolderAutoScan;
+        private System.Windows.Forms.CheckedListBox checkedListBoxAutoScanFolders;
     }
 }

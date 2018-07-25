@@ -38,7 +38,6 @@
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.panel2 = new System.Windows.Forms.Panel();
             this.OLVLocalFiles = new BrightIdeasSoftware.ObjectListView();
-            this.olvColumnTitleIDLocal = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnGameNameLocal = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnROMSizeLocal = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnUsedSpaceLocal = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
@@ -50,6 +49,7 @@
             this.olvColumnDeveloperLocal = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnGameRevisionLocal = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnMasterKeyLocal = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.olvColumnTitleIDLocal = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.contextMenuLocalList = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.showInExplorerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem20 = new System.Windows.Forms.ToolStripSeparator();
@@ -497,7 +497,6 @@
             // 
             // OLVLocalFiles
             // 
-            this.OLVLocalFiles.AllColumns.Add(this.olvColumnTitleIDLocal);
             this.OLVLocalFiles.AllColumns.Add(this.olvColumnGameNameLocal);
             this.OLVLocalFiles.AllColumns.Add(this.olvColumnROMSizeLocal);
             this.OLVLocalFiles.AllColumns.Add(this.olvColumnUsedSpaceLocal);
@@ -542,12 +541,6 @@
             this.OLVLocalFiles.ItemSelectionChanged += new System.Windows.Forms.ListViewItemSelectionChangedEventHandler(this.objectListView1_ItemSelectionChanged);
             this.OLVLocalFiles.KeyDown += new System.Windows.Forms.KeyEventHandler(this.objectListView1_KeyDown);
             // 
-            // olvColumnTitleIDLocal
-            // 
-            this.olvColumnTitleIDLocal.AspectName = "TitleID";
-            this.olvColumnTitleIDLocal.Text = "Title ID";
-            this.olvColumnTitleIDLocal.Width = 118;
-            // 
             // olvColumnGameNameLocal
             // 
             this.olvColumnGameNameLocal.AspectName = "GameName";
@@ -587,7 +580,7 @@
             // 
             // olvColumnLanguagesLocal
             // 
-            this.olvColumnLanguagesLocal.AspectName = "Languagues";
+            this.olvColumnLanguagesLocal.AspectName = "Languages";
             this.olvColumnLanguagesLocal.Text = "Languages";
             this.olvColumnLanguagesLocal.UseInitialLetterForGroup = true;
             this.olvColumnLanguagesLocal.Width = 154;
@@ -627,6 +620,12 @@
             this.olvColumnMasterKeyLocal.Text = "Masterkey revision";
             this.olvColumnMasterKeyLocal.UseInitialLetterForGroup = true;
             this.olvColumnMasterKeyLocal.Width = 135;
+            // 
+            // olvColumnTitleIDLocal
+            // 
+            this.olvColumnTitleIDLocal.AspectName = "TitleID";
+            this.olvColumnTitleIDLocal.Text = "Title ID";
+            this.olvColumnTitleIDLocal.Width = 118;
             // 
             // contextMenuLocalList
             // 
@@ -1355,7 +1354,7 @@
             // 
             // olvColumnLanguagesSD
             // 
-            this.olvColumnLanguagesSD.AspectName = "Languagues";
+            this.olvColumnLanguagesSD.AspectName = "Languages";
             this.olvColumnLanguagesSD.Text = "Languages";
             this.olvColumnLanguagesSD.UseInitialLetterForGroup = true;
             this.olvColumnLanguagesSD.Width = 84;
@@ -2054,7 +2053,7 @@
             // 
             // olvColumnLanguagesScene
             // 
-            this.olvColumnLanguagesScene.AspectName = "Languagues";
+            this.olvColumnLanguagesScene.AspectName = "Languages";
             this.olvColumnLanguagesScene.Text = "Languages";
             this.olvColumnLanguagesScene.Width = 116;
             // 
@@ -2611,7 +2610,7 @@
             // 
             // olvColumnLanguagesEShop
             // 
-            this.olvColumnLanguagesEShop.AspectName = "Languagues";
+            this.olvColumnLanguagesEShop.AspectName = "Languages";
             this.olvColumnLanguagesEShop.Text = "Languages";
             this.olvColumnLanguagesEShop.UseInitialLetterForGroup = true;
             this.olvColumnLanguagesEShop.Width = 154;
@@ -2621,7 +2620,7 @@
             this.olvColumnFilePathEShop.AspectName = "FilePath";
             this.olvColumnFilePathEShop.Text = "Filename";
             this.olvColumnFilePathEShop.UseInitialLetterForGroup = true;
-            this.olvColumnFilePathEShop.Width = 356;
+            this.olvColumnFilePathEShop.Width = 322;
             // 
             // olvColumnDeveloperEShop
             // 
@@ -3298,7 +3297,6 @@
         private System.Windows.Forms.Panel panel3;
         private System.Windows.Forms.PictureBox PB_GameIcon;
         private BrightIdeasSoftware.ObjectListView OLVLocalFiles;
-        private BrightIdeasSoftware.OLVColumn olvColumnTitleIDLocal;
         private BrightIdeasSoftware.OLVColumn olvColumnGameNameLocal;
         private BrightIdeasSoftware.OLVColumn olvColumnROMSizeLocal;
         private BrightIdeasSoftware.OLVColumn olvColumnUsedSpaceLocal;
@@ -3574,6 +3572,7 @@
         private System.Windows.Forms.TextBox textBoxFilterEShop;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.ComboBox cbxFilterEshop;
+        private BrightIdeasSoftware.OLVColumn olvColumnTitleIDLocal;
     }
 }
 

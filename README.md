@@ -74,6 +74,6 @@ Complete Switch Backups management tool
 
 ## Source & Binaries
 * [GitHub](https://github.com/gibaBR/Switch-Backup-Manager/archive/master.zip)
-* [Release 1.0.7](https://github.com/gibaBR/Switch-Backup-Manager/releases/tag/v1.0.7)
+* [Release 1.0.8](https://github.com/gibaBR/Switch-Backup-Manager/releases/tag/v1.0.8)
 
 

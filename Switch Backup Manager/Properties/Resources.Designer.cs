@@ -89,11 +89,29 @@ namespace Switch_Backup_Manager.Properties {
         }
         
         /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Scanning for new files.
+        /// </summary>
+        internal static string EN_FileOperationScanningNewFiles {
+            get {
+                return ResourceManager.GetString("EN_FileOperationScanningNewFiles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Consulta uma cadeia de caracteres localizada semelhante a Scraping games....
         /// </summary>
         internal static string EN_FileOperationScraping {
             get {
                 return ResourceManager.GetString("EN_FileOperationScraping", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Updating files info....
+        /// </summary>
+        internal static string EN_FileOperationUpdateFiles {
+            get {
+                return ResourceManager.GetString("EN_FileOperationUpdateFiles", resourceCulture);
             }
         }
         

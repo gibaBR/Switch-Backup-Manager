@@ -38,6 +38,7 @@
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.panel2 = new System.Windows.Forms.Panel();
             this.OLVLocalFiles = new BrightIdeasSoftware.ObjectListView();
+            this.olvColumnTitleIDLocal = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnGameNameLocal = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnROMSizeLocal = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnUsedSpaceLocal = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
@@ -49,7 +50,6 @@
             this.olvColumnDeveloperLocal = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnGameRevisionLocal = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnMasterKeyLocal = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
-            this.olvColumnTitleIDLocal = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.contextMenuLocalList = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.showInExplorerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem20 = new System.Windows.Forms.ToolStripSeparator();
@@ -295,6 +295,7 @@
             this.olvColumnDistributionType = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.contextMenuStripEShop = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.toolStripMenuItemEShopShowInExplorer = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItemEShopUpdateInfo = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator9 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripMenuItemEShopAutoRename = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator10 = new System.Windows.Forms.ToolStripSeparator();
@@ -362,6 +363,8 @@
             this.backgroundWorkerAddFile = new System.ComponentModel.BackgroundWorker();
             this.backgroundWorkerCopyFiles = new System.ComponentModel.BackgroundWorker();
             this.backgroundWorkerLoadSDCardFiles = new System.ComponentModel.BackgroundWorker();
+            this.backgroundWorkerScanNewFiles = new System.ComponentModel.BackgroundWorker();
+            this.backgroundWorkerUpdateFiles = new System.ComponentModel.BackgroundWorker();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -497,6 +500,7 @@
             // 
             // OLVLocalFiles
             // 
+            this.OLVLocalFiles.AllColumns.Add(this.olvColumnTitleIDLocal);
             this.OLVLocalFiles.AllColumns.Add(this.olvColumnGameNameLocal);
             this.OLVLocalFiles.AllColumns.Add(this.olvColumnROMSizeLocal);
             this.OLVLocalFiles.AllColumns.Add(this.olvColumnUsedSpaceLocal);
@@ -541,6 +545,12 @@
             this.OLVLocalFiles.ItemSelectionChanged += new System.Windows.Forms.ListViewItemSelectionChangedEventHandler(this.objectListView1_ItemSelectionChanged);
             this.OLVLocalFiles.KeyDown += new System.Windows.Forms.KeyEventHandler(this.objectListView1_KeyDown);
             // 
+            // olvColumnTitleIDLocal
+            // 
+            this.olvColumnTitleIDLocal.AspectName = "TitleID";
+            this.olvColumnTitleIDLocal.Text = "Title ID";
+            this.olvColumnTitleIDLocal.Width = 118;
+            // 
             // olvColumnGameNameLocal
             // 
             this.olvColumnGameNameLocal.AspectName = "GameName";
@@ -576,13 +586,11 @@
             this.olvColumnCartSizeLocal.AspectName = "CartSize";
             this.olvColumnCartSizeLocal.Text = "Cart size";
             this.olvColumnCartSizeLocal.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.olvColumnCartSizeLocal.UseInitialLetterForGroup = true;
             // 
             // olvColumnLanguagesLocal
             // 
             this.olvColumnLanguagesLocal.AspectName = "Languages";
             this.olvColumnLanguagesLocal.Text = "Languages";
-            this.olvColumnLanguagesLocal.UseInitialLetterForGroup = true;
             this.olvColumnLanguagesLocal.Width = 154;
             // 
             // olvColumnCardTypeLocal
@@ -590,7 +598,6 @@
             this.olvColumnCardTypeLocal.AspectName = "Cardtype";
             this.olvColumnCardTypeLocal.Text = "Card type";
             this.olvColumnCardTypeLocal.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.olvColumnCardTypeLocal.UseInitialLetterForGroup = true;
             this.olvColumnCardTypeLocal.Width = 62;
             // 
             // olvColumnFilePathLocal
@@ -604,7 +611,6 @@
             // 
             this.olvColumnDeveloperLocal.AspectName = "Developer";
             this.olvColumnDeveloperLocal.Text = "Developer";
-            this.olvColumnDeveloperLocal.UseInitialLetterForGroup = true;
             this.olvColumnDeveloperLocal.Width = 84;
             // 
             // olvColumnGameRevisionLocal
@@ -618,14 +624,7 @@
             // 
             this.olvColumnMasterKeyLocal.AspectName = "MasterKeyRevision";
             this.olvColumnMasterKeyLocal.Text = "Masterkey revision";
-            this.olvColumnMasterKeyLocal.UseInitialLetterForGroup = true;
             this.olvColumnMasterKeyLocal.Width = 135;
-            // 
-            // olvColumnTitleIDLocal
-            // 
-            this.olvColumnTitleIDLocal.AspectName = "TitleID";
-            this.olvColumnTitleIDLocal.Text = "Title ID";
-            this.olvColumnTitleIDLocal.Width = 118;
             // 
             // contextMenuLocalList
             // 
@@ -1350,13 +1349,11 @@
             this.olvColumnCartSizeSD.AspectName = "CartSize";
             this.olvColumnCartSizeSD.Text = "Cart size";
             this.olvColumnCartSizeSD.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.olvColumnCartSizeSD.UseInitialLetterForGroup = true;
             // 
             // olvColumnLanguagesSD
             // 
             this.olvColumnLanguagesSD.AspectName = "Languages";
             this.olvColumnLanguagesSD.Text = "Languages";
-            this.olvColumnLanguagesSD.UseInitialLetterForGroup = true;
             this.olvColumnLanguagesSD.Width = 84;
             // 
             // olvColumnCardTypeSD
@@ -1364,7 +1361,6 @@
             this.olvColumnCardTypeSD.AspectName = "Cardtype";
             this.olvColumnCardTypeSD.Text = "Card type";
             this.olvColumnCardTypeSD.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.olvColumnCardTypeSD.UseInitialLetterForGroup = true;
             this.olvColumnCardTypeSD.Width = 63;
             // 
             // olvColumnFilePathSD
@@ -1378,21 +1374,18 @@
             // 
             this.olvColumnDeveloperSD.AspectName = "Developer";
             this.olvColumnDeveloperSD.Text = "Developer";
-            this.olvColumnDeveloperSD.UseInitialLetterForGroup = true;
             this.olvColumnDeveloperSD.Width = 78;
             // 
             // olvColumnGameRevisionSD
             // 
             this.olvColumnGameRevisionSD.AspectName = "GameRevision";
             this.olvColumnGameRevisionSD.Text = "Game revision";
-            this.olvColumnGameRevisionSD.UseInitialLetterForGroup = true;
             this.olvColumnGameRevisionSD.Width = 100;
             // 
             // olvColumnMasterKeySD
             // 
             this.olvColumnMasterKeySD.AspectName = "MasterKeyRevision";
             this.olvColumnMasterKeySD.Text = "Masterkey revision";
-            this.olvColumnMasterKeySD.UseInitialLetterForGroup = true;
             this.olvColumnMasterKeySD.Width = 142;
             // 
             // contextMenuStripSDCard
@@ -2584,6 +2577,7 @@
             this.OLVEshop.UseExplorerTheme = true;
             this.OLVEshop.View = System.Windows.Forms.View.Details;
             this.OLVEshop.CellOver += new System.EventHandler<BrightIdeasSoftware.CellOverEventArgs>(this.OLVEshop_CellOver);
+            this.OLVEshop.FormatCell += new System.EventHandler<BrightIdeasSoftware.FormatCellEventArgs>(this.OLVEshop_FormatCell);
             this.OLVEshop.ItemSelectionChanged += new System.Windows.Forms.ListViewItemSelectionChangedEventHandler(this.OLVEshop_ItemSelectionChanged);
             this.OLVEshop.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OLVEshop_KeyDown);
             // 
@@ -2612,7 +2606,6 @@
             // 
             this.olvColumnLanguagesEShop.AspectName = "Languages";
             this.olvColumnLanguagesEShop.Text = "Languages";
-            this.olvColumnLanguagesEShop.UseInitialLetterForGroup = true;
             this.olvColumnLanguagesEShop.Width = 154;
             // 
             // olvColumnFilePathEShop
@@ -2626,7 +2619,6 @@
             // 
             this.olvColumnDeveloperEShop.AspectName = "Developer";
             this.olvColumnDeveloperEShop.Text = "Developer";
-            this.olvColumnDeveloperEShop.UseInitialLetterForGroup = true;
             this.olvColumnDeveloperEShop.Width = 204;
             // 
             // olvColumnGameRevisionEShop
@@ -2640,7 +2632,6 @@
             // 
             this.olvColumnMasterKeyRevisionEShop.AspectName = "MasterKeyRevision";
             this.olvColumnMasterKeyRevisionEShop.Text = "Masterkey revision";
-            this.olvColumnMasterKeyRevisionEShop.UseInitialLetterForGroup = true;
             this.olvColumnMasterKeyRevisionEShop.Width = 135;
             // 
             // olvColumnDistributionType
@@ -2653,6 +2644,7 @@
             // 
             this.contextMenuStripEShop.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripMenuItemEShopShowInExplorer,
+            this.toolStripMenuItemEShopUpdateInfo,
             this.toolStripSeparator9,
             this.toolStripMenuItemEShopAutoRename,
             this.toolStripSeparator10,
@@ -2661,7 +2653,7 @@
             this.toolStripMenuItem64,
             this.copyInfoToClipboardToolStripMenuItem});
             this.contextMenuStripEShop.Name = "contextMenuStripSDCard";
-            this.contextMenuStripEShop.Size = new System.Drawing.Size(194, 132);
+            this.contextMenuStripEShop.Size = new System.Drawing.Size(194, 154);
             this.contextMenuStripEShop.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStripEShop_Opening);
             // 
             // toolStripMenuItemEShopShowInExplorer
@@ -2671,6 +2663,14 @@
             this.toolStripMenuItemEShopShowInExplorer.Text = "Show in explorer";
             this.toolStripMenuItemEShopShowInExplorer.Click += new System.EventHandler(this.toolStripMenuItemEShopShowInExplorer_Click);
             // 
+            // toolStripMenuItemEShopUpdateInfo
+            // 
+            this.toolStripMenuItemEShopUpdateInfo.Name = "toolStripMenuItemEShopUpdateInfo";
+            this.toolStripMenuItemEShopUpdateInfo.Size = new System.Drawing.Size(193, 22);
+            this.toolStripMenuItemEShopUpdateInfo.Text = "Update info";
+            this.toolStripMenuItemEShopUpdateInfo.Visible = false;
+            this.toolStripMenuItemEShopUpdateInfo.Click += new System.EventHandler(this.toolStripMenuItemEShopUpdateInfo_Click);
+            // 
             // toolStripSeparator9
             // 
             this.toolStripSeparator9.Name = "toolStripSeparator9";
@@ -2678,7 +2678,6 @@
             // 
             // toolStripMenuItemEShopAutoRename
             // 
-            this.toolStripMenuItemEShopAutoRename.Enabled = false;
             this.toolStripMenuItemEShopAutoRename.Name = "toolStripMenuItemEShopAutoRename";
             this.toolStripMenuItemEShopAutoRename.Size = new System.Drawing.Size(193, 22);
             this.toolStripMenuItemEShopAutoRename.Text = "Auto rename files";
@@ -3147,6 +3146,7 @@
             this.updateEshopLocalDatabaseToolStripMenuItem.Name = "updateEshopLocalDatabaseToolStripMenuItem";
             this.updateEshopLocalDatabaseToolStripMenuItem.Size = new System.Drawing.Size(230, 22);
             this.updateEshopLocalDatabaseToolStripMenuItem.Text = "Update e-shop local database";
+            this.updateEshopLocalDatabaseToolStripMenuItem.Visible = false;
             this.updateEshopLocalDatabaseToolStripMenuItem.Click += new System.EventHandler(this.updateEshopLocalDatabaseToolStripMenuItem_Click);
             // 
             // updateNswdbcomListToolStripMenuItem1
@@ -3179,6 +3179,15 @@
             // 
             this.backgroundWorkerLoadSDCardFiles.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorkerLoadSDCardFiles_DoWork);
             this.backgroundWorkerLoadSDCardFiles.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backgroundWorkerLoadSDCardFiles_RunWorkerCompleted);
+            // 
+            // backgroundWorkerScanNewFiles
+            // 
+            this.backgroundWorkerScanNewFiles.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorkerScanNewFiles_DoWork);
+            this.backgroundWorkerScanNewFiles.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backgroundWorkerScanNewFiles_RunWorkerCompleted);
+            // 
+            // backgroundWorkerUpdateFiles
+            // 
+            this.backgroundWorkerUpdateFiles.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorkerUpdateFiles_DoWork);
             // 
             // FrmMain
             // 
@@ -3572,6 +3581,10 @@
         private System.Windows.Forms.TextBox textBoxFilterEShop;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.ComboBox cbxFilterEshop;
+        //private BrightIdeasSoftware.OLVColumn olvColumnTitleIDLocal;
+        private System.ComponentModel.BackgroundWorker backgroundWorkerScanNewFiles;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemEShopUpdateInfo;
+        private System.ComponentModel.BackgroundWorker backgroundWorkerUpdateFiles;
         private BrightIdeasSoftware.OLVColumn olvColumnTitleIDLocal;
     }
 }

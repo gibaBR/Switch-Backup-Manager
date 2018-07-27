@@ -61,6 +61,8 @@ namespace Switch_Backup_Manager
 
             Util.AutoUpdateNSDBOnStartup = this.cbAutoUpdateScene.Checked;
             Util.ini.IniWriteValue("Config", "autoUpdateNSWDB", cbAutoUpdateScene.Checked ? "true" : "false");
+            Util.UseTitleKeys = this.cbUseTitleKeys.Checked;
+            Util.ini.IniWriteValue("Config", "useTitleKeys", cbUseTitleKeys.Checked ? "true" : "false");
 
             for (int j = 1; j <= 5; j++ )
             {
@@ -103,6 +105,7 @@ namespace Switch_Backup_Manager
             }
 
             this.cbAutoUpdateScene.Checked = Util.AutoUpdateNSDBOnStartup;
+            this.cbUseTitleKeys.Checked = Util.UseTitleKeys;
             this.cbScrapLayerFSOnSD.Checked = Util.ScrapInstalledEshopSDCard;
             this.cbScrapNSPOnSD.Checked = Util.ScrapNSPOnSDCard;
             this.cbScrapXCIOnSD.Checked = Util.ScrapXCIOnSDCard;
@@ -223,6 +226,11 @@ namespace Switch_Backup_Manager
             {
                 checkedListBoxAutoScanFolders.Items.RemoveAt(checkedListBoxAutoScanFolders.SelectedIndex);
             }
+        }
+
+        private void btnApply_Click(object sender, EventArgs e)
+        {
+            WriteConfig();
         }
     }
 }

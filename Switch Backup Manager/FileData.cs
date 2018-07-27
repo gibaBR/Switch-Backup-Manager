@@ -22,6 +22,7 @@ namespace Switch_Backup_Manager
         public string UsedSpace { get; set; } //The Size of the Game inside de file
         public long UsedSpaceBytes { get; set; }
         public string TitleID { get; set; }
+        public string TitleIDBaseGame { get; set; } //Used for DLC NSP Files, they have their own Title ID so we neeg the base game Title ID to display pictures
         public string GameName { get; set; }
         public string Developer { get; set; }
         public string GameRevision { get; set; }
@@ -41,5 +42,7 @@ namespace Switch_Backup_Manager
         public bool IsSplit { get; set; }
         public string DistributionType { get; set; }
         public int IdScene { get; set; }
+        public string ContentType { get; set; } //Patch, AddOnContent, Application
+        public string Version { get; set; } //Used by NSP Only
     }
 }

@@ -16,11 +16,11 @@ namespace Switch_Backup_Manager
 {
     public partial class FrmMain : Form
     {
-        private Dictionary<string, FileData> LocalFilesList;
+        internal static Dictionary<string, FileData> LocalFilesList;
         private Dictionary<string, FileData> LocalFilesListSelectedItems;
-        private Dictionary<string, FileData> LocalNSPFilesList;
+        internal static Dictionary<string, FileData> LocalNSPFilesList;
         private Dictionary<string, FileData> LocalNSPFilesListSelectedItems;
-        private Dictionary<string, FileData> SceneReleasesList;
+        internal static Dictionary<string, FileData> SceneReleasesList;
         private Dictionary<string, FileData> SceneReleasesSelectedItems;
         private Dictionary<string, FileData> SDCardList;
         private Dictionary<string, FileData> SDCardListSelectedItems;
@@ -83,13 +83,30 @@ namespace Switch_Backup_Manager
 
             SetupOLVs();
 
-            Util.UpdateDirectories();
+            //Util.UpdateDirectories();
 
             UpdateSceneReleasesList();
             UpdateLocalGamesList();
             UpdateLocalNSPGamesList();
+            ScanFolders();
 
             tabControl1_SelectedIndexChanged(this, new EventArgs());
+        }
+
+        private void ScanFolders()
+        {
+            if (!backgroundWorkerScanNewFiles.IsBusy)
+            {
+                toolStripStatusFilesOperation.Text = Properties.Resources.EN_FileOperationScanningNewFiles;
+                toolStripStatusFilesOperation.Visible = true;
+                toolStripProgressAddingFiles.Visible = true;
+                toolStripStatusLabelGame.Text = "";
+                toolStripStatusLabelGame.Visible = true;
+                toolStripProgressAddingFiles.Value = 0;
+                timer1.Enabled = true;
+                //object[] parameters = { selectedPath, "xci" }; //0: FilesList (string[]), 1: FileType ("xci", "nsp") 
+                backgroundWorkerScanNewFiles.RunWorkerAsync();
+            }
         }
 
         private void SetupOLVs()
@@ -99,9 +116,12 @@ namespace Switch_Backup_Manager
             OLVSceneList.OwnerDraw = true;
             noneToolStripMenuItem1.Checked = true;
 
+            OLVEshop.Sort(olvColumnGameNameLocal, SortOrder.Ascending);
+            
             OLVLocalFiles.SetObjects(LocalFilesList.Values);
             OLVSceneList.SetObjects(SceneReleasesList.Values);
             OLVEshop.SetObjects(LocalNSPFilesList.Values);
+
 
             sizeColumnROMSizeScene.AspectToStringConverter = delegate (object x) { return Util.BytesToGB((long)x); };
             olvColumnROMSizeLocal.AspectToStringConverter = delegate (object x) { return Util.BytesToGB((long)x); };
@@ -578,6 +598,7 @@ namespace Switch_Backup_Manager
 
                     int count = 0;
                     long size = 0;
+
                     foreach (ListViewItem item in selectedItems)
                     {
                         titleID = item.Text;
@@ -588,7 +609,7 @@ namespace Switch_Backup_Manager
                     }
 
                     toolStripStatusLabel1.Text = Convert.ToString(count) + " Selected (" + Util.BytesToGB(size) + ")";
-                    //Display information of the first selected item
+                    //Display information of the last selected item
                     DisplayGameInformation(titleID, LocalFilesList, "local");
                 }
                 else
@@ -1463,9 +1484,10 @@ namespace Switch_Backup_Manager
 
         private void updateLocalDatabaseToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Util.RemoveMissingFilesFromXML(Util.XML_Local, Util.LOCAL_FILES_DB);
-            UpdateLocalGamesList();
-            MessageBox.Show("Done.");
+            //            Util.RemoveMissingFilesFromXML(Util.XML_Local, Util.LOCAL_FILES_DB);
+            //            UpdateLocalGamesList();
+            ScanFolders();
+        //    MessageBox.Show("Done.");
         }
 
         private void updateNswdbcomListToolStripMenuItem1_Click(object sender, EventArgs e)
@@ -2537,6 +2559,7 @@ namespace Switch_Backup_Manager
 
         private void OLVEshop_ItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e)
         {
+
             if (OLVEshop.SelectedItems.Count == 0)
             {
                 LocalNSPFilesListSelectedItems.Clear();
@@ -2558,6 +2581,7 @@ namespace Switch_Backup_Manager
 
                     LocalNSPFilesListSelectedItems.Clear();
                     string titleID = selectedItems[0].Text;
+                    string titleIDBaseGame = "";
 
                     int count = 0;
                     long size = 0;
@@ -2565,13 +2589,18 @@ namespace Switch_Backup_Manager
                     {
                         titleID = item.Text;
                         FileData data = Util.GetFileData(titleID, LocalNSPFilesList);
+                        titleIDBaseGame = data.TitleIDBaseGame;
                         LocalNSPFilesListSelectedItems.Add(titleID, data);
                         count++;
                         size += Convert.ToInt64(data.UsedSpaceBytes);
                     }
 
                     toolStripStatusLabel1.Text = Convert.ToString(count) + " Selected (" + Util.BytesToGB(size) + ")";
-                    //Display information of the first selected item
+                    //Display information of the last selected item
+                    if (titleIDBaseGame != "")
+                    {
+                        titleID = titleIDBaseGame;
+                    }
                     DisplayGameInformation(titleID, LocalNSPFilesList, "eshop");
                 }
                 else
@@ -2951,6 +2980,81 @@ namespace Switch_Backup_Manager
         private void btnClearFilterEShop_Click(object sender, EventArgs e)
         {
             textBoxFilterEShop.Clear();
+        }
+
+        private void backgroundWorkerScanNewFiles_DoWork(object sender, DoWorkEventArgs e)
+        {
+            BackgroundWorker worker = sender as BackgroundWorker;
+
+            Util.UpdateDirectories();
+        }
+
+        private void backgroundWorkerScanNewFiles_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            timer1.Enabled = false;
+            toolStripStatusFilesOperation.Visible = false;
+            toolStripProgressAddingFiles.Visible = false;
+            toolStripStatusLabelGame.Text = "";
+            toolStripStatusLabelGame.Visible = false;
+
+            UpdateLocalGamesList();
+            UpdateLocalNSPGamesList();
+            tabControl1_SelectedIndexChanged(this, new EventArgs());
+        }
+
+        private void toolStripMenuItemEShopUpdateInfo_Click(object sender, EventArgs e)
+        {
+            if (LocalNSPFilesListSelectedItems.Count > 0)
+            {
+                CommonOpenFileDialog dialog = new CommonOpenFileDialog();
+                dialog.IsFolderPicker = true;
+
+                if (!backgroundWorkerUpdateFiles.IsBusy)
+                {
+                    menuEShop.Enabled = false;
+                    toolStripStatusFilesOperation.Text = Properties.Resources.EN_FileOperationUpdateFiles;
+                    toolStripStatusFilesOperation.Visible = true;
+                    toolStripProgressAddingFiles.Visible = true;
+                    toolStripStatusLabelGame.Text = "";
+                    toolStripStatusLabelGame.Visible = true;
+                    toolStripProgressAddingFiles.Value = 0;
+                    progressCurrentfile = "";
+                    progressPercent = 0;
+                    timer1.Enabled = true;
+                    object[] parameters = { LocalNSPFilesListSelectedItems, "eshop" }; //0: FilesList (Dictionary), 1: source ("local", "sdcard", "eshop") 
+                    backgroundWorkerUpdateFiles.RunWorkerAsync(parameters);
+                }
+            }
+            else
+            {
+                MessageBox.Show("No files selected");
+                return;
+            }
+        }
+
+        private void backgroundWorkerUpdateFiles_DoWork(object sender, DoWorkEventArgs e)
+        {
+            BackgroundWorker worker = sender as BackgroundWorker;
+
+            object[] parameters = e.Argument as object[];
+
+            Dictionary<string, FileData> filesList = (Dictionary<string, FileData>)parameters[0];
+            string source = (string)parameters[1];
+
+            Util.UpdateFilesInfo(filesList, source);
+
+        }
+
+        private void OLVEshop_FormatCell(object sender, FormatCellEventArgs e)
+        {
+            if (e.ColumnIndex == this.olvColumnGameNameEShop.Index)
+            {
+                FileData data = (FileData)e.Model;
+                if (data.ContentType == "AddOnContent") //DLC
+                    e.SubItem.ForeColor = Color.ForestGreen;
+                if (data.ContentType == "Patch") //DLC
+                    e.SubItem.ForeColor = Color.OrangeRed;
+            }
         }
     }
 }

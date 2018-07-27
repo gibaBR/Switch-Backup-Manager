@@ -35,6 +35,10 @@
             this.panel2 = new System.Windows.Forms.Panel();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.btnRemFolderAutoScan = new System.Windows.Forms.Button();
+            this.btnAddFolderAutoScan = new System.Windows.Forms.Button();
+            this.checkedListBoxAutoScanFolders = new System.Windows.Forms.CheckedListBox();
             this.cbAutoUpdateScene = new System.Windows.Forms.CheckBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.cbScrapLayerFSOnSD = new System.Windows.Forms.CheckBox();
@@ -54,19 +58,16 @@
             this.cbxTags = new System.Windows.Forms.ComboBox();
             this.rbRenamingTitleIDGameName = new System.Windows.Forms.RadioButton();
             this.rbRenamingGameName = new System.Windows.Forms.RadioButton();
-            this.groupBox3 = new System.Windows.Forms.GroupBox();
-            this.checkedListBoxAutoScanFolders = new System.Windows.Forms.CheckedListBox();
-            this.btnAddFolderAutoScan = new System.Windows.Forms.Button();
-            this.btnRemFolderAutoScan = new System.Windows.Forms.Button();
+            this.cbUseTitleKeys = new System.Windows.Forms.CheckBox();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
+            this.groupBox3.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.tabPage3.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.gbCustom.SuspendLayout();
-            this.groupBox3.SuspendLayout();
             this.SuspendLayout();
             // 
             // panel1
@@ -88,6 +89,7 @@
             this.btnApply.TabIndex = 2;
             this.btnApply.Text = "&Apply";
             this.btnApply.UseVisualStyleBackColor = true;
+            this.btnApply.Click += new System.EventHandler(this.btnApply_Click);
             // 
             // btnCancel
             // 
@@ -132,6 +134,7 @@
             // 
             // tabPage1
             // 
+            this.tabPage1.Controls.Add(this.cbUseTitleKeys);
             this.tabPage1.Controls.Add(this.groupBox3);
             this.tabPage1.Controls.Add(this.cbAutoUpdateScene);
             this.tabPage1.Controls.Add(this.groupBox2);
@@ -142,6 +145,48 @@
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "General";
             this.tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // groupBox3
+            // 
+            this.groupBox3.Controls.Add(this.btnRemFolderAutoScan);
+            this.groupBox3.Controls.Add(this.btnAddFolderAutoScan);
+            this.groupBox3.Controls.Add(this.checkedListBoxAutoScanFolders);
+            this.groupBox3.Location = new System.Drawing.Point(10, 123);
+            this.groupBox3.Name = "groupBox3";
+            this.groupBox3.Size = new System.Drawing.Size(588, 128);
+            this.groupBox3.TabIndex = 3;
+            this.groupBox3.TabStop = false;
+            this.groupBox3.Text = "Folders to scan at startup";
+            // 
+            // btnRemFolderAutoScan
+            // 
+            this.btnRemFolderAutoScan.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnRemFolderAutoScan.Location = new System.Drawing.Point(550, 54);
+            this.btnRemFolderAutoScan.Name = "btnRemFolderAutoScan";
+            this.btnRemFolderAutoScan.Size = new System.Drawing.Size(32, 28);
+            this.btnRemFolderAutoScan.TabIndex = 4;
+            this.btnRemFolderAutoScan.Text = "-";
+            this.btnRemFolderAutoScan.UseVisualStyleBackColor = true;
+            this.btnRemFolderAutoScan.Click += new System.EventHandler(this.btnRemFolderAutoScan_Click);
+            // 
+            // btnAddFolderAutoScan
+            // 
+            this.btnAddFolderAutoScan.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnAddFolderAutoScan.Location = new System.Drawing.Point(550, 20);
+            this.btnAddFolderAutoScan.Name = "btnAddFolderAutoScan";
+            this.btnAddFolderAutoScan.Size = new System.Drawing.Size(32, 28);
+            this.btnAddFolderAutoScan.TabIndex = 3;
+            this.btnAddFolderAutoScan.Text = "+";
+            this.btnAddFolderAutoScan.UseVisualStyleBackColor = true;
+            this.btnAddFolderAutoScan.Click += new System.EventHandler(this.btnAddFolderAutoScan_Click);
+            // 
+            // checkedListBoxAutoScanFolders
+            // 
+            this.checkedListBoxAutoScanFolders.FormattingEnabled = true;
+            this.checkedListBoxAutoScanFolders.Location = new System.Drawing.Point(7, 20);
+            this.checkedListBoxAutoScanFolders.Name = "checkedListBoxAutoScanFolders";
+            this.checkedListBoxAutoScanFolders.Size = new System.Drawing.Size(537, 94);
+            this.checkedListBoxAutoScanFolders.TabIndex = 0;
             // 
             // cbAutoUpdateScene
             // 
@@ -359,47 +404,15 @@
             this.rbRenamingGameName.UseVisualStyleBackColor = true;
             this.rbRenamingGameName.CheckedChanged += new System.EventHandler(this.rbRenamingGameName_CheckedChanged);
             // 
-            // groupBox3
+            // cbUseTitleKeys
             // 
-            this.groupBox3.Controls.Add(this.btnRemFolderAutoScan);
-            this.groupBox3.Controls.Add(this.btnAddFolderAutoScan);
-            this.groupBox3.Controls.Add(this.checkedListBoxAutoScanFolders);
-            this.groupBox3.Location = new System.Drawing.Point(10, 123);
-            this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(588, 128);
-            this.groupBox3.TabIndex = 3;
-            this.groupBox3.TabStop = false;
-            this.groupBox3.Text = "Folders to scan at startup";
-            // 
-            // checkedListBoxAutoScanFolders
-            // 
-            this.checkedListBoxAutoScanFolders.FormattingEnabled = true;
-            this.checkedListBoxAutoScanFolders.Location = new System.Drawing.Point(7, 20);
-            this.checkedListBoxAutoScanFolders.Name = "checkedListBoxAutoScanFolders";
-            this.checkedListBoxAutoScanFolders.Size = new System.Drawing.Size(537, 94);
-            this.checkedListBoxAutoScanFolders.TabIndex = 0;
-            // 
-            // btnAddFolderAutoScan
-            // 
-            this.btnAddFolderAutoScan.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnAddFolderAutoScan.Location = new System.Drawing.Point(550, 20);
-            this.btnAddFolderAutoScan.Name = "btnAddFolderAutoScan";
-            this.btnAddFolderAutoScan.Size = new System.Drawing.Size(32, 28);
-            this.btnAddFolderAutoScan.TabIndex = 3;
-            this.btnAddFolderAutoScan.Text = "+";
-            this.btnAddFolderAutoScan.UseVisualStyleBackColor = true;
-            this.btnAddFolderAutoScan.Click += new System.EventHandler(this.btnAddFolderAutoScan_Click);
-            // 
-            // btnRemFolderAutoScan
-            // 
-            this.btnRemFolderAutoScan.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnRemFolderAutoScan.Location = new System.Drawing.Point(550, 54);
-            this.btnRemFolderAutoScan.Name = "btnRemFolderAutoScan";
-            this.btnRemFolderAutoScan.Size = new System.Drawing.Size(32, 28);
-            this.btnRemFolderAutoScan.TabIndex = 4;
-            this.btnRemFolderAutoScan.Text = "-";
-            this.btnRemFolderAutoScan.UseVisualStyleBackColor = true;
-            this.btnRemFolderAutoScan.Click += new System.EventHandler(this.btnRemFolderAutoScan_Click);
+            this.cbUseTitleKeys.AutoSize = true;
+            this.cbUseTitleKeys.Location = new System.Drawing.Point(6, 281);
+            this.cbUseTitleKeys.Name = "cbUseTitleKeys";
+            this.cbUseTitleKeys.Size = new System.Drawing.Size(248, 17);
+            this.cbUseTitleKeys.TabIndex = 4;
+            this.cbUseTitleKeys.Text = "Use titlekeys.txt to get missing info on NSP files";
+            this.cbUseTitleKeys.UseVisualStyleBackColor = true;
             // 
             // FormConfigs
             // 
@@ -420,6 +433,7 @@
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.tabPage1.PerformLayout();
+            this.groupBox3.ResumeLayout(false);
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
             this.tabPage3.ResumeLayout(false);
@@ -427,7 +441,6 @@
             this.groupBox1.PerformLayout();
             this.gbCustom.ResumeLayout(false);
             this.gbCustom.PerformLayout();
-            this.groupBox3.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -464,5 +477,6 @@
         private System.Windows.Forms.Button btnRemFolderAutoScan;
         private System.Windows.Forms.Button btnAddFolderAutoScan;
         private System.Windows.Forms.CheckedListBox checkedListBoxAutoScanFolders;
+        private System.Windows.Forms.CheckBox cbUseTitleKeys;
     }
 }

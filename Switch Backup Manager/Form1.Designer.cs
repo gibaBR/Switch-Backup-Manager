@@ -343,6 +343,8 @@
             this.toolStripMenuItem69 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItemCopyFilesToFolderEShop = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItemMoveFilesToFolderEShop = new System.Windows.Forms.ToolStripMenuItem();
+            this.tabPage5 = new System.Windows.Forms.TabPage();
+            this.richTextBoxLog = new System.Windows.Forms.RichTextBox();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
@@ -395,6 +397,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.OLVEshop)).BeginInit();
             this.contextMenuStripEShop.SuspendLayout();
             this.menuEShop.SuspendLayout();
+            this.tabPage5.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -468,6 +471,7 @@
             this.tabControl1.Controls.Add(this.tabPage2);
             this.tabControl1.Controls.Add(this.tabPage3);
             this.tabControl1.Controls.Add(this.tabPage4);
+            this.tabControl1.Controls.Add(this.tabPage5);
             this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabControl1.Location = new System.Drawing.Point(0, 24);
             this.tabControl1.Name = "tabControl1";
@@ -1133,7 +1137,7 @@
             this.selectedFilesToolStripMenuItem,
             this.allFilesToolStripMenuItem});
             this.trimToolStripMenuItem.Name = "trimToolStripMenuItem";
-            this.trimToolStripMenuItem.Size = new System.Drawing.Size(158, 22);
+            this.trimToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.trimToolStripMenuItem.Text = "Trim";
             // 
             // selectedFilesToolStripMenuItem
@@ -1156,7 +1160,7 @@
             this.selectedFilesToolStripMenuItem1,
             this.allFilesToolStripMenuItem1});
             this.renameToolStripMenuItem.Name = "renameToolStripMenuItem";
-            this.renameToolStripMenuItem.Size = new System.Drawing.Size(158, 22);
+            this.renameToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.renameToolStripMenuItem.Text = "Auto rename";
             // 
             // selectedFilesToolStripMenuItem1
@@ -1176,14 +1180,14 @@
             // exportListToolStripMenuItem
             // 
             this.exportListToolStripMenuItem.Name = "exportListToolStripMenuItem";
-            this.exportListToolStripMenuItem.Size = new System.Drawing.Size(158, 22);
+            this.exportListToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.exportListToolStripMenuItem.Text = "Extract file...";
             this.exportListToolStripMenuItem.Click += new System.EventHandler(this.exportListToolStripMenuItem_Click);
             // 
             // toolStripMenuItem3
             // 
             this.toolStripMenuItem3.Name = "toolStripMenuItem3";
-            this.toolStripMenuItem3.Size = new System.Drawing.Size(155, 6);
+            this.toolStripMenuItem3.Size = new System.Drawing.Size(177, 6);
             // 
             // exportGameListToolStripMenuItem
             // 
@@ -1191,20 +1195,20 @@
             this.htmlToolStripMenuItem,
             this.cSVToolStripMenuItem});
             this.exportGameListToolStripMenuItem.Name = "exportGameListToolStripMenuItem";
-            this.exportGameListToolStripMenuItem.Size = new System.Drawing.Size(158, 22);
+            this.exportGameListToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.exportGameListToolStripMenuItem.Text = "Export game list";
             // 
             // htmlToolStripMenuItem
             // 
             this.htmlToolStripMenuItem.Name = "htmlToolStripMenuItem";
-            this.htmlToolStripMenuItem.Size = new System.Drawing.Size(107, 22);
+            this.htmlToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.htmlToolStripMenuItem.Text = "HTML";
             this.htmlToolStripMenuItem.Click += new System.EventHandler(this.htmlToolStripMenuItem_Click);
             // 
             // cSVToolStripMenuItem
             // 
             this.cSVToolStripMenuItem.Name = "cSVToolStripMenuItem";
-            this.cSVToolStripMenuItem.Size = new System.Drawing.Size(107, 22);
+            this.cSVToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.cSVToolStripMenuItem.Text = "CSV";
             this.cSVToolStripMenuItem.Click += new System.EventHandler(this.cSVToolStripMenuItem_Click);
             // 
@@ -3029,6 +3033,28 @@
             this.toolStripMenuItemMoveFilesToFolderEShop.Text = "Move files";
             this.toolStripMenuItemMoveFilesToFolderEShop.Click += new System.EventHandler(this.toolStripMenuItemMoveFilesToFolderEShop_Click);
             // 
+            // tabPage5
+            // 
+            this.tabPage5.Controls.Add(this.richTextBoxLog);
+            this.tabPage5.Location = new System.Drawing.Point(4, 22);
+            this.tabPage5.Name = "tabPage5";
+            this.tabPage5.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage5.Size = new System.Drawing.Size(1574, 591);
+            this.tabPage5.TabIndex = 4;
+            this.tabPage5.Text = "Log";
+            this.tabPage5.UseVisualStyleBackColor = true;
+            // 
+            // richTextBoxLog
+            // 
+            this.richTextBoxLog.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.richTextBoxLog.Location = new System.Drawing.Point(3, 3);
+            this.richTextBoxLog.Name = "richTextBoxLog";
+            this.richTextBoxLog.ReadOnly = true;
+            this.richTextBoxLog.Size = new System.Drawing.Size(1568, 585);
+            this.richTextBoxLog.TabIndex = 0;
+            this.richTextBoxLog.Text = "";
+            this.richTextBoxLog.TextChanged += new System.EventHandler(this.richTextBoxLog_TextChanged);
+            // 
             // statusStrip1
             // 
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -3199,7 +3225,7 @@
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "FrmMain";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Switch Backup Manager v1.0.7";
+            this.Text = "Switch Backup Manager";
             this.splitContainer1.Panel1.ResumeLayout(false);
             this.splitContainer1.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
@@ -3240,6 +3266,7 @@
             this.contextMenuStripEShop.ResumeLayout(false);
             this.menuEShop.ResumeLayout(false);
             this.menuEShop.PerformLayout();
+            this.tabPage5.ResumeLayout(false);
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
             this.menuStrip1.ResumeLayout(false);
@@ -3586,6 +3613,8 @@
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemEShopUpdateInfo;
         private System.ComponentModel.BackgroundWorker backgroundWorkerUpdateFiles;
         private BrightIdeasSoftware.OLVColumn olvColumnTitleIDLocal;
+        private System.Windows.Forms.TabPage tabPage5;
+        private System.Windows.Forms.RichTextBox richTextBoxLog;
     }
 }
 

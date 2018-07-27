@@ -27,10 +27,11 @@ namespace Switch_Backup_Manager
 
         private bool updateCbxRemoveableFiles;
         private bool updateFileListAfterMove;
+        private bool updateLog;
         private string clipboardInfoEShop;
         private string clipboardInfoLocal;
         private string clipboardInfoSD;
-        private string clipboardInfoScene;
+        private string clipboardInfoScene;        
 
         //To update Statusbar wheile adding files
         public static int progressPercent = 0;
@@ -46,7 +47,46 @@ namespace Switch_Backup_Manager
 
             lblSpaceAvailabeOnSD.Visible = false;
 
-            Util.LoadSettings();
+            Util.LoadSettings(ref this.richTextBoxLog);
+
+            updateLog = false;
+            if (File.Exists(Util.LOG_FILE))
+            {
+                string[] lines = File.ReadAllLines(Util.LOG_FILE);
+                richTextBoxLog.Suspend();
+                foreach (string line in lines)
+                {
+                    Color color = richTextBoxLog.ForeColor;
+
+                    if (line.Contains("[DEBUG]"))
+                    {
+                        color = Color.DarkGreen;
+                    }
+                    else if (line.Contains("[ERROR]"))
+                    {
+                        color = Color.DarkRed;
+                    }
+                    else if (line.Contains("[WARNING]"))
+                    {
+                        color = Color.IndianRed;
+                    }                    
+                    richTextBoxLog.AppendText(line+"\n", color);
+                }                
+                richTextBoxLog.SelectionStart = richTextBoxLog.Text.Length;
+                richTextBoxLog.ScrollToCaret();
+                richTextBoxLog.Resume();
+            }
+            updateLog = true;
+
+            /*
+            var watch = new FileSystemWatcher();
+                        watch.Path = AppDomain.CurrentDomain.BaseDirectory;
+            watch.Filter = Util.LOG_FILE;
+            watch.NotifyFilter = NotifyFilters.LastWrite; //more options
+            watch.Changed += new FileSystemEventHandler(OnLogChanged);
+            watch.EnableRaisingEvents = true;
+            */
+
             LocalFilesList = new Dictionary<string, FileData>();
             LocalNSPFilesList = new Dictionary<string, FileData>();
             SceneReleasesList = new Dictionary<string, FileData>();
@@ -92,6 +132,32 @@ namespace Switch_Backup_Manager
 
             tabControl1_SelectedIndexChanged(this, new EventArgs());
         }
+
+/*
+        delegate void OnLogChangedDelegate(object source, FileSystemEventArgs e); //Safe Thread
+        private void OnLogChanged(object source, FileSystemEventArgs e) //Safe Thread
+        {
+            if (e.Name == Util.LOG_FILE)
+            {
+                if (richTextBoxLog.InvokeRequired)
+                {
+                    OnLogChangedDelegate d = new OnLogChangedDelegate(OnLogChanged);
+                    try
+                    {
+                        this.Invoke(d, new object[] { source, e });
+                    } catch{}                    
+                } else
+                {
+                    richTextBoxLog.Suspend();
+                    richTextBoxLog.Clear();
+                    richTextBoxLog.Text = File.ReadAllText(Util.LOG_FILE);
+                    richTextBoxLog.SelectionStart = richTextBoxLog.Text.Length;
+                    richTextBoxLog.ScrollToCaret();
+                    richTextBoxLog.Resume();
+                }
+            }
+        }
+*/
 
         private void ScanFolders()
         {
@@ -3054,6 +3120,17 @@ namespace Switch_Backup_Manager
                     e.SubItem.ForeColor = Color.ForestGreen;
                 if (data.ContentType == "Patch") //DLC
                     e.SubItem.ForeColor = Color.OrangeRed;
+            }
+        }
+
+        private void richTextBoxLog_TextChanged(object sender, EventArgs e)
+        {
+            if (updateLog)
+            {
+                richTextBoxLog.Suspend();
+                richTextBoxLog.SelectionStart = richTextBoxLog.Text.Length;
+                richTextBoxLog.ScrollToCaret();
+                richTextBoxLog.Resume();
             }
         }
     }

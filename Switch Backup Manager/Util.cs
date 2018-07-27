@@ -722,10 +722,10 @@ namespace Switch_Backup_Manager
             return result;
         }
 
-        public static void LoadSettings()
+        public static void LoadSettings(ref RichTextBox outputLogBox)
         {
             ini = new IniFile((AppDomain.CurrentDomain.BaseDirectory) + INI_FILE);
-            logger = new Logger();
+            logger = new Logger(ref outputLogBox);
 
             string keys_file = ini.IniReadValue("Config", "keys_file");
             string title_keys = ini.IniReadValue("Config", "title_keys");

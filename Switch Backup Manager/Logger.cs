@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 //Original article: https://heiswayi.nrird.com/2016/creating-super-simple-logger-class-in-csharp
 
@@ -12,6 +14,7 @@ namespace Switch_Backup_Manager
     {
         private readonly string datetimeFormat;
         private readonly string logFilename;
+        private RichTextBox outputTextBox;
 
         /// <summary>
         /// Initiate an instance of SimpleLogger class constructor.
@@ -28,6 +31,12 @@ namespace Switch_Backup_Manager
             {
                 WriteLine(System.DateTime.Now.ToString(datetimeFormat) + " " + logHeader, false);
             }
+        }
+
+        public Logger(ref RichTextBox output)
+            :this()
+        {
+            this.outputTextBox = output;
         }
 
         /// <summary>
@@ -117,6 +126,7 @@ namespace Switch_Backup_Manager
             WriteLine(pretext + text);
         }
 
+        delegate void OutputMethodDelegate(string text, bool append = true);
         private void WriteLine(string text, bool append = true)
         {
             try
@@ -126,12 +136,26 @@ namespace Switch_Backup_Manager
                     if (text != "")
                     {
                         writer.WriteLine(text);
+                        Color color = this.outputTextBox.ForeColor;
+
+                        if (text.Contains("[DEBUG]"))
+                        {
+                            color = Color.DarkGreen;
+                        } else if (text.Contains("[ERROR]"))
+                        {
+                            color = Color.DarkRed;
+                        } else if (text.Contains("[WARNING]"))
+                        {
+                            color = Color.IndianRed;
+                        }
+                        
+                        this.outputTextBox.AppendText("\n" + text, color);
                     }
                 }
             }
-            catch
+            catch (Exception e)
             {
-                //throw;
+                string ex = e.StackTrace;
             }
         }
 

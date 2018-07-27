@@ -149,7 +149,7 @@ namespace Switch_Backup_Manager
                             color = Color.IndianRed;
                         }
                         
-                        this.outputTextBox.AppendText("\n" + text, color);
+                        this.outputTextBox.AppendText(text+"\n", color);
                     }
                 }
             }

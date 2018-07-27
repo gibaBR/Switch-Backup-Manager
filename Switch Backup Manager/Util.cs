@@ -1455,45 +1455,8 @@ namespace Switch_Backup_Manager
                         ncaTarget = xe.Element("Id").Value + ".cnmt.nca";
                         break;
                     }
-                    /*
-                     * We need this information:
-                    data.Region_Icon
-                    data.Languages
-                    data.GameRevision
-                    data.ProductCode
-                    data.GameName
-                    data.Developer
-                    Gonna search by TitleID on: NSP Files -> Scene -> Local Files -> TitleKeys (partial info only)
-                    */
                     bool found = false;
 
-                    //We need to infer the TitleID of base game
-                    //string titleIdBase = data.TitleID.Substring(0, 13);
-                    //long tmp = long.Parse(titleIdBase, System.Globalization.NumberStyles.HexNumber) - 1;
-                    //titleIdBase = string.Format("0{0:X8}", tmp) + "000";
-                    //data.TitleIDBaseGame = titleIdBase;
-                    //data.TitleIDBaseGame = titleIDBaseGame;
-
-                    /*
-                    foreach (XElement xe in XML_NSP_Local.Descendants("Game"))
-                    {
-                        if (xe != null)
-                        {
-                            if (xe.Attribute("TitleID").Value == titleIdBase)
-                            {
-                                FileData data_tmp = GetFileData(xe);
-                                data.Region_Icon = data_tmp.Region_Icon;
-                                data.Languages = data_tmp.Languages;
-                                data.GameRevision = data_tmp.GameRevision;
-                                data.ProductCode = data_tmp.ProductCode;
-                                data.GameName = data_tmp.GameName + " [DLC]";
-                                data.Developer = data_tmp.Developer;
-                                found = true;
-                                break;
-                            }
-                        }                        
-                    }
-                    */
                     FileData data_tmp = null;
                     FrmMain.LocalNSPFilesList.TryGetValue(data.TitleIDBaseGame, out data_tmp); //Try to find on NSP List
                     if (data_tmp != null)
@@ -1521,26 +1484,6 @@ namespace Switch_Backup_Manager
                             data.Developer = data_tmp.Developer;
                             found = true;
                         }
-                        /*
-                        foreach (XElement xe in XML_NSWDB.Descendants("release"))
-                        {
-                            if (xe != null)
-                            {
-                                if (xe.Element("id").Value == titleIdBase)
-                                {
-                                    data_tmp = GetFileData(xe, true);
-                                    data.Region_Icon = data_tmp.Region_Icon;
-                                    data.Languages = data_tmp.Languages;
-                                    data.GameRevision = data_tmp.GameRevision;
-                                    data.ProductCode = data_tmp.ProductCode;
-                                    data.GameName = data_tmp.GameName + " [DLC]";
-                                    data.Developer = data_tmp.Developer;
-                                    found = true;
-                                    break;
-                                }
-                            }
-                        }
-                        */
                     }
 
                     if (!found)
@@ -1557,26 +1500,6 @@ namespace Switch_Backup_Manager
                             data.Developer = data_tmp.Developer;
                             found = true;
                         }
-                        /*
-                        foreach (XElement xe in XML_Local.Descendants("Game"))
-                        {
-                            if (xe != null)
-                            {
-                                if (xe.Attribute("TitleID").Value == titleIdBase)
-                                {
-                                    data_tmp = GetFileData(xe);
-                                    data.Region_Icon = data_tmp.Region_Icon;
-                                    data.Languages = data_tmp.Languages;
-                                    data.GameRevision = data_tmp.GameRevision;
-                                    data.ProductCode = data_tmp.ProductCode;
-                                    data.GameName = data_tmp.GameName + " [DLC]";
-                                    data.Developer = data_tmp.Developer;
-                                    found = true;
-                                    break;
-                                }
-                            }
-                        }
-                        */
                     }
 
                     //Last resource, look at titlekeys
@@ -1600,17 +1523,6 @@ namespace Switch_Backup_Manager
                             }
 
                             data.GameName = gameName;
-
-                            /*
-                            foreach (var line in File.ReadAllLines(TITLE_KEYS))
-                            {
-                                if (line.Contains(data.TitleID.ToLower()))
-                                {
-
-                                    break;
-                                }
-                            }
-                            */
                         }
                     }
 

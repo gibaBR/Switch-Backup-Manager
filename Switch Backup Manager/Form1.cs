@@ -3133,5 +3133,20 @@ namespace Switch_Backup_Manager
                 richTextBoxLog.Resume();
             }
         }
+
+        private void btnClearLogFile_Click(object sender, EventArgs e)
+        {
+            richTextBoxLog.Clear();
+            if (File.Exists(Util.LOG_FILE))
+            {
+                try
+                {
+                    File.Delete(Util.LOG_FILE);
+                } catch (Exception ex)
+                {
+                    Util.logger.Error("Could not delete log file. " + ex.StackTrace);
+                }                
+            }
+        }
     }
 }

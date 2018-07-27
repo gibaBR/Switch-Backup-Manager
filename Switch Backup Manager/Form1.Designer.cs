@@ -344,7 +344,8 @@
             this.toolStripMenuItemCopyFilesToFolderEShop = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItemMoveFilesToFolderEShop = new System.Windows.Forms.ToolStripMenuItem();
             this.tabPage5 = new System.Windows.Forms.TabPage();
-            this.richTextBoxLog = new System.Windows.Forms.RichTextBox();
+            this.panel7 = new System.Windows.Forms.Panel();
+            this.btnClearLogFile = new System.Windows.Forms.Button();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
@@ -367,6 +368,8 @@
             this.backgroundWorkerLoadSDCardFiles = new System.ComponentModel.BackgroundWorker();
             this.backgroundWorkerScanNewFiles = new System.ComponentModel.BackgroundWorker();
             this.backgroundWorkerUpdateFiles = new System.ComponentModel.BackgroundWorker();
+            this.panel6 = new System.Windows.Forms.Panel();
+            this.richTextBoxLog = new System.Windows.Forms.RichTextBox();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -398,8 +401,10 @@
             this.contextMenuStripEShop.SuspendLayout();
             this.menuEShop.SuspendLayout();
             this.tabPage5.SuspendLayout();
+            this.panel7.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
+            this.panel6.SuspendLayout();
             this.SuspendLayout();
             // 
             // splitContainer1
@@ -1137,7 +1142,7 @@
             this.selectedFilesToolStripMenuItem,
             this.allFilesToolStripMenuItem});
             this.trimToolStripMenuItem.Name = "trimToolStripMenuItem";
-            this.trimToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.trimToolStripMenuItem.Size = new System.Drawing.Size(158, 22);
             this.trimToolStripMenuItem.Text = "Trim";
             // 
             // selectedFilesToolStripMenuItem
@@ -1160,7 +1165,7 @@
             this.selectedFilesToolStripMenuItem1,
             this.allFilesToolStripMenuItem1});
             this.renameToolStripMenuItem.Name = "renameToolStripMenuItem";
-            this.renameToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.renameToolStripMenuItem.Size = new System.Drawing.Size(158, 22);
             this.renameToolStripMenuItem.Text = "Auto rename";
             // 
             // selectedFilesToolStripMenuItem1
@@ -1180,14 +1185,14 @@
             // exportListToolStripMenuItem
             // 
             this.exportListToolStripMenuItem.Name = "exportListToolStripMenuItem";
-            this.exportListToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.exportListToolStripMenuItem.Size = new System.Drawing.Size(158, 22);
             this.exportListToolStripMenuItem.Text = "Extract file...";
             this.exportListToolStripMenuItem.Click += new System.EventHandler(this.exportListToolStripMenuItem_Click);
             // 
             // toolStripMenuItem3
             // 
             this.toolStripMenuItem3.Name = "toolStripMenuItem3";
-            this.toolStripMenuItem3.Size = new System.Drawing.Size(177, 6);
+            this.toolStripMenuItem3.Size = new System.Drawing.Size(155, 6);
             // 
             // exportGameListToolStripMenuItem
             // 
@@ -1195,20 +1200,20 @@
             this.htmlToolStripMenuItem,
             this.cSVToolStripMenuItem});
             this.exportGameListToolStripMenuItem.Name = "exportGameListToolStripMenuItem";
-            this.exportGameListToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.exportGameListToolStripMenuItem.Size = new System.Drawing.Size(158, 22);
             this.exportGameListToolStripMenuItem.Text = "Export game list";
             // 
             // htmlToolStripMenuItem
             // 
             this.htmlToolStripMenuItem.Name = "htmlToolStripMenuItem";
-            this.htmlToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.htmlToolStripMenuItem.Size = new System.Drawing.Size(107, 22);
             this.htmlToolStripMenuItem.Text = "HTML";
             this.htmlToolStripMenuItem.Click += new System.EventHandler(this.htmlToolStripMenuItem_Click);
             // 
             // cSVToolStripMenuItem
             // 
             this.cSVToolStripMenuItem.Name = "cSVToolStripMenuItem";
-            this.cSVToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.cSVToolStripMenuItem.Size = new System.Drawing.Size(107, 22);
             this.cSVToolStripMenuItem.Text = "CSV";
             this.cSVToolStripMenuItem.Click += new System.EventHandler(this.cSVToolStripMenuItem_Click);
             // 
@@ -3035,25 +3040,34 @@
             // 
             // tabPage5
             // 
-            this.tabPage5.Controls.Add(this.richTextBoxLog);
+            this.tabPage5.Controls.Add(this.panel6);
+            this.tabPage5.Controls.Add(this.panel7);
             this.tabPage5.Location = new System.Drawing.Point(4, 22);
             this.tabPage5.Name = "tabPage5";
             this.tabPage5.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage5.Size = new System.Drawing.Size(1574, 591);
+            this.tabPage5.Size = new System.Drawing.Size(1576, 593);
             this.tabPage5.TabIndex = 4;
             this.tabPage5.Text = "Log";
             this.tabPage5.UseVisualStyleBackColor = true;
             // 
-            // richTextBoxLog
+            // panel7
             // 
-            this.richTextBoxLog.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.richTextBoxLog.Location = new System.Drawing.Point(3, 3);
-            this.richTextBoxLog.Name = "richTextBoxLog";
-            this.richTextBoxLog.ReadOnly = true;
-            this.richTextBoxLog.Size = new System.Drawing.Size(1568, 585);
-            this.richTextBoxLog.TabIndex = 0;
-            this.richTextBoxLog.Text = "";
-            this.richTextBoxLog.TextChanged += new System.EventHandler(this.richTextBoxLog_TextChanged);
+            this.panel7.Controls.Add(this.btnClearLogFile);
+            this.panel7.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.panel7.Location = new System.Drawing.Point(3, 564);
+            this.panel7.Name = "panel7";
+            this.panel7.Size = new System.Drawing.Size(1570, 26);
+            this.panel7.TabIndex = 1;
+            // 
+            // btnClearLogFile
+            // 
+            this.btnClearLogFile.Location = new System.Drawing.Point(1494, 2);
+            this.btnClearLogFile.Name = "btnClearLogFile";
+            this.btnClearLogFile.Size = new System.Drawing.Size(75, 23);
+            this.btnClearLogFile.TabIndex = 0;
+            this.btnClearLogFile.Text = "Clear log file";
+            this.btnClearLogFile.UseVisualStyleBackColor = true;
+            this.btnClearLogFile.Click += new System.EventHandler(this.btnClearLogFile_Click);
             // 
             // statusStrip1
             // 
@@ -3215,6 +3229,27 @@
             // 
             this.backgroundWorkerUpdateFiles.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorkerUpdateFiles_DoWork);
             // 
+            // panel6
+            // 
+            this.panel6.Controls.Add(this.richTextBoxLog);
+            this.panel6.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel6.Location = new System.Drawing.Point(3, 3);
+            this.panel6.Name = "panel6";
+            this.panel6.Size = new System.Drawing.Size(1570, 561);
+            this.panel6.TabIndex = 2;
+            // 
+            // richTextBoxLog
+            // 
+            this.richTextBoxLog.BackColor = System.Drawing.SystemColors.Window;
+            this.richTextBoxLog.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.richTextBoxLog.Location = new System.Drawing.Point(0, 0);
+            this.richTextBoxLog.Name = "richTextBoxLog";
+            this.richTextBoxLog.ReadOnly = true;
+            this.richTextBoxLog.Size = new System.Drawing.Size(1570, 561);
+            this.richTextBoxLog.TabIndex = 3;
+            this.richTextBoxLog.Text = "";
+            this.richTextBoxLog.TextChanged += new System.EventHandler(this.richTextBoxLog_TextChanged);
+            // 
             // FrmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -3267,10 +3302,12 @@
             this.menuEShop.ResumeLayout(false);
             this.menuEShop.PerformLayout();
             this.tabPage5.ResumeLayout(false);
+            this.panel7.ResumeLayout(false);
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
+            this.panel6.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -3614,6 +3651,9 @@
         private System.ComponentModel.BackgroundWorker backgroundWorkerUpdateFiles;
         private BrightIdeasSoftware.OLVColumn olvColumnTitleIDLocal;
         private System.Windows.Forms.TabPage tabPage5;
+        private System.Windows.Forms.Panel panel7;
+        private System.Windows.Forms.Button btnClearLogFile;
+        private System.Windows.Forms.Panel panel6;
         private System.Windows.Forms.RichTextBox richTextBoxLog;
     }
 }

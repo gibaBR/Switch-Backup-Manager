@@ -19,14 +19,15 @@ namespace Switch_Backup_Manager
 {
     internal static class Util
     {
-        public const string VERSION = "1.0.8";   //Actual application version
-        public const string MIN_DB_Version = "1.0.8"; //This is the minimum version of the DB that can work
+        public const string VERSION = "1.0.9";   //Actual application version
+        public const string MIN_DB_Version = "1.0.9"; //This is the minimum version of the DB that can work
 
         public const string INI_FILE = "sbm.ini";
         public static string TITLE_KEYS = "titlekeys.txt";
         public static string KEYS_FILE = "keys.txt";
         public const string KEYS_DOWNLOAD_SITE = "https://pastebin.com/raw/ekSH9R8t";
-        public const string HACTOOL_FILE = "hactool.exe";
+        public static string HACTOOL_FILE = "hactool.exe";
+        public static string NSTOOLMOD = "nstoolmod.exe";
         public const string HACTOOL_DOWNLOAD_SITE = "https://github.com/SciresM/hactool/releases/download/1.1.0/hactool-1.1.0.win.zip";
         public const string NSWDB_FILE = "nswdb.xml";
         public const string NSWDB_DOWNLOAD_SITE = "http://nswdb.com/xml.php";
@@ -68,7 +69,7 @@ namespace Switch_Backup_Manager
             "???"
         };
 
-        public static string[] AutoRenamingTags = new string[10]
+        public static string[] AutoRenamingTags = new string[12]
         {
             "{gamename}",
             "{titleid}",
@@ -79,7 +80,9 @@ namespace Switch_Backup_Manager
             "{region}",
             "{firmware}",
             "{languages}",
-            "{sceneid}"
+            "{sceneid}",
+            "{nsptype}",
+            "{nspversion}"
         };
 
         private static Image[] Icons = new Image[16];
@@ -198,6 +201,19 @@ namespace Switch_Backup_Manager
 
             if (data != null)
             {
+                string contentType = "";
+                switch (data.ContentType)
+                {
+                    case "Application":
+                        contentType = "BASE";
+                        break;
+                    case "Patch":
+                        contentType = "UPD";
+                        break;
+                    case "AddOnContent":
+                        contentType = "DLC";
+                        break;
+                }
                 result = pattern;
                 result = result.Replace(AutoRenamingTags[0], data.GameName);
                 result = result.Replace(AutoRenamingTags[1], data.TitleID);
@@ -208,8 +224,9 @@ namespace Switch_Backup_Manager
                 result = result.Replace(AutoRenamingTags[6], data.Region);
                 result = result.Replace(AutoRenamingTags[7], data.Firmware);
                 result = result.Replace(AutoRenamingTags[8], data.Languages_resumed);
-                result = result.Replace(AutoRenamingTags[9], Convert.ToString(data.IdScene));
-
+                result = result.Replace(AutoRenamingTags[9], string.Format("{0:D4}", (int)data.IdScene));
+                result = result.Replace(AutoRenamingTags[10], contentType);
+                result = result.Replace(AutoRenamingTags[11], data.Version);
                 result += Path.GetExtension(data.FilePath);
             }
 
@@ -682,7 +699,7 @@ namespace Switch_Backup_Manager
         {
             bool result = false;
             int ver_db  = 0;
-            int ver_min = Convert.ToInt32(VERSION.Replace(".", "")); //Ex 1.0.8 -> 108
+            int ver_min = Convert.ToInt32(MIN_DB_Version.Replace(".", "")); //Ex 1.0.8 -> 108
 
             //Check if DB is on minimum version
             XDocument xml_temp = XDocument.Load(xml);
@@ -794,6 +811,13 @@ namespace Switch_Backup_Manager
             {
                 MessageBox.Show(HACTOOL_FILE+" is missing. Please, download it at\n"+HACTOOL_DOWNLOAD_SITE);
                 Environment.Exit(0);
+            }
+
+            //If nstoolmod.exe is not found, use hactool on NSP files (slow)
+            if (!File.Exists(NSTOOLMOD))
+            {
+                MessageBox.Show(NSTOOLMOD + " is missing. Gonna use " + HACTOOL_FILE +" on NSP files instead (very slow).\nThis file should be included on the package you downloaded.");
+                NSTOOLMOD = HACTOOL_FILE;
             }
 
             //Searches for db.xml
@@ -1306,12 +1330,29 @@ namespace Switch_Backup_Manager
             try
             {
                 //Directory.CreateDirectory("tmp");
-                process.StartInfo = new ProcessStartInfo
+
+                //It means nstoolmod.exe was not found. So, we need to use hactool (slow)
+                if (NSTOOLMOD == HACTOOL_FILE)
                 {
-                    WindowStyle = ProcessWindowStyle.Hidden,
-                    FileName = "hactool.exe",
-                    Arguments = "-t pfs0 " + "\""+ file +"\"" + " --outdir=tmp"
-                };
+                    process.StartInfo = new ProcessStartInfo
+                    {
+                        WindowStyle = ProcessWindowStyle.Hidden,
+                        FileName = HACTOOL_FILE,
+                        Arguments = "-t pfs0 " + "\"" + file + "\"" + " --outdir=tmp"
+                    };
+                } else
+                {
+                    /* StudentBlake's Solution. Fast!
+                     * 
+                     */
+                    process.StartInfo = new ProcessStartInfo
+                    {
+                        WindowStyle = ProcessWindowStyle.Hidden,
+                        FileName = NSTOOLMOD,
+                        Arguments = "--fsdir tmp \"" + file + "\""
+                    };
+                }
+
                 logger.Info("Extracting NSP file.");
                 process.Start();
                 process.WaitForExit();
@@ -1372,7 +1413,7 @@ namespace Switch_Backup_Manager
                     process.StartInfo = new ProcessStartInfo
                     {
                         WindowStyle = ProcessWindowStyle.Hidden,
-                        FileName = "hactool.exe",
+                        FileName = HACTOOL_FILE,
                         Arguments = "-k keys.txt --romfsdir=tmp tmp/" + ncaTarget
                     };
                     logger.Info("Making some voodoo magic with " + ncaTarget);
@@ -1436,12 +1477,12 @@ namespace Switch_Backup_Manager
                         }
                     }
 
+                    /* #22
                     if (data.ContentType == "Patch")
                     {
                         data.GameName = data.GameName + " [UPD]";
                     }
-
-                    //data.TitleIDBaseGame = data.TitleID;
+                    */
                 }
                 else //This is a DLC
                 {
@@ -1465,7 +1506,7 @@ namespace Switch_Backup_Manager
                         data.Languages = data_tmp.Languages;
                         data.GameRevision = data_tmp.GameRevision;
                         data.ProductCode = data_tmp.ProductCode;
-                        data.GameName = data_tmp.GameName + " [DLC]";
+                        data.GameName = data_tmp.GameName;
                         data.Developer = data_tmp.Developer;
                         found = true;
                     }
@@ -1480,7 +1521,7 @@ namespace Switch_Backup_Manager
                             data.Languages = data_tmp.Languages;
                             data.GameRevision = data_tmp.GameRevision;
                             data.ProductCode = data_tmp.ProductCode;
-                            data.GameName = data_tmp.GameName + " [DLC]";
+                            data.GameName = data_tmp.GameName;
                             data.Developer = data_tmp.Developer;
                             found = true;
                         }
@@ -1496,7 +1537,7 @@ namespace Switch_Backup_Manager
                             data.Languages = data_tmp.Languages;
                             data.GameRevision = data_tmp.GameRevision;
                             data.ProductCode = data_tmp.ProductCode;
-                            data.GameName = data_tmp.GameName + " [DLC]";
+                            data.GameName = data_tmp.GameName;
                             data.Developer = data_tmp.Developer;
                             found = true;
                         }
@@ -1519,7 +1560,7 @@ namespace Switch_Backup_Manager
                                             select x).ToDictionary((string[] x) => x[0].Trim(), (string[] x) => x[2])[data.TitleID].ToLower();
                             } else
                             {
-                                gameName += " [DLC]";
+                                //gameName += " [DLC]";
                             }
 
                             data.GameName = gameName;
@@ -1528,7 +1569,7 @@ namespace Switch_Backup_Manager
 
                 }
 
-                data.GameName = data.GameName + " [v" + data.Version + "]";
+                //data.GameName = data.GameName + " [v" + data.Version + "]";
 
                 //Lets get SDK Version, Distribution Type and Masterkey revision
                 //This is far from the best aproach, but its what we have for now
@@ -1536,7 +1577,7 @@ namespace Switch_Backup_Manager
                 process.StartInfo = new ProcessStartInfo
                 {
                     WindowStyle = ProcessWindowStyle.Hidden,
-                    FileName = "hactool.exe",
+                    FileName = HACTOOL_FILE,
                     Arguments = "-k keys.txt tmp/" + ncaTarget,
                     RedirectStandardOutput = true,
                     UseShellExecute = false,
@@ -1790,7 +1831,7 @@ namespace Switch_Backup_Manager
                         process.StartInfo = new ProcessStartInfo
                         {
                             WindowStyle = ProcessWindowStyle.Hidden,
-                            FileName = "hactool.exe",
+                            FileName = HACTOOL_FILE,
                             Arguments = "-k keys.txt --romfsdir=data meta"
                         };
                         process.Start();

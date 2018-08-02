@@ -19,6 +19,7 @@ namespace Switch_Backup_Manager
         public FormConfigs()
         {
             InitializeComponent();
+            this.AutoScaleMode = AutoScaleMode.Dpi;
 
             //Hide tabs not ready
             //tabControl1.TabPages.Remove(tabPage1);
@@ -37,6 +38,8 @@ namespace Switch_Backup_Manager
             gameExample.Firmware = "3.0.1";
             gameExample.Languages_resumed = "en,fr,de,it,es,nl,ru,ja";
             gameExample.IdScene = 38;
+            gameExample.ContentType = "Application";
+            gameExample.Version = "0";
 
             cbxTags.Items.Clear();
             for (int i = 0; i < Util.AutoRenamingTags.Length; i++)

@@ -215,6 +215,7 @@
             this.cbxFilterScene = new System.Windows.Forms.ComboBox();
             this.OLVSceneList = new BrightIdeasSoftware.ObjectListView();
             this.olvColumnTitleIDScene = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.olvColumnSceneID = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnGameNameScene = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.sizeColumnROMSizeScene = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnDeveloperScene = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
@@ -344,6 +345,8 @@
             this.toolStripMenuItemCopyFilesToFolderEShop = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItemMoveFilesToFolderEShop = new System.Windows.Forms.ToolStripMenuItem();
             this.tabPage5 = new System.Windows.Forms.TabPage();
+            this.panel6 = new System.Windows.Forms.Panel();
+            this.richTextBoxLog = new System.Windows.Forms.RichTextBox();
             this.panel7 = new System.Windows.Forms.Panel();
             this.btnClearLogFile = new System.Windows.Forms.Button();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
@@ -368,8 +371,6 @@
             this.backgroundWorkerLoadSDCardFiles = new System.ComponentModel.BackgroundWorker();
             this.backgroundWorkerScanNewFiles = new System.ComponentModel.BackgroundWorker();
             this.backgroundWorkerUpdateFiles = new System.ComponentModel.BackgroundWorker();
-            this.panel6 = new System.Windows.Forms.Panel();
-            this.richTextBoxLog = new System.Windows.Forms.RichTextBox();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -401,10 +402,10 @@
             this.contextMenuStripEShop.SuspendLayout();
             this.menuEShop.SuspendLayout();
             this.tabPage5.SuspendLayout();
+            this.panel6.SuspendLayout();
             this.panel7.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
-            this.panel6.SuspendLayout();
             this.SuspendLayout();
             // 
             // splitContainer1
@@ -1922,7 +1923,7 @@
             this.tabPage3.Location = new System.Drawing.Point(4, 22);
             this.tabPage3.Name = "tabPage3";
             this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage3.Size = new System.Drawing.Size(1574, 591);
+            this.tabPage3.Size = new System.Drawing.Size(1576, 593);
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Text = "Scene releases";
             this.tabPage3.UseVisualStyleBackColor = true;
@@ -1938,7 +1939,7 @@
             this.panel4.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel4.Location = new System.Drawing.Point(3, 3);
             this.panel4.Name = "panel4";
-            this.panel4.Size = new System.Drawing.Size(1568, 585);
+            this.panel4.Size = new System.Drawing.Size(1570, 587);
             this.panel4.TabIndex = 0;
             // 
             // btnClearFilterScene
@@ -1981,6 +1982,7 @@
             // OLVSceneList
             // 
             this.OLVSceneList.AllColumns.Add(this.olvColumnTitleIDScene);
+            this.OLVSceneList.AllColumns.Add(this.olvColumnSceneID);
             this.OLVSceneList.AllColumns.Add(this.olvColumnGameNameScene);
             this.OLVSceneList.AllColumns.Add(this.sizeColumnROMSizeScene);
             this.OLVSceneList.AllColumns.Add(this.olvColumnDeveloperScene);
@@ -1994,6 +1996,7 @@
             this.OLVSceneList.CellEditUseWholeCell = false;
             this.OLVSceneList.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.olvColumnTitleIDScene,
+            this.olvColumnSceneID,
             this.olvColumnGameNameScene,
             this.sizeColumnROMSizeScene,
             this.olvColumnDeveloperScene,
@@ -2012,7 +2015,7 @@
             this.OLVSceneList.Location = new System.Drawing.Point(0, 24);
             this.OLVSceneList.Name = "OLVSceneList";
             this.OLVSceneList.ShowGroups = false;
-            this.OLVSceneList.Size = new System.Drawing.Size(1568, 561);
+            this.OLVSceneList.Size = new System.Drawing.Size(1570, 563);
             this.OLVSceneList.TabIndex = 6;
             this.OLVSceneList.UseCellFormatEvents = true;
             this.OLVSceneList.UseCompatibleStateImageBehavior = false;
@@ -2027,11 +2030,18 @@
             this.olvColumnTitleIDScene.Text = "Title ID";
             this.olvColumnTitleIDScene.Width = 124;
             // 
+            // olvColumnSceneID
+            // 
+            this.olvColumnSceneID.AspectName = "IdScene";
+            this.olvColumnSceneID.Text = "ID";
+            this.olvColumnSceneID.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.olvColumnSceneID.Width = 39;
+            // 
             // olvColumnGameNameScene
             // 
             this.olvColumnGameNameScene.AspectName = "GameName";
             this.olvColumnGameNameScene.Text = "Game title";
-            this.olvColumnGameNameScene.Width = 600;
+            this.olvColumnGameNameScene.Width = 565;
             // 
             // sizeColumnROMSizeScene
             // 
@@ -2120,7 +2130,7 @@
             this.toolStripMenuItem85});
             this.menuStrip3.Location = new System.Drawing.Point(0, 0);
             this.menuStrip3.Name = "menuStrip3";
-            this.menuStrip3.Size = new System.Drawing.Size(1568, 24);
+            this.menuStrip3.Size = new System.Drawing.Size(1570, 24);
             this.menuStrip3.TabIndex = 5;
             this.menuStrip3.Text = "menuStrip3";
             // 
@@ -2509,7 +2519,7 @@
             this.tabPage4.Padding = new System.Windows.Forms.Padding(3);
             this.tabPage4.Size = new System.Drawing.Size(1574, 591);
             this.tabPage4.TabIndex = 3;
-            this.tabPage4.Text = "E-shop files (experimental - SLOW)";
+            this.tabPage4.Text = "E-shop files";
             this.tabPage4.UseVisualStyleBackColor = true;
             // 
             // btnClearFilterEShop
@@ -3045,18 +3055,39 @@
             this.tabPage5.Location = new System.Drawing.Point(4, 22);
             this.tabPage5.Name = "tabPage5";
             this.tabPage5.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage5.Size = new System.Drawing.Size(1576, 593);
+            this.tabPage5.Size = new System.Drawing.Size(1574, 591);
             this.tabPage5.TabIndex = 4;
             this.tabPage5.Text = "Log";
             this.tabPage5.UseVisualStyleBackColor = true;
+            // 
+            // panel6
+            // 
+            this.panel6.Controls.Add(this.richTextBoxLog);
+            this.panel6.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel6.Location = new System.Drawing.Point(3, 3);
+            this.panel6.Name = "panel6";
+            this.panel6.Size = new System.Drawing.Size(1568, 559);
+            this.panel6.TabIndex = 2;
+            // 
+            // richTextBoxLog
+            // 
+            this.richTextBoxLog.BackColor = System.Drawing.SystemColors.Window;
+            this.richTextBoxLog.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.richTextBoxLog.Location = new System.Drawing.Point(0, 0);
+            this.richTextBoxLog.Name = "richTextBoxLog";
+            this.richTextBoxLog.ReadOnly = true;
+            this.richTextBoxLog.Size = new System.Drawing.Size(1568, 559);
+            this.richTextBoxLog.TabIndex = 3;
+            this.richTextBoxLog.Text = "";
+            this.richTextBoxLog.TextChanged += new System.EventHandler(this.richTextBoxLog_TextChanged);
             // 
             // panel7
             // 
             this.panel7.Controls.Add(this.btnClearLogFile);
             this.panel7.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel7.Location = new System.Drawing.Point(3, 564);
+            this.panel7.Location = new System.Drawing.Point(3, 562);
             this.panel7.Name = "panel7";
-            this.panel7.Size = new System.Drawing.Size(1570, 26);
+            this.panel7.Size = new System.Drawing.Size(1568, 26);
             this.panel7.TabIndex = 1;
             // 
             // btnClearLogFile
@@ -3229,27 +3260,6 @@
             // 
             this.backgroundWorkerUpdateFiles.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorkerUpdateFiles_DoWork);
             // 
-            // panel6
-            // 
-            this.panel6.Controls.Add(this.richTextBoxLog);
-            this.panel6.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel6.Location = new System.Drawing.Point(3, 3);
-            this.panel6.Name = "panel6";
-            this.panel6.Size = new System.Drawing.Size(1570, 561);
-            this.panel6.TabIndex = 2;
-            // 
-            // richTextBoxLog
-            // 
-            this.richTextBoxLog.BackColor = System.Drawing.SystemColors.Window;
-            this.richTextBoxLog.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.richTextBoxLog.Location = new System.Drawing.Point(0, 0);
-            this.richTextBoxLog.Name = "richTextBoxLog";
-            this.richTextBoxLog.ReadOnly = true;
-            this.richTextBoxLog.Size = new System.Drawing.Size(1570, 561);
-            this.richTextBoxLog.TabIndex = 3;
-            this.richTextBoxLog.Text = "";
-            this.richTextBoxLog.TextChanged += new System.EventHandler(this.richTextBoxLog_TextChanged);
-            // 
             // FrmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -3302,12 +3312,12 @@
             this.menuEShop.ResumeLayout(false);
             this.menuEShop.PerformLayout();
             this.tabPage5.ResumeLayout(false);
+            this.panel6.ResumeLayout(false);
             this.panel7.ResumeLayout(false);
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
-            this.panel6.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -3655,6 +3665,7 @@
         private System.Windows.Forms.Button btnClearLogFile;
         private System.Windows.Forms.Panel panel6;
         private System.Windows.Forms.RichTextBox richTextBoxLog;
+        private BrightIdeasSoftware.OLVColumn olvColumnSceneID;
     }
 }
 

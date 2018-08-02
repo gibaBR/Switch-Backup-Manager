@@ -183,7 +183,7 @@ namespace Switch_Backup_Manager
             noneToolStripMenuItem1.Checked = true;
 
             OLVEshop.Sort(olvColumnGameNameLocal, SortOrder.Ascending);
-            
+
             OLVLocalFiles.SetObjects(LocalFilesList.Values);
             OLVSceneList.SetObjects(SceneReleasesList.Values);
             OLVEshop.SetObjects(LocalNSPFilesList.Values);
@@ -198,15 +198,15 @@ namespace Switch_Backup_Manager
 
             olvColumnLanguagesLocal.AspectToStringConverter = delegate (object x) {
                 string result = "";
-                foreach (string language in (List<string>) x)
+                foreach (string language in (List<string>)x)
                 {
                     result += language + ", ";
                 }
                 if (result.Trim().Length > 1)
                 {
                     result = result.Remove(result.Length - 2);
-                }                
-                return result; 
+                }
+                return result;
             };
 
             olvColumnLanguagesEShop.AspectToStringConverter = delegate (object x) {
@@ -245,6 +245,33 @@ namespace Switch_Backup_Manager
                 {
                     result = result.Remove(result.Length - 2);
                 }
+                return result;
+            };
+
+            olvColumnGameNameEShop.AspectGetter = delegate (object x)
+            {
+                string result = "";
+                FileData data = (FileData)x;
+
+                if (data != null)
+                {
+                    result = data.GameName;
+
+                    switch (data.ContentType)
+                    {
+                        case "Application":
+
+                            break;
+                        case "Patch":
+                            result += " [UPD]";
+                            break;
+                        case "AddOnContent":
+                            result += " [DLC]";
+                            break;
+                    }
+                    result += " [" + data.Version + "]";
+                }
+
                 return result;
             };
 
@@ -288,6 +315,7 @@ namespace Switch_Backup_Manager
 
             this.olvColumnIsTrimmedLocal.AspectToStringConverter = delegate (object x) { return ((bool)x == true) ? "Yes" : "No"; };
             this.olvColumnIsTrimmedSD.AspectToStringConverter = delegate (object x) { return ((bool)x == true) ? "Yes" : "No"; };
+            this.olvColumnSceneID.AspectToStringConverter = delegate (object x) { return string.Format("{0:D4}", (int)x); };
         }
 
         public void UpdateSceneReleasesList()
@@ -2554,6 +2582,9 @@ namespace Switch_Backup_Manager
             {
                 case "Title ID":
                     filterText.Columns = new[] { olvColumnTitleIDScene };
+                    break;
+                case "ID":
+                    filterText.Columns = new[] { olvColumnSceneID };
                     break;
                 case "Game title":
                     filterText.Columns = new[] { olvColumnGameNameScene };

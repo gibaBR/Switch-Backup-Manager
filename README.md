@@ -12,6 +12,7 @@ Complete Switch Backups management tool
 
 ## Requirements
 * .NET 4.6
+* Visual C++ Redistributable for Visual Studio 2015
 
 ## Screenshots
 

@@ -1474,7 +1474,7 @@ namespace Switch_Backup_Manager
                                 data.Languages = data_tmp.Languages;
                                 data.GameRevision = data_tmp.GameRevision;
                                 data.ProductCode = data_tmp.ProductCode;
-                                data.GameName = data_tmp.GameName + " [DLC]";
+                                data.GameName = data_tmp.GameName;// + " [DLC]";
                                 data.Developer = data_tmp.Developer;
                                 found = true;
                             }
@@ -1489,7 +1489,7 @@ namespace Switch_Backup_Manager
                                     data.Languages = data_tmp.Languages;
                                     data.GameRevision = data_tmp.GameRevision;
                                     data.ProductCode = data_tmp.ProductCode;
-                                    data.GameName = data_tmp.GameName + " [DLC]";
+                                    data.GameName = data_tmp.GameName;// + " [DLC]";
                                     data.Developer = data_tmp.Developer;
                                     found = true;
                                 }
@@ -1505,7 +1505,7 @@ namespace Switch_Backup_Manager
                                     data.Languages = data_tmp.Languages;
                                     data.GameRevision = data_tmp.GameRevision;
                                     data.ProductCode = data_tmp.ProductCode;
-                                    data.GameName = data_tmp.GameName + " [DLC]";
+                                    data.GameName = data_tmp.GameName;// + " [DLC]";
                                     data.Developer = data_tmp.Developer;
                                     found = true;
                                 }
@@ -1530,7 +1530,7 @@ namespace Switch_Backup_Manager
                                     }
                                     else
                                     {
-                                        gameName += " [DLC]";
+                                        //gameName += " [DLC]";
                                     }
 
                                     data.GameName = gameName;
@@ -1651,13 +1651,13 @@ namespace Switch_Backup_Manager
 
                     if (data.ContentType == "Patch")
                     {
-                        data.GameName = data.GameName + " [UPD]";
+                        data.GameName = data.GameName;// + " [UPD]";
                     }
 
                     //data.TitleIDBaseGame = data.TitleID;
                 }
 
-                data.GameName = data.GameName + " [v" + data.Version + "]";
+                //data.GameName = data.GameName + " [v" + data.Version + "]";
 
                 //Lets get SDK Version, Distribution Type and Masterkey revision
                 //This is far from the best aproach, but its what we have for now

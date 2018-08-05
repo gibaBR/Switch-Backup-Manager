@@ -50,6 +50,8 @@
             this.olvColumnDeveloperLocal = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnGameRevisionLocal = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnMasterKeyLocal = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.olvColumnFirmwareLocal = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.olvColumnSDKVersionLocal = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.contextMenuLocalList = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.showInExplorerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem20 = new System.Windows.Forms.ToolStripSeparator();
@@ -141,6 +143,8 @@
             this.olvColumnDeveloperSD = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnGameRevisionSD = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnMasterKeySD = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.olvColumnFirmwareSD = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.olvColumnSDKVersionSD = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.contextMenuStripSDCard = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.showInExplorerToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem21 = new System.Windows.Forms.ToolStripSeparator();
@@ -293,6 +297,8 @@
             this.olvColumnGameRevisionEShop = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnMasterKeyRevisionEShop = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnDistributionType = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.olvColumnFirmwareEShop = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.olvColumnSDKVersionEShop = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.contextMenuStripEShop = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.toolStripMenuItemEShopShowInExplorer = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItemEShopUpdateInfo = new System.Windows.Forms.ToolStripMenuItem();
@@ -344,6 +350,8 @@
             this.toolStripMenuItemCopyFilesToFolderEShop = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItemMoveFilesToFolderEShop = new System.Windows.Forms.ToolStripMenuItem();
             this.tabPage5 = new System.Windows.Forms.TabPage();
+            this.panel6 = new System.Windows.Forms.Panel();
+            this.richTextBoxLog = new System.Windows.Forms.RichTextBox();
             this.panel7 = new System.Windows.Forms.Panel();
             this.btnClearLogFile = new System.Windows.Forms.Button();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
@@ -368,8 +376,6 @@
             this.backgroundWorkerLoadSDCardFiles = new System.ComponentModel.BackgroundWorker();
             this.backgroundWorkerScanNewFiles = new System.ComponentModel.BackgroundWorker();
             this.backgroundWorkerUpdateFiles = new System.ComponentModel.BackgroundWorker();
-            this.panel6 = new System.Windows.Forms.Panel();
-            this.richTextBoxLog = new System.Windows.Forms.RichTextBox();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -401,10 +407,10 @@
             this.contextMenuStripEShop.SuspendLayout();
             this.menuEShop.SuspendLayout();
             this.tabPage5.SuspendLayout();
+            this.panel6.SuspendLayout();
             this.panel7.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
-            this.panel6.SuspendLayout();
             this.SuspendLayout();
             // 
             // splitContainer1
@@ -521,6 +527,8 @@
             this.OLVLocalFiles.AllColumns.Add(this.olvColumnDeveloperLocal);
             this.OLVLocalFiles.AllColumns.Add(this.olvColumnGameRevisionLocal);
             this.OLVLocalFiles.AllColumns.Add(this.olvColumnMasterKeyLocal);
+            this.OLVLocalFiles.AllColumns.Add(this.olvColumnFirmwareLocal);
+            this.OLVLocalFiles.AllColumns.Add(this.olvColumnSDKVersionLocal);
             this.OLVLocalFiles.CellEditUseWholeCell = false;
             this.OLVLocalFiles.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.olvColumnTitleIDLocal,
@@ -534,7 +542,9 @@
             this.olvColumnFilePathLocal,
             this.olvColumnDeveloperLocal,
             this.olvColumnGameRevisionLocal,
-            this.olvColumnMasterKeyLocal});
+            this.olvColumnMasterKeyLocal,
+            this.olvColumnFirmwareLocal,
+            this.olvColumnSDKVersionLocal});
             this.OLVLocalFiles.ContextMenuStrip = this.contextMenuLocalList;
             this.OLVLocalFiles.Cursor = System.Windows.Forms.Cursors.Default;
             this.OLVLocalFiles.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -565,7 +575,7 @@
             this.olvColumnGameNameLocal.AspectName = "GameName";
             this.olvColumnGameNameLocal.Text = "Game title";
             this.olvColumnGameNameLocal.UseInitialLetterForGroup = true;
-            this.olvColumnGameNameLocal.Width = 344;
+            this.olvColumnGameNameLocal.Width = 260;
             // 
             // olvColumnROMSizeLocal
             // 
@@ -600,7 +610,7 @@
             // 
             this.olvColumnLanguagesLocal.AspectName = "Languages";
             this.olvColumnLanguagesLocal.Text = "Languages";
-            this.olvColumnLanguagesLocal.Width = 154;
+            this.olvColumnLanguagesLocal.Width = 84;
             // 
             // olvColumnCardTypeLocal
             // 
@@ -614,7 +624,7 @@
             this.olvColumnFilePathLocal.AspectName = "FilePath";
             this.olvColumnFilePathLocal.Text = "Filename";
             this.olvColumnFilePathLocal.UseInitialLetterForGroup = true;
-            this.olvColumnFilePathLocal.Width = 291;
+            this.olvColumnFilePathLocal.Width = 260;
             // 
             // olvColumnDeveloperLocal
             // 
@@ -634,6 +644,18 @@
             this.olvColumnMasterKeyLocal.AspectName = "MasterKeyRevision";
             this.olvColumnMasterKeyLocal.Text = "Masterkey revision";
             this.olvColumnMasterKeyLocal.Width = 135;
+            // 
+            // olvColumnFirmwareLocal
+            // 
+            this.olvColumnFirmwareLocal.AspectName = "Firmware";
+            this.olvColumnFirmwareLocal.Text = "Firmware";
+            this.olvColumnFirmwareLocal.Width = 100;
+            // 
+            // olvColumnSDKVersionLocal
+            // 
+            this.olvColumnSDKVersionLocal.AspectName = "SDKVersion";
+            this.olvColumnSDKVersionLocal.Text = "SDK Version";
+            this.olvColumnSDKVersionLocal.Width = 100;
             // 
             // contextMenuLocalList
             // 
@@ -1229,7 +1251,7 @@
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(1574, 591);
+            this.tabPage2.Size = new System.Drawing.Size(1576, 593);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "SD card";
             this.tabPage2.UseVisualStyleBackColor = true;
@@ -1285,6 +1307,8 @@
             this.OLV_SDCard.AllColumns.Add(this.olvColumnDeveloperSD);
             this.OLV_SDCard.AllColumns.Add(this.olvColumnGameRevisionSD);
             this.OLV_SDCard.AllColumns.Add(this.olvColumnMasterKeySD);
+            this.OLV_SDCard.AllColumns.Add(this.olvColumnFirmwareSD);
+            this.OLV_SDCard.AllColumns.Add(this.olvColumnSDKVersionSD);
             this.OLV_SDCard.CellEditUseWholeCell = false;
             this.OLV_SDCard.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.olvColumnTitleIDSD,
@@ -1298,7 +1322,9 @@
             this.olvColumnFilePathSD,
             this.olvColumnDeveloperSD,
             this.olvColumnGameRevisionSD,
-            this.olvColumnMasterKeySD});
+            this.olvColumnMasterKeySD,
+            this.olvColumnFirmwareSD,
+            this.olvColumnSDKVersionSD});
             this.OLV_SDCard.ContextMenuStrip = this.contextMenuStripSDCard;
             this.OLV_SDCard.Cursor = System.Windows.Forms.Cursors.Default;
             this.OLV_SDCard.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -1307,7 +1333,7 @@
             this.OLV_SDCard.Location = new System.Drawing.Point(3, 55);
             this.OLV_SDCard.Name = "OLV_SDCard";
             this.OLV_SDCard.ShowGroups = false;
-            this.OLV_SDCard.Size = new System.Drawing.Size(1568, 533);
+            this.OLV_SDCard.Size = new System.Drawing.Size(1570, 535);
             this.OLV_SDCard.TabIndex = 6;
             this.OLV_SDCard.UseCellFormatEvents = true;
             this.OLV_SDCard.UseCompatibleStateImageBehavior = false;
@@ -1328,7 +1354,7 @@
             this.olvColumnGameNameSD.AspectName = "GameName";
             this.olvColumnGameNameSD.Text = "Game title";
             this.olvColumnGameNameSD.UseInitialLetterForGroup = true;
-            this.olvColumnGameNameSD.Width = 414;
+            this.olvColumnGameNameSD.Width = 260;
             // 
             // olvColumnROMSizeSD
             // 
@@ -1377,7 +1403,7 @@
             this.olvColumnFilePathSD.AspectName = "FilePath";
             this.olvColumnFilePathSD.Text = "Filename";
             this.olvColumnFilePathSD.UseInitialLetterForGroup = true;
-            this.olvColumnFilePathSD.Width = 291;
+            this.olvColumnFilePathSD.Width = 260;
             // 
             // olvColumnDeveloperSD
             // 
@@ -1396,6 +1422,18 @@
             this.olvColumnMasterKeySD.AspectName = "MasterKeyRevision";
             this.olvColumnMasterKeySD.Text = "Masterkey revision";
             this.olvColumnMasterKeySD.Width = 142;
+            // 
+            // olvColumnFirmwareSD
+            // 
+            this.olvColumnFirmwareSD.AspectName = "Firmware";
+            this.olvColumnFirmwareSD.Text = "Firmware";
+            this.olvColumnFirmwareSD.Width = 100;
+            // 
+            // olvColumnSDKVersionSD
+            // 
+            this.olvColumnSDKVersionSD.AspectName = "SDKVersion";
+            this.olvColumnSDKVersionSD.Text = "SDK Version";
+            this.olvColumnSDKVersionSD.Width = 100;
             // 
             // contextMenuStripSDCard
             // 
@@ -1478,7 +1516,7 @@
             this.panel5.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel5.Location = new System.Drawing.Point(3, 27);
             this.panel5.Name = "panel5";
-            this.panel5.Size = new System.Drawing.Size(1568, 28);
+            this.panel5.Size = new System.Drawing.Size(1570, 28);
             this.panel5.TabIndex = 5;
             // 
             // lblSpaceAvailabeOnSD
@@ -1524,7 +1562,7 @@
             this.toolStripMenuItem39});
             this.menuSDFiles.Location = new System.Drawing.Point(3, 3);
             this.menuSDFiles.Name = "menuSDFiles";
-            this.menuSDFiles.Size = new System.Drawing.Size(1568, 24);
+            this.menuSDFiles.Size = new System.Drawing.Size(1570, 24);
             this.menuSDFiles.TabIndex = 4;
             // 
             // toolStripMenuItem4
@@ -1922,7 +1960,7 @@
             this.tabPage3.Location = new System.Drawing.Point(4, 22);
             this.tabPage3.Name = "tabPage3";
             this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage3.Size = new System.Drawing.Size(1574, 591);
+            this.tabPage3.Size = new System.Drawing.Size(1576, 593);
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Text = "Scene releases";
             this.tabPage3.UseVisualStyleBackColor = true;
@@ -1938,7 +1976,7 @@
             this.panel4.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel4.Location = new System.Drawing.Point(3, 3);
             this.panel4.Name = "panel4";
-            this.panel4.Size = new System.Drawing.Size(1568, 585);
+            this.panel4.Size = new System.Drawing.Size(1570, 587);
             this.panel4.TabIndex = 0;
             // 
             // btnClearFilterScene
@@ -2012,7 +2050,7 @@
             this.OLVSceneList.Location = new System.Drawing.Point(0, 24);
             this.OLVSceneList.Name = "OLVSceneList";
             this.OLVSceneList.ShowGroups = false;
-            this.OLVSceneList.Size = new System.Drawing.Size(1568, 561);
+            this.OLVSceneList.Size = new System.Drawing.Size(1570, 563);
             this.OLVSceneList.TabIndex = 6;
             this.OLVSceneList.UseCellFormatEvents = true;
             this.OLVSceneList.UseCompatibleStateImageBehavior = false;
@@ -2120,7 +2158,7 @@
             this.toolStripMenuItem85});
             this.menuStrip3.Location = new System.Drawing.Point(0, 0);
             this.menuStrip3.Name = "menuStrip3";
-            this.menuStrip3.Size = new System.Drawing.Size(1568, 24);
+            this.menuStrip3.Size = new System.Drawing.Size(1570, 24);
             this.menuStrip3.TabIndex = 5;
             this.menuStrip3.Text = "menuStrip3";
             // 
@@ -2507,9 +2545,9 @@
             this.tabPage4.Location = new System.Drawing.Point(4, 22);
             this.tabPage4.Name = "tabPage4";
             this.tabPage4.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage4.Size = new System.Drawing.Size(1574, 591);
+            this.tabPage4.Size = new System.Drawing.Size(1576, 593);
             this.tabPage4.TabIndex = 3;
-            this.tabPage4.Text = "E-shop files (experimental - SLOW)";
+            this.tabPage4.Text = "E-shop files";
             this.tabPage4.UseVisualStyleBackColor = true;
             // 
             // btnClearFilterEShop
@@ -2560,6 +2598,8 @@
             this.OLVEshop.AllColumns.Add(this.olvColumnGameRevisionEShop);
             this.OLVEshop.AllColumns.Add(this.olvColumnMasterKeyRevisionEShop);
             this.OLVEshop.AllColumns.Add(this.olvColumnDistributionType);
+            this.OLVEshop.AllColumns.Add(this.olvColumnFirmwareEShop);
+            this.OLVEshop.AllColumns.Add(this.olvColumnSDKVersionEShop);
             this.OLVEshop.CellEditUseWholeCell = false;
             this.OLVEshop.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.olvColumnTitleIDEShop,
@@ -2570,7 +2610,9 @@
             this.olvColumnDeveloperEShop,
             this.olvColumnGameRevisionEShop,
             this.olvColumnMasterKeyRevisionEShop,
-            this.olvColumnDistributionType});
+            this.olvColumnDistributionType,
+            this.olvColumnFirmwareEShop,
+            this.olvColumnSDKVersionEShop});
             this.OLVEshop.ContextMenuStrip = this.contextMenuStripEShop;
             this.OLVEshop.Cursor = System.Windows.Forms.Cursors.Default;
             this.OLVEshop.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -2579,7 +2621,7 @@
             this.OLVEshop.Location = new System.Drawing.Point(3, 27);
             this.OLVEshop.Name = "OLVEshop";
             this.OLVEshop.ShowGroups = false;
-            this.OLVEshop.Size = new System.Drawing.Size(1568, 561);
+            this.OLVEshop.Size = new System.Drawing.Size(1570, 563);
             this.OLVEshop.TabIndex = 2;
             this.OLVEshop.UseCellFormatEvents = true;
             this.OLVEshop.UseCompatibleStateImageBehavior = false;
@@ -2601,7 +2643,7 @@
             this.olvColumnGameNameEShop.AspectName = "GameName";
             this.olvColumnGameNameEShop.Text = "Game title";
             this.olvColumnGameNameEShop.UseInitialLetterForGroup = true;
-            this.olvColumnGameNameEShop.Width = 344;
+            this.olvColumnGameNameEShop.Width = 280;
             // 
             // olvColumnROMSizeEshop
             // 
@@ -2615,14 +2657,14 @@
             // 
             this.olvColumnLanguagesEShop.AspectName = "Languages";
             this.olvColumnLanguagesEShop.Text = "Languages";
-            this.olvColumnLanguagesEShop.Width = 154;
+            this.olvColumnLanguagesEShop.Width = 100;
             // 
             // olvColumnFilePathEShop
             // 
             this.olvColumnFilePathEShop.AspectName = "FilePath";
             this.olvColumnFilePathEShop.Text = "Filename";
             this.olvColumnFilePathEShop.UseInitialLetterForGroup = true;
-            this.olvColumnFilePathEShop.Width = 322;
+            this.olvColumnFilePathEShop.Width = 280;
             // 
             // olvColumnDeveloperEShop
             // 
@@ -2648,6 +2690,18 @@
             this.olvColumnDistributionType.AspectName = "DistributionType";
             this.olvColumnDistributionType.Text = "Distribution";
             this.olvColumnDistributionType.Width = 72;
+            // 
+            // olvColumnFirmwareEShop
+            // 
+            this.olvColumnFirmwareEShop.AspectName = "Firmware";
+            this.olvColumnFirmwareEShop.Text = "Firmware";
+            this.olvColumnFirmwareEShop.Width = 100;
+            // 
+            // olvColumnSDKVersionEShop
+            // 
+            this.olvColumnSDKVersionEShop.AspectName = "SDKVersion";
+            this.olvColumnSDKVersionEShop.Text = "SDK Version";
+            this.olvColumnSDKVersionEShop.Width = 100;
             // 
             // contextMenuStripEShop
             // 
@@ -2765,7 +2819,7 @@
             this.toolStripMenuItem24});
             this.menuEShop.Location = new System.Drawing.Point(3, 3);
             this.menuEShop.Name = "menuEShop";
-            this.menuEShop.Size = new System.Drawing.Size(1568, 24);
+            this.menuEShop.Size = new System.Drawing.Size(1570, 24);
             this.menuEShop.TabIndex = 0;
             this.menuEShop.Text = "menuStrip2";
             // 
@@ -3050,6 +3104,27 @@
             this.tabPage5.Text = "Log";
             this.tabPage5.UseVisualStyleBackColor = true;
             // 
+            // panel6
+            // 
+            this.panel6.Controls.Add(this.richTextBoxLog);
+            this.panel6.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel6.Location = new System.Drawing.Point(3, 3);
+            this.panel6.Name = "panel6";
+            this.panel6.Size = new System.Drawing.Size(1570, 561);
+            this.panel6.TabIndex = 2;
+            // 
+            // richTextBoxLog
+            // 
+            this.richTextBoxLog.BackColor = System.Drawing.SystemColors.Window;
+            this.richTextBoxLog.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.richTextBoxLog.Location = new System.Drawing.Point(0, 0);
+            this.richTextBoxLog.Name = "richTextBoxLog";
+            this.richTextBoxLog.ReadOnly = true;
+            this.richTextBoxLog.Size = new System.Drawing.Size(1570, 561);
+            this.richTextBoxLog.TabIndex = 3;
+            this.richTextBoxLog.Text = "";
+            this.richTextBoxLog.TextChanged += new System.EventHandler(this.richTextBoxLog_TextChanged);
+            // 
             // panel7
             // 
             this.panel7.Controls.Add(this.btnClearLogFile);
@@ -3229,27 +3304,6 @@
             // 
             this.backgroundWorkerUpdateFiles.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorkerUpdateFiles_DoWork);
             // 
-            // panel6
-            // 
-            this.panel6.Controls.Add(this.richTextBoxLog);
-            this.panel6.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel6.Location = new System.Drawing.Point(3, 3);
-            this.panel6.Name = "panel6";
-            this.panel6.Size = new System.Drawing.Size(1570, 561);
-            this.panel6.TabIndex = 2;
-            // 
-            // richTextBoxLog
-            // 
-            this.richTextBoxLog.BackColor = System.Drawing.SystemColors.Window;
-            this.richTextBoxLog.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.richTextBoxLog.Location = new System.Drawing.Point(0, 0);
-            this.richTextBoxLog.Name = "richTextBoxLog";
-            this.richTextBoxLog.ReadOnly = true;
-            this.richTextBoxLog.Size = new System.Drawing.Size(1570, 561);
-            this.richTextBoxLog.TabIndex = 3;
-            this.richTextBoxLog.Text = "";
-            this.richTextBoxLog.TextChanged += new System.EventHandler(this.richTextBoxLog_TextChanged);
-            // 
             // FrmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -3302,12 +3356,12 @@
             this.menuEShop.ResumeLayout(false);
             this.menuEShop.PerformLayout();
             this.tabPage5.ResumeLayout(false);
+            this.panel6.ResumeLayout(false);
             this.panel7.ResumeLayout(false);
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
-            this.panel6.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -3655,6 +3709,12 @@
         private System.Windows.Forms.Button btnClearLogFile;
         private System.Windows.Forms.Panel panel6;
         private System.Windows.Forms.RichTextBox richTextBoxLog;
+        private BrightIdeasSoftware.OLVColumn olvColumnSDKVersionLocal;
+        private BrightIdeasSoftware.OLVColumn olvColumnSDKVersionSD;
+        private BrightIdeasSoftware.OLVColumn olvColumnSDKVersionEShop;
+        private BrightIdeasSoftware.OLVColumn olvColumnFirmwareLocal;
+        private BrightIdeasSoftware.OLVColumn olvColumnFirmwareSD;
+        private BrightIdeasSoftware.OLVColumn olvColumnFirmwareEShop;
     }
 }
 

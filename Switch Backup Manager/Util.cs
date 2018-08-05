@@ -248,7 +248,7 @@ namespace Switch_Backup_Manager
             return result;
         }
 
-        public static void TrimXCIFiles(Dictionary<string, FileData> files, string source) //source possible values: "local", "sdcard"
+        public static void TrimXCIFiles(Dictionary<Tuple<string, string>, FileData> files, string source) //source possible values: "local", "sdcard"
         {
             int filesCount = files.Count();
             int i = 0;
@@ -256,7 +256,7 @@ namespace Switch_Backup_Manager
 
             if (source == "local")
             {
-                foreach (KeyValuePair<string, FileData> entry in files)
+                foreach (KeyValuePair<Tuple<string, string>, FileData> entry in files)
                 {
                     FrmMain.progressCurrentfile = entry.Value.FilePath;
 
@@ -271,7 +271,7 @@ namespace Switch_Backup_Manager
                 XML_Local.Save(@LOCAL_FILES_DB);
             } else
             {
-                foreach (KeyValuePair<string, FileData> entry in files)
+                foreach (KeyValuePair<Tuple<string, string>, FileData> entry in files)
                 {
                     FrmMain.progressCurrentfile = entry.Value.FilePath;
 
@@ -284,7 +284,7 @@ namespace Switch_Backup_Manager
             logger.Info("Finished trimming " + source + " files.");
         }
 
-        public static void AutoRenameXCIFiles(Dictionary<string, FileData> files, string source) //source possible values: "local", "sdcard", "eshop"
+        public static void AutoRenameXCIFiles(Dictionary<Tuple<string, string>, FileData> files, string source) //source possible values: "local", "sdcard", "eshop"
         {
             int filesCount = files.Count();
             int i = 0;
@@ -292,7 +292,7 @@ namespace Switch_Backup_Manager
 
             if (source != "sdcard")
             {
-                foreach (KeyValuePair<string, FileData> entry in files)
+                foreach (KeyValuePair<Tuple<string, string>, FileData> entry in files)
                 {
                     FrmMain.progressCurrentfile = entry.Value.FilePath;
 
@@ -314,7 +314,7 @@ namespace Switch_Backup_Manager
             }
             else
             {
-                foreach (KeyValuePair<string, FileData> entry in files)
+                foreach (KeyValuePair<Tuple<string, string>, FileData> entry in files)
                 {
                     FrmMain.progressCurrentfile = entry.Value.FilePath;
 
@@ -458,7 +458,7 @@ namespace Switch_Backup_Manager
             {
                 if (!File.Exists(xe.Element("FilePath").Value))
                 {
-                    RemoveTitleIDFromXML(xe.Attribute("TitleID").Value, @source_xml);
+                    RemoveTitleIDFromXML(xe.Attribute("TitleID").Value, source_xml == LOCAL_NSP_FILES_DB ? xe.Element("Version").Value : "", @source_xml);
                     logger.Info(xe.Element("FilePath").Value + " removed.");
                     i++;
                 }                
@@ -475,7 +475,7 @@ namespace Switch_Backup_Manager
             logger.Info("Finished removing missing files from "+ removeFrom + " database. " + i + " files removed.");
         }
 
-        public static bool IsTitleIDOnXML(string titleID, string xml)
+        public static bool IsTitleIDOnXML(string titleID, string version, string xml)
         {
             bool result = false;
             XElement element;
@@ -487,7 +487,7 @@ namespace Switch_Backup_Manager
             } else
             {
                 element = XML_NSP_Local.Descendants("Game")
-                   .FirstOrDefault(el => (string)el.Attribute("TitleID") == titleID);
+                   .FirstOrDefault(el => (string)el.Attribute("TitleID") == titleID && (string)el.Element("Version") == version);
             }
 
             if (element != null)
@@ -557,7 +557,7 @@ namespace Switch_Backup_Manager
                 {
                     logger.Debug("searching for " + data.TitleID + " on database.");
                     //Try to find the game. If exists, do nothing. If not, Append
-                    if (!IsTitleIDOnXML(data.TitleID, xml))
+                    if (!IsTitleIDOnXML(data.TitleID, data.Version, xml))
                     {
                         logger.Debug(data.TitleID + " not found on database. Adding...");
                         string languages = "";
@@ -650,25 +650,25 @@ namespace Switch_Backup_Manager
         /// </summary>
         /// <param name="xml">XDocument object</param>
         /// <returns></returns>
-        public static Dictionary<string, FileData> LoadXMLToFileDataDictionary(XDocument xml)
+        public static Dictionary<Tuple<string, string>, FileData> LoadXMLToFileDataDictionary(XDocument xml)
         {
-            Dictionary<string, FileData> result = new Dictionary<string, FileData>();
+            Dictionary<Tuple<string, string>, FileData> result = new Dictionary<Tuple<string, string>, FileData>();
             foreach (XElement xe in xml.Descendants("Game"))
             {
-                result.Add(xe.Attribute("TitleID").Value, GetFileData(xe));
+                result.Add(new Tuple<string, string>(xe.Attribute("TitleID").Value, xe.Element("CardType").Value == "e-shop" ? xe.Element("Version").Value : ""), GetFileData(xe));
             }
             return result;
         }
 
-        public static Dictionary<string, FileData> LoadSceneXMLToFileDataDictionary(XDocument xml)
+        public static Dictionary<Tuple<string, string>, FileData> LoadSceneXMLToFileDataDictionary(XDocument xml)
         {
-            Dictionary<string, FileData> result = new Dictionary<string, FileData>();
+            Dictionary<Tuple<string, string>, FileData> result = new Dictionary<Tuple<string, string>, FileData>();
 
             foreach (XElement xe in xml.Descendants("release"))
             {
                 try
                 {
-                    result.Add(xe.Element("titleid").Value, GetFileData(xe, true));
+                    result.Add(new Tuple<string, string>(xe.Element("titleid").Value, ""), GetFileData(xe, true));
                 } catch { System.ArgumentException ex; }
                 {
                     //If TitleID is already on the list, ignore
@@ -1000,9 +1000,9 @@ namespace Switch_Backup_Manager
         /// Add all XCI files found on given path to a Dictionary of FileData <TitleID, FileData>
         /// </summary>
         /// <param name="path"></param>
-        public static Dictionary<string, FileData> AddFilesFromFolder(string path, string fileType)
+        public static Dictionary<Tuple<string, string>, FileData> AddFilesFromFolder(string path, string fileType)
         {
-            Dictionary<string, FileData> dictionary = new Dictionary<string, FileData>();
+            Dictionary<Tuple<string, string>, FileData> dictionary = new Dictionary<Tuple<string, string>, FileData>();
             try
             {
                 if (Directory.Exists(path) && path.Trim() != "")
@@ -1043,8 +1043,9 @@ namespace Switch_Backup_Manager
                         FrmMain.progressCurrentfile = data.FilePath;
                         try
                         {
-                            dictionary.Add(data.TitleID, data);
-                        } catch (ArgumentException ex)
+                            dictionary.Add(new Tuple<string, string>(data.TitleID, data.Cardtype == "e-shop" ? data.Version : ""), data);
+                        }
+                        catch (ArgumentException ex)
                         {
                             logger.Error("TitleID " + data.TitleID + " is already on database");
                         }
@@ -1068,9 +1069,9 @@ namespace Switch_Backup_Manager
         /// </summary>
         /// <param name="files string[]">List of files to be appended</param>
         /// <param name="file_type string">valid values: xci, nsp</param>
-        public static Dictionary<string, FileData> AddFiles(string[] files, string fileType)
+        public static Dictionary<Tuple<string, string>, FileData> AddFiles(string[] files, string fileType)
         {
-            Dictionary<string, FileData> dictionary = new Dictionary<string, FileData>();
+            Dictionary<Tuple<string, string>, FileData> dictionary = new Dictionary<Tuple<string, string>, FileData>();
             try
             {
                 int filesCount = files.Count();
@@ -1100,7 +1101,7 @@ namespace Switch_Backup_Manager
                     FrmMain.progressCurrentfile = data.FilePath;
                     try
                     {
-                        dictionary.Add(data.TitleID, data);
+                        dictionary.Add(new Tuple<string, string>(data.TitleID, data.Cardtype == "e-shop" ? data.Version : ""), data);
                     }
                     catch (ArgumentException ex)
                     {
@@ -1120,24 +1121,24 @@ namespace Switch_Backup_Manager
             return dictionary;
         }
         
-        public static void AppendFileDataDictionaryToXML(Dictionary<string, FileData> dictionary, string xml)
+        public static void AppendFileDataDictionaryToXML(Dictionary<Tuple<string, string>, FileData> dictionary, string xml)
         {
-            foreach (KeyValuePair<string, FileData> entry in dictionary)
+            foreach (KeyValuePair<Tuple<string, string>, FileData> entry in dictionary)
             {
                 WriteFileDataToXML(entry.Value, xml);
             }
         }
         
-        public static void AppendFileDataDictionaryToXML(Dictionary<string, FileData> dictionary)
+        public static void AppendFileDataDictionaryToXML(Dictionary<Tuple<string, string>, FileData> dictionary)
         {
             AppendFileDataDictionaryToXML(dictionary, LOCAL_FILES_DB);
         }
 
-        public static void RemoveFileDataDictionaryFromXML(Dictionary<string, FileData> dictionary, string xml)
+        public static void RemoveFileDataDictionaryFromXML(Dictionary<Tuple<string, string>, FileData> dictionary, string xml)
         {
-            foreach (KeyValuePair<string, FileData> entry in dictionary)
+            foreach (KeyValuePair<Tuple<string, string>, FileData> entry in dictionary)
             {
-                RemoveTitleIDFromXML(entry.Key, xml);
+                RemoveTitleIDFromXML(entry.Key.Item1, entry.Key.Item2, xml);
             }
             if (xml == LOCAL_FILES_DB)
             {
@@ -1148,7 +1149,7 @@ namespace Switch_Backup_Manager
             }            
         }
 
-        public static void RemoveTitleIDFromXML(string titleID, string xml)
+        public static void RemoveTitleIDFromXML(string titleID, string version, string xml)
         {
             if (xml == LOCAL_FILES_DB)
             {
@@ -1164,7 +1165,7 @@ namespace Switch_Backup_Manager
             else
             {
                 XElement element = XML_NSP_Local.Descendants("Game")
-                   .FirstOrDefault(el => (string)el.Attribute("TitleID") == titleID);
+                   .FirstOrDefault(el => (string)el.Attribute("TitleID") == titleID && (string)el.Element("Version") == version);
 
                 if (element != null)
                 {
@@ -1467,7 +1468,7 @@ namespace Switch_Backup_Manager
                             bool found = false;
 
                             FileData data_tmp = null;
-                            FrmMain.LocalNSPFilesList.TryGetValue(data.TitleIDBaseGame, out data_tmp); //Try to find on NSP List
+                            FrmMain.LocalNSPFilesList.TryGetValue(new Tuple<string, string>(data.TitleIDBaseGame, data.Version), out data_tmp); //Try to find on NSP List
                             if (data_tmp != null)
                             {
                                 data.Region_Icon = data_tmp.Region_Icon;
@@ -1482,7 +1483,7 @@ namespace Switch_Backup_Manager
                             if (!found)
                             {
                                 data_tmp = null;
-                                FrmMain.SceneReleasesList.TryGetValue(data.TitleIDBaseGame, out data_tmp); //Try to find on Scene List
+                                FrmMain.SceneReleasesList.TryGetValue(new Tuple<string, string>(data.TitleIDBaseGame, ""), out data_tmp); //Try to find on Scene List
                                 if (data_tmp != null)
                                 {
                                     data.Region_Icon = data_tmp.Region_Icon;
@@ -1498,7 +1499,7 @@ namespace Switch_Backup_Manager
                             if (!found)
                             {
                                 data_tmp = null;
-                                FrmMain.LocalFilesList.TryGetValue(data.TitleIDBaseGame, out data_tmp); //Try to find on Local XCI List
+                                FrmMain.LocalFilesList.TryGetValue(new Tuple<string, string>(data.TitleIDBaseGame, ""), out data_tmp); //Try to find on Local XCI List
                                 if (data_tmp != null)
                                 {
                                     data.Region_Icon = data_tmp.Region_Icon;
@@ -2164,18 +2165,22 @@ namespace Switch_Backup_Manager
             return result;
         }
 
-        public static FileData GetFileData(string titleID, Dictionary<string, FileData> dictionary)
+        public static FileData GetFileData(string titleID, string version, Dictionary<Tuple<string, string>, FileData> dictionary)
         {
             FileData  result = new FileData();
 
-            dictionary.TryGetValue(titleID, out result);
+            dictionary.TryGetValue(new Tuple<string, string>(titleID, version), out result);
+            if (result == null)
+            {
+                dictionary.TryGetValue(new Tuple<string, string>(titleID, ""), out result);
+            }
 
             return result;
         }
 
-        public static Dictionary<string, FileData> GetFileDataCollectionNSP (string path)
+        public static Dictionary<Tuple<string, string>, FileData> GetFileDataCollectionNSP (string path)
         {
-            Dictionary<string, FileData> result = new Dictionary<string, FileData>();
+            Dictionary<Tuple<string, string>, FileData> result = new Dictionary<Tuple<string, string>, FileData>();
 
             List<string> list = GetNSPsInFolder(path);
 
@@ -2188,7 +2193,7 @@ namespace Switch_Backup_Manager
                 FileData data = GetFileDataNSP(file);
                 try
                 {
-                    result.Add(data.TitleID, data);
+                    result.Add(new Tuple<string, string>(data.TitleID, data.Version), data);
                 }
                 catch
                 {
@@ -2202,9 +2207,9 @@ namespace Switch_Backup_Manager
             return result;
         }
 
-        public static Dictionary<string, FileData> GetFileDataCollection (string path)
+        public static Dictionary<Tuple<string, string>, FileData> GetFileDataCollection (string path)
         {
-            Dictionary<string, FileData> result = new Dictionary<string, FileData>();
+            Dictionary<Tuple<string, string>, FileData> result = new Dictionary<Tuple<string, string>, FileData>();
 
             List<string> list = GetXCIsInFolder(path);
 
@@ -2217,7 +2222,7 @@ namespace Switch_Backup_Manager
                 FileData data = GetFileData(file);
                 try
                 {
-                    result.Add(data.TitleID, data);
+                    result.Add(new Tuple<string, string>(data.TitleID, ""), data);
                 } catch
                 {
                     logger.Error("Found duplicate file (same TitleID = " + data.TitleID + " on " + Path.GetDirectoryName(data.FilePath) + ".");
@@ -2230,9 +2235,9 @@ namespace Switch_Backup_Manager
             return result;
         }
 
-        public static Dictionary<string, FileData> GetFileDataCollectionAll (string path)
+        public static Dictionary<Tuple<string, string>, FileData> GetFileDataCollectionAll (string path)
         {
-            Dictionary<string, FileData> result = new Dictionary<string, FileData>();
+            Dictionary<Tuple<string, string>, FileData> result = new Dictionary<Tuple<string, string>, FileData>();
 
             List<string> list = GetNSPsInFolder(path);
             list.AddRange(GetXCIsInFolder(path));
@@ -2254,7 +2259,7 @@ namespace Switch_Backup_Manager
                 
                 try
                 {
-                    result.Add(data.TitleID, data);
+                    result.Add(new Tuple<string, string>(data.TitleID, Path.GetExtension(file) == ".xci" ? "" : data.Version), data);
                 }
                 catch
                 {

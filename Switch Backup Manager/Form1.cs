@@ -16,14 +16,14 @@ namespace Switch_Backup_Manager
 {
     public partial class FrmMain : Form
     {
-        internal static Dictionary<string, FileData> LocalFilesList;
-        private Dictionary<string, FileData> LocalFilesListSelectedItems;
-        internal static Dictionary<string, FileData> LocalNSPFilesList;
-        private Dictionary<string, FileData> LocalNSPFilesListSelectedItems;
-        internal static Dictionary<string, FileData> SceneReleasesList;
-        private Dictionary<string, FileData> SceneReleasesSelectedItems;
-        private Dictionary<string, FileData> SDCardList;
-        private Dictionary<string, FileData> SDCardListSelectedItems;
+        internal static Dictionary<Tuple<string, string>, FileData> LocalFilesList;
+        private Dictionary<Tuple<string, string>, FileData> LocalFilesListSelectedItems;
+        internal static Dictionary<Tuple<string, string>, FileData> LocalNSPFilesList;
+        private Dictionary<Tuple<string, string>, FileData> LocalNSPFilesListSelectedItems;
+        internal static Dictionary<Tuple<string, string>, FileData> SceneReleasesList;
+        private Dictionary<Tuple<string, string>, FileData> SceneReleasesSelectedItems;
+        private Dictionary<Tuple<string, string>, FileData> SDCardList;
+        private Dictionary<Tuple<string, string>, FileData> SDCardListSelectedItems;
 
         private bool updateCbxRemoveableFiles;
         private bool updateFileListAfterMove;
@@ -31,7 +31,9 @@ namespace Switch_Backup_Manager
         private string clipboardInfoEShop;
         private string clipboardInfoLocal;
         private string clipboardInfoSD;
-        private string clipboardInfoScene;        
+        private string clipboardInfoScene;
+
+        private string SDCardSelected;
 
         //To update Statusbar wheile adding files
         public static int progressPercent = 0;
@@ -87,10 +89,10 @@ namespace Switch_Backup_Manager
             watch.EnableRaisingEvents = true;
             */
 
-            LocalFilesList = new Dictionary<string, FileData>();
-            LocalNSPFilesList = new Dictionary<string, FileData>();
-            SceneReleasesList = new Dictionary<string, FileData>();
-            SDCardList = new Dictionary<string, FileData>();
+            LocalFilesList = new Dictionary<Tuple<string, string>, FileData>();
+            LocalNSPFilesList = new Dictionary<Tuple<string, string>, FileData>();
+            SceneReleasesList = new Dictionary<Tuple<string, string>, FileData>();
+            SDCardList = new Dictionary<Tuple<string, string>, FileData>();
 
             foreach (ColumnHeader column in OLVLocalFiles.Columns)
             {
@@ -294,7 +296,14 @@ namespace Switch_Backup_Manager
         {
             SceneReleasesList = Util.LoadSceneXMLToFileDataDictionary(Util.XML_NSWDB);
             OLVSceneList.SetObjects(SceneReleasesList.Values);
-            SceneReleasesSelectedItems = new Dictionary<string, FileData>();
+
+            //Prevent crash caused by null Tag values
+            foreach (ListViewItem item in OLVSceneList.Items)
+            {
+                item.Tag = "";
+            }
+
+            SceneReleasesSelectedItems = new Dictionary<Tuple<string, string>, FileData>();
             SumarizeLocalGamesList("scene");
         }
 
@@ -303,26 +312,30 @@ namespace Switch_Backup_Manager
             //Support for NSP files on SD Card for Now is VERY slow. But we can put it as an option on .INI
             if (Util.ScrapXCIOnSDCard & Util.ScrapNSPOnSDCard)
             {
-                SDCardList = Util.GetFileDataCollectionAll(cbxRemoveableDrives.SelectedItem.ToString());
+                SDCardList = Util.GetFileDataCollectionAll(SDCardSelected);
             } else if (Util.ScrapNSPOnSDCard)
             {
-                SDCardList = Util.GetFileDataCollectionNSP(cbxRemoveableDrives.SelectedItem.ToString());
+                SDCardList = Util.GetFileDataCollectionNSP(SDCardSelected);
             } else if (Util.ScrapXCIOnSDCard)
             {
-                SDCardList = Util.GetFileDataCollection(cbxRemoveableDrives.SelectedItem.ToString());
+                SDCardList = Util.GetFileDataCollection(SDCardSelected);
             }
 
             //SDCardList = Util.GetFileDataCollection(cbxRemoveableDrives.SelectedItem.ToString());
-            OLV_SDCard.SetObjects(SDCardList.Values);
-            SDCardListSelectedItems = new Dictionary<string, FileData>();
-            SumarizeLocalGamesList("sdcard");
         }
 
         public void UpdateLocalGamesList()
         {
             LocalFilesList = Util.LoadXMLToFileDataDictionary(Util.XML_Local);
             OLVLocalFiles.SetObjects(LocalFilesList.Values);
-            LocalFilesListSelectedItems = new Dictionary<string, FileData>();
+
+            //Prevent crash caused by null Tag values
+            foreach (ListViewItem item in OLVLocalFiles.Items)
+            {
+                item.Tag = "";
+            }
+
+            LocalFilesListSelectedItems = new Dictionary<Tuple<string, string>, FileData>();
             SumarizeLocalGamesList("local");
         }
 
@@ -330,7 +343,16 @@ namespace Switch_Backup_Manager
         {
             LocalNSPFilesList = Util.LoadXMLToFileDataDictionary(Util.XML_NSP_Local);
             OLVEshop.SetObjects(LocalNSPFilesList.Values);
-            LocalNSPFilesListSelectedItems = new Dictionary<string, FileData>();
+
+            List<Tuple<string, string>> keys = new List<Tuple<string, string>>(LocalNSPFilesList.Keys);
+            int i = 0;
+            foreach (ListViewItem item in OLVEshop.Items)
+            {
+                item.Tag = keys[i].Item2;
+                i++;
+            }
+
+            LocalNSPFilesListSelectedItems = new Dictionary<Tuple<string, string>, FileData>();
             SumarizeLocalGamesList("eshop");
         }
 
@@ -346,7 +368,7 @@ namespace Switch_Backup_Manager
             switch (list)
             {
                 case "local":
-                    foreach (KeyValuePair<string, FileData> entry in LocalFilesList)
+                    foreach (KeyValuePair<Tuple<string, string>, FileData> entry in LocalFilesList)
                     {
                         FileData data = entry.Value;
                         size += Convert.ToInt64(data.UsedSpaceBytes);
@@ -354,7 +376,7 @@ namespace Switch_Backup_Manager
                     }
                     break;
                 case ("sdcard"):
-                    foreach (KeyValuePair<string, FileData> entry in SDCardList)
+                    foreach (KeyValuePair<Tuple<string, string>, FileData> entry in SDCardList)
                     {
                         FileData data = entry.Value;
                         size += Convert.ToInt64(data.ROMSizeBytes);
@@ -362,7 +384,7 @@ namespace Switch_Backup_Manager
                     }
                     break;
                 case ("scene"):
-                    foreach (KeyValuePair<string, FileData> entry in SceneReleasesList)
+                    foreach (KeyValuePair<Tuple<string, string>, FileData> entry in SceneReleasesList)
                     {
                         FileData data = entry.Value;
                         size += Convert.ToInt64(data.ROMSizeBytes);
@@ -370,7 +392,7 @@ namespace Switch_Backup_Manager
                     }
                     break;
                 case ("eshop"):
-                    foreach (KeyValuePair<string, FileData> entry in LocalNSPFilesList)
+                    foreach (KeyValuePair<Tuple<string, string>, FileData> entry in LocalNSPFilesList)
                     {
                         FileData data = entry.Value;
                         size += Convert.ToInt64(data.ROMSizeBytes);
@@ -382,13 +404,13 @@ namespace Switch_Backup_Manager
             toolStripStatusLabel2.Text = Convert.ToString(count) + " Total (" + Util.BytesToGB(size) + ")";
         }
 
-        private void DisplayGameInformation(string TitleID, Dictionary<string, FileData> list, string sourceList) //Possible values for sourceList ("local", "sdcard", "scene")
+        private void DisplayGameInformation(string TitleID, string Version, Dictionary<Tuple<string, string>, FileData> list, string sourceList) //Possible values for sourceList ("local", "sdcard", "scene")
         {
-            FileData data = Util.GetFileData(TitleID, list);
+            FileData data = Util.GetFileData(TitleID, Version, list);
 
             if (sourceList == "local" || sourceList == "sdcard")
             {
-                if (data != null && data.Region_Icon.Count > 0 && File.Exists(AppDomain.CurrentDomain.BaseDirectory + data.Region_Icon.First().Value))
+                if (data != null && data.Region_Icon != null && data.Region_Icon.Count > 0 && File.Exists(AppDomain.CurrentDomain.BaseDirectory + data.Region_Icon.First().Value))
                 {
                     PB_GameIcon.BackgroundImage = Image.FromFile(AppDomain.CurrentDomain.BaseDirectory + data.Region_Icon.First().Value);
                 }
@@ -401,7 +423,7 @@ namespace Switch_Backup_Manager
             {
                 if (data != null)
                 {
-                    if (data.Region_Icon.Count > 0 && File.Exists(AppDomain.CurrentDomain.BaseDirectory + data.Region_Icon.First().Value))
+                    if (data.Region_Icon != null && data.Region_Icon.Count > 0 && File.Exists(AppDomain.CurrentDomain.BaseDirectory + data.Region_Icon.First().Value))
                     {
                         PB_GameIcon.BackgroundImage = Image.FromFile(AppDomain.CurrentDomain.BaseDirectory + data.Region_Icon.First().Value);
                     }
@@ -581,32 +603,32 @@ namespace Switch_Backup_Manager
             }
         }
 
-        private Dictionary<string, FileData> DiffLists(Dictionary<string, FileData> list1, Dictionary<string, FileData> list2)
+        private Dictionary<Tuple<string, string>, FileData> DiffLists(Dictionary<Tuple<string, string>, FileData> list1, Dictionary<Tuple<string, string>, FileData> list2)
         {
-            Dictionary<string, FileData> result = new Dictionary<string, FileData>();
+            Dictionary<Tuple<string, string>, FileData> result = new Dictionary<Tuple<string, string>, FileData>();
 
             foreach (FileData data in list1.Values)
             {
                 FileData dummy;
-                if (!list2.TryGetValue(data.TitleID, out dummy))
+                if (!list2.TryGetValue(new Tuple<string, string>(data.TitleID, data.Version), out dummy))
                 {
-                    result.Add(data.TitleID, data);
+                    result.Add(new Tuple<string, string>(data.TitleID, data.Version), data);
                 }
             }
 
             return result;
         }
 
-        private Dictionary<string, FileData> ContainsLists(Dictionary<string, FileData> list1, Dictionary<string, FileData> list2)
+        private Dictionary<Tuple<string, string>, FileData> ContainsLists(Dictionary<Tuple<string, string>, FileData> list1, Dictionary<Tuple<string, string>, FileData> list2)
         {
-            Dictionary<string, FileData> result = new Dictionary<string, FileData>();
+            Dictionary<Tuple<string, string>, FileData> result = new Dictionary<Tuple<string, string>, FileData>();
 
             foreach (FileData data in list1.Values)
             {
                 FileData dummy;
-                if (list2.TryGetValue(data.TitleID, out dummy))
+                if (list2.TryGetValue(new Tuple<string, string>(data.TitleID, data.Version), out dummy))
                 {
-                    result.Add(data.TitleID, data);
+                    result.Add(new Tuple<string, string>(data.TitleID, data.Version), data);
                 }
             }
 
@@ -668,15 +690,15 @@ namespace Switch_Backup_Manager
                     foreach (ListViewItem item in selectedItems)
                     {
                         titleID = item.Text;
-                        FileData data = Util.GetFileData(titleID, LocalFilesList);
-                        LocalFilesListSelectedItems.Add(titleID, data);
+                        FileData data = Util.GetFileData(titleID, "", LocalFilesList);
+                        LocalFilesListSelectedItems.Add(new Tuple<string, string>(titleID, ""), data);
                         count++;
                         size += Convert.ToInt64(data.UsedSpaceBytes);
                     }
 
                     toolStripStatusLabel1.Text = Convert.ToString(count) + " Selected (" + Util.BytesToGB(size) + ")";
                     //Display information of the last selected item
-                    DisplayGameInformation(titleID, LocalFilesList, "local");
+                    DisplayGameInformation(titleID, "", LocalFilesList, "local");
                 }
                 else
                 {
@@ -687,8 +709,8 @@ namespace Switch_Backup_Manager
                     foreach (ListViewItem item in selectedItems)
                     {
                         string titleID = item.Text;
-                        FileData data = Util.GetFileData(titleID, LocalFilesList);
-                        LocalFilesListSelectedItems.Add(titleID, data);
+                        FileData data = Util.GetFileData(titleID, "", LocalFilesList);
+                        LocalFilesListSelectedItems.Add(new Tuple<string, string>(titleID, ""), data);
                         count++;
                         size += Convert.ToInt64(data.UsedSpaceBytes);
                     }
@@ -759,15 +781,15 @@ namespace Switch_Backup_Manager
                     foreach (ListViewItem item in selectedItems)
                     {
                         titleID = item.Text;
-                        FileData data = Util.GetFileData(titleID, SceneReleasesList);
-                        SceneReleasesSelectedItems.Add(titleID, data);
+                        FileData data = Util.GetFileData(titleID, "", SceneReleasesList);
+                        SceneReleasesSelectedItems.Add(new Tuple<string, string>(titleID, ""), data);
                         count++;
                         size += Convert.ToInt64(data.ROMSizeBytes);
                     }
 
                     toolStripStatusLabel1.Text = Convert.ToString(count) + " Selected (" + Util.BytesToGB(size) + ")";
                     //Display information of the first selected item
-                    DisplayGameInformation(titleID, LocalFilesList, "scene"); //Has to be Locallist as we dont store scene info other than its xml file...
+                    DisplayGameInformation(titleID, "", LocalFilesList, "scene"); //Has to be Locallist as we dont store scene info other than its xml file...
                 }
                 else
                 {
@@ -778,8 +800,8 @@ namespace Switch_Backup_Manager
                     foreach (ListViewItem item in selectedItems)
                     {
                         string titleID = item.Text;
-                        FileData data = Util.GetFileData(titleID, SceneReleasesList);
-                        SceneReleasesSelectedItems.Add(titleID, data);
+                        FileData data = Util.GetFileData(titleID, "", SceneReleasesList);
+                        SceneReleasesSelectedItems.Add(new Tuple<string, string>(titleID, ""), data);
                         count++;
                         size += Convert.ToInt64(data.ROMSizeBytes);
                     }
@@ -960,6 +982,7 @@ namespace Switch_Backup_Manager
                     toolStripStatusLabelGame.Visible = true;
                     toolStripProgressAddingFiles.Value = 0;
                     timer1.Enabled = true;
+                    SDCardSelected = cbxRemoveableDrives.SelectedItem.ToString();
                     backgroundWorkerLoadSDCardFiles.RunWorkerAsync();
                 }
 
@@ -1005,23 +1028,24 @@ namespace Switch_Backup_Manager
 
                     SDCardListSelectedItems.Clear();
                     string titleID = selectedItems[0].Text;
+                    string version = Convert.ToString(selectedItems[0].Tag);
 
                     int count = 0;
                     long size = 0;
                     foreach (ListViewItem item in selectedItems)
                     {
                         titleID = item.Text;
-                        FileData data = Util.GetFileData(titleID, SDCardList);
-                        string icon_titleID_filename = data.Region_Icon.First().Value;
+                        FileData data = Util.GetFileData(titleID, version, SDCardList);
+                        //string icon_titleID_filename = data.Region_Icon.First().Value;
 
-                        SDCardListSelectedItems.Add(titleID, data);
+                        SDCardListSelectedItems.Add(new Tuple<string, string>(titleID, version), data);
                         count++;
                         size += Convert.ToInt64(data.UsedSpaceBytes);
                     }
 
                     toolStripStatusLabel1.Text = Convert.ToString(count) + " Selected (" + Util.BytesToGB(size) + ")";
                     //Display information of the first selected item
-                    DisplayGameInformation(titleID, SDCardList, "sdcard");
+                    DisplayGameInformation(titleID, version, SDCardList, "sdcard");
                 }
                 else
                 {
@@ -1032,8 +1056,9 @@ namespace Switch_Backup_Manager
                     foreach (ListViewItem item in selectedItems)
                     {
                         string titleID = item.Text;
-                        FileData data = Util.GetFileData(titleID, SDCardList);
-                        SDCardListSelectedItems.Add(titleID, data);
+                        string version = Convert.ToString(selectedItems[0].Tag);
+                        FileData data = Util.GetFileData(titleID, version, SDCardList);
+                        SDCardListSelectedItems.Add(new Tuple<string, string>(titleID, version), data);
                         count++;
                         size += Convert.ToInt64(data.UsedSpaceBytes);
                     }
@@ -1045,31 +1070,30 @@ namespace Switch_Backup_Manager
 
         private void itemsNotOnSceneReleasesToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Dictionary<string, FileData> list = DiffLists(LocalFilesList, SceneReleasesList);
+            Dictionary<Tuple<string, string>, FileData> list = DiffLists(LocalFilesList, SceneReleasesList);
             FileData dummy;
             OLVLocalFiles.Select();
             OLVLocalFiles.HideSelection = false;
             OLVLocalFiles.SelectedItems.Clear();
             foreach (ListViewItem item in OLVLocalFiles.Items)
             {
-                if (list.TryGetValue(item.SubItems[0].Text, out dummy))
+                if (list.TryGetValue(new Tuple<string, string>(item.SubItems[0].Text, Convert.ToString(item.SubItems[0].Tag)), out dummy))
                 {
                     item.Selected = true;
-
                 }
             }
         }
 
         private void itemsOnSceneReleasesToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Dictionary<string, FileData> list = ContainsLists(SceneReleasesList, LocalFilesList);
+            Dictionary<Tuple<string, string>, FileData> list = ContainsLists(SceneReleasesList, LocalFilesList);
             FileData dummy;
             OLVLocalFiles.Select();
             OLVLocalFiles.HideSelection = false;
             OLVLocalFiles.SelectedItems.Clear();
             foreach (ListViewItem item in OLVLocalFiles.Items)
             {
-                if (list.TryGetValue(item.SubItems[0].Text, out dummy))
+                if (list.TryGetValue(new Tuple<string, string>(item.SubItems[0].Text, Convert.ToString(item.SubItems[0].Tag)), out dummy))
                 {
                     item.Selected = true;
                 }
@@ -1080,14 +1104,14 @@ namespace Switch_Backup_Manager
         {
             if (cbxRemoveableDrives.Items.Count > 0 && cbxRemoveableDrives.SelectedIndex > -1)
             {
-                Dictionary<string, FileData> list = ContainsLists(SDCardList, LocalFilesList);
+                Dictionary<Tuple<string, string>, FileData> list = ContainsLists(SDCardList, LocalFilesList);
                 FileData dummy;
                 OLVLocalFiles.Select();
                 OLVLocalFiles.HideSelection = false;
                 OLVLocalFiles.SelectedItems.Clear();
                 foreach (ListViewItem item in OLVLocalFiles.Items)
                 {
-                    if (list.TryGetValue(item.SubItems[0].Text, out dummy))
+                    if (list.TryGetValue(new Tuple<string, string>(item.SubItems[0].Text, Convert.ToString(item.SubItems[0].Tag)), out dummy))
                     {
                         item.Selected = true;
                     }
@@ -1103,14 +1127,14 @@ namespace Switch_Backup_Manager
         {
             if (cbxRemoveableDrives.Items.Count > 0 && cbxRemoveableDrives.SelectedIndex > -1)
             {
-                Dictionary<string, FileData> list = DiffLists(LocalFilesList, SDCardList);
+                Dictionary<Tuple<string, string>, FileData> list = DiffLists(LocalFilesList, SDCardList);
                 FileData dummy;
                 OLVLocalFiles.Select();
                 OLVLocalFiles.HideSelection = false;
                 OLVLocalFiles.SelectedItems.Clear();
                 foreach (ListViewItem item in OLVLocalFiles.Items)
                 {
-                    if (list.TryGetValue(item.SubItems[0].Text, out dummy))
+                    if (list.TryGetValue(new Tuple<string, string>(item.SubItems[0].Text, Convert.ToString(item.SubItems[0].Tag)), out dummy))
                     {
                         item.Selected = true;
                     }
@@ -1126,14 +1150,14 @@ namespace Switch_Backup_Manager
         {
             if (cbxRemoveableDrives.Items.Count > 0 && cbxRemoveableDrives.SelectedIndex > -1)
             {
-                Dictionary<string, FileData> list = ContainsLists(LocalFilesList, SDCardList);
+                Dictionary<Tuple<string, string>, FileData> list = ContainsLists(LocalFilesList, SDCardList);
                 FileData dummy;
                 OLV_SDCard.Select();
                 OLV_SDCard.HideSelection = false;
                 OLV_SDCard.SelectedItems.Clear();
                 foreach (ListViewItem item in OLV_SDCard.Items)
                 {
-                    if (list.TryGetValue(item.SubItems[0].Text, out dummy))
+                    if (list.TryGetValue(new Tuple<string, string>(item.SubItems[0].Text, Convert.ToString(item.SubItems[0].Tag)), out dummy))
                     {
                         item.Selected = true;
                     }
@@ -1149,14 +1173,14 @@ namespace Switch_Backup_Manager
         {
             if (cbxRemoveableDrives.Items.Count > 0 && cbxRemoveableDrives.SelectedIndex > -1)
             {
-                Dictionary<string, FileData> list = DiffLists(SDCardList, LocalFilesList);
+                Dictionary<Tuple<string, string>, FileData> list = DiffLists(SDCardList, LocalFilesList);
                 FileData dummy;
                 OLV_SDCard.Select();
                 OLV_SDCard.HideSelection = false;
                 OLV_SDCard.SelectedItems.Clear();
                 foreach (ListViewItem item in OLV_SDCard.Items)
                 {
-                    if (list.TryGetValue(item.SubItems[0].Text, out dummy))
+                    if (list.TryGetValue(new Tuple<string, string>(item.SubItems[0].Text, Convert.ToString(item.SubItems[0].Tag)), out dummy))
                     {
                         item.Selected = true;
                     }
@@ -1188,14 +1212,14 @@ namespace Switch_Backup_Manager
         {
             if (cbxRemoveableDrives.Items.Count > 0 && cbxRemoveableDrives.SelectedIndex > -1)
             {
-                Dictionary<string, FileData> list = ContainsLists(SceneReleasesList, SDCardList);
+                Dictionary<Tuple<string, string>, FileData> list = ContainsLists(SceneReleasesList, SDCardList);
                 FileData dummy;
                 OLV_SDCard.Select();
                 OLV_SDCard.HideSelection = false;
                 OLV_SDCard.SelectedItems.Clear();
                 foreach (ListViewItem item in OLV_SDCard.Items)
                 {
-                    if (list.TryGetValue(item.SubItems[0].Text, out dummy))
+                    if (list.TryGetValue(new Tuple<string, string>(item.SubItems[0].Text, Convert.ToString(item.SubItems[0].Tag)), out dummy))
                     {
                         item.Selected = true;
                     }
@@ -1211,14 +1235,14 @@ namespace Switch_Backup_Manager
         {
             if (cbxRemoveableDrives.Items.Count > 0 && cbxRemoveableDrives.SelectedIndex > -1)
             {
-                Dictionary<string, FileData> list = DiffLists(SceneReleasesList, SDCardList);
+                Dictionary<Tuple<string, string>, FileData> list = DiffLists(SceneReleasesList, SDCardList);
                 FileData dummy;
                 OLV_SDCard.Select();
                 OLV_SDCard.HideSelection = false;
                 OLV_SDCard.SelectedItems.Clear();
                 foreach (ListViewItem item in OLV_SDCard.Items)
                 {
-                    if (list.TryGetValue(item.SubItems[0].Text, out dummy))
+                    if (list.TryGetValue(new Tuple<string, string>(item.SubItems[0].Text, Convert.ToString(item.SubItems[0].Tag)), out dummy))
                     {
                         item.Selected = true;
                     }
@@ -1232,14 +1256,14 @@ namespace Switch_Backup_Manager
 
         private void toolStripMenuItem58_Click(object sender, EventArgs e)
         {
-            Dictionary<string, FileData> list = ContainsLists(LocalFilesList, SceneReleasesList);
+            Dictionary<Tuple<string, string>, FileData> list = ContainsLists(LocalFilesList, SceneReleasesList);
             FileData dummy;
             OLVSceneList.Select();
             OLVSceneList.HideSelection = false;
             OLVSceneList.SelectedItems.Clear();
             foreach (ListViewItem item in OLVSceneList.Items)
             {
-                if (list.TryGetValue(item.SubItems[0].Text, out dummy))
+                if (list.TryGetValue(new Tuple<string, string>(item.SubItems[0].Text, Convert.ToString(item.SubItems[0].Tag)), out dummy))
                 {
                     item.Selected = true;
                 }
@@ -1248,14 +1272,14 @@ namespace Switch_Backup_Manager
 
         private void toolStripMenuItem59_Click(object sender, EventArgs e)
         {
-            Dictionary<string, FileData> list = DiffLists(SceneReleasesList, LocalFilesList);
+            Dictionary<Tuple<string, string>, FileData> list = DiffLists(SceneReleasesList, LocalFilesList);
             FileData dummy;
             OLVSceneList.Select();
             OLVSceneList.HideSelection = false;
             OLVSceneList.SelectedItems.Clear();
             foreach (ListViewItem item in OLVSceneList.Items)
             {
-                if (list.TryGetValue(item.SubItems[0].Text, out dummy))
+                if (list.TryGetValue(new Tuple<string, string>(item.SubItems[0].Text, Convert.ToString(item.SubItems[0].Tag)), out dummy))
                 {
                     item.Selected = true;
                 }
@@ -1266,14 +1290,14 @@ namespace Switch_Backup_Manager
         {
             if (cbxRemoveableDrives.Items.Count > 0 && cbxRemoveableDrives.SelectedIndex > -1)
             {
-                Dictionary<string, FileData> list = ContainsLists(SDCardList, SceneReleasesList);
+                Dictionary<Tuple<string, string>, FileData> list = ContainsLists(SDCardList, SceneReleasesList);
                 FileData dummy;
                 OLVSceneList.Select();
                 OLVSceneList.HideSelection = false;
                 OLVSceneList.SelectedItems.Clear();
                 foreach (ListViewItem item in OLVSceneList.Items)
                 {
-                    if (list.TryGetValue(item.SubItems[0].Text, out dummy))
+                    if (list.TryGetValue(new Tuple<string, string>(item.SubItems[0].Text, Convert.ToString(item.SubItems[0].Tag)), out dummy))
                     {
                         item.Selected = true;
                     }
@@ -1288,14 +1312,14 @@ namespace Switch_Backup_Manager
         {
             if (cbxRemoveableDrives.Items.Count > 0 && cbxRemoveableDrives.SelectedIndex > -1)
             {
-                Dictionary<string, FileData> list = DiffLists(SceneReleasesList, SDCardList);
+                Dictionary<Tuple<string, string>, FileData> list = DiffLists(SceneReleasesList, SDCardList);
                 FileData dummy;
                 OLVSceneList.Select();
                 OLVSceneList.HideSelection = false;
                 OLVSceneList.SelectedItems.Clear();
                 foreach (ListViewItem item in OLVSceneList.Items)
                 {
-                    if (list.TryGetValue(item.SubItems[0].Text, out dummy))
+                    if (list.TryGetValue(new Tuple<string, string>(item.SubItems[0].Text, Convert.ToString(item.SubItems[0].Tag)), out dummy))
                     {
                         item.Selected = true;
                     }
@@ -1509,12 +1533,26 @@ namespace Switch_Backup_Manager
 
         private void backgroundWorkerLoadSDCardFiles_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
+            OLV_SDCard.SetObjects(SDCardList.Values);
+
+            List<Tuple<string, string>> keys = new List<Tuple<string, string>>(SDCardList.Keys);
+            int i = 0;
+            foreach (ListViewItem item in OLV_SDCard.Items)
+            {
+                item.Tag = keys[i].Item2;
+                i++;
+            }
+
+            SDCardListSelectedItems = new Dictionary<Tuple<string, string>, FileData>();
+            SumarizeLocalGamesList("sdcard");
+
             timer1.Enabled = false;
             toolStripStatusFilesOperation.Visible = false;
             toolStripProgressAddingFiles.Visible = false;
             toolStripStatusLabelGame.Text = "";
             toolStripStatusLabelGame.Visible = false;
             menuSDFiles.Enabled = true;
+            SDCardSelected = "";
             //cbxRemoveableDrives_SelectedIndexChanged(this, new EventArgs());
         }
 
@@ -1564,7 +1602,7 @@ namespace Switch_Backup_Manager
             MessageBox.Show("Done.");
         }
 
-        private void TrimSelectedFiles(Dictionary<string, FileData> dictionary, string source) //source possible values: "local", "sdcard"
+        private void TrimSelectedFiles(Dictionary<Tuple<string, string>, FileData> dictionary, string source) //source possible values: "local", "sdcard"
         {
             Util.TrimXCIFiles(dictionary, source);
         }
@@ -2152,7 +2190,7 @@ namespace Switch_Backup_Manager
             }
         }
 
-        private void RenameSelectedFiles(Dictionary<string, FileData> localFilesListSelectedItems, string source) //source possible values: "local", "sdcard", "eshop"
+        private void RenameSelectedFiles(Dictionary<Tuple<string, string>, FileData> localFilesListSelectedItems, string source) //source possible values: "local", "sdcard", "eshop"
         {
             Util.AutoRenameXCIFiles(localFilesListSelectedItems, source);
         }
@@ -2647,6 +2685,7 @@ namespace Switch_Backup_Manager
 
                     LocalNSPFilesListSelectedItems.Clear();
                     string titleID = selectedItems[0].Text;
+                    string version = Convert.ToString(selectedItems[0].Tag);
                     string titleIDBaseGame = "";
 
                     int count = 0;
@@ -2654,9 +2693,10 @@ namespace Switch_Backup_Manager
                     foreach (ListViewItem item in selectedItems)
                     {
                         titleID = item.Text;
-                        FileData data = Util.GetFileData(titleID, LocalNSPFilesList);
+                        version = Convert.ToString(item.Tag);
+                        FileData data = Util.GetFileData(titleID, version, LocalNSPFilesList);
                         titleIDBaseGame = data.TitleIDBaseGame;
-                        LocalNSPFilesListSelectedItems.Add(titleID, data);
+                        LocalNSPFilesListSelectedItems.Add(new Tuple<string, string>(titleID, version), data);
                         count++;
                         size += Convert.ToInt64(data.UsedSpaceBytes);
                     }
@@ -2667,7 +2707,7 @@ namespace Switch_Backup_Manager
                     {
                         titleID = titleIDBaseGame;
                     }
-                    DisplayGameInformation(titleID, LocalNSPFilesList, "eshop");
+                    DisplayGameInformation(titleID, version, LocalNSPFilesList, "eshop");
                 }
                 else
                 {
@@ -2678,8 +2718,9 @@ namespace Switch_Backup_Manager
                     foreach (ListViewItem item in selectedItems)
                     {
                         string titleID = item.Text;
-                        FileData data = Util.GetFileData(titleID, LocalNSPFilesList);
-                        LocalNSPFilesListSelectedItems.Add(titleID, data);
+                        string version = Convert.ToString(item.Tag);
+                        FileData data = Util.GetFileData(titleID, version, LocalNSPFilesList);
+                        LocalNSPFilesListSelectedItems.Add(new Tuple<string, string>(titleID, version), data);
                         count++;
                         size += Convert.ToInt64(data.UsedSpaceBytes);
                     }
@@ -2742,14 +2783,14 @@ namespace Switch_Backup_Manager
         {
             if (cbxRemoveableDrives.Items.Count > 0 && cbxRemoveableDrives.SelectedIndex > -1)
             {
-                Dictionary<string, FileData> list = ContainsLists(SDCardList, LocalNSPFilesList);
+                Dictionary<Tuple<string, string>, FileData> list = ContainsLists(SDCardList, LocalNSPFilesList);
                 FileData dummy;
                 OLVEshop.Select();
                 OLVEshop.HideSelection = false;
                 OLVEshop.SelectedItems.Clear();
                 foreach (ListViewItem item in OLVEshop.Items)
                 {
-                    if (list.TryGetValue(item.SubItems[0].Text, out dummy))
+                    if (list.TryGetValue(new Tuple<string, string>(item.SubItems[0].Text, Convert.ToString(item.SubItems[0].Tag)), out dummy))
                     {
                         item.Selected = true;
                     }
@@ -2766,14 +2807,14 @@ namespace Switch_Backup_Manager
         {
             if (cbxRemoveableDrives.Items.Count > 0 && cbxRemoveableDrives.SelectedIndex > -1)
             {
-                Dictionary<string, FileData> list = DiffLists(LocalNSPFilesList, SDCardList);
+                Dictionary<Tuple<string, string>, FileData> list = DiffLists(LocalNSPFilesList, SDCardList);
                 FileData dummy;
                 OLVEshop.Select();
                 OLVEshop.HideSelection = false;
                 OLVEshop.SelectedItems.Clear();
                 foreach (ListViewItem item in OLVEshop.Items)
                 {
-                    if (list.TryGetValue(item.SubItems[0].Text, out dummy))
+                    if (list.TryGetValue(new Tuple<string, string>(item.SubItems[0].Text, Convert.ToString(item.SubItems[0].Tag)), out dummy))
                     {
                         item.Selected = true;
                     }

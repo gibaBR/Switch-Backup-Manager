@@ -78,15 +78,6 @@ namespace Switch_Backup_Manager
             }
             updateLog = true;
 
-            /*
-            var watch = new FileSystemWatcher();
-                        watch.Path = AppDomain.CurrentDomain.BaseDirectory;
-            watch.Filter = Util.LOG_FILE;
-            watch.NotifyFilter = NotifyFilters.LastWrite; //more options
-            watch.Changed += new FileSystemEventHandler(OnLogChanged);
-            watch.EnableRaisingEvents = true;
-            */
-
             LocalFilesList = new Dictionary<string, FileData>();
             LocalNSPFilesList = new Dictionary<string, FileData>();
             SceneReleasesList = new Dictionary<string, FileData>();
@@ -122,8 +113,6 @@ namespace Switch_Backup_Manager
             OLVEshop.UseFiltering = true;
 
             SetupOLVs();
-
-            //Util.UpdateDirectories();
 
             UpdateSceneReleasesList();
             UpdateLocalGamesList();
@@ -249,6 +238,33 @@ namespace Switch_Backup_Manager
             };
 
             olvColumnGameNameEShop.AspectGetter = delegate (object x)
+            {
+                string result = "";
+                FileData data = (FileData)x;
+
+                if (data != null)
+                {
+                    result = data.GameName;
+
+                    switch (data.ContentType)
+                    {
+                        case "Application":
+
+                            break;
+                        case "Patch":
+                            result += " [UPD]";
+                            break;
+                        case "AddOnContent":
+                            result += " [DLC]";
+                            break;
+                    }
+                    result += " [" + data.Version + "]";
+                }
+
+                return result;
+            };
+
+            olvColumnGameNameSD.AspectGetter = delegate (object x)
             {
                 string result = "";
                 FileData data = (FileData)x;
@@ -2329,6 +2345,15 @@ namespace Switch_Backup_Manager
                 FileData data = (FileData)e.Model;
                 if (!data.IsTrimmed)
                     e.SubItem.BackColor = Color.IndianRed;
+            }
+
+            if (e.ColumnIndex == this.olvColumnGameNameSD.Index)
+            {
+                FileData data = (FileData)e.Model;
+                if (data.ContentType == "AddOnContent") //DLC
+                    e.SubItem.ForeColor = Color.ForestGreen;
+                if (data.ContentType == "Patch") //DLC
+                    e.SubItem.ForeColor = Color.OrangeRed;
             }
         }
 

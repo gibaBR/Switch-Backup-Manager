@@ -12,16 +12,33 @@ Complete Switch Backups management tool
 
 ## Requirements
 * .NET 4.6
+* Visual C++ Redistributable for Visual Studio 2015
 
 ## Screenshots
 
-![main](https://i.imgur.com/7D7MXPK.png)
+![main](https://i.imgur.com/SHlcuGp.png)
 
-![main](https://i.imgur.com/5RipVQI.png)
+![main](https://i.imgur.com/dH5t3Vi.png)
 
-![main](https://i.imgur.com/eHKzI2R.png)
+![main](https://i.imgur.com/Ufhn64p.png)
+
+![main](https://i.imgur.com/dHRvZ4J.png)
+
+![main](https://i.imgur.com/3Qyat3W.png)
+
+![main](https://i.imgur.com/vENGuJn.png)
+
+![main](https://i.imgur.com/wABgTLS.png)
 
 ## Changelog
+
+* 1.0.8
+  - **Now you can configure folders to autoscan at startup** (FinnYoung's suggestion)
+  - Adds new info to Database: Scene ID.
+  - Adds more options to autorename patterns (Scene ID and Languages) (MR_TeCKnO's suggestion).
+  - **NSP Games now have [DLC] and [UPD] on their names in accord to the content. Version is there too.**
+  - Better control over database version matching application version (sorry, you will need to redo your database with this update).
+  - Log is now shown inside the application.
 
 * 1.0.7
   - Fixed  an error where title has Taiwanese as its only language (TitleID 0100D7700AF88000)
@@ -58,6 +75,6 @@ Complete Switch Backups management tool
 
 ## Source & Binaries
 * [GitHub](https://github.com/gibaBR/Switch-Backup-Manager/archive/master.zip)
-* [Release 1.0.7](https://github.com/gibaBR/Switch-Backup-Manager/releases/tag/v1.0.7)
+* [Release 1.0.8](https://github.com/gibaBR/Switch-Backup-Manager/releases/tag/v1.0.8)
 
 

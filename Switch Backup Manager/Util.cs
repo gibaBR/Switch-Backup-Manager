@@ -19,15 +19,14 @@ namespace Switch_Backup_Manager
 {
     internal static class Util
     {
-        public const string VERSION = "1.0.9";   //Actual application version
-        public const string MIN_DB_Version = "1.0.9"; //This is the minimum version of the DB that can work
+        public const string VERSION = "1.0.8";   //Actual application version
+        public const string MIN_DB_Version = "1.0.8"; //This is the minimum version of the DB that can work
 
         public const string INI_FILE = "sbm.ini";
         public static string TITLE_KEYS = "titlekeys.txt";
         public static string KEYS_FILE = "keys.txt";
         public const string KEYS_DOWNLOAD_SITE = "https://pastebin.com/raw/ekSH9R8t";
-        public static string HACTOOL_FILE = "hactool.exe";
-        public static string NSTOOLMOD = "nstoolmod.exe";
+        public const string HACTOOL_FILE = "hactool.exe";
         public const string HACTOOL_DOWNLOAD_SITE = "https://github.com/SciresM/hactool/releases/download/1.1.0/hactool-1.1.0.win.zip";
         public const string NSWDB_FILE = "nswdb.xml";
         public const string NSWDB_DOWNLOAD_SITE = "http://nswdb.com/xml.php";
@@ -69,7 +68,7 @@ namespace Switch_Backup_Manager
             "???"
         };
 
-        public static string[] AutoRenamingTags = new string[12]
+        public static string[] AutoRenamingTags = new string[10]
         {
             "{gamename}",
             "{titleid}",
@@ -80,9 +79,7 @@ namespace Switch_Backup_Manager
             "{region}",
             "{firmware}",
             "{languages}",
-            "{sceneid}",
-            "{nsptype}",
-            "{nspversion}"
+            "{sceneid}"
         };
 
         private static Image[] Icons = new Image[16];
@@ -201,19 +198,6 @@ namespace Switch_Backup_Manager
 
             if (data != null)
             {
-                string contentType = "";
-                switch (data.ContentType)
-                {
-                    case "Application":
-                        contentType = "BASE";
-                        break;
-                    case "Patch":
-                        contentType = "UPD";
-                        break;
-                    case "AddOnContent":
-                        contentType = "DLC";
-                        break;
-                }
                 result = pattern;
                 result = result.Replace(AutoRenamingTags[0], data.GameName);
                 result = result.Replace(AutoRenamingTags[1], data.TitleID);
@@ -224,9 +208,8 @@ namespace Switch_Backup_Manager
                 result = result.Replace(AutoRenamingTags[6], data.Region);
                 result = result.Replace(AutoRenamingTags[7], data.Firmware);
                 result = result.Replace(AutoRenamingTags[8], data.Languages_resumed);
-                result = result.Replace(AutoRenamingTags[9], string.Format("{0:D4}", (int)data.IdScene));
-                result = result.Replace(AutoRenamingTags[10], contentType);
-                result = result.Replace(AutoRenamingTags[11], data.Version);
+                result = result.Replace(AutoRenamingTags[9], Convert.ToString(data.IdScene));
+
                 result += Path.GetExtension(data.FilePath);
             }
 
@@ -699,7 +682,7 @@ namespace Switch_Backup_Manager
         {
             bool result = false;
             int ver_db  = 0;
-            int ver_min = Convert.ToInt32(MIN_DB_Version.Replace(".", "")); //Ex 1.0.8 -> 108
+            int ver_min = Convert.ToInt32(VERSION.Replace(".", "")); //Ex 1.0.8 -> 108
 
             //Check if DB is on minimum version
             XDocument xml_temp = XDocument.Load(xml);
@@ -811,13 +794,6 @@ namespace Switch_Backup_Manager
             {
                 MessageBox.Show(HACTOOL_FILE+" is missing. Please, download it at\n"+HACTOOL_DOWNLOAD_SITE);
                 Environment.Exit(0);
-            }
-
-            //If nstoolmod.exe is not found, use hactool on NSP files (slow)
-            if (!File.Exists(NSTOOLMOD))
-            {
-                MessageBox.Show(NSTOOLMOD + " is missing. Gonna use " + HACTOOL_FILE +" on NSP files instead (very slow).\nThis file should be included on the package you downloaded.");
-                NSTOOLMOD = HACTOOL_FILE;
             }
 
             //Searches for db.xml
@@ -1327,93 +1303,289 @@ namespace Switch_Backup_Manager
 
             Process process = new Process();
             logger.Info("Adding NSP file: " + data.FileName);
+
             try
             {
-                //Directory.CreateDirectory("tmp");
+                MultiStream fileStream = GetFileStream(file);
 
-                //It means nstoolmod.exe was not found. So, we need to use hactool (slow)
-                if (NSTOOLMOD == HACTOOL_FILE)
-                {
-                    process.StartInfo = new ProcessStartInfo
-                    {
-                        WindowStyle = ProcessWindowStyle.Hidden,
-                        FileName = HACTOOL_FILE,
-                        Arguments = "-t pfs0 " + "\"" + file + "\"" + " --outdir=tmp"
-                    };
-                } else
-                {
-                    /* StudentBlake's Solution. Fast!
-                     * 
-                     */
-                    process.StartInfo = new ProcessStartInfo
-                    {
-                        WindowStyle = ProcessWindowStyle.Hidden,
-                        FileName = NSTOOLMOD,
-                        Arguments = "--fsdir tmp \"" + file + "\""
-                    };
-                }
-
-                logger.Info("Extracting NSP file.");
-                process.Start();
-                process.WaitForExit();
-                process.Close();
-
-                List<string> listXML = new List<string>();
-                if (!Directory.Exists("tmp"))
-                {
-                    logger.Error("Directory tmp was not created ?!");                    
-                }
-                try
-                {
-                    logger.Info("found " + Directory.GetFiles("tmp", "*.xml").First());
-                    foreach (string f in Directory.GetFiles("tmp", "*.xml"))
-                    {
-                        listXML.Add(f);
-                        break;
-                    }
-                } catch (Exception e)
-                {
-                    logger.Error(e.StackTrace);
-                }
-
-                XDocument xml = XDocument.Load(listXML.First());
-                data.TitleID = xml.Element("ContentMeta").Element("Id").Value.Remove(1,2).ToUpper();                
-                data.ContentType = xml.Element("ContentMeta").Element("Type").Value;
-                data.Version = xml.Element("ContentMeta").Element("Version").Value;
                 string ncaTarget = "";
 
-                string titleIDBaseGame = data.TitleID;
-                if (data.ContentType != "Application")
+                List<char> chars = new List<char>();
+                byte[] array = new byte[16];
+                byte[] array2 = new byte[24];
+                fileStream.Read(array, 0, 16);
+                PFS0.PFS0_Headers[0] = new PFS0.PFS0_Header(array);
+                if (!PFS0.PFS0_Headers[0].Magic.Contains("PFS0"))
                 {
-                    string titleIdBase = data.TitleID.Substring(0, 13);
-                    if (data.ContentType == "Patch") //UPDATE
+                    return data;
+                }
+                PFS0.PFS0_Entry[] array3;
+                array3 = new PFS0.PFS0_Entry[Math.Max(PFS0.PFS0_Headers[0].FileCount, 20)]; //Dump of TitleID 01009AA000FAA000 reports more than 10000000 files here, so it breaks the program. Standard is to have only 20 files
+
+                for (int m = 0; m < PFS0.PFS0_Headers[0].FileCount; m++)
+                {
+                    fileStream.Position = 16 + 24 * m;
+                    fileStream.Read(array2, 0, 24);
+                    array3[m] = new PFS0.PFS0_Entry(array2);
+
+                    if (m == 19) //Dump of TitleID 01009AA000FAA000 reports more than 10000000 files here, so it breaks the program. Standard is to have only 20 files
                     {
-                        titleIDBaseGame = titleIdBase + "000";
-                    } else //DLC
-                    {
-                        long tmp = long.Parse(titleIdBase, System.Globalization.NumberStyles.HexNumber) - 1;
-                        titleIDBaseGame = string.Format("0{0:X8}", tmp) + "000";
+                        break;
                     }
                 }
-                data.TitleIDBaseGame = titleIDBaseGame;
+                for (int n = 0; n < PFS0.PFS0_Headers[0].FileCount; n++)
+                {
+                    fileStream.Position = 16 + 24 * PFS0.PFS0_Headers[0].FileCount + array3[n].Name_ptr;
+                    int num4;
+                    while ((num4 = fileStream.ReadByte()) != 0 && num4 != 0)
+                    {
+                        chars.Add((char)num4);
+                    }
+                    array3[n].Name = new string(chars.ToArray());
+                    chars.Clear();
+
+                    if (array3[n].Name.EndsWith(".xml"))
+                    {
+                        byte[] array4 = new byte[array3[n].Size];
+                        fileStream.Position = 16 + 24 * PFS0.PFS0_Headers[0].FileCount + PFS0.PFS0_Headers[0].StringTableSize + array3[n].Offset;
+                        fileStream.Read(array4, 0, (int)array3[n].Size);
+
+                        XDocument xml = XDocument.Parse(Encoding.UTF8.GetString(array4));
+                        data.TitleID = xml.Element("ContentMeta").Element("Id").Value.Remove(1, 2).ToUpper();
+                        data.ContentType = xml.Element("ContentMeta").Element("Type").Value;
+                        data.Version = xml.Element("ContentMeta").Element("Version").Value;
+
+                        //0100000000000816,ALL,v65796 v131162 v196628 v262164 v201327002 v201392178 v201457684 v268435656 v268501002 v269484082 v335544750 v335609886 v335675432 v336592976,2.0.0 2.1.0 2.2.0 2.3.0 3.0.0 3.0.1 3.0.2 4.0.0 4.0.1 4.1.0 5.0.0 5.0.1 5.0.2 5.1.0
+                        data.Firmware = "";
+                        long Firmware = Convert.ToInt64(xml.Element("ContentMeta").Element("RequiredSystemVersion").Value) % 0x100000000;
+                        if (Firmware <= 450)
+                        {
+                            data.Firmware = "1.0.0";
+                        }
+                        else if (Firmware <= 65796)
+                        {
+                            data.Firmware = "2.0.0";
+                        }
+                        else if (Firmware <= 131162)
+                        {
+                            data.Firmware = "2.1.0";
+                        }
+                        else if (Firmware <= 196628)
+                        {
+                            data.Firmware = "2.2.0";
+                        }
+                        else if (Firmware <= 262164)
+                        {
+                            data.Firmware = "2.3.0";
+                        }
+                        else if (Firmware <= 201327002)
+                        {
+                            data.Firmware = "3.0.0";
+                        }
+                        else if (Firmware <= 201392178)
+                        {
+                            data.Firmware = "3.0.1";
+                        }
+                        else if (Firmware <= 201457684)
+                        {
+                            data.Firmware = "3.0.2";
+                        }
+                        else if (Firmware <= 268435656)
+                        {
+                            data.Firmware = "4.0.0";
+                        }
+                        else if (Firmware <= 268501002)
+                        {
+                            data.Firmware = "4.0.1";
+                        }
+                        else if (Firmware <= 269484082)
+                        {
+                            data.Firmware = "4.1.0";
+                        }
+                        else if (Firmware <= 335544750)
+                        {
+                            data.Firmware = "5.0.0";
+                        }
+                        else if (Firmware <= 335609886)
+                        {
+                            data.Firmware = "5.0.1";
+                        }
+                        else if (Firmware <= 335675432)
+                        {
+                            data.Firmware = "5.0.2";
+                        }
+                        else if (Firmware <= 336592976)
+                        {
+                            data.Firmware = "5.1.0";
+                        }
+                        else
+                        {
+                            data.Firmware = Convert.ToString(Firmware);
+                        }
+
+                        string titleIDBaseGame = data.TitleID;
+                        if (data.ContentType != "Application")
+                        {
+                            string titleIdBase = data.TitleID.Substring(0, 13);
+                            if (data.ContentType == "Patch") //UPDATE
+                            {
+                                titleIDBaseGame = titleIdBase + "000";
+                            }
+                            else //DLC
+                            {
+                                long tmp = long.Parse(titleIdBase, System.Globalization.NumberStyles.HexNumber) - 1;
+                                titleIDBaseGame = string.Format("0{0:X8}", tmp) + "000";
+                            }
+                        }
+                        data.TitleIDBaseGame = titleIDBaseGame;
+
+                        if (data.ContentType != "AddOnContent")
+                        {
+                            foreach (XElement xe in xml.Descendants("Content"))
+                            {
+                                if (xe.Element("Type").Value != "Control")
+                                {
+                                    continue;
+                                }
+
+                                ncaTarget = xe.Element("Id").Value + ".nca";
+                                break;
+                            }
+                        }
+                        else //This is a DLC
+                        {
+                            foreach (XElement xe in xml.Descendants("Content"))
+                            {
+                                if (xe.Element("Type").Value != "Meta")
+                                {
+                                    continue;
+                                }
+
+                                ncaTarget = xe.Element("Id").Value + ".cnmt.nca";
+                                break;
+                            }
+                            bool found = false;
+
+                            FileData data_tmp = null;
+                            FrmMain.LocalNSPFilesList.TryGetValue(data.TitleIDBaseGame, out data_tmp); //Try to find on NSP List
+                            if (data_tmp != null)
+                            {
+                                data.Region_Icon = data_tmp.Region_Icon;
+                                data.Languages = data_tmp.Languages;
+                                data.GameRevision = data_tmp.GameRevision;
+                                data.ProductCode = data_tmp.ProductCode;
+                                data.GameName = data_tmp.GameName;// + " [DLC]";
+                                data.Developer = data_tmp.Developer;
+                                found = true;
+                            }
+
+                            if (!found)
+                            {
+                                data_tmp = null;
+                                FrmMain.SceneReleasesList.TryGetValue(data.TitleIDBaseGame, out data_tmp); //Try to find on Scene List
+                                if (data_tmp != null)
+                                {
+                                    data.Region_Icon = data_tmp.Region_Icon;
+                                    data.Languages = data_tmp.Languages;
+                                    data.GameRevision = data_tmp.GameRevision;
+                                    data.ProductCode = data_tmp.ProductCode;
+                                    data.GameName = data_tmp.GameName;// + " [DLC]";
+                                    data.Developer = data_tmp.Developer;
+                                    found = true;
+                                }
+                            }
+
+                            if (!found)
+                            {
+                                data_tmp = null;
+                                FrmMain.LocalFilesList.TryGetValue(data.TitleIDBaseGame, out data_tmp); //Try to find on Local XCI List
+                                if (data_tmp != null)
+                                {
+                                    data.Region_Icon = data_tmp.Region_Icon;
+                                    data.Languages = data_tmp.Languages;
+                                    data.GameRevision = data_tmp.GameRevision;
+                                    data.ProductCode = data_tmp.ProductCode;
+                                    data.GameName = data_tmp.GameName;// + " [DLC]";
+                                    data.Developer = data_tmp.Developer;
+                                    found = true;
+                                }
+                            }
+
+                            //Last resource, look at titlekeys
+                            if (!found)
+                            {
+                                if (UseTitleKeys && File.Exists(TITLE_KEYS))
+                                {
+                                    string gameName = (from x in File.ReadAllLines(TITLE_KEYS)
+                                                       select x.Split('|') into x
+                                                       where x.Length > 1
+                                                       select x).ToDictionary((string[] x) => x[0].Trim(), (string[] x) => x[2])[data.TitleIDBaseGame].ToLower();
+
+                                    if (gameName.Trim() == "")
+                                    {
+                                        gameName = (from x in File.ReadAllLines(TITLE_KEYS)
+                                                    select x.Split('|') into x
+                                                    where x.Length > 1
+                                                    select x).ToDictionary((string[] x) => x[0].Trim(), (string[] x) => x[2])[data.TitleID].ToLower();
+                                    }
+                                    else
+                                    {
+                                        //gameName += " [DLC]";
+                                    }
+
+                                    data.GameName = gameName;
+                                }
+                            }
+                        }
+
+                        //break;
+                    }
+
+                    if (n == 19) //Dump of TitleID 01009AA000FAA000 reports more than 10000000 files here, so it breaks the program. Standard is to have only 20 files
+                    {
+                        break;
+                    }
+                }
+
+                for (int n = 0; n < PFS0.PFS0_Headers[0].FileCount; n++)
+                {
+                    if (array3[n].Name.Equals(ncaTarget))
+                    {
+                        if (!Directory.Exists("tmp"))
+                        {
+                            Directory.CreateDirectory("tmp");
+                        }
+
+                        byte[] array5 = new byte[64 * 1024];
+                        fileStream.Position = 16 + 24 * PFS0.PFS0_Headers[0].FileCount + PFS0.PFS0_Headers[0].StringTableSize + array3[n].Offset;
+
+                        using (Stream output = File.Create("tmp\\" + ncaTarget))
+                        {
+                            long Size = array3[n].Size;
+                            int result = 0;
+                            while ((result = fileStream.Read(array5, 0, (int)Math.Min(array5.Length, Size))) > 0)
+                            {
+                                output.Write(array5, 0, result);
+                                Size -= result;
+                            }
+                        }
+
+                        break;
+                    }
+
+                    if (n == 19) //Dump of TitleID 01009AA000FAA000 reports more than 10000000 files here, so it breaks the program. Standard is to have only 20 files
+                    {
+                        break;
+                    }
+                }
 
                 if (data.ContentType != "AddOnContent")
                 {
-                    foreach (XElement xe in xml.Descendants("Content"))
-                    {
-                        if (xe.Element("Type").Value != "Control")
-                        {
-                            continue;
-                        }
-
-                        ncaTarget = xe.Element("Id").Value + ".nca";
-                        break;
-                    }
                     process = new Process();
                     process.StartInfo = new ProcessStartInfo
                     {
                         WindowStyle = ProcessWindowStyle.Hidden,
-                        FileName = HACTOOL_FILE,
+                        FileName = "hactool.exe",
                         Arguments = "-k keys.txt --romfsdir=tmp tmp/" + ncaTarget
                     };
                     logger.Info("Making some voodoo magic with " + ncaTarget);
@@ -1477,96 +1649,12 @@ namespace Switch_Backup_Manager
                         }
                     }
 
-                    /* #22
                     if (data.ContentType == "Patch")
                     {
-                        data.GameName = data.GameName + " [UPD]";
-                    }
-                    */
-                }
-                else //This is a DLC
-                {
-                    foreach (XElement xe in xml.Descendants("Content"))
-                    {
-                        if (xe.Element("Type").Value != "Meta")
-                        {
-                            continue;
-                        }
-
-                        ncaTarget = xe.Element("Id").Value + ".cnmt.nca";
-                        break;
-                    }
-                    bool found = false;
-
-                    FileData data_tmp = null;
-                    FrmMain.LocalNSPFilesList.TryGetValue(data.TitleIDBaseGame, out data_tmp); //Try to find on NSP List
-                    if (data_tmp != null)
-                    {
-                        data.Region_Icon = data_tmp.Region_Icon;
-                        data.Languages = data_tmp.Languages;
-                        data.GameRevision = data_tmp.GameRevision;
-                        data.ProductCode = data_tmp.ProductCode;
-                        data.GameName = data_tmp.GameName;
-                        data.Developer = data_tmp.Developer;
-                        found = true;
+                        data.GameName = data.GameName;// + " [UPD]";
                     }
 
-                    if (!found)
-                    {
-                        data_tmp = null;
-                        FrmMain.SceneReleasesList.TryGetValue(data.TitleIDBaseGame, out data_tmp); //Try to find on Scene List
-                        if (data_tmp != null)
-                        {
-                            data.Region_Icon = data_tmp.Region_Icon;
-                            data.Languages = data_tmp.Languages;
-                            data.GameRevision = data_tmp.GameRevision;
-                            data.ProductCode = data_tmp.ProductCode;
-                            data.GameName = data_tmp.GameName;
-                            data.Developer = data_tmp.Developer;
-                            found = true;
-                        }
-                    }
-
-                    if (!found)
-                    {
-                        data_tmp = null;
-                        FrmMain.LocalFilesList.TryGetValue(data.TitleIDBaseGame, out data_tmp); //Try to find on Local XCI List
-                        if (data_tmp != null)
-                        {
-                            data.Region_Icon = data_tmp.Region_Icon;
-                            data.Languages = data_tmp.Languages;
-                            data.GameRevision = data_tmp.GameRevision;
-                            data.ProductCode = data_tmp.ProductCode;
-                            data.GameName = data_tmp.GameName;
-                            data.Developer = data_tmp.Developer;
-                            found = true;
-                        }
-                    }
-
-                    //Last resource, look at titlekeys
-                    if (!found)
-                    {
-                        if (UseTitleKeys && File.Exists(TITLE_KEYS))
-                        {
-                            string gameName = (from x in File.ReadAllLines(TITLE_KEYS)
-                                               select x.Split('|') into x
-                                               where x.Length > 1
-                                               select x).ToDictionary((string[] x) => x[0].Trim(), (string[] x) => x[2])[data.TitleIDBaseGame].ToLower();
-                            
-                            if (gameName.Trim() == "") {
-                                gameName = (from x in File.ReadAllLines(TITLE_KEYS)
-                                            select x.Split('|') into x
-                                            where x.Length > 1
-                                            select x).ToDictionary((string[] x) => x[0].Trim(), (string[] x) => x[2])[data.TitleID].ToLower();
-                            } else
-                            {
-                                //gameName += " [DLC]";
-                            }
-
-                            data.GameName = gameName;
-                        }
-                    }
-
+                    //data.TitleIDBaseGame = data.TitleID;
                 }
 
                 //data.GameName = data.GameName + " [v" + data.Version + "]";
@@ -1577,7 +1665,7 @@ namespace Switch_Backup_Manager
                 process.StartInfo = new ProcessStartInfo
                 {
                     WindowStyle = ProcessWindowStyle.Hidden,
-                    FileName = HACTOOL_FILE,
+                    FileName = "hactool.exe",
                     Arguments = "-k keys.txt tmp/" + ncaTarget,
                     RedirectStandardOutput = true,
                     UseShellExecute = false,
@@ -1595,10 +1683,12 @@ namespace Switch_Backup_Manager
                     if (strArray[0] == "SDK Version")
                     {
                         data.SDKVersion = strArray[1].Trim();
-                    } else if (strArray[0] == "Distribution type")
+                    }
+                    else if (strArray[0] == "Distribution type")
                     {
                         data.DistributionType = strArray[1].Trim();
-                    } else if (strArray[0] == "Master Key Revision")
+                    }
+                    else if (strArray[0] == "Master Key Revision")
                     {
                         data.MasterKeyRevision = strArray[1].Trim();
                         break;
@@ -1610,7 +1700,8 @@ namespace Switch_Backup_Manager
             catch (Exception e)
             {
                 logger.Error(e.StackTrace);
-            } finally
+            }
+            finally
             {
                 Directory.Delete("tmp", true);
             }
@@ -1831,7 +1922,7 @@ namespace Switch_Backup_Manager
                         process.StartInfo = new ProcessStartInfo
                         {
                             WindowStyle = ProcessWindowStyle.Hidden,
-                            FileName = HACTOOL_FILE,
+                            FileName = "hactool.exe",
                             Arguments = "-k keys.txt --romfsdir=data meta"
                         };
                         process.Start();

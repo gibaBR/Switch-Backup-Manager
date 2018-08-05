@@ -117,36 +117,92 @@ namespace Switch_Backup_Manager
             UpdateSceneReleasesList();
             UpdateLocalGamesList();
             UpdateLocalNSPGamesList();
+
+            try
+            {
+                if (File.Exists("confXCI.bin"))
+                {
+                    OLVLocalFiles.RestoreState(File.ReadAllBytes("confXCI.bin"));
+                }
+                if (File.Exists("confSCN.bin"))
+                {
+                    OLVSceneList.RestoreState(File.ReadAllBytes("confSCN.bin"));
+                }
+                if (File.Exists("confSDC.bin"))
+                {
+                    OLV_SDCard.RestoreState(File.ReadAllBytes("confSDC.bin"));
+                }
+                if (File.Exists("confNSP.bin"))
+                {
+                    OLVEshop.RestoreState(File.ReadAllBytes("confNSP.bin"));
+                }                               
+            }
+            catch (Exception e)
+            {
+                Util.logger.Warning("Could not recover environment settings.");
+            }
+
             ScanFolders();
 
             tabControl1_SelectedIndexChanged(this, new EventArgs());
         }
 
-/*
-        delegate void OnLogChangedDelegate(object source, FileSystemEventArgs e); //Safe Thread
-        private void OnLogChanged(object source, FileSystemEventArgs e) //Safe Thread
-        {
-            if (e.Name == Util.LOG_FILE)
-            {
-                if (richTextBoxLog.InvokeRequired)
+        /*
+                delegate void OnLogChangedDelegate(object source, FileSystemEventArgs e); //Safe Thread
+                private void OnLogChanged(object source, FileSystemEventArgs e) //Safe Thread
                 {
-                    OnLogChangedDelegate d = new OnLogChangedDelegate(OnLogChanged);
-                    try
+                    if (e.Name == Util.LOG_FILE)
                     {
-                        this.Invoke(d, new object[] { source, e });
-                    } catch{}                    
-                } else
-                {
-                    richTextBoxLog.Suspend();
-                    richTextBoxLog.Clear();
-                    richTextBoxLog.Text = File.ReadAllText(Util.LOG_FILE);
-                    richTextBoxLog.SelectionStart = richTextBoxLog.Text.Length;
-                    richTextBoxLog.ScrollToCaret();
-                    richTextBoxLog.Resume();
+                        if (richTextBoxLog.InvokeRequired)
+                        {
+                            OnLogChangedDelegate d = new OnLogChangedDelegate(OnLogChanged);
+                            try
+                            {
+                                this.Invoke(d, new object[] { source, e });
+                            } catch{}                    
+                        } else
+                        {
+                            richTextBoxLog.Suspend();
+                            richTextBoxLog.Clear();
+                            richTextBoxLog.Text = File.ReadAllText(Util.LOG_FILE);
+                            richTextBoxLog.SelectionStart = richTextBoxLog.Text.Length;
+                            richTextBoxLog.ScrollToCaret();
+                            richTextBoxLog.Resume();
+                        }
+                    }
                 }
+        */
+
+        private void SaveEnvironment()
+        {
+            File.WriteAllBytes("confXCI.bin", OLVLocalFiles.SaveState());
+            File.WriteAllBytes("confSCN.bin", OLVSceneList.SaveState());
+            File.WriteAllBytes("confSDC.bin", OLV_SDCard.SaveState());
+            File.WriteAllBytes("confNSP.bin", OLVEshop.SaveState());
+
+            if (WindowState == FormWindowState.Maximized)
+            {
+                Properties.Settings.Default.Location = RestoreBounds.Location;
+                Properties.Settings.Default.Size = RestoreBounds.Size;
+                Properties.Settings.Default.Maximised = true;
+                Properties.Settings.Default.Minimised = false;
             }
+            else if (WindowState == FormWindowState.Normal)
+            {
+                Properties.Settings.Default.Location = Location;
+                Properties.Settings.Default.Size = Size;
+                Properties.Settings.Default.Maximised = false;
+                Properties.Settings.Default.Minimised = false;
+            }
+            else
+            {
+                Properties.Settings.Default.Location = RestoreBounds.Location;
+                Properties.Settings.Default.Size = RestoreBounds.Size;
+                Properties.Settings.Default.Maximised = false;
+                Properties.Settings.Default.Minimised = true;
+            }
+            Properties.Settings.Default.Save();
         }
-*/
 
         private void ScanFolders()
         {
@@ -3202,6 +3258,32 @@ namespace Switch_Backup_Manager
                 {
                     Util.logger.Error("Could not delete log file. " + ex.StackTrace);
                 }                
+            }
+        }
+
+        private void FrmMain_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            SaveEnvironment();
+        }
+
+        private void FrmMain_Load(object sender, EventArgs e)
+        {
+            if (Properties.Settings.Default.Maximised)
+            {
+                WindowState = FormWindowState.Maximized;
+                Location = Properties.Settings.Default.Location;
+                Size = Properties.Settings.Default.Size;
+            }
+            else if (Properties.Settings.Default.Minimised)
+            {
+                WindowState = FormWindowState.Minimized;
+                Location = Properties.Settings.Default.Location;
+                Size = Properties.Settings.Default.Size;
+            }
+            else
+            {
+                Location = Properties.Settings.Default.Location;
+                Size = Properties.Settings.Default.Size;
             }
         }
     }

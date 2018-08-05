@@ -19,8 +19,8 @@ namespace Switch_Backup_Manager
 {
     internal static class Util
     {
-        public const string VERSION = "1.0.8";   //Actual application version
-        public const string MIN_DB_Version = "1.0.8"; //This is the minimum version of the DB that can work
+        public const string VERSION = "1.1.0";   //Actual application version
+        public const string MIN_DB_Version = "1.0.9"; //This is the minimum version of the DB that can work
 
         public const string INI_FILE = "sbm.ini";
         public static string TITLE_KEYS = "titlekeys.txt";
@@ -68,7 +68,7 @@ namespace Switch_Backup_Manager
             "???"
         };
 
-        public static string[] AutoRenamingTags = new string[10]
+        public static string[] AutoRenamingTags = new string[11]
         {
             "{gamename}",
             "{titleid}",
@@ -79,7 +79,8 @@ namespace Switch_Backup_Manager
             "{region}",
             "{firmware}",
             "{languages}",
-            "{sceneid}"
+            "{sceneid}",
+            "{nspversion}"
         };
 
         private static Image[] Icons = new Image[16];
@@ -89,11 +90,6 @@ namespace Switch_Backup_Manager
         public static XDocument XML_Local;
         public static XDocument XML_NSWDB;
         public static XDocument XML_NSP_Local;
-
-        private static void SaveEnvironment()
-        {
-
-        }
 
         private static List<string> ListDirectoriesToUpdate()
         {
@@ -257,6 +253,7 @@ namespace Switch_Backup_Manager
                 result = result.Replace(AutoRenamingTags[7], data.Firmware);
                 result = result.Replace(AutoRenamingTags[8], data.Languages_resumed);
                 result = result.Replace(AutoRenamingTags[9], Convert.ToString(data.IdScene));
+                result = result.Replace(AutoRenamingTags[10], data.Version);
 
                 result += Path.GetExtension(data.FilePath);
             }

@@ -1411,7 +1411,11 @@ namespace Switch_Backup_Manager
                         //0100000000000816,ALL,v65796 v131162 v196628 v262164 v201327002 v201392178 v201457684 v268435656 v268501002 v269484082 v335544750 v335609886 v335675432 v336592976,2.0.0 2.1.0 2.2.0 2.3.0 3.0.0 3.0.1 3.0.2 4.0.0 4.0.1 4.1.0 5.0.0 5.0.1 5.0.2 5.1.0
                         data.Firmware = "";
                         long Firmware = Convert.ToInt64(xml.Element("ContentMeta").Element("RequiredSystemVersion").Value) % 0x100000000;
-                        if (Firmware <= 450)
+                        if (Firmware == 0)
+                        {
+                            data.Firmware = "0";
+                        }
+                        else if (Firmware <= 450)
                         {
                             data.Firmware = "1.0.0";
                         }
@@ -1537,7 +1541,7 @@ namespace Switch_Backup_Manager
                             if (!found)
                             {
                                 data_tmp = null;
-                                Dictionary<Tuple<string, string>, FileData> SceneList = Util.LoadXMLToFileDataDictionary(XML_NSWDB);
+                                Dictionary<Tuple<string, string>, FileData> SceneList = Util.LoadSceneXMLToFileDataDictionary(XML_NSWDB);
                                 SceneList.TryGetValue(new Tuple<string, string>(data.TitleIDBaseGame, ""), out data_tmp); //Try to find on Scene List
                                 if (data_tmp != null)
                                 {

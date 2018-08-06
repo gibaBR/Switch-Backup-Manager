@@ -1634,6 +1634,7 @@ namespace Switch_Backup_Manager
 
         private void backgroundWorkerLoadSDCardFiles_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
+            //Move UI operations here as it's unsafe to do this on worker thread
             OLV_SDCard.SetObjects(SDCardList.Values);
 
             List<Tuple<string, string>> keys = new List<Tuple<string, string>>(SDCardList.Keys);

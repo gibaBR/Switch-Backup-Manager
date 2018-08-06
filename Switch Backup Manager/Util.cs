@@ -188,7 +188,7 @@ namespace Switch_Backup_Manager
             }
         }
 
-        internal static void UpdateFilesInfo(Dictionary<string, FileData> filesList, string source)
+        internal static void UpdateFilesInfo(Dictionary<Tuple<string, string>, FileData> filesList, string source)
         {
             throw new NotImplementedException();
         }
@@ -1176,9 +1176,9 @@ namespace Switch_Backup_Manager
         }
 
         //0: FilesList (Dictionary), 1: DestinyPath (string), 2: Operation("copy","move")
-        public static bool CopyFilesOnDictionaryToFolder(Dictionary<string, FileData> dictionary, string destiny, string operation)
+        public static bool CopyFilesOnDictionaryToFolder(Dictionary<Tuple<string, string>, FileData> dictionary, string destiny, string operation)
         {
-            Dictionary<string, FileData> dictionary_ = CloneDictionary(dictionary);
+            Dictionary<Tuple<string, string>, FileData> dictionary_ = CloneDictionary(dictionary);
             bool result = true;
 
             int filesCount = dictionary_.Count();
@@ -2485,11 +2485,11 @@ namespace Switch_Backup_Manager
             return result;
         }
 
-        public static Dictionary<string, FileData> CloneDictionary(Dictionary<string, FileData> dictionary)
+        public static Dictionary<Tuple<string, string>, FileData> CloneDictionary(Dictionary<Tuple<string, string>, FileData> dictionary)
         {
-            Dictionary<string, FileData> result = new Dictionary<string, FileData>();
+            Dictionary<Tuple<string, string>, FileData> result = new Dictionary<Tuple<string, string>, FileData>();
 
-            foreach(KeyValuePair<string, FileData> entry in dictionary)
+            foreach(KeyValuePair<Tuple<string, string>, FileData> entry in dictionary)
             {
                 result.Add(entry.Key, entry.Value);
             }

@@ -229,6 +229,7 @@
             this.olvColumnSerialScene = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnFirmwareScene = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnCardTypeScene = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.olvColumnSceneID = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.contextMenuStripScene = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.copyInfoToClipboardToolStripMenuItem3 = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip3 = new System.Windows.Forms.MenuStrip();
@@ -1251,7 +1252,7 @@
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(1576, 593);
+            this.tabPage2.Size = new System.Drawing.Size(1574, 591);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "SD card";
             this.tabPage2.UseVisualStyleBackColor = true;
@@ -1333,7 +1334,7 @@
             this.OLV_SDCard.Location = new System.Drawing.Point(3, 55);
             this.OLV_SDCard.Name = "OLV_SDCard";
             this.OLV_SDCard.ShowGroups = false;
-            this.OLV_SDCard.Size = new System.Drawing.Size(1570, 535);
+            this.OLV_SDCard.Size = new System.Drawing.Size(1568, 533);
             this.OLV_SDCard.TabIndex = 6;
             this.OLV_SDCard.UseCellFormatEvents = true;
             this.OLV_SDCard.UseCompatibleStateImageBehavior = false;
@@ -1516,7 +1517,7 @@
             this.panel5.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel5.Location = new System.Drawing.Point(3, 27);
             this.panel5.Name = "panel5";
-            this.panel5.Size = new System.Drawing.Size(1570, 28);
+            this.panel5.Size = new System.Drawing.Size(1568, 28);
             this.panel5.TabIndex = 5;
             // 
             // lblSpaceAvailabeOnSD
@@ -1562,7 +1563,7 @@
             this.toolStripMenuItem39});
             this.menuSDFiles.Location = new System.Drawing.Point(3, 3);
             this.menuSDFiles.Name = "menuSDFiles";
-            this.menuSDFiles.Size = new System.Drawing.Size(1570, 24);
+            this.menuSDFiles.Size = new System.Drawing.Size(1568, 24);
             this.menuSDFiles.TabIndex = 4;
             // 
             // toolStripMenuItem4
@@ -1960,7 +1961,7 @@
             this.tabPage3.Location = new System.Drawing.Point(4, 22);
             this.tabPage3.Name = "tabPage3";
             this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage3.Size = new System.Drawing.Size(1576, 593);
+            this.tabPage3.Size = new System.Drawing.Size(1574, 591);
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Text = "Scene releases";
             this.tabPage3.UseVisualStyleBackColor = true;
@@ -1976,7 +1977,7 @@
             this.panel4.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel4.Location = new System.Drawing.Point(3, 3);
             this.panel4.Name = "panel4";
-            this.panel4.Size = new System.Drawing.Size(1570, 587);
+            this.panel4.Size = new System.Drawing.Size(1568, 585);
             this.panel4.TabIndex = 0;
             // 
             // btnClearFilterScene
@@ -2029,6 +2030,7 @@
             this.OLVSceneList.AllColumns.Add(this.olvColumnSerialScene);
             this.OLVSceneList.AllColumns.Add(this.olvColumnFirmwareScene);
             this.OLVSceneList.AllColumns.Add(this.olvColumnCardTypeScene);
+            this.OLVSceneList.AllColumns.Add(this.olvColumnSceneID);
             this.OLVSceneList.CellEditUseWholeCell = false;
             this.OLVSceneList.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.olvColumnTitleIDScene,
@@ -2041,7 +2043,8 @@
             this.olvColumnCartSizeScene,
             this.olvColumnSerialScene,
             this.olvColumnFirmwareScene,
-            this.olvColumnCardTypeScene});
+            this.olvColumnCardTypeScene,
+            this.olvColumnSceneID});
             this.OLVSceneList.ContextMenuStrip = this.contextMenuStripScene;
             this.OLVSceneList.Cursor = System.Windows.Forms.Cursors.Default;
             this.OLVSceneList.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -2050,7 +2053,7 @@
             this.OLVSceneList.Location = new System.Drawing.Point(0, 24);
             this.OLVSceneList.Name = "OLVSceneList";
             this.OLVSceneList.ShowGroups = false;
-            this.OLVSceneList.Size = new System.Drawing.Size(1570, 563);
+            this.OLVSceneList.Size = new System.Drawing.Size(1568, 561);
             this.OLVSceneList.TabIndex = 6;
             this.OLVSceneList.UseCellFormatEvents = true;
             this.OLVSceneList.UseCompatibleStateImageBehavior = false;
@@ -2068,12 +2071,14 @@
             // olvColumnGameNameScene
             // 
             this.olvColumnGameNameScene.AspectName = "GameName";
+            this.olvColumnGameNameScene.DisplayIndex = 2;
             this.olvColumnGameNameScene.Text = "Game title";
             this.olvColumnGameNameScene.Width = 600;
             // 
             // sizeColumnROMSizeScene
             // 
             this.sizeColumnROMSizeScene.AspectName = "ROMSizeBytes";
+            this.sizeColumnROMSizeScene.DisplayIndex = 3;
             this.sizeColumnROMSizeScene.Text = "Trimmed size";
             this.sizeColumnROMSizeScene.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.sizeColumnROMSizeScene.Width = 92;
@@ -2081,12 +2086,14 @@
             // olvColumnDeveloperScene
             // 
             this.olvColumnDeveloperScene.AspectName = "Developer";
+            this.olvColumnDeveloperScene.DisplayIndex = 4;
             this.olvColumnDeveloperScene.Text = "Developer";
             this.olvColumnDeveloperScene.Width = 163;
             // 
             // columnSceneRegionScene
             // 
             this.columnSceneRegionScene.AspectName = "Region";
+            this.columnSceneRegionScene.DisplayIndex = 5;
             this.columnSceneRegionScene.Text = "Region";
             this.columnSceneRegionScene.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.columnSceneRegionScene.Width = 47;
@@ -2094,18 +2101,21 @@
             // olvColumnLanguagesScene
             // 
             this.olvColumnLanguagesScene.AspectName = "Languages";
+            this.olvColumnLanguagesScene.DisplayIndex = 6;
             this.olvColumnLanguagesScene.Text = "Languages";
             this.olvColumnLanguagesScene.Width = 116;
             // 
             // olvColumnGroupScene
             // 
             this.olvColumnGroupScene.AspectName = "Group";
+            this.olvColumnGroupScene.DisplayIndex = 7;
             this.olvColumnGroupScene.Text = "Release group";
             this.olvColumnGroupScene.Width = 94;
             // 
             // olvColumnCartSizeScene
             // 
             this.olvColumnCartSizeScene.AspectName = "CartSize";
+            this.olvColumnCartSizeScene.DisplayIndex = 8;
             this.olvColumnCartSizeScene.Text = "Cart size";
             this.olvColumnCartSizeScene.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.olvColumnCartSizeScene.Width = 74;
@@ -2113,6 +2123,7 @@
             // olvColumnSerialScene
             // 
             this.olvColumnSerialScene.AspectName = "Serial";
+            this.olvColumnSerialScene.DisplayIndex = 9;
             this.olvColumnSerialScene.Text = "Serial number";
             this.olvColumnSerialScene.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.olvColumnSerialScene.Width = 83;
@@ -2120,6 +2131,7 @@
             // olvColumnFirmwareScene
             // 
             this.olvColumnFirmwareScene.AspectName = "Firmware";
+            this.olvColumnFirmwareScene.DisplayIndex = 10;
             this.olvColumnFirmwareScene.Text = "Firmware";
             this.olvColumnFirmwareScene.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.olvColumnFirmwareScene.Width = 93;
@@ -2127,9 +2139,17 @@
             // olvColumnCardTypeScene
             // 
             this.olvColumnCardTypeScene.AspectName = "Cardtype";
+            this.olvColumnCardTypeScene.DisplayIndex = 11;
             this.olvColumnCardTypeScene.Text = "Card type";
             this.olvColumnCardTypeScene.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.olvColumnCardTypeScene.Width = 57;
+            // 
+            // olvColumnSceneID
+            // 
+            this.olvColumnSceneID.AspectName = "IdScene";
+            this.olvColumnSceneID.DisplayIndex = 1;
+            this.olvColumnSceneID.Text = "ID";
+            this.olvColumnSceneID.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // contextMenuStripScene
             // 
@@ -2158,7 +2178,7 @@
             this.toolStripMenuItem85});
             this.menuStrip3.Location = new System.Drawing.Point(0, 0);
             this.menuStrip3.Name = "menuStrip3";
-            this.menuStrip3.Size = new System.Drawing.Size(1570, 24);
+            this.menuStrip3.Size = new System.Drawing.Size(1568, 24);
             this.menuStrip3.TabIndex = 5;
             this.menuStrip3.Text = "menuStrip3";
             // 
@@ -2545,7 +2565,7 @@
             this.tabPage4.Location = new System.Drawing.Point(4, 22);
             this.tabPage4.Name = "tabPage4";
             this.tabPage4.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage4.Size = new System.Drawing.Size(1576, 593);
+            this.tabPage4.Size = new System.Drawing.Size(1574, 591);
             this.tabPage4.TabIndex = 3;
             this.tabPage4.Text = "E-shop files";
             this.tabPage4.UseVisualStyleBackColor = true;
@@ -2621,7 +2641,7 @@
             this.OLVEshop.Location = new System.Drawing.Point(3, 27);
             this.OLVEshop.Name = "OLVEshop";
             this.OLVEshop.ShowGroups = false;
-            this.OLVEshop.Size = new System.Drawing.Size(1570, 563);
+            this.OLVEshop.Size = new System.Drawing.Size(1568, 561);
             this.OLVEshop.TabIndex = 2;
             this.OLVEshop.UseCellFormatEvents = true;
             this.OLVEshop.UseCompatibleStateImageBehavior = false;
@@ -2819,7 +2839,7 @@
             this.toolStripMenuItem24});
             this.menuEShop.Location = new System.Drawing.Point(3, 3);
             this.menuEShop.Name = "menuEShop";
-            this.menuEShop.Size = new System.Drawing.Size(1570, 24);
+            this.menuEShop.Size = new System.Drawing.Size(1568, 24);
             this.menuEShop.TabIndex = 0;
             this.menuEShop.Text = "menuStrip2";
             // 
@@ -3099,7 +3119,7 @@
             this.tabPage5.Location = new System.Drawing.Point(4, 22);
             this.tabPage5.Name = "tabPage5";
             this.tabPage5.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage5.Size = new System.Drawing.Size(1576, 593);
+            this.tabPage5.Size = new System.Drawing.Size(1574, 591);
             this.tabPage5.TabIndex = 4;
             this.tabPage5.Text = "Log";
             this.tabPage5.UseVisualStyleBackColor = true;
@@ -3110,7 +3130,7 @@
             this.panel6.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel6.Location = new System.Drawing.Point(3, 3);
             this.panel6.Name = "panel6";
-            this.panel6.Size = new System.Drawing.Size(1570, 561);
+            this.panel6.Size = new System.Drawing.Size(1568, 559);
             this.panel6.TabIndex = 2;
             // 
             // richTextBoxLog
@@ -3120,7 +3140,7 @@
             this.richTextBoxLog.Location = new System.Drawing.Point(0, 0);
             this.richTextBoxLog.Name = "richTextBoxLog";
             this.richTextBoxLog.ReadOnly = true;
-            this.richTextBoxLog.Size = new System.Drawing.Size(1570, 561);
+            this.richTextBoxLog.Size = new System.Drawing.Size(1568, 559);
             this.richTextBoxLog.TabIndex = 3;
             this.richTextBoxLog.Text = "";
             this.richTextBoxLog.TextChanged += new System.EventHandler(this.richTextBoxLog_TextChanged);
@@ -3129,9 +3149,9 @@
             // 
             this.panel7.Controls.Add(this.btnClearLogFile);
             this.panel7.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel7.Location = new System.Drawing.Point(3, 564);
+            this.panel7.Location = new System.Drawing.Point(3, 562);
             this.panel7.Name = "panel7";
-            this.panel7.Size = new System.Drawing.Size(1570, 26);
+            this.panel7.Size = new System.Drawing.Size(1568, 26);
             this.panel7.TabIndex = 1;
             // 
             // btnClearLogFile
@@ -3315,6 +3335,8 @@
             this.Name = "FrmMain";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Switch Backup Manager";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FrmMain_FormClosing);
+            this.Load += new System.EventHandler(this.FrmMain_Load);
             this.splitContainer1.Panel1.ResumeLayout(false);
             this.splitContainer1.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
@@ -3715,6 +3737,7 @@
         private BrightIdeasSoftware.OLVColumn olvColumnFirmwareLocal;
         private BrightIdeasSoftware.OLVColumn olvColumnFirmwareSD;
         private BrightIdeasSoftware.OLVColumn olvColumnFirmwareEShop;
+        private BrightIdeasSoftware.OLVColumn olvColumnSceneID;
     }
 }
 

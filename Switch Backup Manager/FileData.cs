@@ -11,7 +11,35 @@ namespace Switch_Backup_Manager
     {
         public FileData () //Default constructor
         {
+            this.FilePath = "";
+            this.FileName = "";
+            this.FileNameWithExt = "";
+            this.ROMSize = "";
+            this.ROMSizeBytes = 0;
+            this.UsedSpace = "";
+            this.UsedSpaceBytes = 0;
+            this.TitleID = "";
+            this.TitleIDBaseGame = "";
+            this.GameName = "";
+            this.Developer = "";
+            this.GameRevision = "";
+            this.ProductCode = "";
+            this.SDKVersion = "";
+            this.CartSize = "";
+            this.MasterKeyRevision = "";
+            this.Region_Icon = new Dictionary<string, string>();
+            this.Languages = new List<string>();
+            this.IsTrimmed = false;
+            this.Group = "";
+            this.Serial = "";
+            this.Firmware = "";
+            this.Cardtype = "";
+            this.Region = "";
+            this.IsSplit = false;
+            this.DistributionType = "";
             this.IdScene = 0;
+            this.ContentType = "";
+            this.Version = "";
         }
 
         public string FilePath { get; set; }

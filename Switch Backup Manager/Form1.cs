@@ -80,15 +80,6 @@ namespace Switch_Backup_Manager
             }
             updateLog = true;
 
-            /*
-            var watch = new FileSystemWatcher();
-                        watch.Path = AppDomain.CurrentDomain.BaseDirectory;
-            watch.Filter = Util.LOG_FILE;
-            watch.NotifyFilter = NotifyFilters.LastWrite; //more options
-            watch.Changed += new FileSystemEventHandler(OnLogChanged);
-            watch.EnableRaisingEvents = true;
-            */
-
             LocalFilesList = new Dictionary<Tuple<string, string>, FileData>();
             LocalNSPFilesList = new Dictionary<Tuple<string, string>, FileData>();
             SceneReleasesList = new Dictionary<Tuple<string, string>, FileData>();
@@ -125,41 +116,95 @@ namespace Switch_Backup_Manager
 
             SetupOLVs();
 
-            //Util.UpdateDirectories();
-
             UpdateSceneReleasesList();
             UpdateLocalGamesList();
             UpdateLocalNSPGamesList();
+
+            try
+            {
+                if (File.Exists("confXCI.bin"))
+                {
+                    OLVLocalFiles.RestoreState(File.ReadAllBytes("confXCI.bin"));
+                }
+                if (File.Exists("confSCN.bin"))
+                {
+                    OLVSceneList.RestoreState(File.ReadAllBytes("confSCN.bin"));
+                }
+                if (File.Exists("confSDC.bin"))
+                {
+                    OLV_SDCard.RestoreState(File.ReadAllBytes("confSDC.bin"));
+                }
+                if (File.Exists("confNSP.bin"))
+                {
+                    OLVEshop.RestoreState(File.ReadAllBytes("confNSP.bin"));
+                }                               
+            }
+            catch (Exception e)
+            {
+                Util.logger.Warning("Could not recover environment settings.");
+            }
+
             ScanFolders();
 
             tabControl1_SelectedIndexChanged(this, new EventArgs());
         }
 
-/*
-        delegate void OnLogChangedDelegate(object source, FileSystemEventArgs e); //Safe Thread
-        private void OnLogChanged(object source, FileSystemEventArgs e) //Safe Thread
-        {
-            if (e.Name == Util.LOG_FILE)
-            {
-                if (richTextBoxLog.InvokeRequired)
+        /*
+                delegate void OnLogChangedDelegate(object source, FileSystemEventArgs e); //Safe Thread
+                private void OnLogChanged(object source, FileSystemEventArgs e) //Safe Thread
                 {
-                    OnLogChangedDelegate d = new OnLogChangedDelegate(OnLogChanged);
-                    try
+                    if (e.Name == Util.LOG_FILE)
                     {
-                        this.Invoke(d, new object[] { source, e });
-                    } catch{}                    
-                } else
-                {
-                    richTextBoxLog.Suspend();
-                    richTextBoxLog.Clear();
-                    richTextBoxLog.Text = File.ReadAllText(Util.LOG_FILE);
-                    richTextBoxLog.SelectionStart = richTextBoxLog.Text.Length;
-                    richTextBoxLog.ScrollToCaret();
-                    richTextBoxLog.Resume();
+                        if (richTextBoxLog.InvokeRequired)
+                        {
+                            OnLogChangedDelegate d = new OnLogChangedDelegate(OnLogChanged);
+                            try
+                            {
+                                this.Invoke(d, new object[] { source, e });
+                            } catch{}                    
+                        } else
+                        {
+                            richTextBoxLog.Suspend();
+                            richTextBoxLog.Clear();
+                            richTextBoxLog.Text = File.ReadAllText(Util.LOG_FILE);
+                            richTextBoxLog.SelectionStart = richTextBoxLog.Text.Length;
+                            richTextBoxLog.ScrollToCaret();
+                            richTextBoxLog.Resume();
+                        }
+                    }
                 }
+        */
+
+        private void SaveEnvironment()
+        {
+            File.WriteAllBytes("confXCI.bin", OLVLocalFiles.SaveState());
+            File.WriteAllBytes("confSCN.bin", OLVSceneList.SaveState());
+            File.WriteAllBytes("confSDC.bin", OLV_SDCard.SaveState());
+            File.WriteAllBytes("confNSP.bin", OLVEshop.SaveState());
+
+            if (WindowState == FormWindowState.Maximized)
+            {
+                Properties.Settings.Default.Location = RestoreBounds.Location;
+                Properties.Settings.Default.Size = RestoreBounds.Size;
+                Properties.Settings.Default.Maximised = true;
+                Properties.Settings.Default.Minimised = false;
             }
+            else if (WindowState == FormWindowState.Normal)
+            {
+                Properties.Settings.Default.Location = Location;
+                Properties.Settings.Default.Size = Size;
+                Properties.Settings.Default.Maximised = false;
+                Properties.Settings.Default.Minimised = false;
+            }
+            else
+            {
+                Properties.Settings.Default.Location = RestoreBounds.Location;
+                Properties.Settings.Default.Size = RestoreBounds.Size;
+                Properties.Settings.Default.Maximised = false;
+                Properties.Settings.Default.Minimised = true;
+            }
+            Properties.Settings.Default.Save();
         }
-*/
 
         private void ScanFolders()
         {
@@ -185,7 +230,7 @@ namespace Switch_Backup_Manager
             noneToolStripMenuItem1.Checked = true;
 
             OLVEshop.Sort(olvColumnGameNameLocal, SortOrder.Ascending);
-            
+
             OLVLocalFiles.SetObjects(LocalFilesList.Values);
             OLVSceneList.SetObjects(SceneReleasesList.Values);
             OLVEshop.SetObjects(LocalNSPFilesList.Values);
@@ -200,15 +245,15 @@ namespace Switch_Backup_Manager
 
             olvColumnLanguagesLocal.AspectToStringConverter = delegate (object x) {
                 string result = "";
-                foreach (string language in (List<string>) x)
+                foreach (string language in (List<string>)x)
                 {
                     result += language + ", ";
                 }
                 if (result.Trim().Length > 1)
                 {
                     result = result.Remove(result.Length - 2);
-                }                
-                return result; 
+                }
+                return result;
             };
 
             olvColumnLanguagesEShop.AspectToStringConverter = delegate (object x) {
@@ -247,6 +292,60 @@ namespace Switch_Backup_Manager
                 {
                     result = result.Remove(result.Length - 2);
                 }
+                return result;
+            };
+
+            olvColumnGameNameEShop.AspectGetter = delegate (object x)
+            {
+                string result = "";
+                FileData data = (FileData)x;
+
+                if (data != null)
+                {
+                    result = data.GameName;
+
+                    switch (data.ContentType)
+                    {
+                        case "Application":
+
+                            break;
+                        case "Patch":
+                            result += " [UPD]";
+                            break;
+                        case "AddOnContent":
+                            result += " [DLC]";
+                            break;
+                    }
+                    result += " [" + data.Version + "]";
+                }
+
+                return result;
+            };
+
+            olvColumnGameNameSD.AspectGetter = delegate (object x)
+            {
+                string result = "";
+                FileData data = (FileData)x;
+
+                if (data != null)
+                {
+                    result = data.GameName;
+
+                    switch (data.ContentType)
+                    {
+                        case "Application":
+
+                            break;
+                        case "Patch":
+                            result += " [UPD]";
+                            break;
+                        case "AddOnContent":
+                            result += " [DLC]";
+                            break;
+                    }
+                    result += " [" + data.Version + "]";
+                }
+
                 return result;
             };
 
@@ -290,6 +389,7 @@ namespace Switch_Backup_Manager
 
             this.olvColumnIsTrimmedLocal.AspectToStringConverter = delegate (object x) { return ((bool)x == true) ? "Yes" : "No"; };
             this.olvColumnIsTrimmedSD.AspectToStringConverter = delegate (object x) { return ((bool)x == true) ? "Yes" : "No"; };
+            this.olvColumnSceneID.AspectToStringConverter = delegate (object x) { return string.Format("{0:D4}", (int)x); };
         }
 
         public void UpdateSceneReleasesList()
@@ -2341,6 +2441,15 @@ namespace Switch_Backup_Manager
                 if (!data.IsTrimmed)
                     e.SubItem.BackColor = Color.IndianRed;
             }
+
+            if (e.ColumnIndex == this.olvColumnGameNameSD.Index)
+            {
+                FileData data = (FileData)e.Model;
+                if (data.ContentType == "AddOnContent") //DLC
+                    e.SubItem.ForeColor = Color.ForestGreen;
+                if (data.ContentType == "Patch") //DLC
+                    e.SubItem.ForeColor = Color.OrangeRed;
+            }
         }
 
         private void toolStripMenuItemRenameAllFilesOnSDCard_Click(object sender, EventArgs e)
@@ -2593,6 +2702,9 @@ namespace Switch_Backup_Manager
             {
                 case "Title ID":
                     filterText.Columns = new[] { olvColumnTitleIDScene };
+                    break;
+                case "ID":
+                    filterText.Columns = new[] { olvColumnSceneID };
                     break;
                 case "Game title":
                     filterText.Columns = new[] { olvColumnGameNameScene };
@@ -3187,6 +3299,32 @@ namespace Switch_Backup_Manager
                 {
                     Util.logger.Error("Could not delete log file. " + ex.StackTrace);
                 }                
+            }
+        }
+
+        private void FrmMain_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            SaveEnvironment();
+        }
+
+        private void FrmMain_Load(object sender, EventArgs e)
+        {
+            if (Properties.Settings.Default.Maximised)
+            {
+                WindowState = FormWindowState.Maximized;
+                Location = Properties.Settings.Default.Location;
+                Size = Properties.Settings.Default.Size;
+            }
+            else if (Properties.Settings.Default.Minimised)
+            {
+                WindowState = FormWindowState.Minimized;
+                Location = Properties.Settings.Default.Location;
+                Size = Properties.Settings.Default.Size;
+            }
+            else
+            {
+                Location = Properties.Settings.Default.Location;
+                Size = Properties.Settings.Default.Size;
             }
         }
     }

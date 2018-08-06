@@ -16,21 +16,22 @@ namespace Switch_Backup_Manager
 {
     public partial class FrmMain : Form
     {
-        private Dictionary<string, FileData> LocalFilesList;
+        internal static Dictionary<string, FileData> LocalFilesList;
         private Dictionary<string, FileData> LocalFilesListSelectedItems;
-        private Dictionary<string, FileData> LocalNSPFilesList;
+        internal static Dictionary<string, FileData> LocalNSPFilesList;
         private Dictionary<string, FileData> LocalNSPFilesListSelectedItems;
-        private Dictionary<string, FileData> SceneReleasesList;
+        internal static Dictionary<string, FileData> SceneReleasesList;
         private Dictionary<string, FileData> SceneReleasesSelectedItems;
         private Dictionary<string, FileData> SDCardList;
         private Dictionary<string, FileData> SDCardListSelectedItems;
 
         private bool updateCbxRemoveableFiles;
         private bool updateFileListAfterMove;
+        private bool updateLog;
         private string clipboardInfoEShop;
         private string clipboardInfoLocal;
         private string clipboardInfoSD;
-        private string clipboardInfoScene;
+        private string clipboardInfoScene;        
 
         //To update Statusbar wheile adding files
         public static int progressPercent = 0;
@@ -40,12 +41,43 @@ namespace Switch_Backup_Manager
         {
             InitializeComponent();
 
+            this.Text = "Switch Backup Manager v"+Util.VERSION;
             //Need to think a way of auto resizing columns based on screen resolution to ocupy all space available
             //this.Width = Screen.PrimaryScreen.Bounds.Width;
 
             lblSpaceAvailabeOnSD.Visible = false;
 
-            Util.LoadSettings();
+            Util.LoadSettings(ref this.richTextBoxLog);
+
+            updateLog = false;
+            if (File.Exists(Util.LOG_FILE))
+            {
+                string[] lines = File.ReadAllLines(Util.LOG_FILE);
+                richTextBoxLog.Suspend();
+                foreach (string line in lines)
+                {
+                    Color color = richTextBoxLog.ForeColor;
+
+                    if (line.Contains("[DEBUG]"))
+                    {
+                        color = Color.DarkGreen;
+                    }
+                    else if (line.Contains("[ERROR]"))
+                    {
+                        color = Color.DarkRed;
+                    }
+                    else if (line.Contains("[WARNING]"))
+                    {
+                        color = Color.IndianRed;
+                    }                    
+                    richTextBoxLog.AppendText(line+"\n", color);
+                }                
+                richTextBoxLog.SelectionStart = richTextBoxLog.Text.Length;
+                richTextBoxLog.ScrollToCaret();
+                richTextBoxLog.Resume();
+            }
+            updateLog = true;
+
             LocalFilesList = new Dictionary<string, FileData>();
             LocalNSPFilesList = new Dictionary<string, FileData>();
             SceneReleasesList = new Dictionary<string, FileData>();
@@ -86,7 +118,106 @@ namespace Switch_Backup_Manager
             UpdateLocalGamesList();
             UpdateLocalNSPGamesList();
 
+            try
+            {
+                if (File.Exists("confXCI.bin"))
+                {
+                    OLVLocalFiles.RestoreState(File.ReadAllBytes("confXCI.bin"));
+                }
+                if (File.Exists("confSCN.bin"))
+                {
+                    OLVSceneList.RestoreState(File.ReadAllBytes("confSCN.bin"));
+                }
+                if (File.Exists("confSDC.bin"))
+                {
+                    OLV_SDCard.RestoreState(File.ReadAllBytes("confSDC.bin"));
+                }
+                if (File.Exists("confNSP.bin"))
+                {
+                    OLVEshop.RestoreState(File.ReadAllBytes("confNSP.bin"));
+                }                               
+            }
+            catch (Exception e)
+            {
+                Util.logger.Warning("Could not recover environment settings.");
+            }
+
+            ScanFolders();
+
             tabControl1_SelectedIndexChanged(this, new EventArgs());
+        }
+
+        /*
+                delegate void OnLogChangedDelegate(object source, FileSystemEventArgs e); //Safe Thread
+                private void OnLogChanged(object source, FileSystemEventArgs e) //Safe Thread
+                {
+                    if (e.Name == Util.LOG_FILE)
+                    {
+                        if (richTextBoxLog.InvokeRequired)
+                        {
+                            OnLogChangedDelegate d = new OnLogChangedDelegate(OnLogChanged);
+                            try
+                            {
+                                this.Invoke(d, new object[] { source, e });
+                            } catch{}                    
+                        } else
+                        {
+                            richTextBoxLog.Suspend();
+                            richTextBoxLog.Clear();
+                            richTextBoxLog.Text = File.ReadAllText(Util.LOG_FILE);
+                            richTextBoxLog.SelectionStart = richTextBoxLog.Text.Length;
+                            richTextBoxLog.ScrollToCaret();
+                            richTextBoxLog.Resume();
+                        }
+                    }
+                }
+        */
+
+        private void SaveEnvironment()
+        {
+            File.WriteAllBytes("confXCI.bin", OLVLocalFiles.SaveState());
+            File.WriteAllBytes("confSCN.bin", OLVSceneList.SaveState());
+            File.WriteAllBytes("confSDC.bin", OLV_SDCard.SaveState());
+            File.WriteAllBytes("confNSP.bin", OLVEshop.SaveState());
+
+            if (WindowState == FormWindowState.Maximized)
+            {
+                Properties.Settings.Default.Location = RestoreBounds.Location;
+                Properties.Settings.Default.Size = RestoreBounds.Size;
+                Properties.Settings.Default.Maximised = true;
+                Properties.Settings.Default.Minimised = false;
+            }
+            else if (WindowState == FormWindowState.Normal)
+            {
+                Properties.Settings.Default.Location = Location;
+                Properties.Settings.Default.Size = Size;
+                Properties.Settings.Default.Maximised = false;
+                Properties.Settings.Default.Minimised = false;
+            }
+            else
+            {
+                Properties.Settings.Default.Location = RestoreBounds.Location;
+                Properties.Settings.Default.Size = RestoreBounds.Size;
+                Properties.Settings.Default.Maximised = false;
+                Properties.Settings.Default.Minimised = true;
+            }
+            Properties.Settings.Default.Save();
+        }
+
+        private void ScanFolders()
+        {
+            if (!backgroundWorkerScanNewFiles.IsBusy)
+            {
+                toolStripStatusFilesOperation.Text = Properties.Resources.EN_FileOperationScanningNewFiles;
+                toolStripStatusFilesOperation.Visible = true;
+                toolStripProgressAddingFiles.Visible = true;
+                toolStripStatusLabelGame.Text = "";
+                toolStripStatusLabelGame.Visible = true;
+                toolStripProgressAddingFiles.Value = 0;
+                timer1.Enabled = true;
+                //object[] parameters = { selectedPath, "xci" }; //0: FilesList (string[]), 1: FileType ("xci", "nsp") 
+                backgroundWorkerScanNewFiles.RunWorkerAsync();
+            }
         }
 
         private void SetupOLVs()
@@ -96,9 +227,12 @@ namespace Switch_Backup_Manager
             OLVSceneList.OwnerDraw = true;
             noneToolStripMenuItem1.Checked = true;
 
+            OLVEshop.Sort(olvColumnGameNameLocal, SortOrder.Ascending);
+
             OLVLocalFiles.SetObjects(LocalFilesList.Values);
             OLVSceneList.SetObjects(SceneReleasesList.Values);
             OLVEshop.SetObjects(LocalNSPFilesList.Values);
+
 
             sizeColumnROMSizeScene.AspectToStringConverter = delegate (object x) { return Util.BytesToGB((long)x); };
             olvColumnROMSizeLocal.AspectToStringConverter = delegate (object x) { return Util.BytesToGB((long)x); };
@@ -109,15 +243,15 @@ namespace Switch_Backup_Manager
 
             olvColumnLanguagesLocal.AspectToStringConverter = delegate (object x) {
                 string result = "";
-                foreach (string language in (List<string>) x)
+                foreach (string language in (List<string>)x)
                 {
                     result += language + ", ";
                 }
                 if (result.Trim().Length > 1)
                 {
                     result = result.Remove(result.Length - 2);
-                }                
-                return result; 
+                }
+                return result;
             };
 
             olvColumnLanguagesEShop.AspectToStringConverter = delegate (object x) {
@@ -156,6 +290,60 @@ namespace Switch_Backup_Manager
                 {
                     result = result.Remove(result.Length - 2);
                 }
+                return result;
+            };
+
+            olvColumnGameNameEShop.AspectGetter = delegate (object x)
+            {
+                string result = "";
+                FileData data = (FileData)x;
+
+                if (data != null)
+                {
+                    result = data.GameName;
+
+                    switch (data.ContentType)
+                    {
+                        case "Application":
+
+                            break;
+                        case "Patch":
+                            result += " [UPD]";
+                            break;
+                        case "AddOnContent":
+                            result += " [DLC]";
+                            break;
+                    }
+                    result += " [" + data.Version + "]";
+                }
+
+                return result;
+            };
+
+            olvColumnGameNameSD.AspectGetter = delegate (object x)
+            {
+                string result = "";
+                FileData data = (FileData)x;
+
+                if (data != null)
+                {
+                    result = data.GameName;
+
+                    switch (data.ContentType)
+                    {
+                        case "Application":
+
+                            break;
+                        case "Patch":
+                            result += " [UPD]";
+                            break;
+                        case "AddOnContent":
+                            result += " [DLC]";
+                            break;
+                    }
+                    result += " [" + data.Version + "]";
+                }
+
                 return result;
             };
 
@@ -199,6 +387,7 @@ namespace Switch_Backup_Manager
 
             this.olvColumnIsTrimmedLocal.AspectToStringConverter = delegate (object x) { return ((bool)x == true) ? "Yes" : "No"; };
             this.olvColumnIsTrimmedSD.AspectToStringConverter = delegate (object x) { return ((bool)x == true) ? "Yes" : "No"; };
+            this.olvColumnSceneID.AspectToStringConverter = delegate (object x) { return string.Format("{0:D4}", (int)x); };
         }
 
         public void UpdateSceneReleasesList()
@@ -575,6 +764,7 @@ namespace Switch_Backup_Manager
 
                     int count = 0;
                     long size = 0;
+
                     foreach (ListViewItem item in selectedItems)
                     {
                         titleID = item.Text;
@@ -585,7 +775,7 @@ namespace Switch_Backup_Manager
                     }
 
                     toolStripStatusLabel1.Text = Convert.ToString(count) + " Selected (" + Util.BytesToGB(size) + ")";
-                    //Display information of the first selected item
+                    //Display information of the last selected item
                     DisplayGameInformation(titleID, LocalFilesList, "local");
                 }
                 else
@@ -1460,9 +1650,10 @@ namespace Switch_Backup_Manager
 
         private void updateLocalDatabaseToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Util.RemoveMissingFilesFromXML(Util.XML_Local, Util.LOCAL_FILES_DB);
-            UpdateLocalGamesList();
-            MessageBox.Show("Done.");
+            //            Util.RemoveMissingFilesFromXML(Util.XML_Local, Util.LOCAL_FILES_DB);
+            //            UpdateLocalGamesList();
+            ScanFolders();
+        //    MessageBox.Show("Done.");
         }
 
         private void updateNswdbcomListToolStripMenuItem1_Click(object sender, EventArgs e)
@@ -2211,6 +2402,15 @@ namespace Switch_Backup_Manager
                 if (!data.IsTrimmed)
                     e.SubItem.BackColor = Color.IndianRed;
             }
+
+            if (e.ColumnIndex == this.olvColumnGameNameSD.Index)
+            {
+                FileData data = (FileData)e.Model;
+                if (data.ContentType == "AddOnContent") //DLC
+                    e.SubItem.ForeColor = Color.ForestGreen;
+                if (data.ContentType == "Patch") //DLC
+                    e.SubItem.ForeColor = Color.OrangeRed;
+            }
         }
 
         private void toolStripMenuItemRenameAllFilesOnSDCard_Click(object sender, EventArgs e)
@@ -2286,7 +2486,6 @@ namespace Switch_Backup_Manager
             var configForm = new FormConfigs();
             configForm.StartPosition = FormStartPosition.CenterParent;
             configForm.ShowDialog(this);
-            //MessageBox.Show(Properties.Resources.EN_Soon);
         }
 
         private void showInExplorerToolStripMenuItem_Click(object sender, EventArgs e)
@@ -2465,6 +2664,9 @@ namespace Switch_Backup_Manager
                 case "Title ID":
                     filterText.Columns = new[] { olvColumnTitleIDScene };
                     break;
+                case "ID":
+                    filterText.Columns = new[] { olvColumnSceneID };
+                    break;
                 case "Game title":
                     filterText.Columns = new[] { olvColumnGameNameScene };
                     break;
@@ -2535,6 +2737,7 @@ namespace Switch_Backup_Manager
 
         private void OLVEshop_ItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e)
         {
+
             if (OLVEshop.SelectedItems.Count == 0)
             {
                 LocalNSPFilesListSelectedItems.Clear();
@@ -2556,6 +2759,7 @@ namespace Switch_Backup_Manager
 
                     LocalNSPFilesListSelectedItems.Clear();
                     string titleID = selectedItems[0].Text;
+                    string titleIDBaseGame = "";
 
                     int count = 0;
                     long size = 0;
@@ -2563,13 +2767,18 @@ namespace Switch_Backup_Manager
                     {
                         titleID = item.Text;
                         FileData data = Util.GetFileData(titleID, LocalNSPFilesList);
+                        titleIDBaseGame = data.TitleIDBaseGame;
                         LocalNSPFilesListSelectedItems.Add(titleID, data);
                         count++;
                         size += Convert.ToInt64(data.UsedSpaceBytes);
                     }
 
                     toolStripStatusLabel1.Text = Convert.ToString(count) + " Selected (" + Util.BytesToGB(size) + ")";
-                    //Display information of the first selected item
+                    //Display information of the last selected item
+                    if (titleIDBaseGame != "")
+                    {
+                        titleID = titleIDBaseGame;
+                    }
                     DisplayGameInformation(titleID, LocalNSPFilesList, "eshop");
                 }
                 else
@@ -2949,6 +3158,133 @@ namespace Switch_Backup_Manager
         private void btnClearFilterEShop_Click(object sender, EventArgs e)
         {
             textBoxFilterEShop.Clear();
+        }
+
+        private void backgroundWorkerScanNewFiles_DoWork(object sender, DoWorkEventArgs e)
+        {
+            BackgroundWorker worker = sender as BackgroundWorker;
+
+            Util.UpdateDirectories();
+        }
+
+        private void backgroundWorkerScanNewFiles_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            timer1.Enabled = false;
+            toolStripStatusFilesOperation.Visible = false;
+            toolStripProgressAddingFiles.Visible = false;
+            toolStripStatusLabelGame.Text = "";
+            toolStripStatusLabelGame.Visible = false;
+
+            UpdateLocalGamesList();
+            UpdateLocalNSPGamesList();
+            tabControl1_SelectedIndexChanged(this, new EventArgs());
+        }
+
+        private void toolStripMenuItemEShopUpdateInfo_Click(object sender, EventArgs e)
+        {
+            if (LocalNSPFilesListSelectedItems.Count > 0)
+            {
+                CommonOpenFileDialog dialog = new CommonOpenFileDialog();
+                dialog.IsFolderPicker = true;
+
+                if (!backgroundWorkerUpdateFiles.IsBusy)
+                {
+                    menuEShop.Enabled = false;
+                    toolStripStatusFilesOperation.Text = Properties.Resources.EN_FileOperationUpdateFiles;
+                    toolStripStatusFilesOperation.Visible = true;
+                    toolStripProgressAddingFiles.Visible = true;
+                    toolStripStatusLabelGame.Text = "";
+                    toolStripStatusLabelGame.Visible = true;
+                    toolStripProgressAddingFiles.Value = 0;
+                    progressCurrentfile = "";
+                    progressPercent = 0;
+                    timer1.Enabled = true;
+                    object[] parameters = { LocalNSPFilesListSelectedItems, "eshop" }; //0: FilesList (Dictionary), 1: source ("local", "sdcard", "eshop") 
+                    backgroundWorkerUpdateFiles.RunWorkerAsync(parameters);
+                }
+            }
+            else
+            {
+                MessageBox.Show("No files selected");
+                return;
+            }
+        }
+
+        private void backgroundWorkerUpdateFiles_DoWork(object sender, DoWorkEventArgs e)
+        {
+            BackgroundWorker worker = sender as BackgroundWorker;
+
+            object[] parameters = e.Argument as object[];
+
+            Dictionary<string, FileData> filesList = (Dictionary<string, FileData>)parameters[0];
+            string source = (string)parameters[1];
+
+            Util.UpdateFilesInfo(filesList, source);
+
+        }
+
+        private void OLVEshop_FormatCell(object sender, FormatCellEventArgs e)
+        {
+            if (e.ColumnIndex == this.olvColumnGameNameEShop.Index)
+            {
+                FileData data = (FileData)e.Model;
+                if (data.ContentType == "AddOnContent") //DLC
+                    e.SubItem.ForeColor = Color.ForestGreen;
+                if (data.ContentType == "Patch") //DLC
+                    e.SubItem.ForeColor = Color.OrangeRed;
+            }
+        }
+
+        private void richTextBoxLog_TextChanged(object sender, EventArgs e)
+        {
+            if (updateLog)
+            {
+                richTextBoxLog.Suspend();
+                richTextBoxLog.SelectionStart = richTextBoxLog.Text.Length;
+                richTextBoxLog.ScrollToCaret();
+                richTextBoxLog.Resume();
+            }
+        }
+
+        private void btnClearLogFile_Click(object sender, EventArgs e)
+        {
+            richTextBoxLog.Clear();
+            if (File.Exists(Util.LOG_FILE))
+            {
+                try
+                {
+                    File.Delete(Util.LOG_FILE);
+                } catch (Exception ex)
+                {
+                    Util.logger.Error("Could not delete log file. " + ex.StackTrace);
+                }                
+            }
+        }
+
+        private void FrmMain_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            SaveEnvironment();
+        }
+
+        private void FrmMain_Load(object sender, EventArgs e)
+        {
+            if (Properties.Settings.Default.Maximised)
+            {
+                WindowState = FormWindowState.Maximized;
+                Location = Properties.Settings.Default.Location;
+                Size = Properties.Settings.Default.Size;
+            }
+            else if (Properties.Settings.Default.Minimised)
+            {
+                WindowState = FormWindowState.Minimized;
+                Location = Properties.Settings.Default.Location;
+                Size = Properties.Settings.Default.Size;
+            }
+            else
+            {
+                Location = Properties.Settings.Default.Location;
+                Size = Properties.Settings.Default.Size;
+            }
         }
     }
 }

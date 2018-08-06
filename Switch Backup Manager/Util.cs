@@ -19,7 +19,11 @@ namespace Switch_Backup_Manager
 {
     internal static class Util
     {
+        public const string VERSION = "1.1.0";   //Actual application version
+        public const string MIN_DB_Version = "1.0.9"; //This is the minimum version of the DB that can work
+
         public const string INI_FILE = "sbm.ini";
+        public static string TITLE_KEYS = "titlekeys.txt";
         public static string KEYS_FILE = "keys.txt";
         public const string KEYS_DOWNLOAD_SITE = "https://pastebin.com/raw/ekSH9R8t";
         public const string HACTOOL_FILE = "hactool.exe";
@@ -35,10 +39,11 @@ namespace Switch_Backup_Manager
         public static byte[] NcaHeaderEncryptionKey2_Prod;
         public static string Mkey;
         public static Logger logger;
-        public static string log_Level = "info";
+        public static string log_Level = "debug";
         public static string autoRenamingPattern = "{gamename}";
 
         public static bool AutoUpdateNSDBOnStartup = false;
+        public static bool UseTitleKeys = false;
         public static bool ScrapXCIOnSDCard = true;
         public static bool ScrapNSPOnSDCard = true;
         public static bool ScrapInstalledEshopSDCard = true;
@@ -63,7 +68,7 @@ namespace Switch_Backup_Manager
             "???"
         };
 
-        public static string[] AutoRenamingTags = new string[8]
+        public static string[] AutoRenamingTags = new string[11]
         {
             "{gamename}",
             "{titleid}",
@@ -72,15 +77,165 @@ namespace Switch_Backup_Manager
             "{revision}",
             "{releasegroup}",
             "{region}",
-            "{firmware}"
+            "{firmware}",
+            "{languages}",
+            "{sceneid}",
+            "{nspversion}"
         };
 
         private static Image[] Icons = new Image[16];
+        private static List<string> filesWithNoName;
 
         public static IniFile ini;
         public static XDocument XML_Local;
         public static XDocument XML_NSWDB;
         public static XDocument XML_NSP_Local;
+
+        private static List<string> ListDirectoriesToUpdate()
+        {
+            List<string> list = new List<string>();
+            for (int i = 0; i <= 5; i++)
+            {
+                string value = ini.IniReadValue("AutoScan", "Folder_0" + (i + 1));
+                if (value.Trim() != "")
+                {
+                    int ind = value.IndexOf("?");
+                    if (value.Substring(ind + 1, 1) == "1")
+                    {
+                        list.Add(value.Substring(0, ind));
+                    }
+                }
+            }
+
+            return list;
+        }
+
+        private static void AddMissingInfoFilesFromList(List<string> files)
+        {
+            XDocument xml_nsp = XDocument.Load(LOCAL_NSP_FILES_DB);
+
+            foreach (string file in files) //NSP Files
+            {
+                bool found = false;
+                foreach (XElement xe in xml_nsp.Descendants("Game"))
+                {
+                    if (xe.Element("FilePath").Value == file) //File is already on XML. Go to next one.
+                    {
+                        found = true;
+                        break;
+                    }
+                }
+
+                if (!found) //File is not on XML. Add it.
+                {
+                    FileData data = GetFileDataNSP(file);
+                    WriteFileDataToXML(data, LOCAL_NSP_FILES_DB);
+                }
+            }
+        }
+
+        private static int UpdateDirectory(string dir)
+        {
+            int added_files = 0;
+            XDocument xml_local = XDocument.Load(LOCAL_FILES_DB);
+            XDocument xml_nsp = XDocument.Load(LOCAL_NSP_FILES_DB);
+
+            //XCI Files (Includding splitted files)
+            List<string> files_xci = GetXCIsInFolder(dir);
+            List<string> files_nsp = GetNSPsInFolder(dir);
+            int filesCount = files_xci.Count() + files_nsp.Count();
+
+            int i = 0;
+            foreach (string file in files_xci) //XCI Files
+            {
+                FrmMain.progressCurrentfile = file;
+
+                bool found = false;
+                foreach (XElement xe in xml_local.Descendants("Game"))
+                {
+                    if (xe.Element("FilePath").Value == file) //File is already on XML. Go to next one.
+                    {
+                        found = true;
+                        break;
+                    }
+                }
+                i++;
+
+                if (!found) //File is not on XML. Add it.
+                {
+                    FileData data = GetFileData(file);
+                    if (WriteFileDataToXML(data, LOCAL_FILES_DB))
+                    {
+                        added_files++;
+                    }                    
+                }
+                FrmMain.progressPercent = (int)(i * 100) / filesCount;
+            }
+
+            foreach (string file in files_nsp) //NSP Files
+            {
+                FrmMain.progressCurrentfile = file;
+
+                bool found = false;
+                foreach (XElement xe in xml_nsp.Descendants("Game"))
+                {
+                    if (xe.Element("FilePath").Value == file) //File is already on XML. Go to next one.
+                    {
+                        found = true;
+                        break;
+                    }
+                }
+                i++;
+
+                if (!found) //File is not on XML. Add it.
+                {
+                    FileData data = GetFileDataNSP(file);
+                    if (data.GameName.Trim() == "")
+                    {
+                        filesWithNoName.Add(file);
+                    } else
+                    {
+                        if (WriteFileDataToXML(data, LOCAL_NSP_FILES_DB))
+                        {
+                            added_files++;
+                        }
+                    }
+                }
+                FrmMain.progressPercent = (int)(i * 100) / filesCount;
+            }
+
+            return added_files;
+        }
+
+        public static void UpdateDirectories()
+        {
+            RemoveMissingFilesFromXML(XML_Local, LOCAL_FILES_DB);
+            RemoveMissingFilesFromXML(XML_NSP_Local, LOCAL_NSP_FILES_DB);
+
+            // DLC NSP Files, have no info about the game thay belong to, other then Title ID. So, if we add them prior to adding the main game, there will be problems.
+            // So, we create a list of those files, and try to add them after processing all other files.
+            filesWithNoName = new List<string>();
+
+            foreach (string dir in ListDirectoriesToUpdate())
+            {
+                logger.Info("Searchng for new files on " + dir);
+                int added_files = UpdateDirectory(dir);
+                logger.Info("Finished search for new files on " + dir + ". " + added_files + " files added.");
+            }
+
+            //As explained above
+            if (filesWithNoName.Count > 0)
+            {
+                logger.Info("Parsing NSP files with no info: " + filesWithNoName.Count + " files.");
+                AddMissingInfoFilesFromList(filesWithNoName);
+                logger.Info("Finished.");
+            }
+        }
+
+        internal static void UpdateFilesInfo(Dictionary<string, FileData> filesList, string source)
+        {
+            throw new NotImplementedException();
+        }
 
         public static string GetRenamingString(FileData data, string pattern) {
             string result ="";
@@ -96,6 +251,9 @@ namespace Switch_Backup_Manager
                 result = result.Replace(AutoRenamingTags[5], data.Group);
                 result = result.Replace(AutoRenamingTags[6], data.Region);
                 result = result.Replace(AutoRenamingTags[7], data.Firmware);
+                result = result.Replace(AutoRenamingTags[8], data.Languages_resumed);
+                result = result.Replace(AutoRenamingTags[9], Convert.ToString(data.IdScene));
+                result = result.Replace(AutoRenamingTags[10], data.Version);
 
                 result += Path.GetExtension(data.FilePath);
             }
@@ -308,6 +466,7 @@ namespace Switch_Backup_Manager
                 element.Element("FileName").Value = file.FileName;
                 element.Element("FileNameWithExt").Value = file.FileNameWithExt;
                 element.Element("ROMSize").Value = file.ROMSize;
+                element.Element("TitleIDBaseGame").Value = file.TitleIDBaseGame;
                 element.Element("ROMSizeBytes").Value = Convert.ToString(file.ROMSizeBytes);
                 element.Element("UsedSpace").Value = file.UsedSpace;
                 element.Element("UsedSpaceBytes").Value = Convert.ToString(file.UsedSpaceBytes);
@@ -320,8 +479,15 @@ namespace Switch_Backup_Manager
                 element.Element("CardType").Value = file.Cardtype;
                 element.Element("MasterKeyRevision").Value = file.MasterKeyRevision;
                 element.Element("IsTrimmed").Value = Convert.ToString(file.IsTrimmed).ToLower();
-                
+                element.Element("Group").Value = file.Group;
+                element.Element("Serial").Value = file.Serial;
+                element.Element("Firmware").Value = file.Firmware;
+                element.Element("Region").Value = file.Region;
+                element.Element("Languages_resumed").Value = file.Languages_resumed;
                 element.Element("Distribution_Type").Value = file.DistributionType;
+                element.Element("ID_Scene").Value = (file.IdScene > 0 ? Convert.ToString(file.IdScene) : ""); ;
+                element.Element("Distribution_Type").Value = file.DistributionType;
+                element.Element("Content_Type").Value = file.ContentType;
             }
         }
 
@@ -339,8 +505,8 @@ namespace Switch_Backup_Manager
                 {
                     RemoveTitleIDFromXML(xe.Attribute("TitleID").Value, @source_xml);
                     logger.Info(xe.Element("FilePath").Value + " removed.");
-                }
-                i++;
+                    i++;
+                }                
             }
 
             if (source_xml == LOCAL_FILES_DB)
@@ -412,76 +578,113 @@ namespace Switch_Backup_Manager
                 if (element.Element("languages") != null)
                 {
                     data.Languages_resumed = element.Element("languages").Value;
-                }                               
+                }                 
+                if (element.Element("id") != null)
+                {
+                    data.IdScene = element.Element("id").Value == "" ? 0 : Convert.ToInt32(element.Element("id").Value);
+                }
             } else
             {
                 if (data.DistributionType == "Download")
                 {
                     data.Cardtype = "e-shop";
+                    data.CartSize = "e-shop";
                 }
             }
         }
 
         public static bool WriteFileDataToXML(FileData data, string xml)
         {
-            bool result = true;
+            bool result = false;
 
             try
             {
-                //Try to find the game. If exists, do nothing. If not, Append
-                if (!IsTitleIDOnXML(data.TitleID, xml))
+                if (data != null)
                 {
-                    string languages = "";
-                    foreach (string language in data.Languagues)
+                    logger.Debug("searching for " + data.TitleID + " on database.");
+                    //Try to find the game. If exists, do nothing. If not, Append
+                    if (!IsTitleIDOnXML(data.TitleID, xml))
                     {
-                        languages += language + ",";
-                    }
-                    if (languages.Trim().Length > 1)
-                    {
-                        languages = languages.Remove(languages.Length - 1);
-                    }
+                        logger.Debug(data.TitleID + " not found on database. Adding...");
+                        string languages = "";
+                        if (data.Languages != null)
+                        {
+                            foreach (string language in data.Languages)
+                            {
+                                languages += language + ",";
+                            }
+                            if (languages.Trim().Length > 1)
+                            {
+                                try
+                                {
+                                    languages = languages.Remove(languages.Length - 1);
+                                } catch (Exception e)
+                                {
+                                    logger.Debug("Exception on languages.Remove for Title ID " + data.TitleID);
+                                    languages = "";
+                                }                                
+                            }
+                        } else
+                        {
+                            logger.Debug("data.Languages was null for Title ID " + data.TitleID);
+                        }
 
-
-                    XElement element = new XElement("Game", new XAttribute("TitleID", data.TitleID),
-                               new XElement("FilePath", data.FilePath),
-                               new XElement("FileName", data.FileName),
-                               new XElement("FileNameWithExt", data.FileNameWithExt),
-                               new XElement("ROMSize", data.ROMSize),
-                               new XElement("ROMSizeBytes", data.ROMSizeBytes),
-                               new XElement("UsedSpace", data.UsedSpace),
-                               new XElement("UsedSpaceBytes", data.UsedSpaceBytes),
-                               new XElement("GameName", data.GameName),
-                               new XElement("Developer", data.Developer),
-                               new XElement("GameRevision", data.GameRevision),
-                               new XElement("ProductCode", data.ProductCode),
-                               new XElement("SDKVersion", data.SDKVersion),
-                               new XElement("CartSize", data.CartSize),
-                               new XElement("CardType", data.Cardtype),
-                               new XElement("MasterKeyRevision", data.MasterKeyRevision),
-                               new XElement("Region_Icon", data.Region_Icon),
-                               new XElement("Languagues", languages),
-                               new XElement("IsTrimmed", data.IsTrimmed),
-                               new XElement("Group", data.Group),
-                               new XElement("Serial", data.Serial),
-                               new XElement("Firmware", data.Firmware),
-                               new XElement("Region", data.Region),
-                               new XElement("Languages_resumed", data.Languages_resumed),
-                               new XElement("Distribution_Type", data.DistributionType)
-                       );
-                    if (xml == LOCAL_FILES_DB)
-                    {
-                        XML_Local.Root.Add(element);
-                        XML_Local.Save(@xml);
+                        if (data.GameName.Trim() == "")
+                        {
+                            data.GameName = data.FileName; //Desperate!!! Don't know my name
+                        }
+                        XElement element = new XElement("Game", new XAttribute("TitleID", data.TitleID),
+                                   new XElement("TitleIDBaseGame", data.TitleIDBaseGame),
+                                   new XElement("FilePath", data.FilePath),
+                                   new XElement("FileName", data.FileName),
+                                   new XElement("FileNameWithExt", data.FileNameWithExt),
+                                   new XElement("ROMSize", data.ROMSize),
+                                   new XElement("ROMSizeBytes", data.ROMSizeBytes),
+                                   new XElement("UsedSpace", data.UsedSpace),
+                                   new XElement("UsedSpaceBytes", data.UsedSpaceBytes),
+                                   new XElement("GameName", data.GameName),
+                                   new XElement("Developer", data.Developer),
+                                   new XElement("GameRevision", data.GameRevision),
+                                   new XElement("ProductCode", data.ProductCode),
+                                   new XElement("SDKVersion", data.SDKVersion),
+                                   new XElement("CartSize", data.CartSize),
+                                   new XElement("CardType", data.Cardtype),
+                                   new XElement("MasterKeyRevision", data.MasterKeyRevision),
+                                   new XElement("Region_Icon", data.Region_Icon),
+                                   new XElement("Languages", languages),
+                                   new XElement("IsTrimmed", data.IsTrimmed),
+                                   new XElement("Group", data.Group),
+                                   new XElement("Serial", data.Serial),
+                                   new XElement("Firmware", data.Firmware),
+                                   new XElement("Region", data.Region),
+                                   new XElement("Languages_resumed", data.Languages_resumed),
+                                   new XElement("Distribution_Type", data.DistributionType),
+                                   new XElement("ID_Scene", data.IdScene),
+                                   new XElement("Content_Type", data.ContentType),
+                                   new XElement("Version", data.Version)
+                           );
+                        if (xml == LOCAL_FILES_DB)
+                        {
+                            logger.Debug("Adding element...");
+                            XML_Local.Root.Add(element);
+                            logger.Debug("Saving xml "+@xml);
+                            XML_Local.Save(@xml);
+                            logger.Debug("xml saved...");
+                        }
+                        else
+                        {
+                            logger.Debug("Adding element...");
+                            XML_NSP_Local.Root.Add(element);
+                            logger.Debug("Saving xml " + @xml);
+                            XML_NSP_Local.Save(@xml);
+                            logger.Debug("xml saved...");
+                        }
+                        result = true;
                     }
                     else
                     {
-                        XML_NSP_Local.Root.Add(element);
-                        XML_NSP_Local.Save(@xml);
+                        logger.Info(data.TitleID + " was already on database. Ignoring.");
                     }
-                }
-                else
-                {
-                    //Nothing to do?
                 }
             }
             catch (Exception e)
@@ -519,19 +722,63 @@ namespace Switch_Backup_Manager
                 } catch { System.ArgumentException ex; }
                 {
                     //If TitleID is already on the list, ignore
-                }
-                
+                }                
             }
 
             return result;
         }
 
-        public static void LoadSettings()
+        private static bool checkDBVersion(string xml)
+        {
+            bool result = false;
+            int ver_db  = 0;
+            int ver_min = Convert.ToInt32(VERSION.Replace(".", "")); //Ex 1.0.8 -> 108
+
+            //Check if DB is on minimum version
+            XDocument xml_temp = XDocument.Load(xml);
+
+            void saveXML() //Local Function to avoid code replication.
+            {
+                if (MessageBox.Show("Your "+ xml + " is outdated and needs to be created again. \nDo you want to make a backup?", "Switch Backup Manager", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                {
+                    try
+                    {
+                        File.Copy(xml, xml + ".old", true);
+                    } catch (Exception e)
+                    {
+                        logger.Error("Could not backup " + xml + "\n" + e.StackTrace);
+                    }
+                    
+                }
+                xml_temp = new XDocument(new XComment("List games"),
+                new XElement("Games", new XAttribute("Date", DateTime.Now.ToString()), new XAttribute("Version", VERSION)));
+                xml_temp.Declaration = new XDeclaration("1.0", "utf-8", "true");
+                xml_temp.Save(xml);
+            }
+
+            if (xml_temp.Element("Games").Attribute("Version") != null)
+            {
+                ver_db = Convert.ToInt32(xml_temp.Element("Games").Attribute("Version").Value.Replace(".", ""));
+                if (ver_db < ver_min)
+                {
+                    saveXML();
+                }
+            }
+            else
+            { //If version tag not found on XML, means its too old. Delete!
+                saveXML();
+            }
+
+            return result;
+        }
+
+        public static void LoadSettings(ref RichTextBox outputLogBox)
         {
             ini = new IniFile((AppDomain.CurrentDomain.BaseDirectory) + INI_FILE);
-            logger = new Logger();
+            logger = new Logger(ref outputLogBox);
 
             string keys_file = ini.IniReadValue("Config", "keys_file");
+            string title_keys = ini.IniReadValue("Config", "title_keys");
             if (keys_file.Trim() == "")
             {
                 keys_file = KEYS_FILE;
@@ -541,12 +788,23 @@ namespace Switch_Backup_Manager
                 KEYS_FILE = keys_file;
             }
 
+            if (title_keys.Trim() == "")
+            {
+                title_keys = TITLE_KEYS;
+                ini.IniWriteValue("Config", "title_keys", title_keys);
+            }
+            else
+            {
+                TITLE_KEYS = title_keys;
+            }
+
             log_Level = ini.IniReadValue("Log", "log_level");
             if (log_Level.Trim() == "")
             {
                 ini.IniWriteValue("Log", "log_level", "info");
                 log_Level = "info";
             }
+            log_Level = "debug"; //Force debug on log, for now...
 
             autoRenamingPattern = ini.IniReadValue("AutoRenaming", "pattern");
             if (autoRenamingPattern.Trim() == "")
@@ -572,11 +830,19 @@ namespace Switch_Backup_Manager
                 }
             }
 
+            //Searches for titlekeys.txt
+            UseTitleKeys = (ini.IniReadValue("Config", "useTitleKeys") == "true" ? true : false);
+            if (UseTitleKeys && !File.Exists(title_keys))
+            {
+                MessageBox.Show(TITLE_KEYS + " not found!\nTo correctly name DLC e-shop files you need to provide a file called " + TITLE_KEYS + " with following format inside: " +
+                    "TitleID|TitleKey|Name.\nIf not provided, game name and other info for DLC will be empty.");
+            }
+
             //TODO: Download hactool.zip and extract files
             //Searches for hactool.exe. 
             if (!File.Exists(HACTOOL_FILE))
             {
-                MessageBox.Show(HACTOOL_FILE+" is missing. Please, download it at "+HACTOOL_DOWNLOAD_SITE);
+                MessageBox.Show(HACTOOL_FILE+" is missing. Please, download it at\n"+HACTOOL_DOWNLOAD_SITE);
                 Environment.Exit(0);
             }
 
@@ -607,34 +873,34 @@ namespace Switch_Backup_Manager
             if (scrapNSP != "") { ScrapNSPOnSDCard = (scrapNSP == "true"); } else { ini.IniWriteValue("SD", "scrapNSP", "true"); };
             if (scrapInstalledNSP != "") { ScrapInstalledEshopSDCard = (scrapInstalledNSP == "true"); } else { ini.IniWriteValue("SD", "scrapInstalledNSP", "false"); };
 
-
             XML_NSWDB = XDocument.Load(@NSWDB_FILE);
 
             //Searches for local dabases (xml) and loads it
             if (!File.Exists(LOCAL_FILES_DB))
             {
-                XML_Local = new XDocument(new XComment("List of local games"),
-                    new XElement("Games", new XAttribute("Date", DateTime.Now.ToString())));
+                XML_Local = new XDocument(new XComment("List games"),
+                    new XElement("Games", new XAttribute("Date", DateTime.Now.ToString()), new XAttribute("Version", VERSION)));
                 XML_Local.Declaration = new XDeclaration("1.0", "utf-8", "true");
                 XML_Local.Save(@LOCAL_FILES_DB);
             } else
             {
+                checkDBVersion(@LOCAL_FILES_DB);               
                 XML_Local = XDocument.Load(@LOCAL_FILES_DB);
             }
 
             //Searches for local NSP dabases (xml) and loads it
             if (!File.Exists(LOCAL_NSP_FILES_DB))
             {
-                XML_NSP_Local = new XDocument(new XComment("List of local NSP games"),
-                    new XElement("Games", new XAttribute("Date", DateTime.Now.ToString())));
+                XML_NSP_Local = new XDocument(new XComment("List games"),
+                    new XElement("Games", new XAttribute("Date", DateTime.Now.ToString()), new XAttribute("Version", VERSION)));
                 XML_NSP_Local.Declaration = new XDeclaration("1.0", "utf-8", "true");
                 XML_NSP_Local.Save(@LOCAL_NSP_FILES_DB);
             }
             else
             {
+                checkDBVersion(@LOCAL_NSP_FILES_DB);
                 XML_NSP_Local = XDocument.Load(@LOCAL_NSP_FILES_DB);
             }
-
 
             //Create cache directory
             if (!Directory.Exists(CACHE_FOLDER))
@@ -823,7 +1089,7 @@ namespace Switch_Backup_Manager
                             data = Util.GetFileDataNSP(file);
                         }
 
-                        logger.Info("Including file " + data.FilePath + ", TitleID: " + data.TitleID);
+                        logger.Info("Scraping file " + data.FilePath + ", TitleID: " + data.TitleID);
                         FrmMain.progressCurrentfile = data.FilePath;
                         try
                         {
@@ -1068,6 +1334,7 @@ namespace Switch_Backup_Manager
             data.FileNameWithExt = Path.GetFileName(file);
             data.IsTrimmed = true;
             data.Cardtype = "e-shop";
+            data.CartSize = "e-shop";
 
             FileInfo fi = new FileInfo(file);
             //Get File Size
@@ -1087,115 +1354,368 @@ namespace Switch_Backup_Manager
 
             Process process = new Process();
             logger.Info("Adding NSP file: " + data.FileName);
+
             try
             {
-                //Directory.CreateDirectory("tmp");
-                process.StartInfo = new ProcessStartInfo
-                {
-                    WindowStyle = ProcessWindowStyle.Hidden,
-                    FileName = "hactool.exe",
-                    Arguments = "-t pfs0 " + "\""+ file +"\"" + " --outdir=tmp"
-                };
-                logger.Info("Extracting NSP file.");
-                process.Start();
-                process.WaitForExit();
-                process.Close();
+                MultiStream fileStream = GetFileStream(file);
 
-                List<string> listXML = new List<string>();
-                if (!Directory.Exists("tmp"))
-                {
-                    logger.Error("Directory tmp was not created ?!");                    
-                }
-                try
-                {
-                    logger.Info("found " + Directory.GetFiles("tmp", "*.xml").First());
-                    foreach (string f in Directory.GetFiles("tmp", "*.xml"))
-                    {
-                        listXML.Add(f);
-                        break;
-                    }
-                } catch (Exception e)
-                {
-                    logger.Error(e.StackTrace);
-                }
-
-                XDocument xml = XDocument.Load(listXML.First());
-                data.TitleID = xml.Element("ContentMeta").Element("Id").Value.Remove(1,2).ToUpper();
                 string ncaTarget = "";
-                foreach (XElement xe in xml.Descendants("Content"))
+
+                List<char> chars = new List<char>();
+                byte[] array = new byte[16];
+                byte[] array2 = new byte[24];
+                fileStream.Read(array, 0, 16);
+                PFS0.PFS0_Headers[0] = new PFS0.PFS0_Header(array);
+                if (!PFS0.PFS0_Headers[0].Magic.Contains("PFS0"))
                 {
-                    if (xe.Element("Type").Value != "Control")
-                    {
-                        continue;
-                    }
-                    ncaTarget = xe.Element("Id").Value + ".nca";
-                    break;
+                    return data;
                 }
-                process = new Process();
-                process.StartInfo = new ProcessStartInfo
+                PFS0.PFS0_Entry[] array3;
+                array3 = new PFS0.PFS0_Entry[Math.Max(PFS0.PFS0_Headers[0].FileCount, 20)]; //Dump of TitleID 01009AA000FAA000 reports more than 10000000 files here, so it breaks the program. Standard is to have only 20 files
+
+                for (int m = 0; m < PFS0.PFS0_Headers[0].FileCount; m++)
                 {
-                    WindowStyle = ProcessWindowStyle.Hidden,
-                    FileName = "hactool.exe",
-                    Arguments = "-k keys.txt --romfsdir=tmp tmp/"+ ncaTarget
-                };
-                logger.Info("Making some voodoo magic with " + ncaTarget);
-                process.Start();
-                process.WaitForExit();
-                process.Close();
-                byte[] flux = new byte[200];
+                    fileStream.Position = 16 + 24 * m;
+                    fileStream.Read(array2, 0, 24);
+                    array3[m] = new PFS0.PFS0_Entry(array2);
 
-                byte[] source = File.ReadAllBytes("tmp\\control.nacp");
-                NACP.NACP_Datas[0] = new NACP.NACP_Data(source.Skip(0x3000).Take(0x1000).ToArray());
-
-                data.Region_Icon = new Dictionary<string, string>();
-                data.Languagues = new List<string>();
-
-                for (int i = 0; i < NACP.NACP_Strings.Length; i++)
-                {
-                    NACP.NACP_Strings[i] = new NACP.NACP_String(source.Skip(i * 0x300).Take(0x300).ToArray());
-
-                    if (NACP.NACP_Strings[i].Check != 0)
+                    if (m == 19) //Dump of TitleID 01009AA000FAA000 reports more than 10000000 files here, so it breaks the program. Standard is to have only 20 files
                     {
-                        //CB_RegionName.Items.Add(Language[i]);
-                        string icon_filename = "tmp\\icon_" + Language[i].Replace(" ", "") + ".dat";
-                        string icon_titleID_filename = CACHE_FOLDER + "\\icon_" + data.TitleID + "_" + Language[i].Replace(" ", "") + ".bmp";
+                        break;
+                    }
+                }
+                for (int n = 0; n < PFS0.PFS0_Headers[0].FileCount; n++)
+                {
+                    fileStream.Position = 16 + 24 * PFS0.PFS0_Headers[0].FileCount + array3[n].Name_ptr;
+                    int num4;
+                    while ((num4 = fileStream.ReadByte()) != 0 && num4 != 0)
+                    {
+                        chars.Add((char)num4);
+                    }
+                    array3[n].Name = new string(chars.ToArray());
+                    chars.Clear();
 
-                        if (File.Exists(icon_filename))
+                    if (array3[n].Name.EndsWith(".xml"))
+                    {
+                        logger.Debug("Analyzing xml file.");
+                        byte[] array4 = new byte[array3[n].Size];
+                        fileStream.Position = 16 + 24 * PFS0.PFS0_Headers[0].FileCount + PFS0.PFS0_Headers[0].StringTableSize + array3[n].Offset;
+                        fileStream.Read(array4, 0, (int)array3[n].Size);
+
+                        XDocument xml = XDocument.Parse(Encoding.UTF8.GetString(array4));
+                        data.TitleID = xml.Element("ContentMeta").Element("Id").Value.Remove(1, 2).ToUpper();
+                        data.ContentType = xml.Element("ContentMeta").Element("Type").Value;
+                        data.Version = xml.Element("ContentMeta").Element("Version").Value;
+
+                        //0100000000000816,ALL,v65796 v131162 v196628 v262164 v201327002 v201392178 v201457684 v268435656 v268501002 v269484082 v335544750 v335609886 v335675432 v336592976,2.0.0 2.1.0 2.2.0 2.3.0 3.0.0 3.0.1 3.0.2 4.0.0 4.0.1 4.1.0 5.0.0 5.0.1 5.0.2 5.1.0
+                        data.Firmware = "";
+                        long Firmware = Convert.ToInt64(xml.Element("ContentMeta").Element("RequiredSystemVersion").Value) % 0x100000000;
+                        if (Firmware <= 450)
                         {
-                            try
-                            {
-                                File.Copy(icon_filename, icon_titleID_filename, true);
-                            }
-                            catch (System.IO.IOException)
-                            {
-                                //File in use?
-                            }
-                            data.Region_Icon.Add(Language[i], icon_titleID_filename);
-                            data.Languagues.Add(Language[i]);
+                            data.Firmware = "1.0.0";
                         }
+                        else if (Firmware <= 65796)
+                        {
+                            data.Firmware = "2.0.0";
+                        }
+                        else if (Firmware <= 131162)
+                        {
+                            data.Firmware = "2.1.0";
+                        }
+                        else if (Firmware <= 196628)
+                        {
+                            data.Firmware = "2.2.0";
+                        }
+                        else if (Firmware <= 262164)
+                        {
+                            data.Firmware = "2.3.0";
+                        }
+                        else if (Firmware <= 201327002)
+                        {
+                            data.Firmware = "3.0.0";
+                        }
+                        else if (Firmware <= 201392178)
+                        {
+                            data.Firmware = "3.0.1";
+                        }
+                        else if (Firmware <= 201457684)
+                        {
+                            data.Firmware = "3.0.2";
+                        }
+                        else if (Firmware <= 268435656)
+                        {
+                            data.Firmware = "4.0.0";
+                        }
+                        else if (Firmware <= 268501002)
+                        {
+                            data.Firmware = "4.0.1";
+                        }
+                        else if (Firmware <= 269484082)
+                        {
+                            data.Firmware = "4.1.0";
+                        }
+                        else if (Firmware <= 335544750)
+                        {
+                            data.Firmware = "5.0.0";
+                        }
+                        else if (Firmware <= 335609886)
+                        {
+                            data.Firmware = "5.0.1";
+                        }
+                        else if (Firmware <= 335675432)
+                        {
+                            data.Firmware = "5.0.2";
+                        }
+                        else if (Firmware <= 336592976)
+                        {
+                            data.Firmware = "5.1.0";
+                        }
+                        else
+                        {
+                            data.Firmware = Convert.ToString(Firmware);
+                        }
+
+                        string titleIDBaseGame = data.TitleID;
+                        if (data.ContentType != "Application")
+                        {
+                            string titleIdBase = data.TitleID.Substring(0, 13);
+                            if (data.ContentType == "Patch") //UPDATE
+                            {
+                                titleIDBaseGame = titleIdBase + "000";
+                            }
+                            else //DLC
+                            {
+                                long tmp = long.Parse(titleIdBase, System.Globalization.NumberStyles.HexNumber) - 1;
+                                titleIDBaseGame = string.Format("0{0:X8}", tmp) + "000";
+                            }
+                        }
+                        data.TitleIDBaseGame = titleIDBaseGame;
+
+                        if (data.ContentType != "AddOnContent")
+                        {
+                            foreach (XElement xe in xml.Descendants("Content"))
+                            {
+                                if (xe.Element("Type").Value != "Control")
+                                {
+                                    continue;
+                                }
+
+                                ncaTarget = xe.Element("Id").Value + ".nca";
+                                break;
+                            }
+                        }
+                        else //This is a DLC
+                        {
+                            foreach (XElement xe in xml.Descendants("Content"))
+                            {
+                                if (xe.Element("Type").Value != "Meta")
+                                {
+                                    continue;
+                                }
+
+                                ncaTarget = xe.Element("Id").Value + ".cnmt.nca";
+                                break;
+                            }
+                            bool found = false;
+
+                            FileData data_tmp = null;
+                            Dictionary<string, FileData> NSPList = Util.LoadXMLToFileDataDictionary(XML_NSP_Local);
+                            NSPList.TryGetValue(data.TitleIDBaseGame, out data_tmp); //Try to find on NSP List
+                            if (data_tmp != null)
+                            {
+                                data.Region_Icon = data_tmp.Region_Icon;
+                                data.Languages = data_tmp.Languages;
+                                data.GameRevision = data_tmp.GameRevision;
+                                data.ProductCode = data_tmp.ProductCode;
+                                data.GameName = data_tmp.GameName;// + " [DLC]";
+                                data.Developer = data_tmp.Developer;
+                                found = true;
+                                logger.Debug("Found extra info for DLC on NSP local database");
+                            }
+
+                            if (!found)
+                            {
+                                data_tmp = null;
+                                Dictionary<string, FileData> SceneList = Util.LoadXMLToFileDataDictionary(XML_NSWDB);
+                                SceneList.TryGetValue(data.TitleIDBaseGame, out data_tmp); //Try to find on Scene List
+                                if (data_tmp != null)
+                                {
+                                    data.Region_Icon = data_tmp.Region_Icon;
+                                    data.Languages = data_tmp.Languages;
+                                    data.GameRevision = data_tmp.GameRevision;
+                                    data.ProductCode = data_tmp.ProductCode;
+                                    data.GameName = data_tmp.GameName;// + " [DLC]";
+                                    data.Developer = data_tmp.Developer;
+                                    found = true;
+                                    logger.Debug("Found extra info for DLC on Scene database");
+                                }
+                            }
+
+                            if (!found)
+                            {
+                                data_tmp = null;
+                                Dictionary<string, FileData> XCIList = Util.LoadXMLToFileDataDictionary(XML_Local);
+                                XCIList.TryGetValue(data.TitleIDBaseGame, out data_tmp); //Try to find on Local XCI List
+                                if (data_tmp != null)
+                                {
+                                    data.Region_Icon = data_tmp.Region_Icon;
+                                    data.Languages = data_tmp.Languages;
+                                    data.GameRevision = data_tmp.GameRevision;
+                                    data.ProductCode = data_tmp.ProductCode;
+                                    data.GameName = data_tmp.GameName;// + " [DLC]";
+                                    data.Developer = data_tmp.Developer;
+                                    found = true;
+                                    logger.Debug("Found extra info for DLC on XCI local database");
+                                }
+                            }
+
+                            //Last resource, look at titlekeys
+                            if (!found)
+                            {
+                                if (UseTitleKeys && File.Exists(TITLE_KEYS))
+                                {
+                                    string gameName = "";
+                                    try
+                                    {
+                                        gameName = (from x in File.ReadAllLines(TITLE_KEYS)
+                                                    select x.Split('|') into x
+                                                    where x.Length > 1
+                                                    select x).ToDictionary((string[] x) => x[0].Trim(), (string[] x) => x[2])[data.TitleIDBaseGame].ToLower();
+                                    }
+                                    catch (Exception e)
+                                    {
+                                        logger.Warning("Could not find game name! Don't worry, will try again later\n"+e.StackTrace);
+                                    }
+
+                                    data.GameName = gameName;
+                                }
+                            }
+                        }
+
+                        //break;
                     }
-                }
-                data.GameRevision = NACP.NACP_Datas[0].GameVer.Replace("\0", ""); ;
-                data.ProductCode = NACP.NACP_Datas[0].GameProd.Replace("\0", ""); ;
-                if (data.ProductCode == "")
-                {
-                    data.ProductCode = "No Prod. ID";
+
+                    if (n == 19) //Dump of TitleID 01009AA000FAA000 reports more than 10000000 files here, so it breaks the program. Standard is to have only 20 files
+                    {
+                        break;
+                    }
                 }
 
-                for (int z = 0; z < NACP.NACP_Strings.Length; z++)
+                for (int n = 0; n < PFS0.PFS0_Headers[0].FileCount; n++)
                 {
-                    if (NACP.NACP_Strings[z].GameName.Replace("\0", "") != "")
+                    if (array3[n].Name.Equals(ncaTarget))
                     {
-                        data.GameName = NACP.NACP_Strings[z].GameName.Replace("\0", "");
+                        if (!Directory.Exists("tmp"))
+                        {
+                            Directory.CreateDirectory("tmp");
+                        }
+
+                        byte[] array5 = new byte[64 * 1024];
+                        fileStream.Position = 16 + 24 * PFS0.PFS0_Headers[0].FileCount + PFS0.PFS0_Headers[0].StringTableSize + array3[n].Offset;
+
+                        using (Stream output = File.Create("tmp\\" + ncaTarget))
+                        {
+                            long Size = array3[n].Size;
+                            int result = 0;
+                            while ((result = fileStream.Read(array5, 0, (int)Math.Min(array5.Length, Size))) > 0)
+                            {
+                                output.Write(array5, 0, result);
+                                Size -= result;
+                            }
+                        }
+
+                        break;
+                    }
+
+                    if (n == 19) //Dump of TitleID 01009AA000FAA000 reports more than 10000000 files here, so it breaks the program. Standard is to have only 20 files
+                    {
                         break;
                     }
                 }
-                for (int z = 0; z < NACP.NACP_Strings.Length; z++)
+
+                if (data.ContentType != "AddOnContent")
                 {
-                    if (NACP.NACP_Strings[z].GameAuthor.Replace("\0", "") != "")
+                    process = new Process();
+                    process.StartInfo = new ProcessStartInfo
                     {
-                        data.Developer = NACP.NACP_Strings[z].GameAuthor.Replace("\0", "");
-                        break;
+                        WindowStyle = ProcessWindowStyle.Hidden,
+                        FileName = "hactool.exe",
+                        Arguments = "-k keys.txt --romfsdir=tmp tmp/" + ncaTarget
+                    };
+                    logger.Info("Making some voodoo magic with " + ncaTarget);
+                    process.Start();
+                    process.WaitForExit();
+                    process.Close();
+                    byte[] flux = new byte[200];
+                    
+                    try
+                    {
+                        data.Region_Icon = new Dictionary<string, string>();
+                        data.Languages = new List<string>();
+
+                        byte[] source = File.ReadAllBytes("tmp\\control.nacp");
+                        NACP.NACP_Datas[0] = new NACP.NACP_Data(source.Skip(0x3000).Take(0x1000).ToArray());
+
+                        for (int i = 0; i < NACP.NACP_Strings.Length; i++)
+                        {
+                            NACP.NACP_Strings[i] = new NACP.NACP_String(source.Skip(i * 0x300).Take(0x300).ToArray());
+
+                            if (NACP.NACP_Strings[i].Check != 0)
+                            {
+                                string icon_filename = "tmp\\icon_" + Language[i].Replace(" ", "") + ".dat";
+                                string icon_titleID_filename = CACHE_FOLDER + "\\icon_" + data.TitleID + "_" + Language[i].Replace(" ", "") + ".bmp";
+
+                                if (File.Exists(icon_filename))
+                                {
+                                    try
+                                    {
+                                        File.Copy(icon_filename, icon_titleID_filename, true);
+                                    }
+                                    catch (System.IO.IOException)
+                                    {
+                                        //File in use?
+                                    }
+                                    data.Region_Icon.Add(Language[i], icon_titleID_filename);
+                                    data.Languages.Add(Language[i]);
+                                }
+                            }
+                        }
+                        data.GameRevision = NACP.NACP_Datas[0].GameVer.Replace("\0", ""); ;
+                        data.ProductCode = NACP.NACP_Datas[0].GameProd.Replace("\0", ""); ;
+                        if (data.ProductCode == "")
+                        {
+                            data.ProductCode = "No Prod. ID";
+                        }
+
+                        for (int z = 0; z < NACP.NACP_Strings.Length; z++)
+                        {
+                            if (NACP.NACP_Strings[z].GameName.Replace("\0", "") != "")
+                            {
+                                data.GameName = NACP.NACP_Strings[z].GameName.Replace("\0", "");
+                                break;
+                            }
+                        }
+                        for (int z = 0; z < NACP.NACP_Strings.Length; z++)
+                        {
+                            if (NACP.NACP_Strings[z].GameAuthor.Replace("\0", "") != "")
+                            {
+                                data.Developer = NACP.NACP_Strings[z].GameAuthor.Replace("\0", "");
+                                break;
+                            }
+                        }
+                        if (data.GameName.Trim() == "")
+                        {
+                            data.GameName = data.FileName;
+                        }                          
+                    }
+                    catch (Exception e)
+                    {
+                        logger.Error(data.TitleID + " seems to be broken! Some info will be missing.");
+                    }
+
+                    if (data.ContentType == "Patch")
+                    {
+                        data.GameName = data.GameName;
                     }
                 }
 
@@ -1223,10 +1743,12 @@ namespace Switch_Backup_Manager
                     if (strArray[0] == "SDK Version")
                     {
                         data.SDKVersion = strArray[1].Trim();
-                    } else if (strArray[0] == "Distribution type")
+                    }
+                    else if (strArray[0] == "Distribution type")
                     {
                         data.DistributionType = strArray[1].Trim();
-                    } else if (strArray[0] == "Master Key Revision")
+                    }
+                    else if (strArray[0] == "Master Key Revision")
                     {
                         data.MasterKeyRevision = strArray[1].Trim();
                         break;
@@ -1238,7 +1760,8 @@ namespace Switch_Backup_Manager
             catch (Exception e)
             {
                 logger.Error(e.StackTrace);
-            } finally
+            }
+            finally
             {
                 Directory.Delete("tmp", true);
             }
@@ -1254,6 +1777,7 @@ namespace Switch_Backup_Manager
             result.FileName = Path.GetFileNameWithoutExtension(filepath);
             result.FileNameWithExt = Path.GetFileName(filepath);
             result.DistributionType = "Cartridge";
+            result.ContentType = "Application";
 
             if (CheckXCI(filepath))
             {
@@ -1422,6 +1946,7 @@ namespace Switch_Backup_Manager
 
                 NCA.NCA_Headers[0] = new NCA.NCA_Header(DecryptNCAHeader(filepath, gameNcaOffset));
                 result.TitleID = "0" + NCA.NCA_Headers[0].TitleID.ToString("X");
+                result.TitleIDBaseGame = result.TitleID;
                 result.SDKVersion = $"{NCA.NCA_Headers[0].SDKVersion4}.{NCA.NCA_Headers[0].SDKVersion3}.{NCA.NCA_Headers[0].SDKVersion2}.{NCA.NCA_Headers[0].SDKVersion1}";
                 result.MasterKeyRevision = Util.GetMkey(NCA.NCA_Headers[0].MasterKeyRev);
 
@@ -1469,7 +1994,7 @@ namespace Switch_Backup_Manager
                             NACP.NACP_Datas[0] = new NACP.NACP_Data(source.Skip(0x3000).Take(0x1000).ToArray());
 
                             result.Region_Icon = new Dictionary<string, string>();
-                            result.Languagues = new List<string>();
+                            result.Languages = new List<string>();
                             for (int i = 0; i < NACP.NACP_Strings.Length; i++)
                             {
                                 NACP.NACP_Strings[i] = new NACP.NACP_String(source.Skip(i * 0x300).Take(0x300).ToArray());
@@ -1498,7 +2023,7 @@ namespace Switch_Backup_Manager
                                             logger.Error(e.StackTrace); //File in use?
                                         }
                                         result.Region_Icon.Add(Language[i], icon_titleID_filename);
-                                        result.Languagues.Add(Language[i]);
+                                        result.Languages.Add(Language[i]);
                                     }
                                 }
                             }
@@ -1551,6 +2076,14 @@ namespace Switch_Backup_Manager
             try
             {
                 result.TitleID = xe.Attribute("TitleID").Value;
+                if (xe.Element("TitleIDBaseGame") != null)
+                {
+                    result.TitleIDBaseGame = xe.Element("TitleIDBaseGame").Value;
+                }          
+                if (xe.Element("Version") != null)
+                {
+                    result.Version = xe.Element("Version").Value;
+                }
                 result.CartSize = xe.Element("CartSize").Value;
                 //result.Cardtype = xe.Element("CardType").Value;
                 result.Developer = xe.Element("Developer").Value;
@@ -1561,14 +2094,14 @@ namespace Switch_Backup_Manager
                 result.GameRevision = xe.Element("GameRevision").Value;
                 result.IsTrimmed = (xe.Element("IsTrimmed").Value == "true") ? true : false;
 
-                string languages_ = xe.Element("Languagues").Value;
+                string languages_ = xe.Element("Languages").Value;
                 string[] languages_array = languages_.Split(",".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
                 List<string> languages = new List<string>();
                 for (int i = 0; i < languages_array.Length; i++)
                 {
                     languages.Add(languages_array[i]);
                 }
-                result.Languagues = languages;
+                result.Languages = languages;
 
                 result.MasterKeyRevision = xe.Element("MasterKeyRevision").Value;
                 result.ProductCode = xe.Element("ProductCode").Value;
@@ -1578,9 +2111,7 @@ namespace Switch_Backup_Manager
                 result.UsedSpace = xe.Element("UsedSpace").Value;
                 result.UsedSpaceBytes = Convert.ToInt64(xe.Element("UsedSpaceBytes").Value);
 
-                //result.Region_Icon = xe.Element("Region_Icon").Value;
                 Dictionary<string, string> Region_Icon = new Dictionary<string, string>();
-                //string regionIcons = xe.Element("Region_Icon").Value;
                 string[] regionIcons = xe.Element("Region_Icon").Value.Split("[".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
                 for (int i = 0; i < regionIcons.Length; i++)
                 {
@@ -1620,6 +2151,14 @@ namespace Switch_Backup_Manager
                 {
                     result.DistributionType = xe.Element("Distribution_Type").Value;
                 }
+                if (xe.Element("ID_Scene") != null)
+                {
+                    result.IdScene = xe.Element("ID_Scene").Value.Trim() == "" ? 0 : Convert.ToInt32(xe.Element("ID_Scene").Value);
+                }
+                if (xe.Element("Content_Type") != null)
+                {
+                    result.ContentType = xe.Element("Content_Type").Value;
+                }
             }
             catch (Exception ex)
             {
@@ -1634,6 +2173,7 @@ namespace Switch_Backup_Manager
             FileData result = new FileData();
 
             result.TitleID = xe.Element("titleid").Value;
+            result.TitleIDBaseGame = result.TitleID;
             result.CartSize = xe.Element("imagesize").Value;
             result.Developer = xe.Element("publisher").Value;
             //result.FileName = xe.Element("FileName").Value;
@@ -1670,6 +2210,8 @@ namespace Switch_Backup_Manager
             result.Cardtype = xe.Element("card").Value;
             result.ROMSizeBytes = Convert.ToInt64(xe.Element("trimmedsize").Value);
             result.Region = xe.Element("region").Value;
+            result.Languages_resumed = xe.Element("languages").Value;
+            result.IdScene = Convert.ToInt32(xe.Element("id").Value);
 
             List<string> languages = new List<string>();
             string[] languages_ = xe.Element("languages").Value.Split(",".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
@@ -1678,7 +2220,7 @@ namespace Switch_Backup_Manager
                 languages.Add(languages_[i]);
             }
 
-            result.Languagues = languages;
+            result.Languages = languages;
             return result;
         }
 

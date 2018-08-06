@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.WindowsAPICodePack.Dialogs;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -18,6 +19,7 @@ namespace Switch_Backup_Manager
         public FormConfigs()
         {
             InitializeComponent();
+            this.AutoScaleMode = AutoScaleMode.Dpi;
 
             //Hide tabs not ready
             //tabControl1.TabPages.Remove(tabPage1);
@@ -34,6 +36,10 @@ namespace Switch_Backup_Manager
             gameExample.Group = "BigBlueBox";
             gameExample.Region = "WLD";
             gameExample.Firmware = "3.0.1";
+            gameExample.Languages_resumed = "en,fr,de,it,es,nl,ru,ja";
+            gameExample.IdScene = 38;
+            gameExample.ContentType = "Application";
+            gameExample.Version = "0";
 
             cbxTags.Items.Clear();
             for (int i = 0; i < Util.AutoRenamingTags.Length; i++)
@@ -58,6 +64,21 @@ namespace Switch_Backup_Manager
 
             Util.AutoUpdateNSDBOnStartup = this.cbAutoUpdateScene.Checked;
             Util.ini.IniWriteValue("Config", "autoUpdateNSWDB", cbAutoUpdateScene.Checked ? "true" : "false");
+            Util.UseTitleKeys = this.cbUseTitleKeys.Checked;
+            Util.ini.IniWriteValue("Config", "useTitleKeys", cbUseTitleKeys.Checked ? "true" : "false");
+
+            for (int j = 1; j <= 5; j++ )
+            {
+                Util.ini.IniWriteValue("AutoScan", "Folder_0" + Convert.ToString(j), "");
+            }
+
+            int i = 1;
+            foreach (string item in checkedListBoxAutoScanFolders.Items)
+            {
+                Util.ini.IniWriteValue("AutoScan", "Folder_0" + Convert.ToString(i), item+"?" + (checkedListBoxAutoScanFolders.CheckedItems.IndexOf(item) == -1 ? "0" : "1"));
+                i++;
+            }
+
         }
 
         public void LoadConfig()
@@ -82,14 +103,31 @@ namespace Switch_Backup_Manager
                     break;
                 default:
                     textBoxCustomPatern.Text = autoRenamingPattern;
-                    rbRenamingCustom.Checked = true;                    
+                    rbRenamingCustom.Checked = true;
                     break;
             }
 
             this.cbAutoUpdateScene.Checked = Util.AutoUpdateNSDBOnStartup;
+            this.cbUseTitleKeys.Checked = Util.UseTitleKeys;
             this.cbScrapLayerFSOnSD.Checked = Util.ScrapInstalledEshopSDCard;
             this.cbScrapNSPOnSD.Checked = Util.ScrapNSPOnSDCard;
             this.cbScrapXCIOnSD.Checked = Util.ScrapXCIOnSDCard;
+
+            for (int i = 1; i <= 5; i++ )
+            {
+                string value = Util.ini.IniReadValue("AutoScan", "Folder_0" + i);
+                if (value.Trim() != "")
+                {
+                    int ind = value.IndexOf("?");
+                    if (value.Substring(ind + 1, 1) == "1")
+                    {
+                        checkedListBoxAutoScanFolders.Items.Add(value.Substring(0, ind), true);
+                    } else
+                    {
+                        checkedListBoxAutoScanFolders.Items.Add(value.Substring(0, ind), false);
+                    }                    
+                }
+            }
         }
 
         private void rbRenamingGameName_CheckedChanged(object sender, EventArgs e)
@@ -148,7 +186,7 @@ namespace Switch_Backup_Manager
         }
 
         private void textBoxCustomPatern_TextChanged(object sender, EventArgs e)
-        {            
+        {
             if (textBoxCustomPatern.Text.Trim() != "")
             {
                 this.autoRenamingPattern = textBoxCustomPatern.Text;
@@ -162,6 +200,40 @@ namespace Switch_Backup_Manager
             {
                 textBoxCustomPatern.Text = textBoxCustomPatern.Text.Insert(textBoxCustomPatern.SelectionStart, cbxTags.Text);
             }
+        }
+
+        private void btnAddFolderAutoScan_Click(object sender, EventArgs e)
+        {
+            if (checkedListBoxAutoScanFolders.Items.Count >= 5)
+            {
+                MessageBox.Show("Too many folders selected!");
+                return;
+            }
+
+            CommonOpenFileDialog dialog = new CommonOpenFileDialog();
+            dialog.IsFolderPicker = true;
+            dialog.RestoreDirectory = true;
+            if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
+            {
+                string selectedPath = dialog.FileName;
+                if (checkedListBoxAutoScanFolders.Items.IndexOf(selectedPath) < 0)
+                {
+                    checkedListBoxAutoScanFolders.Items.Add(selectedPath);
+                }
+            }
+        }
+
+        private void btnRemFolderAutoScan_Click(object sender, EventArgs e)
+        {
+            if (checkedListBoxAutoScanFolders.SelectedIndex >= 0)
+            {
+                checkedListBoxAutoScanFolders.Items.RemoveAt(checkedListBoxAutoScanFolders.SelectedIndex);
+            }
+        }
+
+        private void btnApply_Click(object sender, EventArgs e)
+        {
+            WriteConfig();
         }
     }
 }

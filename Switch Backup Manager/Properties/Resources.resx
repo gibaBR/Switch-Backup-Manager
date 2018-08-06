@@ -163,4 +163,10 @@
   <data name="EN_Soon" xml:space="preserve">
     <value>Soon™</value>
   </data>
+  <data name="EN_FileOperationScanningNewFiles" xml:space="preserve">
+    <value>Scanning for new files</value>
+  </data>
+  <data name="EN_FileOperationUpdateFiles" xml:space="preserve">
+    <value>Updating files info...</value>
+  </data>
 </root>

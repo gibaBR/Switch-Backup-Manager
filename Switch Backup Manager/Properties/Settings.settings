@@ -14,5 +14,11 @@
     <Setting Name="Minimised" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
+    <Setting Name="SplitterDistanceVert" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">350</Value>
+    </Setting>
+    <Setting Name="SplitterDistanceHor" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">670</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

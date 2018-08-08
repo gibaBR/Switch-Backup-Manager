@@ -31,6 +31,18 @@
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmMain));
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.panelGameExtraInfo = new System.Windows.Forms.Panel();
+            this.lnkInfo = new System.Windows.Forms.LinkLabel();
+            this.lblPublisher = new System.Windows.Forms.Label();
+            this.label9 = new System.Windows.Forms.Label();
+            this.label8 = new System.Windows.Forms.Label();
+            this.label7 = new System.Windows.Forms.Label();
+            this.label6 = new System.Windows.Forms.Label();
+            this.pnlGameDescription = new System.Windows.Forms.Panel();
+            this.richTextBoxGameDescription = new System.Windows.Forms.RichTextBox();
+            this.lblCategory = new System.Windows.Forms.Label();
+            this.lblNumberOfPlayers = new System.Windows.Forms.Label();
+            this.lblReleaseDate = new System.Windows.Forms.Label();
             this.panel3 = new System.Windows.Forms.Panel();
             this.PB_GameIcon = new System.Windows.Forms.PictureBox();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
@@ -370,6 +382,7 @@
             this.updateLocalDatabaseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.updateEshopLocalDatabaseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.updateNswdbcomListToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.scrapExtendedInfoFromWebToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.backgroundWorkerAddFilesFromDirectory = new System.ComponentModel.BackgroundWorker();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.backgroundWorkerAddFile = new System.ComponentModel.BackgroundWorker();
@@ -377,10 +390,13 @@
             this.backgroundWorkerLoadSDCardFiles = new System.ComponentModel.BackgroundWorker();
             this.backgroundWorkerScanNewFiles = new System.ComponentModel.BackgroundWorker();
             this.backgroundWorkerUpdateFiles = new System.ComponentModel.BackgroundWorker();
+            this.backgroundWorkerScrapExtraInfo = new System.ComponentModel.BackgroundWorker();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
+            this.panelGameExtraInfo.SuspendLayout();
+            this.pnlGameDescription.SuspendLayout();
             this.panel3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.PB_GameIcon)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).BeginInit();
@@ -423,6 +439,7 @@
             // 
             // splitContainer1.Panel1
             // 
+            this.splitContainer1.Panel1.Controls.Add(this.panelGameExtraInfo);
             this.splitContainer1.Panel1.Controls.Add(this.panel3);
             this.splitContainer1.Panel1MinSize = 250;
             // 
@@ -431,9 +448,139 @@
             this.splitContainer1.Panel2.Controls.Add(this.splitContainer2);
             this.splitContainer1.Panel2MinSize = 800;
             this.splitContainer1.Size = new System.Drawing.Size(1880, 816);
-            this.splitContainer1.SplitterDistance = 293;
+            this.splitContainer1.SplitterDistance = 350;
             this.splitContainer1.SplitterWidth = 1;
             this.splitContainer1.TabIndex = 0;
+            // 
+            // panelGameExtraInfo
+            // 
+            this.panelGameExtraInfo.Controls.Add(this.lnkInfo);
+            this.panelGameExtraInfo.Controls.Add(this.lblPublisher);
+            this.panelGameExtraInfo.Controls.Add(this.label9);
+            this.panelGameExtraInfo.Controls.Add(this.label8);
+            this.panelGameExtraInfo.Controls.Add(this.label7);
+            this.panelGameExtraInfo.Controls.Add(this.label6);
+            this.panelGameExtraInfo.Controls.Add(this.pnlGameDescription);
+            this.panelGameExtraInfo.Controls.Add(this.lblCategory);
+            this.panelGameExtraInfo.Controls.Add(this.lblNumberOfPlayers);
+            this.panelGameExtraInfo.Controls.Add(this.lblReleaseDate);
+            this.panelGameExtraInfo.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panelGameExtraInfo.Location = new System.Drawing.Point(0, 369);
+            this.panelGameExtraInfo.Name = "panelGameExtraInfo";
+            this.panelGameExtraInfo.Size = new System.Drawing.Size(348, 445);
+            this.panelGameExtraInfo.TabIndex = 2;
+            this.panelGameExtraInfo.Visible = false;
+            // 
+            // lnkInfo
+            // 
+            this.lnkInfo.Location = new System.Drawing.Point(10, 218);
+            this.lnkInfo.Name = "lnkInfo";
+            this.lnkInfo.Size = new System.Drawing.Size(328, 13);
+            this.lnkInfo.TabIndex = 29;
+            this.lnkInfo.TabStop = true;
+            this.lnkInfo.Text = "E-shop homepage";
+            this.lnkInfo.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.lnkInfo.Visible = false;
+            this.lnkInfo.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lnkInfo_LinkClicked);
+            // 
+            // lblPublisher
+            // 
+            this.lblPublisher.AutoSize = true;
+            this.lblPublisher.Location = new System.Drawing.Point(104, 292);
+            this.lblPublisher.Name = "lblPublisher";
+            this.lblPublisher.Size = new System.Drawing.Size(41, 13);
+            this.lblPublisher.TabIndex = 14;
+            this.lblPublisher.Text = "label10";
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label9.Location = new System.Drawing.Point(10, 317);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(61, 13);
+            this.label9.TabIndex = 13;
+            this.label9.Text = "Category:";
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label8.Location = new System.Drawing.Point(10, 292);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(63, 13);
+            this.label8.TabIndex = 12;
+            this.label8.Text = "Publisher:";
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label7.Location = new System.Drawing.Point(10, 267);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(85, 13);
+            this.label7.TabIndex = 11;
+            this.label7.Text = "N° of Players:";
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label6.Location = new System.Drawing.Point(10, 242);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(88, 13);
+            this.label6.TabIndex = 10;
+            this.label6.Text = "Release Date:";
+            // 
+            // pnlGameDescription
+            // 
+            this.pnlGameDescription.Controls.Add(this.richTextBoxGameDescription);
+            this.pnlGameDescription.Dock = System.Windows.Forms.DockStyle.Top;
+            this.pnlGameDescription.Location = new System.Drawing.Point(0, 0);
+            this.pnlGameDescription.Name = "pnlGameDescription";
+            this.pnlGameDescription.Padding = new System.Windows.Forms.Padding(5);
+            this.pnlGameDescription.Size = new System.Drawing.Size(348, 208);
+            this.pnlGameDescription.TabIndex = 9;
+            // 
+            // richTextBoxGameDescription
+            // 
+            this.richTextBoxGameDescription.BackColor = System.Drawing.SystemColors.Control;
+            this.richTextBoxGameDescription.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.richTextBoxGameDescription.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.richTextBoxGameDescription.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.richTextBoxGameDescription.Location = new System.Drawing.Point(5, 5);
+            this.richTextBoxGameDescription.Name = "richTextBoxGameDescription";
+            this.richTextBoxGameDescription.ReadOnly = true;
+            this.richTextBoxGameDescription.Size = new System.Drawing.Size(338, 198);
+            this.richTextBoxGameDescription.TabIndex = 9;
+            this.richTextBoxGameDescription.Text = "";
+            // 
+            // lblCategory
+            // 
+            this.lblCategory.AutoSize = true;
+            this.lblCategory.Location = new System.Drawing.Point(104, 317);
+            this.lblCategory.Name = "lblCategory";
+            this.lblCategory.Size = new System.Drawing.Size(35, 13);
+            this.lblCategory.TabIndex = 7;
+            this.lblCategory.Text = "label6";
+            // 
+            // lblNumberOfPlayers
+            // 
+            this.lblNumberOfPlayers.AutoSize = true;
+            this.lblNumberOfPlayers.Location = new System.Drawing.Point(104, 267);
+            this.lblNumberOfPlayers.Name = "lblNumberOfPlayers";
+            this.lblNumberOfPlayers.Size = new System.Drawing.Size(35, 13);
+            this.lblNumberOfPlayers.TabIndex = 6;
+            this.lblNumberOfPlayers.Text = "label6";
+            // 
+            // lblReleaseDate
+            // 
+            this.lblReleaseDate.AutoSize = true;
+            this.lblReleaseDate.Location = new System.Drawing.Point(104, 242);
+            this.lblReleaseDate.Name = "lblReleaseDate";
+            this.lblReleaseDate.Size = new System.Drawing.Size(35, 13);
+            this.lblReleaseDate.TabIndex = 5;
+            this.lblReleaseDate.Text = "label6";
             // 
             // panel3
             // 
@@ -443,7 +590,7 @@
             this.panel3.Margin = new System.Windows.Forms.Padding(10);
             this.panel3.Name = "panel3";
             this.panel3.Padding = new System.Windows.Forms.Padding(10);
-            this.panel3.Size = new System.Drawing.Size(291, 369);
+            this.panel3.Size = new System.Drawing.Size(348, 369);
             this.panel3.TabIndex = 1;
             // 
             // PB_GameIcon
@@ -454,7 +601,7 @@
             this.PB_GameIcon.Margin = new System.Windows.Forms.Padding(20);
             this.PB_GameIcon.Name = "PB_GameIcon";
             this.PB_GameIcon.Padding = new System.Windows.Forms.Padding(10);
-            this.PB_GameIcon.Size = new System.Drawing.Size(271, 349);
+            this.PB_GameIcon.Size = new System.Drawing.Size(328, 349);
             this.PB_GameIcon.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.PB_GameIcon.TabIndex = 28;
             this.PB_GameIcon.TabStop = false;
@@ -472,7 +619,7 @@
             this.splitContainer2.Panel1.Controls.Add(this.tabControl1);
             this.splitContainer2.Panel1.Controls.Add(this.statusStrip1);
             this.splitContainer2.Panel1.Controls.Add(this.menuStrip1);
-            this.splitContainer2.Size = new System.Drawing.Size(1586, 816);
+            this.splitContainer2.Size = new System.Drawing.Size(1529, 816);
             this.splitContainer2.SplitterDistance = 669;
             this.splitContainer2.SplitterWidth = 1;
             this.splitContainer2.TabIndex = 0;
@@ -488,7 +635,7 @@
             this.tabControl1.Location = new System.Drawing.Point(0, 24);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(1584, 619);
+            this.tabControl1.Size = new System.Drawing.Size(1527, 619);
             this.tabControl1.TabIndex = 1;
             this.tabControl1.SelectedIndexChanged += new System.EventHandler(this.tabControl1_SelectedIndexChanged);
             this.tabControl1.TabIndexChanged += new System.EventHandler(this.tabControl1_TabIndexChanged);
@@ -500,7 +647,7 @@
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(1576, 593);
+            this.tabPage1.Size = new System.Drawing.Size(1519, 593);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Local files";
             this.tabPage1.UseVisualStyleBackColor = true;
@@ -511,7 +658,7 @@
             this.panel2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel2.Location = new System.Drawing.Point(3, 31);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(1570, 559);
+            this.panel2.Size = new System.Drawing.Size(1513, 559);
             this.panel2.TabIndex = 1;
             // 
             // OLVLocalFiles
@@ -554,7 +701,7 @@
             this.OLVLocalFiles.Location = new System.Drawing.Point(0, 0);
             this.OLVLocalFiles.Name = "OLVLocalFiles";
             this.OLVLocalFiles.ShowGroups = false;
-            this.OLVLocalFiles.Size = new System.Drawing.Size(1570, 559);
+            this.OLVLocalFiles.Size = new System.Drawing.Size(1513, 559);
             this.OLVLocalFiles.TabIndex = 1;
             this.OLVLocalFiles.UseCellFormatEvents = true;
             this.OLVLocalFiles.UseCompatibleStateImageBehavior = false;
@@ -773,12 +920,12 @@
             this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel1.Location = new System.Drawing.Point(3, 3);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(1570, 28);
+            this.panel1.Size = new System.Drawing.Size(1513, 28);
             this.panel1.TabIndex = 0;
             // 
             // btnClearFilterLocal
             // 
-            this.btnClearFilterLocal.Location = new System.Drawing.Point(1495, 1);
+            this.btnClearFilterLocal.Location = new System.Drawing.Point(1434, 1);
             this.btnClearFilterLocal.Name = "btnClearFilterLocal";
             this.btnClearFilterLocal.Size = new System.Drawing.Size(75, 23);
             this.btnClearFilterLocal.TabIndex = 4;
@@ -788,7 +935,7 @@
             // 
             // textBoxFilterLocal
             // 
-            this.textBoxFilterLocal.Location = new System.Drawing.Point(1220, 3);
+            this.textBoxFilterLocal.Location = new System.Drawing.Point(1159, 3);
             this.textBoxFilterLocal.Name = "textBoxFilterLocal";
             this.textBoxFilterLocal.Size = new System.Drawing.Size(268, 20);
             this.textBoxFilterLocal.TabIndex = 3;
@@ -797,7 +944,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(1076, 6);
+            this.label2.Location = new System.Drawing.Point(1015, 6);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(32, 13);
             this.label2.TabIndex = 2;
@@ -807,7 +954,7 @@
             // 
             this.cbxFilterLocal.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbxFilterLocal.FormattingEnabled = true;
-            this.cbxFilterLocal.Location = new System.Drawing.Point(1111, 2);
+            this.cbxFilterLocal.Location = new System.Drawing.Point(1050, 2);
             this.cbxFilterLocal.Name = "cbxFilterLocal";
             this.cbxFilterLocal.Size = new System.Drawing.Size(102, 21);
             this.cbxFilterLocal.TabIndex = 1;
@@ -825,7 +972,7 @@
             this.toolsToolStripMenuItem});
             this.menuLocalFiles.Location = new System.Drawing.Point(0, 0);
             this.menuLocalFiles.Name = "menuLocalFiles";
-            this.menuLocalFiles.Size = new System.Drawing.Size(1570, 24);
+            this.menuLocalFiles.Size = new System.Drawing.Size(1513, 24);
             this.menuLocalFiles.TabIndex = 0;
             this.menuLocalFiles.Text = "menuStrip1";
             // 
@@ -1252,14 +1399,14 @@
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(1574, 591);
+            this.tabPage2.Size = new System.Drawing.Size(1517, 591);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "SD card";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
             // btnClearFilterSD
             // 
-            this.btnClearFilterSD.Location = new System.Drawing.Point(1498, 3);
+            this.btnClearFilterSD.Location = new System.Drawing.Point(1441, 3);
             this.btnClearFilterSD.Name = "btnClearFilterSD";
             this.btnClearFilterSD.Size = new System.Drawing.Size(75, 23);
             this.btnClearFilterSD.TabIndex = 10;
@@ -1269,7 +1416,7 @@
             // 
             // textBoxFilterSD
             // 
-            this.textBoxFilterSD.Location = new System.Drawing.Point(1223, 5);
+            this.textBoxFilterSD.Location = new System.Drawing.Point(1166, 5);
             this.textBoxFilterSD.Name = "textBoxFilterSD";
             this.textBoxFilterSD.Size = new System.Drawing.Size(268, 20);
             this.textBoxFilterSD.TabIndex = 9;
@@ -1278,7 +1425,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(1079, 8);
+            this.label3.Location = new System.Drawing.Point(1022, 8);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(32, 13);
             this.label3.TabIndex = 8;
@@ -1288,7 +1435,7 @@
             // 
             this.cbxFilterSD.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbxFilterSD.FormattingEnabled = true;
-            this.cbxFilterSD.Location = new System.Drawing.Point(1114, 4);
+            this.cbxFilterSD.Location = new System.Drawing.Point(1057, 4);
             this.cbxFilterSD.Name = "cbxFilterSD";
             this.cbxFilterSD.Size = new System.Drawing.Size(102, 21);
             this.cbxFilterSD.TabIndex = 7;
@@ -1334,7 +1481,7 @@
             this.OLV_SDCard.Location = new System.Drawing.Point(3, 55);
             this.OLV_SDCard.Name = "OLV_SDCard";
             this.OLV_SDCard.ShowGroups = false;
-            this.OLV_SDCard.Size = new System.Drawing.Size(1568, 533);
+            this.OLV_SDCard.Size = new System.Drawing.Size(1511, 533);
             this.OLV_SDCard.TabIndex = 6;
             this.OLV_SDCard.UseCellFormatEvents = true;
             this.OLV_SDCard.UseCompatibleStateImageBehavior = false;
@@ -1517,7 +1664,7 @@
             this.panel5.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel5.Location = new System.Drawing.Point(3, 27);
             this.panel5.Name = "panel5";
-            this.panel5.Size = new System.Drawing.Size(1568, 28);
+            this.panel5.Size = new System.Drawing.Size(1511, 28);
             this.panel5.TabIndex = 5;
             // 
             // lblSpaceAvailabeOnSD
@@ -1563,7 +1710,7 @@
             this.toolStripMenuItem39});
             this.menuSDFiles.Location = new System.Drawing.Point(3, 3);
             this.menuSDFiles.Name = "menuSDFiles";
-            this.menuSDFiles.Size = new System.Drawing.Size(1568, 24);
+            this.menuSDFiles.Size = new System.Drawing.Size(1511, 24);
             this.menuSDFiles.TabIndex = 4;
             // 
             // toolStripMenuItem4
@@ -1961,7 +2108,7 @@
             this.tabPage3.Location = new System.Drawing.Point(4, 22);
             this.tabPage3.Name = "tabPage3";
             this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage3.Size = new System.Drawing.Size(1574, 591);
+            this.tabPage3.Size = new System.Drawing.Size(1517, 591);
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Text = "Scene releases";
             this.tabPage3.UseVisualStyleBackColor = true;
@@ -1977,12 +2124,12 @@
             this.panel4.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel4.Location = new System.Drawing.Point(3, 3);
             this.panel4.Name = "panel4";
-            this.panel4.Size = new System.Drawing.Size(1568, 585);
+            this.panel4.Size = new System.Drawing.Size(1511, 585);
             this.panel4.TabIndex = 0;
             // 
             // btnClearFilterScene
             // 
-            this.btnClearFilterScene.Location = new System.Drawing.Point(1495, -1);
+            this.btnClearFilterScene.Location = new System.Drawing.Point(1434, -1);
             this.btnClearFilterScene.Name = "btnClearFilterScene";
             this.btnClearFilterScene.Size = new System.Drawing.Size(75, 23);
             this.btnClearFilterScene.TabIndex = 14;
@@ -1992,7 +2139,7 @@
             // 
             // textBoxFilterScene
             // 
-            this.textBoxFilterScene.Location = new System.Drawing.Point(1220, 1);
+            this.textBoxFilterScene.Location = new System.Drawing.Point(1159, 1);
             this.textBoxFilterScene.Name = "textBoxFilterScene";
             this.textBoxFilterScene.Size = new System.Drawing.Size(268, 20);
             this.textBoxFilterScene.TabIndex = 13;
@@ -2001,7 +2148,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(1076, 4);
+            this.label4.Location = new System.Drawing.Point(1015, 4);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(32, 13);
             this.label4.TabIndex = 12;
@@ -2011,7 +2158,7 @@
             // 
             this.cbxFilterScene.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbxFilterScene.FormattingEnabled = true;
-            this.cbxFilterScene.Location = new System.Drawing.Point(1111, 0);
+            this.cbxFilterScene.Location = new System.Drawing.Point(1050, 0);
             this.cbxFilterScene.Name = "cbxFilterScene";
             this.cbxFilterScene.Size = new System.Drawing.Size(102, 21);
             this.cbxFilterScene.TabIndex = 11;
@@ -2053,7 +2200,7 @@
             this.OLVSceneList.Location = new System.Drawing.Point(0, 24);
             this.OLVSceneList.Name = "OLVSceneList";
             this.OLVSceneList.ShowGroups = false;
-            this.OLVSceneList.Size = new System.Drawing.Size(1568, 561);
+            this.OLVSceneList.Size = new System.Drawing.Size(1511, 561);
             this.OLVSceneList.TabIndex = 6;
             this.OLVSceneList.UseCellFormatEvents = true;
             this.OLVSceneList.UseCompatibleStateImageBehavior = false;
@@ -2178,7 +2325,7 @@
             this.toolStripMenuItem85});
             this.menuStrip3.Location = new System.Drawing.Point(0, 0);
             this.menuStrip3.Name = "menuStrip3";
-            this.menuStrip3.Size = new System.Drawing.Size(1568, 24);
+            this.menuStrip3.Size = new System.Drawing.Size(1511, 24);
             this.menuStrip3.TabIndex = 5;
             this.menuStrip3.Text = "menuStrip3";
             // 
@@ -2565,14 +2712,14 @@
             this.tabPage4.Location = new System.Drawing.Point(4, 22);
             this.tabPage4.Name = "tabPage4";
             this.tabPage4.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage4.Size = new System.Drawing.Size(1574, 591);
+            this.tabPage4.Size = new System.Drawing.Size(1519, 593);
             this.tabPage4.TabIndex = 3;
             this.tabPage4.Text = "E-shop files";
             this.tabPage4.UseVisualStyleBackColor = true;
             // 
             // btnClearFilterEShop
             // 
-            this.btnClearFilterEShop.Location = new System.Drawing.Point(1498, 2);
+            this.btnClearFilterEShop.Location = new System.Drawing.Point(1439, 2);
             this.btnClearFilterEShop.Name = "btnClearFilterEShop";
             this.btnClearFilterEShop.Size = new System.Drawing.Size(75, 23);
             this.btnClearFilterEShop.TabIndex = 8;
@@ -2582,7 +2729,7 @@
             // 
             // textBoxFilterEShop
             // 
-            this.textBoxFilterEShop.Location = new System.Drawing.Point(1223, 4);
+            this.textBoxFilterEShop.Location = new System.Drawing.Point(1164, 4);
             this.textBoxFilterEShop.Name = "textBoxFilterEShop";
             this.textBoxFilterEShop.Size = new System.Drawing.Size(268, 20);
             this.textBoxFilterEShop.TabIndex = 7;
@@ -2591,7 +2738,7 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(1079, 7);
+            this.label5.Location = new System.Drawing.Point(1020, 7);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(32, 13);
             this.label5.TabIndex = 6;
@@ -2601,7 +2748,7 @@
             // 
             this.cbxFilterEshop.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbxFilterEshop.FormattingEnabled = true;
-            this.cbxFilterEshop.Location = new System.Drawing.Point(1114, 3);
+            this.cbxFilterEshop.Location = new System.Drawing.Point(1055, 3);
             this.cbxFilterEshop.Name = "cbxFilterEshop";
             this.cbxFilterEshop.Size = new System.Drawing.Size(102, 21);
             this.cbxFilterEshop.TabIndex = 5;
@@ -2641,7 +2788,7 @@
             this.OLVEshop.Location = new System.Drawing.Point(3, 27);
             this.OLVEshop.Name = "OLVEshop";
             this.OLVEshop.ShowGroups = false;
-            this.OLVEshop.Size = new System.Drawing.Size(1568, 561);
+            this.OLVEshop.Size = new System.Drawing.Size(1513, 563);
             this.OLVEshop.TabIndex = 2;
             this.OLVEshop.UseCellFormatEvents = true;
             this.OLVEshop.UseCompatibleStateImageBehavior = false;
@@ -2839,7 +2986,7 @@
             this.toolStripMenuItem24});
             this.menuEShop.Location = new System.Drawing.Point(3, 3);
             this.menuEShop.Name = "menuEShop";
-            this.menuEShop.Size = new System.Drawing.Size(1568, 24);
+            this.menuEShop.Size = new System.Drawing.Size(1513, 24);
             this.menuEShop.TabIndex = 0;
             this.menuEShop.Text = "menuStrip2";
             // 
@@ -3119,7 +3266,7 @@
             this.tabPage5.Location = new System.Drawing.Point(4, 22);
             this.tabPage5.Name = "tabPage5";
             this.tabPage5.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage5.Size = new System.Drawing.Size(1574, 591);
+            this.tabPage5.Size = new System.Drawing.Size(1517, 591);
             this.tabPage5.TabIndex = 4;
             this.tabPage5.Text = "Log";
             this.tabPage5.UseVisualStyleBackColor = true;
@@ -3130,7 +3277,7 @@
             this.panel6.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel6.Location = new System.Drawing.Point(3, 3);
             this.panel6.Name = "panel6";
-            this.panel6.Size = new System.Drawing.Size(1568, 559);
+            this.panel6.Size = new System.Drawing.Size(1511, 559);
             this.panel6.TabIndex = 2;
             // 
             // richTextBoxLog
@@ -3140,7 +3287,7 @@
             this.richTextBoxLog.Location = new System.Drawing.Point(0, 0);
             this.richTextBoxLog.Name = "richTextBoxLog";
             this.richTextBoxLog.ReadOnly = true;
-            this.richTextBoxLog.Size = new System.Drawing.Size(1568, 559);
+            this.richTextBoxLog.Size = new System.Drawing.Size(1511, 559);
             this.richTextBoxLog.TabIndex = 3;
             this.richTextBoxLog.Text = "";
             this.richTextBoxLog.TextChanged += new System.EventHandler(this.richTextBoxLog_TextChanged);
@@ -3151,12 +3298,12 @@
             this.panel7.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.panel7.Location = new System.Drawing.Point(3, 562);
             this.panel7.Name = "panel7";
-            this.panel7.Size = new System.Drawing.Size(1568, 26);
+            this.panel7.Size = new System.Drawing.Size(1511, 26);
             this.panel7.TabIndex = 1;
             // 
             // btnClearLogFile
             // 
-            this.btnClearLogFile.Location = new System.Drawing.Point(1494, 2);
+            this.btnClearLogFile.Location = new System.Drawing.Point(1433, 2);
             this.btnClearLogFile.Name = "btnClearLogFile";
             this.btnClearLogFile.Size = new System.Drawing.Size(75, 23);
             this.btnClearLogFile.TabIndex = 0;
@@ -3174,7 +3321,7 @@
             this.toolStripStatusLabelGame});
             this.statusStrip1.Location = new System.Drawing.Point(0, 643);
             this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(1584, 24);
+            this.statusStrip1.Size = new System.Drawing.Size(1527, 24);
             this.statusStrip1.TabIndex = 0;
             this.statusStrip1.Text = "statusStrip1";
             // 
@@ -3226,7 +3373,7 @@
             this.toolsToolStripMenuItem1});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(1584, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(1527, 24);
             this.menuStrip1.TabIndex = 2;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -3264,7 +3411,8 @@
             this.toolsToolStripMenuItem1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.updateLocalDatabaseToolStripMenuItem,
             this.updateEshopLocalDatabaseToolStripMenuItem,
-            this.updateNswdbcomListToolStripMenuItem1});
+            this.updateNswdbcomListToolStripMenuItem1,
+            this.scrapExtendedInfoFromWebToolStripMenuItem});
             this.toolsToolStripMenuItem1.Name = "toolsToolStripMenuItem1";
             this.toolsToolStripMenuItem1.Size = new System.Drawing.Size(47, 20);
             this.toolsToolStripMenuItem1.Text = "&Tools";
@@ -3272,14 +3420,14 @@
             // updateLocalDatabaseToolStripMenuItem
             // 
             this.updateLocalDatabaseToolStripMenuItem.Name = "updateLocalDatabaseToolStripMenuItem";
-            this.updateLocalDatabaseToolStripMenuItem.Size = new System.Drawing.Size(230, 22);
+            this.updateLocalDatabaseToolStripMenuItem.Size = new System.Drawing.Size(232, 22);
             this.updateLocalDatabaseToolStripMenuItem.Text = "&Update local database";
             this.updateLocalDatabaseToolStripMenuItem.Click += new System.EventHandler(this.updateLocalDatabaseToolStripMenuItem_Click);
             // 
             // updateEshopLocalDatabaseToolStripMenuItem
             // 
             this.updateEshopLocalDatabaseToolStripMenuItem.Name = "updateEshopLocalDatabaseToolStripMenuItem";
-            this.updateEshopLocalDatabaseToolStripMenuItem.Size = new System.Drawing.Size(230, 22);
+            this.updateEshopLocalDatabaseToolStripMenuItem.Size = new System.Drawing.Size(232, 22);
             this.updateEshopLocalDatabaseToolStripMenuItem.Text = "Update e-shop local database";
             this.updateEshopLocalDatabaseToolStripMenuItem.Visible = false;
             this.updateEshopLocalDatabaseToolStripMenuItem.Click += new System.EventHandler(this.updateEshopLocalDatabaseToolStripMenuItem_Click);
@@ -3287,9 +3435,16 @@
             // updateNswdbcomListToolStripMenuItem1
             // 
             this.updateNswdbcomListToolStripMenuItem1.Name = "updateNswdbcomListToolStripMenuItem1";
-            this.updateNswdbcomListToolStripMenuItem1.Size = new System.Drawing.Size(230, 22);
+            this.updateNswdbcomListToolStripMenuItem1.Size = new System.Drawing.Size(232, 22);
             this.updateNswdbcomListToolStripMenuItem1.Text = "Update nswdb.com list";
             this.updateNswdbcomListToolStripMenuItem1.Click += new System.EventHandler(this.updateNswdbcomListToolStripMenuItem1_Click);
+            // 
+            // scrapExtendedInfoFromWebToolStripMenuItem
+            // 
+            this.scrapExtendedInfoFromWebToolStripMenuItem.Name = "scrapExtendedInfoFromWebToolStripMenuItem";
+            this.scrapExtendedInfoFromWebToolStripMenuItem.Size = new System.Drawing.Size(232, 22);
+            this.scrapExtendedInfoFromWebToolStripMenuItem.Text = "Scrap extended info from web";
+            this.scrapExtendedInfoFromWebToolStripMenuItem.Click += new System.EventHandler(this.scrapExtendedInfoFromWebToolStripMenuItem_Click);
             // 
             // backgroundWorkerAddFilesFromDirectory
             // 
@@ -3324,6 +3479,11 @@
             // 
             this.backgroundWorkerUpdateFiles.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorkerUpdateFiles_DoWork);
             // 
+            // backgroundWorkerScrapExtraInfo
+            // 
+            this.backgroundWorkerScrapExtraInfo.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorkerScrapExtraInfo_DoWork);
+            this.backgroundWorkerScrapExtraInfo.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backgroundWorkerScrapExtraInfo_RunWorkerCompleted);
+            // 
             // FrmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -3341,6 +3501,9 @@
             this.splitContainer1.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
             this.splitContainer1.ResumeLayout(false);
+            this.panelGameExtraInfo.ResumeLayout(false);
+            this.panelGameExtraInfo.PerformLayout();
+            this.pnlGameDescription.ResumeLayout(false);
             this.panel3.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.PB_GameIcon)).EndInit();
             this.splitContainer2.Panel1.ResumeLayout(false);
@@ -3738,6 +3901,20 @@
         private BrightIdeasSoftware.OLVColumn olvColumnFirmwareSD;
         private BrightIdeasSoftware.OLVColumn olvColumnFirmwareEShop;
         private BrightIdeasSoftware.OLVColumn olvColumnSceneID;
+        private System.Windows.Forms.LinkLabel lnkInfo;
+        private System.Windows.Forms.ToolStripMenuItem scrapExtendedInfoFromWebToolStripMenuItem;
+        private System.ComponentModel.BackgroundWorker backgroundWorkerScrapExtraInfo;
+        private System.Windows.Forms.Panel panelGameExtraInfo;
+        private System.Windows.Forms.Label lblCategory;
+        private System.Windows.Forms.Label lblNumberOfPlayers;
+        private System.Windows.Forms.Label lblReleaseDate;
+        private System.Windows.Forms.Panel pnlGameDescription;
+        private System.Windows.Forms.RichTextBox richTextBoxGameDescription;
+        private System.Windows.Forms.Label lblPublisher;
+        private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.Label label6;
     }
 }
 

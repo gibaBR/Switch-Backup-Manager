@@ -82,6 +82,7 @@
             this.folderToolStripMenuItem3 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem68 = new System.Windows.Forms.ToolStripSeparator();
             this.copyInfoToClipboardToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.updateGameInfoFromWebToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panel1 = new System.Windows.Forms.Panel();
             this.panel9 = new System.Windows.Forms.Panel();
             this.btnClearFilterLocal = new System.Windows.Forms.Button();
@@ -318,7 +319,7 @@
             this.olvColumnDistributionType = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnFirmwareEShop = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnSDKVersionEShop = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
-            this.contextMenuStripEShop = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.contextMenuEShopList = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.toolStripMenuItemEShopShowInExplorer = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItemEShopUpdateInfo = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator9 = new System.Windows.Forms.ToolStripSeparator();
@@ -332,6 +333,7 @@
             this.folderToolStripMenuItem6 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem64 = new System.Windows.Forms.ToolStripSeparator();
             this.copyInfoToClipboardToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.updateGameInfoFromWebToolStripMenuItemEshop = new System.Windows.Forms.ToolStripMenuItem();
             this.menuEShop = new System.Windows.Forms.MenuStrip();
             this.addToolStripMenuItemAddFolderEShop = new System.Windows.Forms.ToolStripMenuItem();
             this.filesToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
@@ -397,7 +399,6 @@
             this.backgroundWorkerScanNewFiles = new System.ComponentModel.BackgroundWorker();
             this.backgroundWorkerUpdateFiles = new System.ComponentModel.BackgroundWorker();
             this.backgroundWorkerScrapExtraInfo = new System.ComponentModel.BackgroundWorker();
-            this.updateGameInfoFromWebToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -430,7 +431,7 @@
             this.menuStrip3.SuspendLayout();
             this.tabPage4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.OLVEshop)).BeginInit();
-            this.contextMenuStripEShop.SuspendLayout();
+            this.contextMenuEShopList.SuspendLayout();
             this.menuEShop.SuspendLayout();
             this.tabPage5.SuspendLayout();
             this.panel6.SuspendLayout();
@@ -820,6 +821,7 @@
             // 
             this.olvColumnFirmwareLocal.AspectName = "Firmware";
             this.olvColumnFirmwareLocal.Text = "Firmware";
+            this.olvColumnFirmwareLocal.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.olvColumnFirmwareLocal.Width = 100;
             // 
             // olvColumnSDKVersionLocal
@@ -858,7 +860,7 @@
             this.copyInfoToClipboardToolStripMenuItem1,
             this.updateGameInfoFromWebToolStripMenuItem});
             this.contextMenuLocalList.Name = "contextMenuLocalList";
-            this.contextMenuLocalList.Size = new System.Drawing.Size(226, 198);
+            this.contextMenuLocalList.Size = new System.Drawing.Size(226, 176);
             this.contextMenuLocalList.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuLocalList_Opening);
             // 
             // showInExplorerToolStripMenuItem
@@ -949,6 +951,13 @@
             this.copyInfoToClipboardToolStripMenuItem1.Size = new System.Drawing.Size(225, 22);
             this.copyInfoToClipboardToolStripMenuItem1.Text = "Copy info to clipboard";
             this.copyInfoToClipboardToolStripMenuItem1.Click += new System.EventHandler(this.copyInfoToClipboardToolStripMenuItem1_Click);
+            // 
+            // updateGameInfoFromWebToolStripMenuItem
+            // 
+            this.updateGameInfoFromWebToolStripMenuItem.Name = "updateGameInfoFromWebToolStripMenuItem";
+            this.updateGameInfoFromWebToolStripMenuItem.Size = new System.Drawing.Size(225, 22);
+            this.updateGameInfoFromWebToolStripMenuItem.Text = "Update game info from Web";
+            this.updateGameInfoFromWebToolStripMenuItem.Click += new System.EventHandler(this.updateGameInfoFromWebToolStripMenuItem_Click);
             // 
             // panel1
             // 
@@ -2768,7 +2777,7 @@
             this.tabPage4.Location = new System.Drawing.Point(4, 22);
             this.tabPage4.Name = "tabPage4";
             this.tabPage4.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage4.Size = new System.Drawing.Size(1517, 591);
+            this.tabPage4.Size = new System.Drawing.Size(1519, 593);
             this.tabPage4.TabIndex = 3;
             this.tabPage4.Text = "E-shop files";
             this.tabPage4.UseVisualStyleBackColor = true;
@@ -2836,7 +2845,7 @@
             this.olvColumnDistributionType,
             this.olvColumnFirmwareEShop,
             this.olvColumnSDKVersionEShop});
-            this.OLVEshop.ContextMenuStrip = this.contextMenuStripEShop;
+            this.OLVEshop.ContextMenuStrip = this.contextMenuEShopList;
             this.OLVEshop.Cursor = System.Windows.Forms.Cursors.Default;
             this.OLVEshop.Dock = System.Windows.Forms.DockStyle.Fill;
             this.OLVEshop.FullRowSelect = true;
@@ -2844,7 +2853,7 @@
             this.OLVEshop.Location = new System.Drawing.Point(3, 27);
             this.OLVEshop.Name = "OLVEshop";
             this.OLVEshop.ShowGroups = false;
-            this.OLVEshop.Size = new System.Drawing.Size(1511, 561);
+            this.OLVEshop.Size = new System.Drawing.Size(1513, 563);
             this.OLVEshop.TabIndex = 2;
             this.OLVEshop.UseCellFormatEvents = true;
             this.OLVEshop.UseCompatibleStateImageBehavior = false;
@@ -2926,9 +2935,9 @@
             this.olvColumnSDKVersionEShop.Text = "SDK Version";
             this.olvColumnSDKVersionEShop.Width = 100;
             // 
-            // contextMenuStripEShop
+            // contextMenuEShopList
             // 
-            this.contextMenuStripEShop.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.contextMenuEShopList.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripMenuItemEShopShowInExplorer,
             this.toolStripMenuItemEShopUpdateInfo,
             this.toolStripSeparator9,
@@ -2937,22 +2946,23 @@
             this.toolStripMenuItemEShopCopyToFolder,
             this.toolStripMenuItemEShopMoveToFolder,
             this.toolStripMenuItem64,
-            this.copyInfoToClipboardToolStripMenuItem});
-            this.contextMenuStripEShop.Name = "contextMenuStripSDCard";
-            this.contextMenuStripEShop.Size = new System.Drawing.Size(194, 154);
-            this.contextMenuStripEShop.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStripEShop_Opening);
+            this.copyInfoToClipboardToolStripMenuItem,
+            this.updateGameInfoFromWebToolStripMenuItemEshop});
+            this.contextMenuEShopList.Name = "contextMenuStripSDCard";
+            this.contextMenuEShopList.Size = new System.Drawing.Size(226, 176);
+            this.contextMenuEShopList.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStripEShop_Opening);
             // 
             // toolStripMenuItemEShopShowInExplorer
             // 
             this.toolStripMenuItemEShopShowInExplorer.Name = "toolStripMenuItemEShopShowInExplorer";
-            this.toolStripMenuItemEShopShowInExplorer.Size = new System.Drawing.Size(193, 22);
+            this.toolStripMenuItemEShopShowInExplorer.Size = new System.Drawing.Size(225, 22);
             this.toolStripMenuItemEShopShowInExplorer.Text = "Show in explorer";
             this.toolStripMenuItemEShopShowInExplorer.Click += new System.EventHandler(this.toolStripMenuItemEShopShowInExplorer_Click);
             // 
             // toolStripMenuItemEShopUpdateInfo
             // 
             this.toolStripMenuItemEShopUpdateInfo.Name = "toolStripMenuItemEShopUpdateInfo";
-            this.toolStripMenuItemEShopUpdateInfo.Size = new System.Drawing.Size(193, 22);
+            this.toolStripMenuItemEShopUpdateInfo.Size = new System.Drawing.Size(225, 22);
             this.toolStripMenuItemEShopUpdateInfo.Text = "Update info";
             this.toolStripMenuItemEShopUpdateInfo.Visible = false;
             this.toolStripMenuItemEShopUpdateInfo.Click += new System.EventHandler(this.toolStripMenuItemEShopUpdateInfo_Click);
@@ -2960,19 +2970,19 @@
             // toolStripSeparator9
             // 
             this.toolStripSeparator9.Name = "toolStripSeparator9";
-            this.toolStripSeparator9.Size = new System.Drawing.Size(190, 6);
+            this.toolStripSeparator9.Size = new System.Drawing.Size(222, 6);
             // 
             // toolStripMenuItemEShopAutoRename
             // 
             this.toolStripMenuItemEShopAutoRename.Name = "toolStripMenuItemEShopAutoRename";
-            this.toolStripMenuItemEShopAutoRename.Size = new System.Drawing.Size(193, 22);
+            this.toolStripMenuItemEShopAutoRename.Size = new System.Drawing.Size(225, 22);
             this.toolStripMenuItemEShopAutoRename.Text = "Auto rename files";
             this.toolStripMenuItemEShopAutoRename.Click += new System.EventHandler(this.toolStripMenuItemEShopAutoRename_Click);
             // 
             // toolStripSeparator10
             // 
             this.toolStripSeparator10.Name = "toolStripSeparator10";
-            this.toolStripSeparator10.Size = new System.Drawing.Size(190, 6);
+            this.toolStripSeparator10.Size = new System.Drawing.Size(222, 6);
             // 
             // toolStripMenuItemEShopCopyToFolder
             // 
@@ -2980,7 +2990,7 @@
             this.sDCardToolStripMenuItem4,
             this.folderToolStripMenuItem5});
             this.toolStripMenuItemEShopCopyToFolder.Name = "toolStripMenuItemEShopCopyToFolder";
-            this.toolStripMenuItemEShopCopyToFolder.Size = new System.Drawing.Size(193, 22);
+            this.toolStripMenuItemEShopCopyToFolder.Size = new System.Drawing.Size(225, 22);
             this.toolStripMenuItemEShopCopyToFolder.Text = "Copy files to";
             // 
             // sDCardToolStripMenuItem4
@@ -3003,7 +3013,7 @@
             this.sDCardToolStripMenuItem5,
             this.folderToolStripMenuItem6});
             this.toolStripMenuItemEShopMoveToFolder.Name = "toolStripMenuItemEShopMoveToFolder";
-            this.toolStripMenuItemEShopMoveToFolder.Size = new System.Drawing.Size(193, 22);
+            this.toolStripMenuItemEShopMoveToFolder.Size = new System.Drawing.Size(225, 22);
             this.toolStripMenuItemEShopMoveToFolder.Text = "Move files to";
             // 
             // sDCardToolStripMenuItem5
@@ -3023,14 +3033,21 @@
             // toolStripMenuItem64
             // 
             this.toolStripMenuItem64.Name = "toolStripMenuItem64";
-            this.toolStripMenuItem64.Size = new System.Drawing.Size(190, 6);
+            this.toolStripMenuItem64.Size = new System.Drawing.Size(222, 6);
             // 
             // copyInfoToClipboardToolStripMenuItem
             // 
             this.copyInfoToClipboardToolStripMenuItem.Name = "copyInfoToClipboardToolStripMenuItem";
-            this.copyInfoToClipboardToolStripMenuItem.Size = new System.Drawing.Size(193, 22);
+            this.copyInfoToClipboardToolStripMenuItem.Size = new System.Drawing.Size(225, 22);
             this.copyInfoToClipboardToolStripMenuItem.Text = "Copy info to clipboard";
             this.copyInfoToClipboardToolStripMenuItem.Click += new System.EventHandler(this.copyInfoToClipboardToolStripMenuItem_Click);
+            // 
+            // updateGameInfoFromWebToolStripMenuItemEshop
+            // 
+            this.updateGameInfoFromWebToolStripMenuItemEshop.Name = "updateGameInfoFromWebToolStripMenuItemEshop";
+            this.updateGameInfoFromWebToolStripMenuItemEshop.Size = new System.Drawing.Size(225, 22);
+            this.updateGameInfoFromWebToolStripMenuItemEshop.Text = "Update game info from Web";
+            this.updateGameInfoFromWebToolStripMenuItemEshop.Click += new System.EventHandler(this.updateGameInfoFromWebToolStripMenuItemEshop_Click);
             // 
             // menuEShop
             // 
@@ -3042,7 +3059,7 @@
             this.toolStripMenuItem24});
             this.menuEShop.Location = new System.Drawing.Point(3, 3);
             this.menuEShop.Name = "menuEShop";
-            this.menuEShop.Size = new System.Drawing.Size(1511, 24);
+            this.menuEShop.Size = new System.Drawing.Size(1513, 24);
             this.menuEShop.TabIndex = 0;
             this.menuEShop.Text = "menuStrip2";
             // 
@@ -3058,14 +3075,14 @@
             // filesToolStripMenuItem1
             // 
             this.filesToolStripMenuItem1.Name = "filesToolStripMenuItem1";
-            this.filesToolStripMenuItem1.Size = new System.Drawing.Size(116, 22);
+            this.filesToolStripMenuItem1.Size = new System.Drawing.Size(180, 22);
             this.filesToolStripMenuItem1.Text = "Files...";
             this.filesToolStripMenuItem1.Click += new System.EventHandler(this.filesToolStripMenuItem1_Click);
             // 
             // folderToolStripMenuItem4
             // 
             this.folderToolStripMenuItem4.Name = "folderToolStripMenuItem4";
-            this.folderToolStripMenuItem4.Size = new System.Drawing.Size(116, 22);
+            this.folderToolStripMenuItem4.Size = new System.Drawing.Size(180, 22);
             this.folderToolStripMenuItem4.Text = "Folder...";
             this.folderToolStripMenuItem4.Click += new System.EventHandler(this.folderToolStripMenuItem4_Click);
             // 
@@ -3085,28 +3102,28 @@
             // toolStripMenuItemSelectAllEshop
             // 
             this.toolStripMenuItemSelectAllEshop.Name = "toolStripMenuItemSelectAllEshop";
-            this.toolStripMenuItemSelectAllEshop.Size = new System.Drawing.Size(154, 22);
+            this.toolStripMenuItemSelectAllEshop.Size = new System.Drawing.Size(180, 22);
             this.toolStripMenuItemSelectAllEshop.Text = "All";
             this.toolStripMenuItemSelectAllEshop.Click += new System.EventHandler(this.toolStripMenuItemSelectAllEshop_Click);
             // 
             // toolStripMenuItemSelectNoneEShop
             // 
             this.toolStripMenuItemSelectNoneEShop.Name = "toolStripMenuItemSelectNoneEShop";
-            this.toolStripMenuItemSelectNoneEShop.Size = new System.Drawing.Size(154, 22);
+            this.toolStripMenuItemSelectNoneEShop.Size = new System.Drawing.Size(180, 22);
             this.toolStripMenuItemSelectNoneEShop.Text = "None";
             this.toolStripMenuItemSelectNoneEShop.Click += new System.EventHandler(this.toolStripMenuItemSelectNoneEShop_Click);
             // 
             // toolStripMenuItemSelectInvertEShop
             // 
             this.toolStripMenuItemSelectInvertEShop.Name = "toolStripMenuItemSelectInvertEShop";
-            this.toolStripMenuItemSelectInvertEShop.Size = new System.Drawing.Size(154, 22);
+            this.toolStripMenuItemSelectInvertEShop.Size = new System.Drawing.Size(180, 22);
             this.toolStripMenuItemSelectInvertEShop.Text = "Invert selection";
             this.toolStripMenuItemSelectInvertEShop.Click += new System.EventHandler(this.toolStripMenuItemSelectInvertEShop_Click);
             // 
             // toolStripSeparator7
             // 
             this.toolStripSeparator7.Name = "toolStripSeparator7";
-            this.toolStripSeparator7.Size = new System.Drawing.Size(151, 6);
+            this.toolStripSeparator7.Size = new System.Drawing.Size(177, 6);
             // 
             // toolStripMenuItemSelectSDCardEShop
             // 
@@ -3114,7 +3131,7 @@
             this.toolStripMenuItemSelectSDCardItemsOnSDEShop,
             this.toolStripMenuItemSelectSDCardItemsNotOnSDCardEShop});
             this.toolStripMenuItemSelectSDCardEShop.Name = "toolStripMenuItemSelectSDCardEShop";
-            this.toolStripMenuItemSelectSDCardEShop.Size = new System.Drawing.Size(154, 22);
+            this.toolStripMenuItemSelectSDCardEShop.Size = new System.Drawing.Size(180, 22);
             this.toolStripMenuItemSelectSDCardEShop.Text = "SD card";
             // 
             // toolStripMenuItemSelectSDCardItemsOnSDEShop
@@ -3137,7 +3154,7 @@
             this.toolStripMenuItemSelectSceneOnEShop,
             this.toolStripMenuItemSelectSceneNotOnEShop});
             this.toolStripMenuItemSelectSceneEShop.Name = "toolStripMenuItemSelectSceneEShop";
-            this.toolStripMenuItemSelectSceneEShop.Size = new System.Drawing.Size(154, 22);
+            this.toolStripMenuItemSelectSceneEShop.Size = new System.Drawing.Size(180, 22);
             this.toolStripMenuItemSelectSceneEShop.Text = "Scene releases";
             this.toolStripMenuItemSelectSceneEShop.Visible = false;
             // 
@@ -3167,28 +3184,28 @@
             // toolStripMenuItemGroupingNoneEShop
             // 
             this.toolStripMenuItemGroupingNoneEShop.Name = "toolStripMenuItemGroupingNoneEShop";
-            this.toolStripMenuItemGroupingNoneEShop.Size = new System.Drawing.Size(172, 22);
+            this.toolStripMenuItemGroupingNoneEShop.Size = new System.Drawing.Size(180, 22);
             this.toolStripMenuItemGroupingNoneEShop.Text = "None";
             this.toolStripMenuItemGroupingNoneEShop.Click += new System.EventHandler(this.toolStripMenuItemGroupingNoneEShop_Click);
             // 
             // toolStripMenuItemGroupingGameTitleEShop
             // 
             this.toolStripMenuItemGroupingGameTitleEShop.Name = "toolStripMenuItemGroupingGameTitleEShop";
-            this.toolStripMenuItemGroupingGameTitleEShop.Size = new System.Drawing.Size(172, 22);
+            this.toolStripMenuItemGroupingGameTitleEShop.Size = new System.Drawing.Size(180, 22);
             this.toolStripMenuItemGroupingGameTitleEShop.Text = "Game title";
             this.toolStripMenuItemGroupingGameTitleEShop.Click += new System.EventHandler(this.toolStripMenuItemGroupingGameTitleEShop_Click);
             // 
             // toolStripMenuItemGroupingDeveloperEShop
             // 
             this.toolStripMenuItemGroupingDeveloperEShop.Name = "toolStripMenuItemGroupingDeveloperEShop";
-            this.toolStripMenuItemGroupingDeveloperEShop.Size = new System.Drawing.Size(172, 22);
+            this.toolStripMenuItemGroupingDeveloperEShop.Size = new System.Drawing.Size(180, 22);
             this.toolStripMenuItemGroupingDeveloperEShop.Text = "Developer";
             this.toolStripMenuItemGroupingDeveloperEShop.Click += new System.EventHandler(this.toolStripMenuItemGroupingDeveloperEShop_Click);
             // 
             // toolStripMenuItemGroupingMasterKeyEShop
             // 
             this.toolStripMenuItemGroupingMasterKeyEShop.Name = "toolStripMenuItemGroupingMasterKeyEShop";
-            this.toolStripMenuItemGroupingMasterKeyEShop.Size = new System.Drawing.Size(172, 22);
+            this.toolStripMenuItemGroupingMasterKeyEShop.Size = new System.Drawing.Size(180, 22);
             this.toolStripMenuItemGroupingMasterKeyEShop.Text = "Masterkey revision";
             this.toolStripMenuItemGroupingMasterKeyEShop.Click += new System.EventHandler(this.toolStripMenuItemGroupingMasterKeyEShop_Click);
             // 
@@ -3206,14 +3223,14 @@
             // toolStripMenuItemRemoveSelectedEShop
             // 
             this.toolStripMenuItemRemoveSelectedEShop.Name = "toolStripMenuItemRemoveSelectedEShop";
-            this.toolStripMenuItemRemoveSelectedEShop.Size = new System.Drawing.Size(149, 22);
+            this.toolStripMenuItemRemoveSelectedEShop.Size = new System.Drawing.Size(180, 22);
             this.toolStripMenuItemRemoveSelectedEShop.Text = "Selected";
             this.toolStripMenuItemRemoveSelectedEShop.Click += new System.EventHandler(this.toolStripMenuItemRemoveSelectedEShop_Click);
             // 
             // toolStripSeparator8
             // 
             this.toolStripSeparator8.Name = "toolStripSeparator8";
-            this.toolStripSeparator8.Size = new System.Drawing.Size(146, 6);
+            this.toolStripSeparator8.Size = new System.Drawing.Size(177, 6);
             this.toolStripSeparator8.Visible = false;
             // 
             // toolStripMenuItem44
@@ -3222,7 +3239,7 @@
             this.toolStripMenuItemRemoveFilesOnSDCardEShop,
             this.toolStripMenuItemRemoveFilesNotOnSDCardEShop});
             this.toolStripMenuItem44.Name = "toolStripMenuItem44";
-            this.toolStripMenuItem44.Size = new System.Drawing.Size(149, 22);
+            this.toolStripMenuItem44.Size = new System.Drawing.Size(180, 22);
             this.toolStripMenuItem44.Text = "SD card";
             this.toolStripMenuItem44.Visible = false;
             // 
@@ -3244,7 +3261,7 @@
             this.toolStripMenuItem66,
             this.toolStripMenuItem67});
             this.toolStripMenuItem65.Name = "toolStripMenuItem65";
-            this.toolStripMenuItem65.Size = new System.Drawing.Size(149, 22);
+            this.toolStripMenuItem65.Size = new System.Drawing.Size(180, 22);
             this.toolStripMenuItem65.Text = "Scene releases";
             this.toolStripMenuItem65.Visible = false;
             // 
@@ -3275,7 +3292,7 @@
             this.toolStripMenuItemCopyFilesToSDEShop,
             this.toolStripMenuItemMoveFilesToSDEShop});
             this.toolStripMenuItem45.Name = "toolStripMenuItem45";
-            this.toolStripMenuItem45.Size = new System.Drawing.Size(116, 22);
+            this.toolStripMenuItem45.Size = new System.Drawing.Size(180, 22);
             this.toolStripMenuItem45.Text = "SD card";
             // 
             // toolStripMenuItemCopyFilesToSDEShop
@@ -3298,7 +3315,7 @@
             this.toolStripMenuItemCopyFilesToFolderEShop,
             this.toolStripMenuItemMoveFilesToFolderEShop});
             this.toolStripMenuItem69.Name = "toolStripMenuItem69";
-            this.toolStripMenuItem69.Size = new System.Drawing.Size(116, 22);
+            this.toolStripMenuItem69.Size = new System.Drawing.Size(180, 22);
             this.toolStripMenuItem69.Text = "Folder...";
             // 
             // toolStripMenuItemCopyFilesToFolderEShop
@@ -3540,12 +3557,6 @@
             this.backgroundWorkerScrapExtraInfo.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorkerScrapExtraInfo_DoWork);
             this.backgroundWorkerScrapExtraInfo.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backgroundWorkerScrapExtraInfo_RunWorkerCompleted);
             // 
-            // updateGameInfoFromWebToolStripMenuItem
-            // 
-            this.updateGameInfoFromWebToolStripMenuItem.Name = "updateGameInfoFromWebToolStripMenuItem";
-            this.updateGameInfoFromWebToolStripMenuItem.Size = new System.Drawing.Size(225, 22);
-            this.updateGameInfoFromWebToolStripMenuItem.Text = "Update game info from Web";
-            // 
             // FrmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -3602,7 +3613,7 @@
             this.tabPage4.ResumeLayout(false);
             this.tabPage4.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.OLVEshop)).EndInit();
-            this.contextMenuStripEShop.ResumeLayout(false);
+            this.contextMenuEShopList.ResumeLayout(false);
             this.menuEShop.ResumeLayout(false);
             this.menuEShop.PerformLayout();
             this.tabPage5.ResumeLayout(false);
@@ -3867,7 +3878,7 @@
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem69;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemCopyFilesToFolderEShop;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemMoveFilesToFolderEShop;
-        private System.Windows.Forms.ContextMenuStrip contextMenuStripEShop;
+        private System.Windows.Forms.ContextMenuStrip contextMenuEShopList;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemEShopShowInExplorer;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator9;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemEShopAutoRename;
@@ -3987,6 +3998,7 @@
         private System.Windows.Forms.ToolStripMenuItem htmlToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem cSVToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem updateGameInfoFromWebToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem updateGameInfoFromWebToolStripMenuItemEshop;
     }
 }
 

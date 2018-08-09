@@ -3447,11 +3447,77 @@ namespace Switch_Backup_Manager
             ScrapExtraInfoFromWeb();
         }
 
+
+        /// <summary>
+        /// Update a list of files with information from web
+        /// </summary>
+        /// <param name="source">Which list? Valid values are local, sdcard, eshop, scene</param>
+        private void UpdateGamesInfoFromWeb(string source)
+        {
+            Dictionary<Tuple<string, string>, FileData> list = null;
+
+            switch (source)
+            {
+                case "local":
+                    list = LocalFilesListSelectedItems;
+                    break;
+                case "sdcard":
+                    list = SDCardListSelectedItems;
+                    break;
+                case "eshop":
+                    list = LocalNSPFilesListSelectedItems;
+                    break;
+                case "scene":
+                    list = SceneReleasesSelectedItems;
+                    break;
+            }
+
+            if (list != null)
+            {
+                if (list.Count > 0)
+                {
+                    if (!backgroundWorkerScrapExtraInfo.IsBusy)
+                    {
+                        switch (source)
+                        {
+                            case "local":
+                                menuLocalFiles.Enabled = false;
+                                break;
+                            case "eshop":
+                                menuEShop.Enabled = false;
+                                break;
+                        }
+                        
+                        toolStripStatusFilesOperation.Text = Properties.Resources.EN_FileOperationsScrapFromWeb;
+                        toolStripStatusFilesOperation.Visible = true;
+                        toolStripProgressAddingFiles.Visible = true;
+                        toolStripStatusLabelGame.Text = "";
+                        toolStripStatusLabelGame.Visible = true;
+                        toolStripProgressAddingFiles.Value = 0;
+                        timer1.Enabled = true;
+                        object[] parameters = { list, source }; //0: FilesList (Dictionary), 1: source ("local", "sdcard", "eshop", "scene") 
+                        backgroundWorkerScrapExtraInfo.RunWorkerAsync(parameters);
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("No files selected");
+                    return;
+                }
+            }
+        }
+
         private void backgroundWorkerScrapExtraInfo_DoWork(object sender, DoWorkEventArgs e)
         {
             BackgroundWorker worker = sender as BackgroundWorker;
+            object[] parameters = e.Argument as object[];
+
+            Dictionary<Tuple<string, string>, FileData> filesList = (Dictionary<Tuple<string, string>, FileData>)parameters[0];
+            string source = (string)parameters[1];
             
-            Util.GetExtendedInfo(LocalFilesList, "local");
+
+            Util.GetExtendedInfo(filesList, source);
+            e.Result = source;
         }
 
         private void backgroundWorkerScrapExtraInfo_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
@@ -3462,14 +3528,35 @@ namespace Switch_Backup_Manager
             toolStripStatusLabelGame.Text = "";
             toolStripStatusLabelGame.Visible = false;
 
-            UpdateLocalGamesList();
-            UpdateLocalNSPGamesList();
+            string source = e.Result as string;
+
+            if (source == "local")
+            {
+                UpdateLocalGamesList();
+                menuLocalFiles.Enabled = true;
+            } else if (source == "shop")
+            {
+                UpdateLocalNSPGamesList();
+                menuEShop.Enabled = true;
+            }
+
             tabControl1_SelectedIndexChanged(this, new EventArgs());
+            MessageBox.Show("Done");
+        }
+
+        private void updateGameInfoFromWebToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            UpdateGamesInfoFromWeb("local");
         }
 
         private void btnClearFilterLocal_Click(object sender, EventArgs e)
         {
             textBoxFilterLocal.Clear();
+        }
+
+        private void updateGameInfoFromWebToolStripMenuItemEshop_Click(object sender, EventArgs e)
+        {
+            UpdateGamesInfoFromWeb("eshop");
         }
     }
 }

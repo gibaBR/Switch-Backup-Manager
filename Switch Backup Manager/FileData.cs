@@ -47,9 +47,9 @@ namespace Switch_Backup_Manager
             this.NumberOfPlayers = "";
             this.Categories = new List<string>();
             this.ESRB = 0;
-    }
+        }
 
-    public string FilePath { get; set; }
+        public string FilePath { get; set; }
         public string FileName { get; set; }
         public string FileNameWithExt { get; set; }
         public string ROMSize { get; set; } //The Size of the file

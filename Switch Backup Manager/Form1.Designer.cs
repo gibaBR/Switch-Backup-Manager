@@ -60,10 +60,14 @@
             this.olvColumnCardTypeLocal = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnFilePathLocal = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnDeveloperLocal = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.olvColumnPublisherLocal = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnGameRevisionLocal = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnMasterKeyLocal = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnFirmwareLocal = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnSDKVersionLocal = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.olvColumnReleaseDateLocal = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.olvColumnNumberOfPlayersLocal = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.olvColumnCategoriesLocal = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.contextMenuLocalList = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.showInExplorerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem20 = new System.Windows.Forms.ToolStripSeparator();
@@ -673,10 +677,14 @@
             this.OLVLocalFiles.AllColumns.Add(this.olvColumnCardTypeLocal);
             this.OLVLocalFiles.AllColumns.Add(this.olvColumnFilePathLocal);
             this.OLVLocalFiles.AllColumns.Add(this.olvColumnDeveloperLocal);
+            this.OLVLocalFiles.AllColumns.Add(this.olvColumnPublisherLocal);
             this.OLVLocalFiles.AllColumns.Add(this.olvColumnGameRevisionLocal);
             this.OLVLocalFiles.AllColumns.Add(this.olvColumnMasterKeyLocal);
             this.OLVLocalFiles.AllColumns.Add(this.olvColumnFirmwareLocal);
             this.OLVLocalFiles.AllColumns.Add(this.olvColumnSDKVersionLocal);
+            this.OLVLocalFiles.AllColumns.Add(this.olvColumnReleaseDateLocal);
+            this.OLVLocalFiles.AllColumns.Add(this.olvColumnNumberOfPlayersLocal);
+            this.OLVLocalFiles.AllColumns.Add(this.olvColumnCategoriesLocal);
             this.OLVLocalFiles.CellEditUseWholeCell = false;
             this.OLVLocalFiles.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.olvColumnTitleIDLocal,
@@ -689,10 +697,14 @@
             this.olvColumnCardTypeLocal,
             this.olvColumnFilePathLocal,
             this.olvColumnDeveloperLocal,
+            this.olvColumnPublisherLocal,
             this.olvColumnGameRevisionLocal,
             this.olvColumnMasterKeyLocal,
             this.olvColumnFirmwareLocal,
-            this.olvColumnSDKVersionLocal});
+            this.olvColumnSDKVersionLocal,
+            this.olvColumnReleaseDateLocal,
+            this.olvColumnNumberOfPlayersLocal,
+            this.olvColumnCategoriesLocal});
             this.OLVLocalFiles.ContextMenuStrip = this.contextMenuLocalList;
             this.OLVLocalFiles.Cursor = System.Windows.Forms.Cursors.Default;
             this.OLVLocalFiles.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -780,6 +792,12 @@
             this.olvColumnDeveloperLocal.Text = "Developer";
             this.olvColumnDeveloperLocal.Width = 84;
             // 
+            // olvColumnPublisherLocal
+            // 
+            this.olvColumnPublisherLocal.AspectName = "Publisher";
+            this.olvColumnPublisherLocal.Text = "Publisher";
+            this.olvColumnPublisherLocal.Width = 84;
+            // 
             // olvColumnGameRevisionLocal
             // 
             this.olvColumnGameRevisionLocal.AspectName = "GameRevision";
@@ -804,6 +822,22 @@
             this.olvColumnSDKVersionLocal.AspectName = "SDKVersion";
             this.olvColumnSDKVersionLocal.Text = "SDK Version";
             this.olvColumnSDKVersionLocal.Width = 100;
+            // 
+            // olvColumnReleaseDateLocal
+            // 
+            this.olvColumnReleaseDateLocal.AspectName = "ReleaseDate";
+            this.olvColumnReleaseDateLocal.Text = "Release date";
+            this.olvColumnReleaseDateLocal.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
+            // olvColumnNumberOfPlayersLocal
+            // 
+            this.olvColumnNumberOfPlayersLocal.AspectName = "NumberOfPlayers";
+            this.olvColumnNumberOfPlayersLocal.Text = "Nº of Players";
+            // 
+            // olvColumnCategoriesLocal
+            // 
+            this.olvColumnCategoriesLocal.AspectName = "Categories";
+            this.olvColumnCategoriesLocal.Text = "Category";
             // 
             // contextMenuLocalList
             // 
@@ -944,6 +978,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
+            this.label2.BackColor = System.Drawing.SystemColors.Control;
             this.label2.Location = new System.Drawing.Point(1015, 6);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(32, 13);
@@ -2712,7 +2747,7 @@
             this.tabPage4.Location = new System.Drawing.Point(4, 22);
             this.tabPage4.Name = "tabPage4";
             this.tabPage4.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage4.Size = new System.Drawing.Size(1519, 593);
+            this.tabPage4.Size = new System.Drawing.Size(1517, 591);
             this.tabPage4.TabIndex = 3;
             this.tabPage4.Text = "E-shop files";
             this.tabPage4.UseVisualStyleBackColor = true;
@@ -2788,7 +2823,7 @@
             this.OLVEshop.Location = new System.Drawing.Point(3, 27);
             this.OLVEshop.Name = "OLVEshop";
             this.OLVEshop.ShowGroups = false;
-            this.OLVEshop.Size = new System.Drawing.Size(1513, 563);
+            this.OLVEshop.Size = new System.Drawing.Size(1511, 561);
             this.OLVEshop.TabIndex = 2;
             this.OLVEshop.UseCellFormatEvents = true;
             this.OLVEshop.UseCompatibleStateImageBehavior = false;
@@ -2986,7 +3021,7 @@
             this.toolStripMenuItem24});
             this.menuEShop.Location = new System.Drawing.Point(3, 3);
             this.menuEShop.Name = "menuEShop";
-            this.menuEShop.Size = new System.Drawing.Size(1513, 24);
+            this.menuEShop.Size = new System.Drawing.Size(1511, 24);
             this.menuEShop.TabIndex = 0;
             this.menuEShop.Text = "menuStrip2";
             // 
@@ -3801,10 +3836,6 @@
         private System.Windows.Forms.ToolStripSeparator toolStripMenuItem20;
         private System.Windows.Forms.ToolStripMenuItem showInExplorerToolStripMenuItem1;
         private System.Windows.Forms.ToolStripSeparator toolStripMenuItem21;
-        private System.Windows.Forms.ComboBox cbxFilterLocal;
-        private System.Windows.Forms.TextBox textBoxFilterLocal;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Button btnClearFilterLocal;
         private System.Windows.Forms.Button btnClearFilterSD;
         private System.Windows.Forms.TextBox textBoxFilterSD;
         private System.Windows.Forms.Label label3;
@@ -3915,6 +3946,14 @@
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Label label6;
+        private BrightIdeasSoftware.OLVColumn olvColumnReleaseDateLocal;
+        private BrightIdeasSoftware.OLVColumn olvColumnNumberOfPlayersLocal;
+        private BrightIdeasSoftware.OLVColumn olvColumnPublisherLocal;
+        private BrightIdeasSoftware.OLVColumn olvColumnCategoriesLocal;
+        private System.Windows.Forms.Button btnClearFilterLocal;
+        private System.Windows.Forms.TextBox textBoxFilterLocal;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.ComboBox cbxFilterLocal;
     }
 }
 

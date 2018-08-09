@@ -313,6 +313,20 @@ namespace Switch_Backup_Manager
                 return result;
             };
 
+
+            olvColumnCategoriesLocal.AspectToStringConverter = delegate (object x) {
+                string result = "";
+                foreach (string category in (List<string>)x)
+                {
+                    result += category + ", ";
+                }
+                if (result.Trim().Length > 1)
+                {
+                    result = result.Remove(result.Length - 2);
+                }
+                return result;
+            };
+
             olvColumnGameNameEShop.AspectGetter = delegate (object x)
             {
                 string result = "";
@@ -420,7 +434,6 @@ namespace Switch_Backup_Manager
 
         public void UpdateSDCardList()
         {
-            //Support for NSP files on SD Card for Now is VERY slow. But we can put it as an option on .INI
             if (Util.ScrapXCIOnSDCard & Util.ScrapNSPOnSDCard)
             {
                 SDCardList = Util.GetFileDataCollectionAll(cbxRemoveableDrives.SelectedItem.ToString());
@@ -2649,7 +2662,19 @@ namespace Switch_Backup_Manager
                     break;
                 case "Trimmed":
                     filterText.Columns = new[] { olvColumnIsTrimmedLocal };
-                    break;                    
+                    break;
+                case "Publisher":
+                    filterText.Columns = new[] { olvColumnPublisherLocal };
+                    break;
+                case "Release date":
+                    filterText.Columns = new[] { olvColumnReleaseDateLocal };
+                    break;
+                case "Nº of Players":
+                    filterText.Columns = new[] { olvColumnNumberOfPlayersLocal };
+                    break;
+                case "Category":
+                    filterText.Columns = new[] { olvColumnCategoriesLocal };
+                    break;
                 default:
                     filterText = null;
                     break;
@@ -2657,7 +2682,6 @@ namespace Switch_Backup_Manager
             
             OLVLocalFiles.ModelFilter = new CompositeAllFilter(new List<IModelFilter> { filterText });
             OLVLocalFiles.DefaultRenderer = new HighlightTextRenderer(filterText);
-//            SumarizeLocalGamesList("local");
         }
 
         private void btnClearFilter_Click(object sender, EventArgs e)

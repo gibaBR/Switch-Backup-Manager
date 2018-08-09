@@ -417,12 +417,6 @@ namespace Switch_Backup_Manager
             SceneReleasesList = Util.LoadSceneXMLToFileDataDictionary(Util.XML_NSWDB);
             OLVSceneList.SetObjects(SceneReleasesList.Values);
 
-            //Prevent crash caused by null Tag values
-            foreach (ListViewItem item in OLVSceneList.Items)
-            {
-                item.Tag = "";
-            }
-
             SceneReleasesSelectedItems = new Dictionary<Tuple<string, string>, FileData>();
             SumarizeLocalGamesList("scene");
         }
@@ -449,12 +443,6 @@ namespace Switch_Backup_Manager
             LocalFilesList = Util.LoadXMLToFileDataDictionary(Util.XML_Local);
             OLVLocalFiles.SetObjects(LocalFilesList.Values);
 
-            //Prevent crash caused by null Tag values
-            foreach (ListViewItem item in OLVLocalFiles.Items)
-            {
-                item.Tag = "";
-            }
-
             LocalFilesListSelectedItems = new Dictionary<Tuple<string, string>, FileData>();
             SumarizeLocalGamesList("local");
         }
@@ -463,14 +451,6 @@ namespace Switch_Backup_Manager
         {
             LocalNSPFilesList = Util.LoadXMLToFileDataDictionary(Util.XML_NSP_Local);
             OLVEshop.SetObjects(LocalNSPFilesList.Values);
-
-            List<Tuple<string, string>> keys = new List<Tuple<string, string>>(LocalNSPFilesList.Keys);
-            int i = 0;
-            foreach (ListViewItem item in OLVEshop.Items)
-            {
-                item.Tag = keys[i].Item2;
-                i++;
-            }
 
             LocalNSPFilesListSelectedItems = new Dictionary<Tuple<string, string>, FileData>();
             SumarizeLocalGamesList("eshop");
@@ -1213,14 +1193,14 @@ namespace Switch_Backup_Manager
                     SDCardListSelectedItems.Clear();
                     string titleID = selectedItems[0].Text;
                     string titleIDBase = titleID;
-                    string version = Convert.ToString(selectedItems[0].Tag);
+                    string version = Convert.ToString(((FileData)((OLVListItem)selectedItems[0]).RowObject).Version);
 
                     int count = 0;
                     long size = 0;
                     foreach (ListViewItem item in selectedItems)
                     {
                         titleID = item.Text;
-                        version = Convert.ToString(item.Tag);
+                        version = Convert.ToString(((FileData)((OLVListItem)item).RowObject).Version);
                         FileData data = Util.GetFileData(titleID, version, SDCardList);
                         //string icon_titleID_filename = data.Region_Icon.First().Value;
 
@@ -1243,7 +1223,7 @@ namespace Switch_Backup_Manager
                     foreach (ListViewItem item in selectedItems)
                     {
                         string titleID = item.Text;
-                        string version = Convert.ToString(item.Tag);
+                        string version = Convert.ToString(((FileData)((OLVListItem)item).RowObject).Version);
                         FileData data = Util.GetFileData(titleID, version, SDCardList);
                         SDCardListSelectedItems.Add(new Tuple<string, string>(titleID, version), data);
                         count++;
@@ -1264,7 +1244,7 @@ namespace Switch_Backup_Manager
             OLVLocalFiles.SelectedItems.Clear();
             foreach (ListViewItem item in OLVLocalFiles.Items)
             {
-                if (list.TryGetValue(new Tuple<string, string>(item.Text, Convert.ToString(item.Tag)), out dummy))
+                if (list.TryGetValue(new Tuple<string, string>(item.Text, Convert.ToString(((FileData)((OLVListItem)item).RowObject).Version)), out dummy))
                 {
                     item.Selected = true;
                 }
@@ -1280,7 +1260,7 @@ namespace Switch_Backup_Manager
             OLVLocalFiles.SelectedItems.Clear();
             foreach (ListViewItem item in OLVLocalFiles.Items)
             {
-                if (list.TryGetValue(new Tuple<string, string>(item.Text, Convert.ToString(item.Tag)), out dummy))
+                if (list.TryGetValue(new Tuple<string, string>(item.Text, Convert.ToString(((FileData)((OLVListItem)item).RowObject).Version)), out dummy))
                 {
                     item.Selected = true;
                 }
@@ -1298,7 +1278,7 @@ namespace Switch_Backup_Manager
                 OLVLocalFiles.SelectedItems.Clear();
                 foreach (ListViewItem item in OLVLocalFiles.Items)
                 {
-                    if (list.TryGetValue(new Tuple<string, string>(item.Text, Convert.ToString(item.Tag)), out dummy))
+                    if (list.TryGetValue(new Tuple<string, string>(item.Text, Convert.ToString(((FileData)((OLVListItem)item).RowObject).Version)), out dummy))
                     {
                         item.Selected = true;
                     }
@@ -1321,7 +1301,7 @@ namespace Switch_Backup_Manager
                 OLVLocalFiles.SelectedItems.Clear();
                 foreach (ListViewItem item in OLVLocalFiles.Items)
                 {
-                    if (list.TryGetValue(new Tuple<string, string>(item.Text, Convert.ToString(item.Tag)), out dummy))
+                    if (list.TryGetValue(new Tuple<string, string>(item.Text, Convert.ToString(((FileData)((OLVListItem)item).RowObject).Version)), out dummy))
                     {
                         item.Selected = true;
                     }
@@ -1344,7 +1324,7 @@ namespace Switch_Backup_Manager
                 OLV_SDCard.SelectedItems.Clear();
                 foreach (ListViewItem item in OLV_SDCard.Items)
                 {
-                    if (list.TryGetValue(new Tuple<string, string>(item.Text, Convert.ToString(item.Tag)), out dummy))
+                    if (list.TryGetValue(new Tuple<string, string>(item.Text, Convert.ToString(((FileData)((OLVListItem)item).RowObject).Version)), out dummy))
                     {
                         item.Selected = true;
                     }
@@ -1367,7 +1347,7 @@ namespace Switch_Backup_Manager
                 OLV_SDCard.SelectedItems.Clear();
                 foreach (ListViewItem item in OLV_SDCard.Items)
                 {
-                    if (list.TryGetValue(new Tuple<string, string>(item.Text, Convert.ToString(item.Tag)), out dummy))
+                    if (list.TryGetValue(new Tuple<string, string>(item.Text, Convert.ToString(((FileData)((OLVListItem)item).RowObject).Version)), out dummy))
                     {
                         item.Selected = true;
                     }
@@ -1406,7 +1386,7 @@ namespace Switch_Backup_Manager
                 OLV_SDCard.SelectedItems.Clear();
                 foreach (ListViewItem item in OLV_SDCard.Items)
                 {
-                    if (list.TryGetValue(new Tuple<string, string>(item.Text, Convert.ToString(item.Tag)), out dummy))
+                    if (list.TryGetValue(new Tuple<string, string>(item.Text, Convert.ToString(((FileData)((OLVListItem)item).RowObject).Version)), out dummy))
                     {
                         item.Selected = true;
                     }
@@ -1429,7 +1409,7 @@ namespace Switch_Backup_Manager
                 OLV_SDCard.SelectedItems.Clear();
                 foreach (ListViewItem item in OLV_SDCard.Items)
                 {
-                    if (list.TryGetValue(new Tuple<string, string>(item.Text, Convert.ToString(item.Tag)), out dummy))
+                    if (list.TryGetValue(new Tuple<string, string>(item.Text, Convert.ToString(((FileData)((OLVListItem)item).RowObject).Version)), out dummy))
                     {
                         item.Selected = true;
                     }
@@ -1450,7 +1430,7 @@ namespace Switch_Backup_Manager
             OLVSceneList.SelectedItems.Clear();
             foreach (ListViewItem item in OLVSceneList.Items)
             {
-                if (list.TryGetValue(new Tuple<string, string>(item.Text, Convert.ToString(item.Tag)), out dummy))
+                if (list.TryGetValue(new Tuple<string, string>(item.Text, Convert.ToString(((FileData)((OLVListItem)item).RowObject).Version)), out dummy))
                 {
                     item.Selected = true;
                 }
@@ -1466,7 +1446,7 @@ namespace Switch_Backup_Manager
             OLVSceneList.SelectedItems.Clear();
             foreach (ListViewItem item in OLVSceneList.Items)
             {
-                if (list.TryGetValue(new Tuple<string, string>(item.Text, Convert.ToString(item.Tag)), out dummy))
+                if (list.TryGetValue(new Tuple<string, string>(item.Text, Convert.ToString(((FileData)((OLVListItem)item).RowObject).Version)), out dummy))
                 {
                     item.Selected = true;
                 }
@@ -1484,7 +1464,7 @@ namespace Switch_Backup_Manager
                 OLVSceneList.SelectedItems.Clear();
                 foreach (ListViewItem item in OLVSceneList.Items)
                 {
-                    if (list.TryGetValue(new Tuple<string, string>(item.Text, Convert.ToString(item.Tag)), out dummy))
+                    if (list.TryGetValue(new Tuple<string, string>(item.Text, Convert.ToString(((FileData)((OLVListItem)item).RowObject).Version)), out dummy))
                     {
                         item.Selected = true;
                     }
@@ -1506,7 +1486,7 @@ namespace Switch_Backup_Manager
                 OLVSceneList.SelectedItems.Clear();
                 foreach (ListViewItem item in OLVSceneList.Items)
                 {
-                    if (list.TryGetValue(new Tuple<string, string>(item.Text, Convert.ToString(item.Tag)), out dummy))
+                    if (list.TryGetValue(new Tuple<string, string>(item.Text, Convert.ToString(((FileData)((OLVListItem)item).RowObject).Version)), out dummy))
                     {
                         item.Selected = true;
                     }
@@ -1720,16 +1700,7 @@ namespace Switch_Backup_Manager
 
         private void backgroundWorkerLoadSDCardFiles_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            //Move UI operations here as it's unsafe to do this on worker thread
             OLV_SDCard.SetObjects(SDCardList.Values);
-
-            List<Tuple<string, string>> keys = new List<Tuple<string, string>>(SDCardList.Keys);
-            int i = 0;
-            foreach (ListViewItem item in OLV_SDCard.Items)
-            {
-                item.Tag = keys[i].Item2;
-                i++;
-            }
 
             SDCardListSelectedItems = new Dictionary<Tuple<string, string>, FileData>();
             SumarizeLocalGamesList("sdcard");
@@ -2882,7 +2853,7 @@ namespace Switch_Backup_Manager
 
                     LocalNSPFilesListSelectedItems.Clear();
                     string titleID = selectedItems[0].Text;
-                    string version = Convert.ToString(selectedItems[0].Tag);
+                    string version = Convert.ToString(((FileData)((OLVListItem)selectedItems[0]).RowObject).Version);
                     string titleIDBaseGame = "";
 
                     int count = 0;
@@ -2890,7 +2861,7 @@ namespace Switch_Backup_Manager
                     foreach (ListViewItem item in selectedItems)
                     {
                         titleID = item.Text;
-                        version = Convert.ToString(item.Tag);
+                        version = Convert.ToString(((FileData)((OLVListItem)item).RowObject).Version);
                         FileData data = Util.GetFileData(titleID, version, LocalNSPFilesList);
                         titleIDBaseGame = data.TitleIDBaseGame;
                         LocalNSPFilesListSelectedItems.Add(new Tuple<string, string>(titleID, version), data);
@@ -2917,7 +2888,7 @@ namespace Switch_Backup_Manager
                     foreach (ListViewItem item in selectedItems)
                     {
                         string titleID = item.Text;
-                        string version = Convert.ToString(item.Tag);
+                        string version = Convert.ToString(((FileData)((OLVListItem)item).RowObject).Version);
                         FileData data = Util.GetFileData(titleID, version, LocalNSPFilesList);
                         LocalNSPFilesListSelectedItems.Add(new Tuple<string, string>(titleID, version), data);
                         count++;
@@ -2989,7 +2960,7 @@ namespace Switch_Backup_Manager
                 OLVEshop.SelectedItems.Clear();
                 foreach (ListViewItem item in OLVEshop.Items)
                 {
-                    if (list.TryGetValue(new Tuple<string, string>(item.Text, Convert.ToString(item.Tag)), out dummy))
+                    if (list.TryGetValue(new Tuple<string, string>(item.Text, Convert.ToString(((FileData)((OLVListItem)item).RowObject).Version)), out dummy))
                     {
                         item.Selected = true;
                     }
@@ -3013,7 +2984,7 @@ namespace Switch_Backup_Manager
                 OLVEshop.SelectedItems.Clear();
                 foreach (ListViewItem item in OLVEshop.Items)
                 {
-                    if (list.TryGetValue(new Tuple<string, string>(item.Text, Convert.ToString(item.Tag)), out dummy))
+                    if (list.TryGetValue(new Tuple<string, string>(item.Text, Convert.ToString(((FileData)((OLVListItem)item).RowObject).Version)), out dummy))
                     {
                         item.Selected = true;
                     }

@@ -57,10 +57,12 @@ namespace Switch_Backup_Manager
 
             Util.ScrapXCIOnSDCard = this.cbScrapXCIOnSD.Checked;
             Util.ScrapNSPOnSDCard = this.cbScrapNSPOnSD.Checked;
+            Util.ScrapExtraInfoFromWeb = this.cbScrapExtraInfoFromWeb.Checked;
             Util.ScrapInstalledEshopSDCard = this.cbScrapLayerFSOnSD.Checked;
             Util.ini.IniWriteValue("SD", "scrapXCI", cbScrapXCIOnSD.Checked ? "true" : "false");
             Util.ini.IniWriteValue("SD", "scrapNSP", cbScrapNSPOnSD.Checked ? "true" : "false");
             Util.ini.IniWriteValue("SD", "scrapInstalledNSP", cbScrapLayerFSOnSD.Checked ? "true" : "false");
+            Util.ini.IniWriteValue("Config", "scrapExtraInfoFromWeb", cbScrapExtraInfoFromWeb.Checked ? "true" : "false");
 
             Util.AutoUpdateNSDBOnStartup = this.cbAutoUpdateScene.Checked;
             Util.ini.IniWriteValue("Config", "autoUpdateNSWDB", cbAutoUpdateScene.Checked ? "true" : "false");
@@ -112,6 +114,7 @@ namespace Switch_Backup_Manager
             this.cbScrapLayerFSOnSD.Checked = Util.ScrapInstalledEshopSDCard;
             this.cbScrapNSPOnSD.Checked = Util.ScrapNSPOnSDCard;
             this.cbScrapXCIOnSD.Checked = Util.ScrapXCIOnSDCard;
+            this.cbScrapExtraInfoFromWeb.Checked = Util.ScrapExtraInfoFromWeb;
 
             for (int i = 1; i <= 5; i++ )
             {

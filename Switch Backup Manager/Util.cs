@@ -14,13 +14,14 @@ using System.Xml.Linq;
 using Microsoft.VisualBasic.FileIO;
 using System.Text.RegularExpressions;
 using System.Threading;
+using HtmlAgilityPack;
 
 namespace Switch_Backup_Manager
 {
     internal static class Util
     {
-        public const string VERSION = "1.1.0";   //Actual application version
-        public const string MIN_DB_Version = "1.0.9"; //This is the minimum version of the DB that can work
+        public const string VERSION = "1.1.1";   //Actual application version
+        public const string MIN_DB_Version = "1.1.1"; //This is the minimum version of the DB that can work
 
         public const string INI_FILE = "sbm.ini";
         public static string TITLE_KEYS = "titlekeys.txt";
@@ -47,6 +48,7 @@ namespace Switch_Backup_Manager
         public static bool ScrapXCIOnSDCard = true;
         public static bool ScrapNSPOnSDCard = true;
         public static bool ScrapInstalledEshopSDCard = true;
+        public static bool ScrapExtraInfoFromWeb = false;
 
         private static string[] Language = new string[16]
         {
@@ -90,6 +92,228 @@ namespace Switch_Backup_Manager
         public static XDocument XML_Local;
         public static XDocument XML_NSWDB;
         public static XDocument XML_NSP_Local;
+
+        public static bool GetExtendedInfo(FileData data)
+        {
+            bool result = false;
+            bool tryNextCountry = false;
+            string country = "/US";
+            string country2 = "/GB";
+            string url = "https://ec.nintendo.com/apps/" + data.TitleIDBaseGame + country;
+            //https://switchbrew.org/index.php?title=Title_list/Games
+            try
+            {
+                HtmlWeb web = new HtmlWeb();
+                HtmlAgilityPack.HtmlDocument doc = web.Load(url);
+                string description = "";
+                string releaseDate = "";
+                string numberOfPlayers = "";
+                string category = "";
+                string publisher = "";
+
+                //Some games needs Age Verification on N's site. Maybe there is someway to bypass it.
+                //First, we try get info from US Site
+                try {
+                    string ageVerification = doc.DocumentNode.SelectNodes("//*[@id=\"page-container\"]/div[3]/section/h1/span")[0].InnerText;
+                    if (ageVerification.Trim().ToLower() == "age verification")
+                    {
+                        logger.Info("This title requires Age Verification!!! Try on GB e-shop");
+                        tryNextCountry = true;
+                    }
+                }catch (Exception e){ }
+
+                if (!tryNextCountry)
+                {
+                    try
+                    {
+                        description = doc.DocumentNode.SelectNodes("//*[@id=\"overview\"]/div[1]/p[1]")[0].InnerText + doc.DocumentNode.SelectNodes("//*[@id=\"overview\"]/div[1]/p[2]")[0].InnerText;
+                        result = true;
+                    }
+                    catch
+                    {
+                        try
+                        {
+                            description = doc.DocumentNode.SelectNodes("//*[@id=\"overview\"]/div[1]/p")[0].InnerText;
+                            result = true;
+                        }
+                        catch { }                        
+                    }
+
+                    try {
+                        releaseDate = doc.DocumentNode.SelectNodes("//*[@id=\"overview\"]/div[2]/dl/div[2]")[0].InnerText;
+                        releaseDate = releaseDate.Replace("\n", "").Replace("\t", "");
+                        releaseDate = releaseDate.Substring(12, releaseDate.Length - 12);
+                        result = true;
+                    }
+                    catch { }
+                    try {
+                        numberOfPlayers = doc.DocumentNode.SelectNodes("//*[@id=\"overview\"]/div[2]/dl/div[3]")[0].InnerText;
+                        numberOfPlayers = numberOfPlayers.Replace("\n", "").Replace("\t", "");
+                        numberOfPlayers = numberOfPlayers.Substring(14, numberOfPlayers.Length - 14);
+                        result = true;
+                    }
+                    catch { }
+                    try {
+                        category = doc.DocumentNode.SelectNodes("//*[@id=\"overview\"]/div[2]/dl/div[4]")[0].InnerText;
+                        category = category.Replace("\n", "").Replace("\t", "");
+                        category = category.Substring(8, category.Length - 8);
+                        result = true;
+                    }
+                    catch { }
+                    try {
+                        publisher = doc.DocumentNode.SelectNodes("//*[@id=\"overview\"]/div[2]/dl/div[5]")[0].InnerText;
+                        publisher = publisher.Replace("\n", "").Replace("\t", "");
+                        publisher = publisher.Substring(9, publisher.Length - 9);
+                        result = true;
+                    }
+                    catch { }                                        
+                }
+                else //Lets try the GB Site
+                {
+                    url = "https://ec.nintendo.com/apps/" + data.TitleIDBaseGame + country2;
+                    doc = web.Load(url);
+
+                    try
+                    {
+                        description = doc.DocumentNode.SelectNodes("//*[@id=\"Overview\"]/div[1]/div/div[1]/div/p[1]")[0].InnerText + doc.DocumentNode.SelectNodes("//*[@id=\"Overview\"]/div[1]/div/div[1]/div/p[2]")[0].InnerText;
+                        result = true;
+                    }
+                    catch
+                    {
+                        try
+                        {
+                            description = doc.DocumentNode.SelectNodes("//*[@id=\"Overview\"]/div[1]/div/div[1]/div/p[1]")[0].InnerText;
+                            result = true;
+                        } catch { };                        
+                    }
+
+                    try
+                    {
+                        releaseDate = doc.DocumentNode.SelectNodes("//*[@id=\"pt_tabs\"]/div[1]/div[4]/div/div/div[1]/div/div[2]/div[2]/p[2]")[0].InnerText;
+                        result = true;
+                    }
+                    catch { }
+
+                    try
+                    {
+                        category = doc.DocumentNode.SelectNodes("//*[@id=\"gameDetails\"]/div/div[1]/p[2]")[0].InnerText;
+                        result = true;
+                    }
+                    catch { }
+
+                    try //Can be Publisher or Player (//*[@id="gameDetails"]/div/div[2]/p[1])
+                    {
+                        if (doc.DocumentNode.SelectNodes("//*[@id=\"gameDetails\"]/div/div[2]/p[1]")[0].InnerText == "Publisher") {
+                            publisher = doc.DocumentNode.SelectNodes("//*[@id=\"gameDetails\"]/div/div[2]/p[2]")[0].InnerText;
+                            publisher = publisher.Replace("\n", "").Replace("\t", "");
+                            result = true;
+                        } else if (doc.DocumentNode.SelectNodes("//*[@id=\"gameDetails\"]/div/div[2]/p[1]")[0].InnerText == "Players")
+                        {
+                            numberOfPlayers = doc.DocumentNode.SelectNodes("//*[@id=\"gameDetails\"]/div/div[2]/p[2]")[0].InnerText;
+                            numberOfPlayers = numberOfPlayers.Replace("\n", "").Replace("\t", "");
+                            result = true;
+                        }
+                    }
+                    catch { }                 
+
+                    try //Can be Publisher or Player (//*[@id="gameDetails"]/div/div[3]/p[1])
+                    {
+                        if (doc.DocumentNode.SelectNodes("//*[@id=\"gameDetails\"]/div/div[3]/p[1]")[0].InnerText == "Publisher")
+                        {
+                            publisher = doc.DocumentNode.SelectNodes("//*[@id=\"gameDetails\"]/div/div[3]/p[2]")[0].InnerText;
+                            publisher = publisher.Replace("\n", "").Replace("\t", "");
+                            result = true;
+                        } else if (doc.DocumentNode.SelectNodes("//*[@id=\"gameDetails\"]/div/div[3]/p[1]")[0].InnerText == "Players")
+                        {
+                            numberOfPlayers = doc.DocumentNode.SelectNodes("//*[@id=\"gameDetails\"]/div/div[3]/p[2]")[0].InnerText;
+                            numberOfPlayers = numberOfPlayers.Replace("\n", "").Replace("\t", "");
+                            result = true;
+                        }
+                    }
+                    catch { }
+
+                    try //Can be Publisher
+                    {
+                        if (doc.DocumentNode.SelectNodes("//*[@id=\"gameDetails\"]/div/div[4]/p[1]")[0].InnerText == "Publisher")
+                        {
+                            publisher = doc.DocumentNode.SelectNodes("//*[@id=\"gameDetails\"]/div/div[4]/p[2]")[0].InnerText;
+                            publisher = publisher.Replace("\n", "").Replace("\t", "");
+                            result = true;
+                        }
+                    }
+                    catch { }
+                }
+
+                try
+                {
+                    data.Description = System.Net.WebUtility.HtmlDecode(description);
+                } catch { }
+                
+                try
+                {
+                    data.Publisher = System.Net.WebUtility.HtmlDecode(publisher);
+                }
+                catch { }
+
+                try
+                {
+                    data.ReleaseDate = releaseDate;
+                }
+                catch { }
+
+                try
+                {
+                    data.NumberOfPlayers = numberOfPlayers;
+                }
+                catch { }
+
+                try
+                {
+                    string[] categories = category.Split(',');
+                    data.Categories = new List<string>();
+                    for (int i = 0; i < categories.Count(); i++)
+                    {
+                        data.Categories.Add(categories[i].TrimStart());
+                    }
+                }
+                catch { }
+
+                data.HasExtendedInfo = result;
+            }
+            catch (Exception e)
+            {
+                Util.logger.Warning("Could not retrieve or parse info from the web for this title ("+data.TitleID+").");
+            }
+            return result;
+        }
+
+        public static void GetExtendedInfo(Dictionary<Tuple<string, string>, FileData> files, string source)
+        {
+            int filesCount = files.Count();
+            int i = 0;
+            logger.Info("Start getting extra info from web.");
+
+            foreach (KeyValuePair<Tuple<string, string>, FileData> entry in files)
+            {
+                FrmMain.progressCurrentfile = entry.Value.GameName;
+
+                GetExtendedInfo(entry.Value);
+                UpdateXMLFromFileData(entry.Value, source);
+
+                i++;
+                FrmMain.progressPercent = (int)(i * 100) / filesCount;
+            }
+
+            if (source == "local")
+            {
+                XML_Local.Save(@LOCAL_FILES_DB);
+            } else if (source == "eshop")
+            {
+                XML_NSP_Local.Save(@LOCAL_NSP_FILES_DB);
+            }
+            
+            logger.Info("Finished getting extra info from web.");
+        }
 
         private static List<string> ListDirectoriesToUpdate()
         {
@@ -488,6 +712,14 @@ namespace Switch_Backup_Manager
                 element.Element("ID_Scene").Value = (file.IdScene > 0 ? Convert.ToString(file.IdScene) : ""); ;
                 element.Element("Distribution_Type").Value = file.DistributionType;
                 element.Element("Content_Type").Value = file.ContentType;
+
+                element.Element("HasExtendedInfo").Value = Convert.ToString(file.HasExtendedInfo).ToLower();
+                element.Element("Description").Value = file.Description;
+                element.Element("Publisher").Value = file.Publisher;
+                element.Element("ReleaseDate").Value = Convert.ToString(file.ReleaseDate);
+                element.Element("NumberOfPlayers").Value = Convert.ToString(file.NumberOfPlayers);
+                element.Element("Categories").Value = Convert.ToString(file.Categories);
+                element.Element("ESRB").Value = Convert.ToString(file.ESRB);
             }
         }
 
@@ -629,6 +861,27 @@ namespace Switch_Backup_Manager
                             logger.Debug("data.Languages was null for Title ID " + data.TitleID);
                         }
 
+                        string categories = "";
+                        if (data.Categories != null && data.Categories.Count() > 0)
+                        {
+                            foreach (string category in data.Categories)
+                            {
+                                categories += category + ",";
+                            }
+                            if (categories.Trim().Length > 1)
+                            {
+                                try
+                                {
+                                    categories = categories.Remove(categories.Length - 1);
+                                }
+                                catch (Exception e)
+                                {
+                                    logger.Debug("Exception on categories.Remove for Title ID " + data.TitleID);
+                                    languages = "";
+                                }
+                            }
+                        }
+
                         if (data.GameName.Trim() == "")
                         {
                             data.GameName = data.FileName; //Desperate!!! Don't know my name
@@ -661,7 +914,14 @@ namespace Switch_Backup_Manager
                                    new XElement("Distribution_Type", data.DistributionType),
                                    new XElement("ID_Scene", data.IdScene),
                                    new XElement("Content_Type", data.ContentType),
-                                   new XElement("Version", data.Version)
+                                   new XElement("Version", data.Version),
+                                   new XElement("HasExtendedInfo", data.HasExtendedInfo),
+                                   new XElement("Description", data.Description),
+                                   new XElement("Publisher", data.Publisher),
+                                   new XElement("ReleaseDate", data.ReleaseDate),
+                                   new XElement("NumberOfPlayers", data.NumberOfPlayers),
+                                   new XElement("ESRB", data.ESRB),
+                                   new XElement("Categories", categories)
                            );
                         if (xml == LOCAL_FILES_DB)
                         {
@@ -869,9 +1129,11 @@ namespace Switch_Backup_Manager
             string scrapXCI = ini.IniReadValue("SD", "scrapXCI").Trim().ToLower();
             string scrapNSP = ini.IniReadValue("SD", "scrapNSP").Trim().ToLower();
             string scrapInstalledNSP = ini.IniReadValue("SD", "scrapInstalledNSP").Trim().ToLower();
+            string scrapExtraInfo = ini.IniReadValue("Config", "scrapExtraInfoFromWeb").Trim().ToLower();
             if (scrapXCI != "") { ScrapXCIOnSDCard = (scrapXCI == "true"); } else { ini.IniWriteValue("SD", "scrapXCI", "true"); };
             if (scrapNSP != "") { ScrapNSPOnSDCard = (scrapNSP == "true"); } else { ini.IniWriteValue("SD", "scrapNSP", "true"); };
             if (scrapInstalledNSP != "") { ScrapInstalledEshopSDCard = (scrapInstalledNSP == "true"); } else { ini.IniWriteValue("SD", "scrapInstalledNSP", "false"); };
+            if (scrapExtraInfo != "") { ScrapExtraInfoFromWeb = (scrapExtraInfo == "true"); } else { ini.IniWriteValue("Config", "scrapExtraInfoFromWeb", "false"); };
 
             XML_NSWDB = XDocument.Load(@NSWDB_FILE);
 
@@ -1771,6 +2033,11 @@ namespace Switch_Backup_Manager
                 Directory.Delete("tmp", true);
             }
 
+            if (ScrapExtraInfoFromWeb)
+            {
+                GetExtendedInfo(data);
+            }
+
             return data;
         }
 
@@ -2070,6 +2337,10 @@ namespace Switch_Backup_Manager
                     fileStream.Close();
                 }
                 GetExtraInfoFromScene(result);
+                if (ScrapExtraInfoFromWeb)
+                {
+                    GetExtendedInfo(result);
+                }
             }
             return result;
         }
@@ -2089,33 +2360,92 @@ namespace Switch_Backup_Manager
                 {
                     result.Version = xe.Element("Version").Value;
                 }
-                result.CartSize = xe.Element("CartSize").Value;
-                //result.Cardtype = xe.Element("CardType").Value;
-                result.Developer = xe.Element("Developer").Value;
-                result.FileName = xe.Element("FileName").Value;
-                result.FileNameWithExt = xe.Element("FileNameWithExt").Value;
-                result.FilePath = xe.Element("FilePath").Value;
-                result.GameName = xe.Element("GameName").Value;
-                result.GameRevision = xe.Element("GameRevision").Value;
-                result.IsTrimmed = (xe.Element("IsTrimmed").Value == "true") ? true : false;
-
-                string languages_ = xe.Element("Languages").Value;
-                string[] languages_array = languages_.Split(",".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
-                List<string> languages = new List<string>();
-                for (int i = 0; i < languages_array.Length; i++)
+                if (xe.Element("CartSize") != null)
                 {
-                    languages.Add(languages_array[i]);
+                    result.CartSize = xe.Element("CartSize").Value;
                 }
-                result.Languages = languages;
+                if (xe.Element("Developer") != null)
+                {
+                    result.Developer = xe.Element("Developer").Value;
+                }
+                if (xe.Element("FileName") != null)
+                {
+                    result.FileName = xe.Element("FileName").Value;
+                }
+                if (xe.Element("FileNameWithExt") != null)
+                {
+                    result.FileNameWithExt = xe.Element("FileNameWithExt").Value;
+                }
+                if (xe.Element("FilePath") != null)
+                {
+                    result.FilePath = xe.Element("FilePath").Value;
+                }
+                if (xe.Element("GameName") != null)
+                {
+                    result.GameName = xe.Element("GameName").Value;
+                }
+                if (xe.Element("GameRevision") != null)
+                {
+                    result.GameRevision = xe.Element("GameRevision").Value;
+                }
+                if (xe.Element("IsTrimmed") != null)
+                {
+                    result.IsTrimmed = (xe.Element("IsTrimmed").Value == "true") ? true : false;
+                }
+                                
+                if (xe.Element("Languages") != null)
+                {
+                    string languages_ = xe.Element("Languages").Value;
+                    string[] languages_array = languages_.Split(",".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
+                    List<string> languages = new List<string>();
+                    for (int i = 0; i < languages_array.Length; i++)
+                    {
+                        languages.Add(languages_array[i]);
+                    }
+                    result.Languages = languages;
+                }
 
-                result.MasterKeyRevision = xe.Element("MasterKeyRevision").Value;
-                result.ProductCode = xe.Element("ProductCode").Value;
-                result.ROMSize = xe.Element("ROMSize").Value;
-                result.ROMSizeBytes = Convert.ToInt64(xe.Element("ROMSizeBytes").Value);
-                result.SDKVersion = xe.Element("SDKVersion").Value;
-                result.UsedSpace = xe.Element("UsedSpace").Value;
-                result.UsedSpaceBytes = Convert.ToInt64(xe.Element("UsedSpaceBytes").Value);
+                if (xe.Element("Categories") != null)
+                {
+                    string categories_ = xe.Element("Categories").Value;
+                    string[] categories_array = categories_.Split(",".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
+                    List<string> categories = new List<string>();
+                    for (int i = 0; i < categories_array.Length; i++)
+                    {
+                        categories.Add(categories_array[i]);
+                    }
+                    result.Categories = categories;
+                }
 
+                if (xe.Element("MasterKeyRevision") != null)
+                {
+                    result.MasterKeyRevision = xe.Element("MasterKeyRevision").Value;
+                }
+                if (xe.Element("ProductCode") != null)
+                {
+                    result.ProductCode = xe.Element("ProductCode").Value;
+                }
+                if (xe.Element("ROMSize") != null)
+                {
+                    result.ROMSize = xe.Element("ROMSize").Value;
+                }
+                if (xe.Element("ROMSizeBytes") != null)
+                {
+                    result.ROMSizeBytes = Convert.ToInt64(xe.Element("ROMSizeBytes").Value);
+                }
+                if (xe.Element("SDKVersion") != null)
+                {
+                    result.SDKVersion = xe.Element("SDKVersion").Value;
+                }
+                if (xe.Element("UsedSpace") != null)
+                {
+                    result.UsedSpace = xe.Element("UsedSpace").Value;
+                }
+                if (xe.Element("UsedSpaceBytes") != null)
+                {
+                    result.UsedSpaceBytes = Convert.ToInt64(xe.Element("UsedSpaceBytes").Value);
+                }
+                                
                 Dictionary<string, string> Region_Icon = new Dictionary<string, string>();
                 string[] regionIcons = xe.Element("Region_Icon").Value.Split("[".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
                 for (int i = 0; i < regionIcons.Length; i++)
@@ -2163,6 +2493,31 @@ namespace Switch_Backup_Manager
                 if (xe.Element("Content_Type") != null)
                 {
                     result.ContentType = xe.Element("Content_Type").Value;
+                }
+                if (xe.Element("HasExtendedInfo") != null)
+                {
+                    result.HasExtendedInfo =
+                        (xe.Element("HasExtendedInfo").Value == "true") ? true : false;
+                }
+                if (xe.Element("Description") != null)
+                {
+                    result.Description = xe.Element("Description").Value;
+                }
+                if (xe.Element("Publisher") != null)
+                {
+                    result.Publisher= xe.Element("Publisher").Value;
+                }
+                if (xe.Element("ReleaseDate") != null)
+                {
+                    result.ReleaseDate = xe.Element("ReleaseDate").Value;
+                }
+                if (xe.Element("NumberOfPlayers") != null)
+                {
+                    result.NumberOfPlayers = xe.Element("NumberOfPlayers").Value;
+                }
+                if (xe.Element("ESRB") != null)
+                {
+                    result.ESRB = Convert.ToInt32(xe.Element("ESRB").Value);
                 }
             }
             catch (Exception ex)

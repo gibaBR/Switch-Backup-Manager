@@ -5,11 +5,13 @@ using System.Data;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml.Linq;
 using BrightIdeasSoftware;
+using HtmlAgilityPack;
 using Microsoft.WindowsAPICodePack.Dialogs;
 
 namespace Switch_Backup_Manager
@@ -203,6 +205,9 @@ namespace Switch_Backup_Manager
                 Properties.Settings.Default.Maximised = false;
                 Properties.Settings.Default.Minimised = true;
             }
+
+            Properties.Settings.Default.SplitterDistanceVert = splitContainer1.SplitterDistance;
+            Properties.Settings.Default.SplitterDistanceHor = splitContainer2.SplitterDistance;
             Properties.Settings.Default.Save();
         }
 
@@ -219,6 +224,21 @@ namespace Switch_Backup_Manager
                 timer1.Enabled = true;
                 //object[] parameters = { selectedPath, "xci" }; //0: FilesList (string[]), 1: FileType ("xci", "nsp") 
                 backgroundWorkerScanNewFiles.RunWorkerAsync();
+            }
+        }
+
+        private void ScrapExtraInfoFromWeb()
+        {
+            if (!backgroundWorkerScrapExtraInfo.IsBusy)
+            {
+                toolStripStatusFilesOperation.Text = Properties.Resources.EN_FileOperationsScrapFromWeb;
+                toolStripStatusFilesOperation.Visible = true;
+                toolStripProgressAddingFiles.Visible = true;
+                toolStripStatusLabelGame.Text = "";
+                toolStripStatusLabelGame.Visible = true;
+                toolStripProgressAddingFiles.Value = 0;
+                timer1.Enabled = true;
+                backgroundWorkerScrapExtraInfo.RunWorkerAsync();
             }
         }
 
@@ -504,9 +524,11 @@ namespace Switch_Backup_Manager
             toolStripStatusLabel2.Text = Convert.ToString(count) + " Total (" + Util.BytesToGB(size) + ")";
         }
 
-        private void DisplayGameInformation(string TitleID, string Version, Dictionary<Tuple<string, string>, FileData> list, string sourceList) //Possible values for sourceList ("local", "sdcard", "scene")
+        private void DisplayGameInformation(string TitleID, string TitleIDBase, string Version, Dictionary<Tuple<string, string>, FileData> list, string sourceList) //Possible values for sourceList ("local", "sdcard", "scene")
         {
-            FileData data = Util.GetFileData(TitleID, Version, list);
+            ClearGameInformation();
+            FileData data = Util.GetFileData(TitleIDBase, Version, list);
+            FileData data2 = Util.GetFileData(TitleID, Version, list);
 
             if (sourceList == "local" || sourceList == "sdcard")
             {
@@ -536,6 +558,10 @@ namespace Switch_Backup_Manager
                 {
                     //Example: icon_0100A7F002830000_AmericanEnglish
                     string[] files = Directory.GetFiles(Util.CACHE_FOLDER, "icon_" + TitleID + "*.bmp");
+                    if (files.Length == 0)
+                    {
+                        files = Directory.GetFiles(Util.CACHE_FOLDER, "icon_" + TitleIDBase + "*.bmp");
+                    }
                     if (files.Length > 0)
                     {
                         PB_GameIcon.BackgroundImage = Image.FromFile(@files[0]);
@@ -547,11 +573,65 @@ namespace Switch_Backup_Manager
                     }
                 }
             }
+
+            string url = "https://ec.nintendo.com/apps/" + TitleID + "/US";
+            lnkInfo.Links.Clear();
+            lnkInfo.Links.Add(0, lnkInfo.Text.Length, url);
+            lnkInfo.Visible = true;
+
+            if (data2 != null)
+            {
+                if (data2.HasExtendedInfo)
+                {
+                    string categories = "";
+                    foreach (string cat in data2.Categories)
+                    {
+                        categories += cat + "\n";
+                    }
+
+                    richTextBoxGameDescription.Text = (data2.Description.Trim() != "") ? data2.Description : Properties.Resources.EN_Not_Available;
+                    lblNumberOfPlayers.Text = (data2.NumberOfPlayers.Trim() != "") ? data2.NumberOfPlayers : Properties.Resources.EN_Not_Available;
+                    lblReleaseDate.Text = (data2.ReleaseDate.Trim() != "") ? data2.ReleaseDate : Properties.Resources.EN_Not_Available;
+                    lblPublisher.Text = (data2.Publisher.Trim() != "") ? data2.Publisher : Properties.Resources.EN_Not_Available;
+                    lblCategory.Text = (categories.Trim() != "") ? categories : Properties.Resources.EN_Not_Available;
+                }
+            }
+            panelGameExtraInfo.Visible = true;
+        }
+
+        private void GetWebInfo(string url)
+        {
+            try
+            {
+                HtmlWeb web = new HtmlWeb();
+                HtmlAgilityPack.HtmlDocument doc = web.Load(url);
+                string releaseDate = doc.DocumentNode.SelectNodes("//*[@id=\"overview\"]/div[2]/dl/div[2]")[0].InnerText;
+                string numberOfPlayers = doc.DocumentNode.SelectNodes("//*[@id=\"overview\"]/div[2]/dl/div[3]")[0].InnerText; 
+                string category = doc.DocumentNode.SelectNodes("//*[@id=\"overview\"]/div[2]/dl/div[4]")[0].InnerText;
+                string publisher = doc.DocumentNode.SelectNodes("//*[@id=\"overview\"]/div[2]/dl/div[5]")[0].InnerText;
+                string developer = doc.DocumentNode.SelectNodes("//*[@id=\"overview\"]/div[2]/dl/div[6]")[0].InnerText;                
+                lblReleaseDate.Text = releaseDate;
+                lblNumberOfPlayers.Text = numberOfPlayers;
+                lblCategory.Text = category;
+            }
+            catch (Exception e)
+            {
+                Util.logger.Error(e.StackTrace);
+            }
         }
 
         public void ClearGameInformation()
         {
             PB_GameIcon.BackgroundImage = null;
+            lnkInfo.Visible = false;
+            lnkInfo.Links.Clear();
+
+            richTextBoxGameDescription.Clear();
+            lblNumberOfPlayers.Text = Properties.Resources.EN_Not_Available;
+            lblReleaseDate.Text = Properties.Resources.EN_Not_Available;
+            lblPublisher.Text = Properties.Resources.EN_Not_Available;
+            lblCategory.Text = Properties.Resources.EN_Not_Available;
+            panelGameExtraInfo.Visible = false;
         }
 
         private void InvertSelection(ListView lv)
@@ -783,6 +863,7 @@ namespace Switch_Backup_Manager
 
                     LocalFilesListSelectedItems.Clear();
                     string titleID = selectedItems[0].Text;
+                    string titleIDBase = titleID;
 
                     int count = 0;
                     long size = 0;
@@ -792,13 +873,14 @@ namespace Switch_Backup_Manager
                         titleID = item.Text;
                         FileData data = Util.GetFileData(titleID, "", LocalFilesList);
                         LocalFilesListSelectedItems.Add(new Tuple<string, string>(titleID, ""), data);
+                        titleIDBase = data.TitleIDBaseGame;
                         count++;
                         size += Convert.ToInt64(data.UsedSpaceBytes);
                     }
 
                     toolStripStatusLabel1.Text = Convert.ToString(count) + " Selected (" + Util.BytesToGB(size) + ")";
                     //Display information of the last selected item
-                    DisplayGameInformation(titleID, "", LocalFilesList, "local");
+                    DisplayGameInformation(titleID, titleIDBase, "", LocalFilesList, "local");
                 }
                 else
                 {
@@ -875,6 +957,7 @@ namespace Switch_Backup_Manager
 
                     SceneReleasesSelectedItems.Clear();
                     string titleID = selectedItems[0].Text;
+                    string titleIDBase = titleID;
 
                     int count = 0;
                     long size = 0;
@@ -883,13 +966,14 @@ namespace Switch_Backup_Manager
                         titleID = item.Text;
                         FileData data = Util.GetFileData(titleID, "", SceneReleasesList);
                         SceneReleasesSelectedItems.Add(new Tuple<string, string>(titleID, ""), data);
+                        titleIDBase = data.TitleIDBaseGame;
                         count++;
                         size += Convert.ToInt64(data.ROMSizeBytes);
                     }
 
                     toolStripStatusLabel1.Text = Convert.ToString(count) + " Selected (" + Util.BytesToGB(size) + ")";
                     //Display information of the first selected item
-                    DisplayGameInformation(titleID, "", LocalFilesList, "scene"); //Has to be Locallist as we dont store scene info other than its xml file...
+                    DisplayGameInformation(titleID, titleIDBase, "", LocalFilesList, "scene"); //Has to be Locallist as we dont store scene info other than its xml file...
                 }
                 else
                 {
@@ -1128,6 +1212,7 @@ namespace Switch_Backup_Manager
 
                     SDCardListSelectedItems.Clear();
                     string titleID = selectedItems[0].Text;
+                    string titleIDBase = titleID;
                     string version = Convert.ToString(selectedItems[0].Tag);
 
                     int count = 0;
@@ -1140,13 +1225,14 @@ namespace Switch_Backup_Manager
                         //string icon_titleID_filename = data.Region_Icon.First().Value;
 
                         SDCardListSelectedItems.Add(new Tuple<string, string>(titleID, version), data);
+                        titleIDBase = data.TitleIDBaseGame;
                         count++;
                         size += Convert.ToInt64(data.UsedSpaceBytes);
                     }
 
                     toolStripStatusLabel1.Text = Convert.ToString(count) + " Selected (" + Util.BytesToGB(size) + ")";
                     //Display information of the first selected item
-                    DisplayGameInformation(titleID, version, SDCardList, "sdcard");
+                    DisplayGameInformation(titleID, titleIDBase, version, SDCardList, "sdcard");
                 }
                 else
                 {
@@ -1690,10 +1776,7 @@ namespace Switch_Backup_Manager
 
         private void updateLocalDatabaseToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            //            Util.RemoveMissingFilesFromXML(Util.XML_Local, Util.LOCAL_FILES_DB);
-            //            UpdateLocalGamesList();
             ScanFolders();
-        //    MessageBox.Show("Done.");
         }
 
         private void updateNswdbcomListToolStripMenuItem1_Click(object sender, EventArgs e)
@@ -2817,11 +2900,13 @@ namespace Switch_Backup_Manager
 
                     toolStripStatusLabel1.Text = Convert.ToString(count) + " Selected (" + Util.BytesToGB(size) + ")";
                     //Display information of the last selected item
+                    /*
                     if (titleIDBaseGame != "")
                     {
                         titleID = titleIDBaseGame;
                     }
-                    DisplayGameInformation(titleID, version, LocalNSPFilesList, "eshop");
+                    */
+                    DisplayGameInformation(titleID, titleIDBaseGame, version, LocalNSPFilesList, "eshop");
                 }
                 else
                 {
@@ -3327,6 +3412,45 @@ namespace Switch_Backup_Manager
                 Location = Properties.Settings.Default.Location;
                 Size = Properties.Settings.Default.Size;
             }
+            splitContainer1.SplitterDistance = Properties.Settings.Default.SplitterDistanceVert;
+            splitContainer2.SplitterDistance = Properties.Settings.Default.SplitterDistanceHor;
+        }
+
+        private void lnkInfo_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            lnkInfo.LinkVisited = true;
+            System.Diagnostics.Process.Start(e.Link.LinkData as string);
+        }
+
+        private void scrapExtendedInfoFromWebToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            /*
+            FileData test = new FileData();
+            test.TitleID = "0100EE80098E6000";
+            Util.GetExtendedInfo(test);
+            string a = test.TitleID;
+            */
+            ScrapExtraInfoFromWeb();
+        }
+
+        private void backgroundWorkerScrapExtraInfo_DoWork(object sender, DoWorkEventArgs e)
+        {
+            BackgroundWorker worker = sender as BackgroundWorker;
+            
+            Util.GetExtendedInfo(LocalFilesList, "local");
+        }
+
+        private void backgroundWorkerScrapExtraInfo_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            timer1.Enabled = false;
+            toolStripStatusFilesOperation.Visible = false;
+            toolStripProgressAddingFiles.Visible = false;
+            toolStripStatusLabelGame.Text = "";
+            toolStripStatusLabelGame.Visible = false;
+
+            UpdateLocalGamesList();
+            UpdateLocalNSPGamesList();
+            tabControl1_SelectedIndexChanged(this, new EventArgs());
         }
     }
 }

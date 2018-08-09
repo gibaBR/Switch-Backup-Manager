@@ -35,6 +35,7 @@
             this.panel2 = new System.Windows.Forms.Panel();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.cbUseTitleKeys = new System.Windows.Forms.CheckBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.btnRemFolderAutoScan = new System.Windows.Forms.Button();
             this.btnAddFolderAutoScan = new System.Windows.Forms.Button();
@@ -58,7 +59,7 @@
             this.cbxTags = new System.Windows.Forms.ComboBox();
             this.rbRenamingTitleIDGameName = new System.Windows.Forms.RadioButton();
             this.rbRenamingGameName = new System.Windows.Forms.RadioButton();
-            this.cbUseTitleKeys = new System.Windows.Forms.CheckBox();
+            this.cbScrapExtraInfoFromWeb = new System.Windows.Forms.CheckBox();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.tabControl1.SuspendLayout();
@@ -134,6 +135,7 @@
             // 
             // tabPage1
             // 
+            this.tabPage1.Controls.Add(this.cbScrapExtraInfoFromWeb);
             this.tabPage1.Controls.Add(this.cbUseTitleKeys);
             this.tabPage1.Controls.Add(this.groupBox3);
             this.tabPage1.Controls.Add(this.cbAutoUpdateScene);
@@ -145,6 +147,16 @@
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "General";
             this.tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // cbUseTitleKeys
+            // 
+            this.cbUseTitleKeys.AutoSize = true;
+            this.cbUseTitleKeys.Location = new System.Drawing.Point(6, 281);
+            this.cbUseTitleKeys.Name = "cbUseTitleKeys";
+            this.cbUseTitleKeys.Size = new System.Drawing.Size(248, 17);
+            this.cbUseTitleKeys.TabIndex = 4;
+            this.cbUseTitleKeys.Text = "Use titlekeys.txt to get missing info on NSP files";
+            this.cbUseTitleKeys.UseVisualStyleBackColor = true;
             // 
             // groupBox3
             // 
@@ -404,15 +416,15 @@
             this.rbRenamingGameName.UseVisualStyleBackColor = true;
             this.rbRenamingGameName.CheckedChanged += new System.EventHandler(this.rbRenamingGameName_CheckedChanged);
             // 
-            // cbUseTitleKeys
+            // cbScrapExtraInfoFromWeb
             // 
-            this.cbUseTitleKeys.AutoSize = true;
-            this.cbUseTitleKeys.Location = new System.Drawing.Point(6, 281);
-            this.cbUseTitleKeys.Name = "cbUseTitleKeys";
-            this.cbUseTitleKeys.Size = new System.Drawing.Size(248, 17);
-            this.cbUseTitleKeys.TabIndex = 4;
-            this.cbUseTitleKeys.Text = "Use titlekeys.txt to get missing info on NSP files";
-            this.cbUseTitleKeys.UseVisualStyleBackColor = true;
+            this.cbScrapExtraInfoFromWeb.AutoSize = true;
+            this.cbScrapExtraInfoFromWeb.Location = new System.Drawing.Point(6, 304);
+            this.cbScrapExtraInfoFromWeb.Name = "cbScrapExtraInfoFromWeb";
+            this.cbScrapExtraInfoFromWeb.Size = new System.Drawing.Size(300, 17);
+            this.cbScrapExtraInfoFromWeb.TabIndex = 5;
+            this.cbScrapExtraInfoFromWeb.Text = "Scrap extra info from web when new files are added (slow)";
+            this.cbScrapExtraInfoFromWeb.UseVisualStyleBackColor = true;
             // 
             // FormConfigs
             // 
@@ -478,5 +490,6 @@
         private System.Windows.Forms.Button btnAddFolderAutoScan;
         private System.Windows.Forms.CheckedListBox checkedListBoxAutoScanFolders;
         private System.Windows.Forms.CheckBox cbUseTitleKeys;
+        private System.Windows.Forms.CheckBox cbScrapExtraInfoFromWeb;
     }
 }

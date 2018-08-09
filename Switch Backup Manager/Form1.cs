@@ -265,53 +265,88 @@ namespace Switch_Backup_Manager
 
             olvColumnLanguagesLocal.AspectToStringConverter = delegate (object x) {
                 string result = "";
-                foreach (string language in (List<string>)x)
+                try
                 {
-                    result += language + ", ";
+                    foreach (string language in (List<string>)x)
+                    {
+                        result += language + ", ";
+                    }
+                    if (result.Trim().Length > 1)
+                    {
+                        result = result.Remove(result.Length - 2);
+                    }
                 }
-                if (result.Trim().Length > 1)
-                {
-                    result = result.Remove(result.Length - 2);
-                }
+                catch { }
                 return result;
             };
 
             olvColumnLanguagesEShop.AspectToStringConverter = delegate (object x) {
                 string result = "";
-                foreach (string language in (List<string>)x)
+                try
                 {
-                    result += language + ", ";
+                    foreach (string language in (List<string>)x)
+                    {
+                        result += language + ", ";
+                    }
+                    if (result.Trim().Length > 1)
+                    {
+                        result = result.Remove(result.Length - 2);
+                    }
                 }
-                if (result.Trim().Length > 1)
-                {
-                    result = result.Remove(result.Length - 2);
-                }
+                catch { }
                 return result;
             };
 
             olvColumnLanguagesSD.AspectToStringConverter = delegate (object x) {
                 string result = "";
-                foreach (string language in (List<string>)x)
+                try
                 {
-                    result += language + ", ";
+                    foreach (string language in (List<string>)x)
+                    {
+                        result += language + ", ";
+                    }
+                    if (result.Trim().Length > 1)
+                    {
+                        result = result.Remove(result.Length - 2);
+                    }
                 }
-                if (result.Trim().Length > 1)
-                {
-                    result = result.Remove(result.Length - 2);
-                }
+                catch { }
                 return result;
             };
 
             olvColumnLanguagesScene.AspectToStringConverter = delegate (object x) {
                 string result = "";
-                foreach (string language in (List<string>)x)
+                try
                 {
-                    result += language + ", ";
+                    foreach (string language in (List<string>)x)
+                    {
+                        result += language + ", ";
+                    }
+                    if (result.Trim().Length > 1)
+                    {
+                        result = result.Remove(result.Length - 2);
+                    }
                 }
-                if (result.Trim().Length > 1)
+                catch { }
+                return result;
+            };
+
+
+            olvColumnCategoriesLocal.AspectToStringConverter = delegate (object x) {
+                string result = "";
+
+                try
                 {
-                    result = result.Remove(result.Length - 2);
+                    foreach (string category in (List<string>)x)
+                    {
+                        result += category + ", ";
+                    }
+                    if (result.Trim().Length > 1)
+                    {
+                        result = result.Remove(result.Length - 2);
+                    }
                 }
+                catch { }
                 return result;
             };
 
@@ -423,7 +458,6 @@ namespace Switch_Backup_Manager
 
         public void UpdateSDCardList()
         {
-            //Support for NSP files on SD Card for Now is VERY slow. But we can put it as an option on .INI
             if (Util.ScrapXCIOnSDCard & Util.ScrapNSPOnSDCard)
             {
                 SDCardList = Util.GetFileDataCollectionAll(SDCardSelected);
@@ -603,10 +637,13 @@ namespace Switch_Backup_Manager
         public void ClearGameInformation()
         {
             PB_GameIcon.BackgroundImage = null;
+            PB_GameIcon.Refresh();
+
             lnkInfo.Visible = false;
             lnkInfo.Links.Clear();
 
             richTextBoxGameDescription.Clear();
+            richTextBoxGameDescription.Text = "";
             lblNumberOfPlayers.Text = Properties.Resources.EN_Not_Available;
             lblReleaseDate.Text = Properties.Resources.EN_Not_Available;
             lblPublisher.Text = Properties.Resources.EN_Not_Available;
@@ -2661,7 +2698,19 @@ namespace Switch_Backup_Manager
                     break;
                 case "Trimmed":
                     filterText.Columns = new[] { olvColumnIsTrimmedLocal };
-                    break;                    
+                    break;
+                case "Publisher":
+                    filterText.Columns = new[] { olvColumnPublisherLocal };
+                    break;
+                case "Release date":
+                    filterText.Columns = new[] { olvColumnReleaseDateLocal };
+                    break;
+                case "Nº of Players":
+                    filterText.Columns = new[] { olvColumnNumberOfPlayersLocal };
+                    break;
+                case "Category":
+                    filterText.Columns = new[] { olvColumnCategoriesLocal };
+                    break;
                 default:
                     filterText = null;
                     break;
@@ -2669,12 +2718,6 @@ namespace Switch_Backup_Manager
             
             OLVLocalFiles.ModelFilter = new CompositeAllFilter(new List<IModelFilter> { filterText });
             OLVLocalFiles.DefaultRenderer = new HighlightTextRenderer(filterText);
-//            SumarizeLocalGamesList("local");
-        }
-
-        private void btnClearFilter_Click(object sender, EventArgs e)
-        {
-            textBoxFilterLocal.Clear();
         }
 
         private void cbxFilterLocal_SelectedIndexChanged(object sender, EventArgs e)
@@ -3422,6 +3465,11 @@ namespace Switch_Backup_Manager
             UpdateLocalGamesList();
             UpdateLocalNSPGamesList();
             tabControl1_SelectedIndexChanged(this, new EventArgs());
+        }
+
+        private void btnClearFilterLocal_Click(object sender, EventArgs e)
+        {
+            textBoxFilterLocal.Clear();
         }
     }
 }

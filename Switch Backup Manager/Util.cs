@@ -184,7 +184,31 @@ namespace Switch_Backup_Manager
                         {
                             description = doc.DocumentNode.SelectNodes("//*[@id=\"Overview\"]/div[1]/div/div[1]/div/p[1]")[0].InnerText;
                             result = true;
-                        } catch { };                        
+                        } catch {
+                            try
+                            {
+                                description = doc.DocumentNode.SelectNodes("//*[@id=\"Overview\"]/div[1]/div/div[2]/div/p[1]")[0].InnerText + doc.DocumentNode.SelectNodes("//*[@id=\"Overview\"]/div[1]/div/div[2]/div/p[2]")[0].InnerText;
+                                result = true;                                
+                            } catch
+                            {
+                                try
+                                {
+                                    description = doc.DocumentNode.SelectNodes("//*[@id=\"Overview\"]/div[1]/div/div[2]/div/p[1]")[0].InnerText;
+                                    result = true;
+                                } catch
+                                {
+                                    try
+                                    {
+                                        description = doc.DocumentNode.SelectNodes("//*[@id=\"Overview\"]/div[1]/div/div[6]/div/p[1]")[0].InnerText;
+                                        //*[@id="Overview"]/div[1]/div/div[6]/div/p[1]
+                                        //*[@id="Overview"]/div[1]/div/div[6]/div/p[2]
+                                        result = true;
+                                    }
+                                    catch { }
+                                }
+                                
+                            }
+                        };                        
                     }
 
                     try

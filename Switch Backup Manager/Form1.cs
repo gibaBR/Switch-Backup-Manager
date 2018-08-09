@@ -263,67 +263,88 @@ namespace Switch_Backup_Manager
 
             olvColumnLanguagesLocal.AspectToStringConverter = delegate (object x) {
                 string result = "";
-                foreach (string language in (List<string>)x)
+                try
                 {
-                    result += language + ", ";
+                    foreach (string language in (List<string>)x)
+                    {
+                        result += language + ", ";
+                    }
+                    if (result.Trim().Length > 1)
+                    {
+                        result = result.Remove(result.Length - 2);
+                    }
                 }
-                if (result.Trim().Length > 1)
-                {
-                    result = result.Remove(result.Length - 2);
-                }
+                catch { }
                 return result;
             };
 
             olvColumnLanguagesEShop.AspectToStringConverter = delegate (object x) {
                 string result = "";
-                foreach (string language in (List<string>)x)
+                try
                 {
-                    result += language + ", ";
+                    foreach (string language in (List<string>)x)
+                    {
+                        result += language + ", ";
+                    }
+                    if (result.Trim().Length > 1)
+                    {
+                        result = result.Remove(result.Length - 2);
+                    }
                 }
-                if (result.Trim().Length > 1)
-                {
-                    result = result.Remove(result.Length - 2);
-                }
+                catch { }
                 return result;
             };
 
             olvColumnLanguagesSD.AspectToStringConverter = delegate (object x) {
                 string result = "";
-                foreach (string language in (List<string>)x)
+                try
                 {
-                    result += language + ", ";
+                    foreach (string language in (List<string>)x)
+                    {
+                        result += language + ", ";
+                    }
+                    if (result.Trim().Length > 1)
+                    {
+                        result = result.Remove(result.Length - 2);
+                    }
                 }
-                if (result.Trim().Length > 1)
-                {
-                    result = result.Remove(result.Length - 2);
-                }
+                catch { }
                 return result;
             };
 
             olvColumnLanguagesScene.AspectToStringConverter = delegate (object x) {
                 string result = "";
-                foreach (string language in (List<string>)x)
+                try
                 {
-                    result += language + ", ";
+                    foreach (string language in (List<string>)x)
+                    {
+                        result += language + ", ";
+                    }
+                    if (result.Trim().Length > 1)
+                    {
+                        result = result.Remove(result.Length - 2);
+                    }
                 }
-                if (result.Trim().Length > 1)
-                {
-                    result = result.Remove(result.Length - 2);
-                }
+                catch { }
                 return result;
             };
 
 
             olvColumnCategoriesLocal.AspectToStringConverter = delegate (object x) {
                 string result = "";
-                foreach (string category in (List<string>)x)
+
+                try
                 {
-                    result += category + ", ";
+                    foreach (string category in (List<string>)x)
+                    {
+                        result += category + ", ";
+                    }
+                    if (result.Trim().Length > 1)
+                    {
+                        result = result.Remove(result.Length - 2);
+                    }
                 }
-                if (result.Trim().Length > 1)
-                {
-                    result = result.Remove(result.Length - 2);
-                }
+                catch { }
                 return result;
             };
 
@@ -614,10 +635,13 @@ namespace Switch_Backup_Manager
         public void ClearGameInformation()
         {
             PB_GameIcon.BackgroundImage = null;
+            PB_GameIcon.Refresh();
+
             lnkInfo.Visible = false;
             lnkInfo.Links.Clear();
 
             richTextBoxGameDescription.Clear();
+            richTextBoxGameDescription.Text = "";
             lblNumberOfPlayers.Text = Properties.Resources.EN_Not_Available;
             lblReleaseDate.Text = Properties.Resources.EN_Not_Available;
             lblPublisher.Text = Properties.Resources.EN_Not_Available;
@@ -2684,11 +2708,6 @@ namespace Switch_Backup_Manager
             OLVLocalFiles.DefaultRenderer = new HighlightTextRenderer(filterText);
         }
 
-        private void btnClearFilter_Click(object sender, EventArgs e)
-        {
-            textBoxFilterLocal.Clear();
-        }
-
         private void cbxFilterLocal_SelectedIndexChanged(object sender, EventArgs e)
         {
             textBoxFilterLocal_TextChanged(sender, e);
@@ -3432,6 +3451,11 @@ namespace Switch_Backup_Manager
             UpdateLocalGamesList();
             UpdateLocalNSPGamesList();
             tabControl1_SelectedIndexChanged(this, new EventArgs());
+        }
+
+        private void btnClearFilterLocal_Click(object sender, EventArgs e)
+        {
+            textBoxFilterLocal.Clear();
         }
     }
 }

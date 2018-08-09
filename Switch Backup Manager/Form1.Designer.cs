@@ -83,10 +83,12 @@
             this.toolStripMenuItem68 = new System.Windows.Forms.ToolStripSeparator();
             this.copyInfoToClipboardToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.panel9 = new System.Windows.Forms.Panel();
             this.btnClearFilterLocal = new System.Windows.Forms.Button();
             this.textBoxFilterLocal = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.cbxFilterLocal = new System.Windows.Forms.ComboBox();
+            this.panel8 = new System.Windows.Forms.Panel();
             this.menuLocalFiles = new System.Windows.Forms.MenuStrip();
             this.addToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.filesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -395,6 +397,7 @@
             this.backgroundWorkerScanNewFiles = new System.ComponentModel.BackgroundWorker();
             this.backgroundWorkerUpdateFiles = new System.ComponentModel.BackgroundWorker();
             this.backgroundWorkerScrapExtraInfo = new System.ComponentModel.BackgroundWorker();
+            this.updateGameInfoFromWebToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -412,6 +415,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.OLVLocalFiles)).BeginInit();
             this.contextMenuLocalList.SuspendLayout();
             this.panel1.SuspendLayout();
+            this.panel9.SuspendLayout();
+            this.panel8.SuspendLayout();
             this.menuLocalFiles.SuspendLayout();
             this.tabPage2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.OLV_SDCard)).BeginInit();
@@ -850,41 +855,42 @@
             this.copyFilesToolStripMenuItem2,
             this.moveFilesToToolStripMenuItem,
             this.toolStripMenuItem68,
-            this.copyInfoToClipboardToolStripMenuItem1});
+            this.copyInfoToClipboardToolStripMenuItem1,
+            this.updateGameInfoFromWebToolStripMenuItem});
             this.contextMenuLocalList.Name = "contextMenuLocalList";
-            this.contextMenuLocalList.Size = new System.Drawing.Size(194, 154);
+            this.contextMenuLocalList.Size = new System.Drawing.Size(226, 198);
             this.contextMenuLocalList.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuLocalList_Opening);
             // 
             // showInExplorerToolStripMenuItem
             // 
             this.showInExplorerToolStripMenuItem.Name = "showInExplorerToolStripMenuItem";
-            this.showInExplorerToolStripMenuItem.Size = new System.Drawing.Size(193, 22);
+            this.showInExplorerToolStripMenuItem.Size = new System.Drawing.Size(225, 22);
             this.showInExplorerToolStripMenuItem.Text = "Show in explorer";
             this.showInExplorerToolStripMenuItem.Click += new System.EventHandler(this.showInExplorerToolStripMenuItem_Click);
             // 
             // toolStripMenuItem20
             // 
             this.toolStripMenuItem20.Name = "toolStripMenuItem20";
-            this.toolStripMenuItem20.Size = new System.Drawing.Size(190, 6);
+            this.toolStripMenuItem20.Size = new System.Drawing.Size(222, 6);
             // 
             // trimFilesToolStripMenuItem
             // 
             this.trimFilesToolStripMenuItem.Name = "trimFilesToolStripMenuItem";
-            this.trimFilesToolStripMenuItem.Size = new System.Drawing.Size(193, 22);
+            this.trimFilesToolStripMenuItem.Size = new System.Drawing.Size(225, 22);
             this.trimFilesToolStripMenuItem.Text = "Trim files";
             this.trimFilesToolStripMenuItem.Click += new System.EventHandler(this.trimFilesToolStripMenuItem_Click);
             // 
             // autoRenameFilesToolStripMenuItem
             // 
             this.autoRenameFilesToolStripMenuItem.Name = "autoRenameFilesToolStripMenuItem";
-            this.autoRenameFilesToolStripMenuItem.Size = new System.Drawing.Size(193, 22);
+            this.autoRenameFilesToolStripMenuItem.Size = new System.Drawing.Size(225, 22);
             this.autoRenameFilesToolStripMenuItem.Text = "Auto rename files";
             this.autoRenameFilesToolStripMenuItem.Click += new System.EventHandler(this.autoRenameFilesToolStripMenuItem_Click);
             // 
             // toolStripMenuItem96
             // 
             this.toolStripMenuItem96.Name = "toolStripMenuItem96";
-            this.toolStripMenuItem96.Size = new System.Drawing.Size(190, 6);
+            this.toolStripMenuItem96.Size = new System.Drawing.Size(222, 6);
             // 
             // copyFilesToolStripMenuItem2
             // 
@@ -892,7 +898,7 @@
             this.sDCardToolStripMenuItem2,
             this.folderToolStripMenuItem2});
             this.copyFilesToolStripMenuItem2.Name = "copyFilesToolStripMenuItem2";
-            this.copyFilesToolStripMenuItem2.Size = new System.Drawing.Size(193, 22);
+            this.copyFilesToolStripMenuItem2.Size = new System.Drawing.Size(225, 22);
             this.copyFilesToolStripMenuItem2.Text = "Copy files to";
             // 
             // sDCardToolStripMenuItem2
@@ -915,7 +921,7 @@
             this.sDCardToolStripMenuItem3,
             this.folderToolStripMenuItem3});
             this.moveFilesToToolStripMenuItem.Name = "moveFilesToToolStripMenuItem";
-            this.moveFilesToToolStripMenuItem.Size = new System.Drawing.Size(193, 22);
+            this.moveFilesToToolStripMenuItem.Size = new System.Drawing.Size(225, 22);
             this.moveFilesToToolStripMenuItem.Text = "Move files to";
             // 
             // sDCardToolStripMenuItem3
@@ -935,65 +941,83 @@
             // toolStripMenuItem68
             // 
             this.toolStripMenuItem68.Name = "toolStripMenuItem68";
-            this.toolStripMenuItem68.Size = new System.Drawing.Size(190, 6);
+            this.toolStripMenuItem68.Size = new System.Drawing.Size(222, 6);
             // 
             // copyInfoToClipboardToolStripMenuItem1
             // 
             this.copyInfoToClipboardToolStripMenuItem1.Name = "copyInfoToClipboardToolStripMenuItem1";
-            this.copyInfoToClipboardToolStripMenuItem1.Size = new System.Drawing.Size(193, 22);
+            this.copyInfoToClipboardToolStripMenuItem1.Size = new System.Drawing.Size(225, 22);
             this.copyInfoToClipboardToolStripMenuItem1.Text = "Copy info to clipboard";
             this.copyInfoToClipboardToolStripMenuItem1.Click += new System.EventHandler(this.copyInfoToClipboardToolStripMenuItem1_Click);
             // 
             // panel1
             // 
-            this.panel1.Controls.Add(this.btnClearFilterLocal);
-            this.panel1.Controls.Add(this.textBoxFilterLocal);
-            this.panel1.Controls.Add(this.label2);
-            this.panel1.Controls.Add(this.cbxFilterLocal);
-            this.panel1.Controls.Add(this.menuLocalFiles);
+            this.panel1.Controls.Add(this.panel9);
+            this.panel1.Controls.Add(this.panel8);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel1.Location = new System.Drawing.Point(3, 3);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(1513, 28);
             this.panel1.TabIndex = 0;
             // 
+            // panel9
+            // 
+            this.panel9.Controls.Add(this.btnClearFilterLocal);
+            this.panel9.Controls.Add(this.textBoxFilterLocal);
+            this.panel9.Controls.Add(this.label2);
+            this.panel9.Controls.Add(this.cbxFilterLocal);
+            this.panel9.Dock = System.Windows.Forms.DockStyle.Right;
+            this.panel9.Location = new System.Drawing.Point(755, 0);
+            this.panel9.Name = "panel9";
+            this.panel9.Size = new System.Drawing.Size(758, 28);
+            this.panel9.TabIndex = 6;
+            // 
             // btnClearFilterLocal
             // 
-            this.btnClearFilterLocal.Location = new System.Drawing.Point(1434, 1);
+            this.btnClearFilterLocal.Location = new System.Drawing.Point(679, 2);
             this.btnClearFilterLocal.Name = "btnClearFilterLocal";
             this.btnClearFilterLocal.Size = new System.Drawing.Size(75, 23);
-            this.btnClearFilterLocal.TabIndex = 4;
+            this.btnClearFilterLocal.TabIndex = 8;
             this.btnClearFilterLocal.Text = "Clear";
             this.btnClearFilterLocal.UseVisualStyleBackColor = true;
-            this.btnClearFilterLocal.Click += new System.EventHandler(this.btnClearFilter_Click);
+            this.btnClearFilterLocal.Click += new System.EventHandler(this.btnClearFilterLocal_Click);
             // 
             // textBoxFilterLocal
             // 
-            this.textBoxFilterLocal.Location = new System.Drawing.Point(1159, 3);
+            this.textBoxFilterLocal.Location = new System.Drawing.Point(404, 4);
             this.textBoxFilterLocal.Name = "textBoxFilterLocal";
             this.textBoxFilterLocal.Size = new System.Drawing.Size(268, 20);
-            this.textBoxFilterLocal.TabIndex = 3;
+            this.textBoxFilterLocal.TabIndex = 7;
             this.textBoxFilterLocal.TextChanged += new System.EventHandler(this.textBoxFilterLocal_TextChanged);
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.BackColor = System.Drawing.SystemColors.Control;
-            this.label2.Location = new System.Drawing.Point(1015, 6);
+            this.label2.BackColor = System.Drawing.SystemColors.Window;
+            this.label2.Location = new System.Drawing.Point(260, 7);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(32, 13);
-            this.label2.TabIndex = 2;
+            this.label2.TabIndex = 6;
             this.label2.Text = "Filter:";
             // 
             // cbxFilterLocal
             // 
             this.cbxFilterLocal.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbxFilterLocal.FormattingEnabled = true;
-            this.cbxFilterLocal.Location = new System.Drawing.Point(1050, 2);
+            this.cbxFilterLocal.Location = new System.Drawing.Point(295, 3);
             this.cbxFilterLocal.Name = "cbxFilterLocal";
             this.cbxFilterLocal.Size = new System.Drawing.Size(102, 21);
-            this.cbxFilterLocal.TabIndex = 1;
+            this.cbxFilterLocal.TabIndex = 5;
             this.cbxFilterLocal.SelectedIndexChanged += new System.EventHandler(this.cbxFilterLocal_SelectedIndexChanged);
+            // 
+            // panel8
+            // 
+            this.panel8.Controls.Add(this.menuLocalFiles);
+            this.panel8.Dock = System.Windows.Forms.DockStyle.Left;
+            this.panel8.Location = new System.Drawing.Point(0, 0);
+            this.panel8.Name = "panel8";
+            this.panel8.Size = new System.Drawing.Size(752, 28);
+            this.panel8.TabIndex = 5;
             // 
             // menuLocalFiles
             // 
@@ -1007,8 +1031,8 @@
             this.toolsToolStripMenuItem});
             this.menuLocalFiles.Location = new System.Drawing.Point(0, 0);
             this.menuLocalFiles.Name = "menuLocalFiles";
-            this.menuLocalFiles.Size = new System.Drawing.Size(1513, 24);
-            this.menuLocalFiles.TabIndex = 0;
+            this.menuLocalFiles.Size = new System.Drawing.Size(752, 24);
+            this.menuLocalFiles.TabIndex = 1;
             this.menuLocalFiles.Text = "menuStrip1";
             // 
             // addToolStripMenuItem
@@ -1320,14 +1344,12 @@
             this.updateToolStripMenuItem.Name = "updateToolStripMenuItem";
             this.updateToolStripMenuItem.Size = new System.Drawing.Size(195, 22);
             this.updateToolStripMenuItem.Text = "Update local database";
-            this.updateToolStripMenuItem.Click += new System.EventHandler(this.updateToolStripMenuItem_Click);
             // 
             // updateNswdbcomListToolStripMenuItem
             // 
             this.updateNswdbcomListToolStripMenuItem.Name = "updateNswdbcomListToolStripMenuItem";
             this.updateNswdbcomListToolStripMenuItem.Size = new System.Drawing.Size(195, 22);
             this.updateNswdbcomListToolStripMenuItem.Text = "Update nswdb.com list";
-            this.updateNswdbcomListToolStripMenuItem.Click += new System.EventHandler(this.updateNswdbcomListToolStripMenuItem_Click);
             // 
             // toolsToolStripMenuItem
             // 
@@ -1392,7 +1414,7 @@
             this.exportListToolStripMenuItem.Name = "exportListToolStripMenuItem";
             this.exportListToolStripMenuItem.Size = new System.Drawing.Size(158, 22);
             this.exportListToolStripMenuItem.Text = "Extract file...";
-            this.exportListToolStripMenuItem.Click += new System.EventHandler(this.exportListToolStripMenuItem_Click);
+            this.exportListToolStripMenuItem.Visible = false;
             // 
             // toolStripMenuItem3
             // 
@@ -1407,20 +1429,19 @@
             this.exportGameListToolStripMenuItem.Name = "exportGameListToolStripMenuItem";
             this.exportGameListToolStripMenuItem.Size = new System.Drawing.Size(158, 22);
             this.exportGameListToolStripMenuItem.Text = "Export game list";
+            this.exportGameListToolStripMenuItem.Visible = false;
             // 
             // htmlToolStripMenuItem
             // 
             this.htmlToolStripMenuItem.Name = "htmlToolStripMenuItem";
             this.htmlToolStripMenuItem.Size = new System.Drawing.Size(107, 22);
             this.htmlToolStripMenuItem.Text = "HTML";
-            this.htmlToolStripMenuItem.Click += new System.EventHandler(this.htmlToolStripMenuItem_Click);
             // 
             // cSVToolStripMenuItem
             // 
             this.cSVToolStripMenuItem.Name = "cSVToolStripMenuItem";
             this.cSVToolStripMenuItem.Size = new System.Drawing.Size(107, 22);
             this.cSVToolStripMenuItem.Text = "CSV";
-            this.cSVToolStripMenuItem.Click += new System.EventHandler(this.cSVToolStripMenuItem_Click);
             // 
             // tabPage2
             // 
@@ -3519,6 +3540,12 @@
             this.backgroundWorkerScrapExtraInfo.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorkerScrapExtraInfo_DoWork);
             this.backgroundWorkerScrapExtraInfo.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backgroundWorkerScrapExtraInfo_RunWorkerCompleted);
             // 
+            // updateGameInfoFromWebToolStripMenuItem
+            // 
+            this.updateGameInfoFromWebToolStripMenuItem.Name = "updateGameInfoFromWebToolStripMenuItem";
+            this.updateGameInfoFromWebToolStripMenuItem.Size = new System.Drawing.Size(225, 22);
+            this.updateGameInfoFromWebToolStripMenuItem.Text = "Update game info from Web";
+            // 
             // FrmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -3551,7 +3578,10 @@
             ((System.ComponentModel.ISupportInitialize)(this.OLVLocalFiles)).EndInit();
             this.contextMenuLocalList.ResumeLayout(false);
             this.panel1.ResumeLayout(false);
-            this.panel1.PerformLayout();
+            this.panel9.ResumeLayout(false);
+            this.panel9.PerformLayout();
+            this.panel8.ResumeLayout(false);
+            this.panel8.PerformLayout();
             this.menuLocalFiles.ResumeLayout(false);
             this.menuLocalFiles.PerformLayout();
             this.tabPage2.ResumeLayout(false);
@@ -3598,48 +3628,6 @@
         private System.Windows.Forms.TabPage tabPage2;
         private System.Windows.Forms.TabPage tabPage3;
         private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.MenuStrip menuLocalFiles;
-        private System.Windows.Forms.ToolStripMenuItem addToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem filesToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem folderToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem selectToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem allToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem noneToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem invertSelectionToolStripMenuItem;
-        private System.Windows.Forms.ToolStripSeparator toolStripMenuItem1;
-        private System.Windows.Forms.ToolStripMenuItem itensToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem itemsOnSDCardToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem itemsNotOnSDCardToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem sceneReleasesToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem itemsOnSceneReleasesToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem itemsNotOnSceneReleasesToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem removeToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem selectedToolStripMenuItem;
-        private System.Windows.Forms.ToolStripSeparator toolStripMenuItem2;
-        private System.Windows.Forms.ToolStripMenuItem sDCardToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem itemsOnSDCardToolStripMenuItem1;
-        private System.Windows.Forms.ToolStripMenuItem itemsNotOnSDCardToolStripMenuItem1;
-        private System.Windows.Forms.ToolStripMenuItem sceneReleasesToolStripMenuItem1;
-        private System.Windows.Forms.ToolStripMenuItem itemsOnSceneReleasesToolStripMenuItem1;
-        private System.Windows.Forms.ToolStripMenuItem itemsNotOnSceneReleasesToolStripMenuItem1;
-        private System.Windows.Forms.ToolStripMenuItem transferToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem sDCardToolStripMenuItem1;
-        private System.Windows.Forms.ToolStripMenuItem folderToolStripMenuItem1;
-        private System.Windows.Forms.ToolStripMenuItem infosToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem updateToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem updateNswdbcomListToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem toolsToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem trimToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem selectedFilesToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem allFilesToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem renameToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem allFilesToolStripMenuItem1;
-        private System.Windows.Forms.ToolStripMenuItem selectedFilesToolStripMenuItem1;
-        private System.Windows.Forms.ToolStripMenuItem exportListToolStripMenuItem;
-        private System.Windows.Forms.ToolStripSeparator toolStripMenuItem3;
-        private System.Windows.Forms.ToolStripMenuItem exportGameListToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem htmlToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem cSVToolStripMenuItem;
         private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.Panel panel3;
         private System.Windows.Forms.PictureBox PB_GameIcon;
@@ -3661,14 +3649,6 @@
         private System.ComponentModel.BackgroundWorker backgroundWorkerAddFilesFromDirectory;
         private System.Windows.Forms.Timer timer1;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabelGame;
-        private System.Windows.Forms.ToolStripMenuItem listToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem noneToolStripMenuItem1;
-        private System.Windows.Forms.ToolStripMenuItem gameTitleToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem trimmedToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem cartSizeToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem typeToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem developerToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem masterkeyRevisionToolStripMenuItem;
         private BrightIdeasSoftware.ObjectListView OLV_SDCard;
         private BrightIdeasSoftware.OLVColumn olvColumnTitleIDSD;
         private BrightIdeasSoftware.OLVColumn olvColumnGameNameSD;
@@ -3797,10 +3777,6 @@
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem94;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem95;
         private System.ComponentModel.BackgroundWorker backgroundWorkerAddFile;
-        private System.Windows.Forms.ToolStripMenuItem copyFilesToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem moveFilesToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem copyFilesToolStripMenuItem1;
-        private System.Windows.Forms.ToolStripMenuItem moveFilesToolStripMenuItem1;
         private System.ComponentModel.BackgroundWorker backgroundWorkerCopyFiles;
         private System.ComponentModel.BackgroundWorker backgroundWorkerLoadSDCardFiles;
         private System.Windows.Forms.MenuStrip menuStrip1;
@@ -3950,10 +3926,67 @@
         private BrightIdeasSoftware.OLVColumn olvColumnNumberOfPlayersLocal;
         private BrightIdeasSoftware.OLVColumn olvColumnPublisherLocal;
         private BrightIdeasSoftware.OLVColumn olvColumnCategoriesLocal;
+        private System.Windows.Forms.Panel panel9;
         private System.Windows.Forms.Button btnClearFilterLocal;
         private System.Windows.Forms.TextBox textBoxFilterLocal;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.ComboBox cbxFilterLocal;
+        private System.Windows.Forms.Panel panel8;
+        private System.Windows.Forms.MenuStrip menuLocalFiles;
+        private System.Windows.Forms.ToolStripMenuItem addToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem filesToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem folderToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem selectToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem allToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem noneToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem invertSelectionToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem itensToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem itemsOnSDCardToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem itemsNotOnSDCardToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem sceneReleasesToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem itemsOnSceneReleasesToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem itemsNotOnSceneReleasesToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem listToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem noneToolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem gameTitleToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem trimmedToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem cartSizeToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem typeToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem developerToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem masterkeyRevisionToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem removeToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem selectedToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripMenuItem2;
+        private System.Windows.Forms.ToolStripMenuItem sDCardToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem itemsOnSDCardToolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem itemsNotOnSDCardToolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem sceneReleasesToolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem itemsOnSceneReleasesToolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem itemsNotOnSceneReleasesToolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem transferToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem sDCardToolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem copyFilesToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem moveFilesToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem folderToolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem copyFilesToolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem moveFilesToolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem infosToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem updateToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem updateNswdbcomListToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem toolsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem trimToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem selectedFilesToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem allFilesToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem renameToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem selectedFilesToolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem allFilesToolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem exportListToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripMenuItem3;
+        private System.Windows.Forms.ToolStripMenuItem exportGameListToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem htmlToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem cSVToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem updateGameInfoFromWebToolStripMenuItem;
     }
 }
 

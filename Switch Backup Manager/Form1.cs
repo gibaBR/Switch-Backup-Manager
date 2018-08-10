@@ -350,6 +350,25 @@ namespace Switch_Backup_Manager
                 return result;
             };
 
+            olvColumnCategoriesEShop.AspectToStringConverter = delegate (object x) {
+                string result = "";
+
+                try
+                {
+                    foreach (string category in (List<string>)x)
+                    {
+                        result += category + ", ";
+                    }
+                    if (result.Trim().Length > 1)
+                    {
+                        result = result.Remove(result.Length - 2);
+                    }
+                }
+                catch { }
+                return result;
+            };
+
+
             olvColumnGameNameEShop.AspectGetter = delegate (object x)
             {
                 string result = "";
@@ -2705,7 +2724,7 @@ namespace Switch_Backup_Manager
                 case "Release date":
                     filterText.Columns = new[] { olvColumnReleaseDateLocal };
                     break;
-                case "Nº of Players":
+                case "Nº of players":
                     filterText.Columns = new[] { olvColumnNumberOfPlayersLocal };
                     break;
                 case "Category":
@@ -3282,6 +3301,18 @@ namespace Switch_Backup_Manager
                     break;
                 case "Distribution":
                     filterText.Columns = new[] { olvColumnDistributionType };
+                    break;
+                case "Publisher":
+                    filterText.Columns = new[] { olvColumnPublisherEshop };
+                    break;
+                case "Release date":
+                    filterText.Columns = new[] { olvColumnReleaseDateEshop };
+                    break;
+                case "Nº of players":
+                    filterText.Columns = new[] { olvColumnNumberOfPlayersEshop };
+                    break;
+                case "Category":
+                    filterText.Columns = new[] { olvColumnCategoriesEShop };
                     break;
                 default:
                     filterText = null;

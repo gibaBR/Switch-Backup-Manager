@@ -265,55 +265,109 @@ namespace Switch_Backup_Manager
 
             olvColumnLanguagesLocal.AspectToStringConverter = delegate (object x) {
                 string result = "";
-                foreach (string language in (List<string>)x)
+                try
                 {
-                    result += language + ", ";
+                    foreach (string language in (List<string>)x)
+                    {
+                        result += language + ", ";
+                    }
+                    if (result.Trim().Length > 1)
+                    {
+                        result = result.Remove(result.Length - 2);
+                    }
                 }
-                if (result.Trim().Length > 1)
-                {
-                    result = result.Remove(result.Length - 2);
-                }
+                catch { }
                 return result;
             };
 
             olvColumnLanguagesEShop.AspectToStringConverter = delegate (object x) {
                 string result = "";
-                foreach (string language in (List<string>)x)
+                try
                 {
-                    result += language + ", ";
+                    foreach (string language in (List<string>)x)
+                    {
+                        result += language + ", ";
+                    }
+                    if (result.Trim().Length > 1)
+                    {
+                        result = result.Remove(result.Length - 2);
+                    }
                 }
-                if (result.Trim().Length > 1)
-                {
-                    result = result.Remove(result.Length - 2);
-                }
+                catch { }
                 return result;
             };
 
             olvColumnLanguagesSD.AspectToStringConverter = delegate (object x) {
                 string result = "";
-                foreach (string language in (List<string>)x)
+                try
                 {
-                    result += language + ", ";
+                    foreach (string language in (List<string>)x)
+                    {
+                        result += language + ", ";
+                    }
+                    if (result.Trim().Length > 1)
+                    {
+                        result = result.Remove(result.Length - 2);
+                    }
                 }
-                if (result.Trim().Length > 1)
-                {
-                    result = result.Remove(result.Length - 2);
-                }
+                catch { }
                 return result;
             };
 
             olvColumnLanguagesScene.AspectToStringConverter = delegate (object x) {
                 string result = "";
-                foreach (string language in (List<string>)x)
+                try
                 {
-                    result += language + ", ";
+                    foreach (string language in (List<string>)x)
+                    {
+                        result += language + ", ";
+                    }
+                    if (result.Trim().Length > 1)
+                    {
+                        result = result.Remove(result.Length - 2);
+                    }
                 }
-                if (result.Trim().Length > 1)
-                {
-                    result = result.Remove(result.Length - 2);
-                }
+                catch { }
                 return result;
             };
+
+
+            olvColumnCategoriesLocal.AspectToStringConverter = delegate (object x) {
+                string result = "";
+
+                try
+                {
+                    foreach (string category in (List<string>)x)
+                    {
+                        result += category + ", ";
+                    }
+                    if (result.Trim().Length > 1)
+                    {
+                        result = result.Remove(result.Length - 2);
+                    }
+                }
+                catch { }
+                return result;
+            };
+
+            olvColumnCategoriesEShop.AspectToStringConverter = delegate (object x) {
+                string result = "";
+
+                try
+                {
+                    foreach (string category in (List<string>)x)
+                    {
+                        result += category + ", ";
+                    }
+                    if (result.Trim().Length > 1)
+                    {
+                        result = result.Remove(result.Length - 2);
+                    }
+                }
+                catch { }
+                return result;
+            };
+
 
             olvColumnGameNameEShop.AspectGetter = delegate (object x)
             {
@@ -426,7 +480,6 @@ namespace Switch_Backup_Manager
 
         public void UpdateSDCardList()
         {
-            //Support for NSP files on SD Card for Now is VERY slow. But we can put it as an option on .INI
             if (Util.ScrapXCIOnSDCard & Util.ScrapNSPOnSDCard)
             {
                 SDCardList = Util.GetFileDataCollectionAll(SDCardSelected);
@@ -606,10 +659,13 @@ namespace Switch_Backup_Manager
         public void ClearGameInformation()
         {
             PB_GameIcon.BackgroundImage = null;
+            PB_GameIcon.Refresh();
+
             lnkInfo.Visible = false;
             lnkInfo.Links.Clear();
 
             richTextBoxGameDescription.Clear();
+            richTextBoxGameDescription.Text = "";
             lblNumberOfPlayers.Text = Properties.Resources.EN_Not_Available;
             lblReleaseDate.Text = Properties.Resources.EN_Not_Available;
             lblPublisher.Text = Properties.Resources.EN_Not_Available;
@@ -2670,7 +2726,19 @@ namespace Switch_Backup_Manager
                     break;
                 case "Trimmed":
                     filterText.Columns = new[] { olvColumnIsTrimmedLocal };
-                    break;                    
+                    break;
+                case "Publisher":
+                    filterText.Columns = new[] { olvColumnPublisherLocal };
+                    break;
+                case "Release date":
+                    filterText.Columns = new[] { olvColumnReleaseDateLocal };
+                    break;
+                case "Nº of players":
+                    filterText.Columns = new[] { olvColumnNumberOfPlayersLocal };
+                    break;
+                case "Category":
+                    filterText.Columns = new[] { olvColumnCategoriesLocal };
+                    break;
                 default:
                     filterText = null;
                     break;
@@ -2678,12 +2746,6 @@ namespace Switch_Backup_Manager
             
             OLVLocalFiles.ModelFilter = new CompositeAllFilter(new List<IModelFilter> { filterText });
             OLVLocalFiles.DefaultRenderer = new HighlightTextRenderer(filterText);
-//            SumarizeLocalGamesList("local");
-        }
-
-        private void btnClearFilter_Click(object sender, EventArgs e)
-        {
-            textBoxFilterLocal.Clear();
         }
 
         private void cbxFilterLocal_SelectedIndexChanged(object sender, EventArgs e)
@@ -3249,6 +3311,18 @@ namespace Switch_Backup_Manager
                 case "Distribution":
                     filterText.Columns = new[] { olvColumnDistributionType };
                     break;
+                case "Publisher":
+                    filterText.Columns = new[] { olvColumnPublisherEshop };
+                    break;
+                case "Release date":
+                    filterText.Columns = new[] { olvColumnReleaseDateEshop };
+                    break;
+                case "Nº of players":
+                    filterText.Columns = new[] { olvColumnNumberOfPlayersEshop };
+                    break;
+                case "Category":
+                    filterText.Columns = new[] { olvColumnCategoriesEShop };
+                    break;
                 default:
                     filterText = null;
                     break;
@@ -3413,11 +3487,77 @@ namespace Switch_Backup_Manager
             ScrapExtraInfoFromWeb();
         }
 
+
+        /// <summary>
+        /// Update a list of files with information from web
+        /// </summary>
+        /// <param name="source">Which list? Valid values are local, sdcard, eshop, scene</param>
+        private void UpdateGamesInfoFromWeb(string source)
+        {
+            Dictionary<Tuple<string, string>, FileData> list = null;
+
+            switch (source)
+            {
+                case "local":
+                    list = LocalFilesListSelectedItems;
+                    break;
+                case "sdcard":
+                    list = SDCardListSelectedItems;
+                    break;
+                case "eshop":
+                    list = LocalNSPFilesListSelectedItems;
+                    break;
+                case "scene":
+                    list = SceneReleasesSelectedItems;
+                    break;
+            }
+
+            if (list != null)
+            {
+                if (list.Count > 0)
+                {
+                    if (!backgroundWorkerScrapExtraInfo.IsBusy)
+                    {
+                        switch (source)
+                        {
+                            case "local":
+                                menuLocalFiles.Enabled = false;
+                                break;
+                            case "eshop":
+                                menuEShop.Enabled = false;
+                                break;
+                        }
+                        
+                        toolStripStatusFilesOperation.Text = Properties.Resources.EN_FileOperationsScrapFromWeb;
+                        toolStripStatusFilesOperation.Visible = true;
+                        toolStripProgressAddingFiles.Visible = true;
+                        toolStripStatusLabelGame.Text = "";
+                        toolStripStatusLabelGame.Visible = true;
+                        toolStripProgressAddingFiles.Value = 0;
+                        timer1.Enabled = true;
+                        object[] parameters = { list, source }; //0: FilesList (Dictionary), 1: source ("local", "sdcard", "eshop", "scene") 
+                        backgroundWorkerScrapExtraInfo.RunWorkerAsync(parameters);
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("No files selected");
+                    return;
+                }
+            }
+        }
+
         private void backgroundWorkerScrapExtraInfo_DoWork(object sender, DoWorkEventArgs e)
         {
             BackgroundWorker worker = sender as BackgroundWorker;
+            object[] parameters = e.Argument as object[];
+
+            Dictionary<Tuple<string, string>, FileData> filesList = (Dictionary<Tuple<string, string>, FileData>)parameters[0];
+            string source = (string)parameters[1];
             
-            Util.GetExtendedInfo(LocalFilesList, "local");
+
+            Util.GetExtendedInfo(filesList, source);
+            e.Result = source;
         }
 
         private void backgroundWorkerScrapExtraInfo_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
@@ -3428,9 +3568,35 @@ namespace Switch_Backup_Manager
             toolStripStatusLabelGame.Text = "";
             toolStripStatusLabelGame.Visible = false;
 
-            UpdateLocalGamesList();
-            UpdateLocalNSPGamesList();
+            string source = e.Result as string;
+
+            if (source == "local")
+            {
+                UpdateLocalGamesList();
+                menuLocalFiles.Enabled = true;
+            } else if (source == "shop")
+            {
+                UpdateLocalNSPGamesList();
+                menuEShop.Enabled = true;
+            }
+
             tabControl1_SelectedIndexChanged(this, new EventArgs());
+            MessageBox.Show("Done");
+        }
+
+        private void updateGameInfoFromWebToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            UpdateGamesInfoFromWeb("local");
+        }
+
+        private void btnClearFilterLocal_Click(object sender, EventArgs e)
+        {
+            textBoxFilterLocal.Clear();
+        }
+
+        private void updateGameInfoFromWebToolStripMenuItemEshop_Click(object sender, EventArgs e)
+        {
+            UpdateGamesInfoFromWeb("eshop");
         }
     }
 }

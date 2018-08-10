@@ -184,7 +184,29 @@ namespace Switch_Backup_Manager
                         {
                             description = doc.DocumentNode.SelectNodes("//*[@id=\"Overview\"]/div[1]/div/div[1]/div/p[1]")[0].InnerText;
                             result = true;
-                        } catch { };                        
+                        } catch {
+                            try
+                            {
+                                description = doc.DocumentNode.SelectNodes("//*[@id=\"Overview\"]/div[1]/div/div[2]/div/p[1]")[0].InnerText + doc.DocumentNode.SelectNodes("//*[@id=\"Overview\"]/div[1]/div/div[2]/div/p[2]")[0].InnerText;
+                                result = true;                                
+                            } catch
+                            {
+                                try
+                                {
+                                    description = doc.DocumentNode.SelectNodes("//*[@id=\"Overview\"]/div[1]/div/div[2]/div/p[1]")[0].InnerText;
+                                    result = true;
+                                } catch
+                                {
+                                    try
+                                    {
+                                        description = doc.DocumentNode.SelectNodes("//*[@id=\"Overview\"]/div[1]/div/div[6]/div/p[1]")[0].InnerText;
+                                        result = true;
+                                    }
+                                    catch { }
+                                }
+                                
+                            }
+                        };                        
                     }
 
                     try
@@ -476,7 +498,7 @@ namespace Switch_Backup_Manager
                 result = result.Replace(AutoRenamingTags[6], data.Region);
                 result = result.Replace(AutoRenamingTags[7], data.Firmware);
                 result = result.Replace(AutoRenamingTags[8], data.Languages_resumed);
-                result = result.Replace(AutoRenamingTags[9], Convert.ToString(data.IdScene));
+                result = result.Replace(AutoRenamingTags[9], string.Format("{0:D4}", data.IdScene));
                 result = result.Replace(AutoRenamingTags[10], data.Version);
 
                 result += Path.GetExtension(data.FilePath);
@@ -674,52 +696,23 @@ namespace Switch_Backup_Manager
         public static void UpdateXMLFromFileData(FileData file, string source)
         {
             XElement element = null;
+            string xml = "";
             if (source == "local")
             {
                 element = XML_Local.Descendants("Game")
                     .FirstOrDefault(el => (string)el.Attribute("TitleID") == file.TitleID);
+                xml = LOCAL_FILES_DB;
             } else if (source == "eshop")
             {
                 element = XML_NSP_Local.Descendants("Game")
                     .FirstOrDefault(el => (string)el.Attribute("TitleID") == file.TitleID);
+                xml = LOCAL_NSP_FILES_DB;
             }
 
             if (element != null)
             {
-                element.Element("FilePath").Value = file.FilePath;
-                element.Element("FileName").Value = file.FileName;
-                element.Element("FileNameWithExt").Value = file.FileNameWithExt;
-                element.Element("ROMSize").Value = file.ROMSize;
-                element.Element("TitleIDBaseGame").Value = file.TitleIDBaseGame;
-                element.Element("ROMSizeBytes").Value = Convert.ToString(file.ROMSizeBytes);
-                element.Element("UsedSpace").Value = file.UsedSpace;
-                element.Element("UsedSpaceBytes").Value = Convert.ToString(file.UsedSpaceBytes);
-                element.Element("GameName").Value = file.GameName;
-                element.Element("Developer").Value = file.Developer;
-                element.Element("GameRevision").Value = file.GameRevision;
-                element.Element("ProductCode").Value = file.ProductCode;
-                element.Element("SDKVersion").Value = file.SDKVersion;
-                element.Element("CartSize").Value = file.CartSize;
-                element.Element("CardType").Value = file.Cardtype;
-                element.Element("MasterKeyRevision").Value = file.MasterKeyRevision;
-                element.Element("IsTrimmed").Value = Convert.ToString(file.IsTrimmed).ToLower();
-                element.Element("Group").Value = file.Group;
-                element.Element("Serial").Value = file.Serial;
-                element.Element("Firmware").Value = file.Firmware;
-                element.Element("Region").Value = file.Region;
-                element.Element("Languages_resumed").Value = file.Languages_resumed;
-                element.Element("Distribution_Type").Value = file.DistributionType;
-                element.Element("ID_Scene").Value = (file.IdScene > 0 ? Convert.ToString(file.IdScene) : ""); ;
-                element.Element("Distribution_Type").Value = file.DistributionType;
-                element.Element("Content_Type").Value = file.ContentType;
-
-                element.Element("HasExtendedInfo").Value = Convert.ToString(file.HasExtendedInfo).ToLower();
-                element.Element("Description").Value = file.Description;
-                element.Element("Publisher").Value = file.Publisher;
-                element.Element("ReleaseDate").Value = Convert.ToString(file.ReleaseDate);
-                element.Element("NumberOfPlayers").Value = Convert.ToString(file.NumberOfPlayers);
-                element.Element("Categories").Value = Convert.ToString(file.Categories);
-                element.Element("ESRB").Value = Convert.ToString(file.ESRB);
+                element.Remove();
+                WriteFileDataToXML(file, xml);
             }
         }
 
@@ -924,7 +917,7 @@ namespace Switch_Backup_Manager
                             XML_Local.Save(@xml);
                             logger.Debug("xml saved...");
                         }
-                        else
+                        else if (xml == LOCAL_NSP_FILES_DB)
                         {
                             logger.Debug("Adding element...");
                             XML_NSP_Local.Root.Add(element);

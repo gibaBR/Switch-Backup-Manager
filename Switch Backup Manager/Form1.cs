@@ -829,9 +829,9 @@ namespace Switch_Backup_Manager
             foreach (FileData data in list1.Values)
             {
                 FileData dummy;
-                if (!list2.TryGetValue(new Tuple<string, string>(data.TitleID, data.Version != null ? data.Version : ""), out dummy))
+                if (!list2.TryGetValue(new Tuple<string, string>(data.TitleID, data.Version), out dummy))
                 {
-                    result.Add(new Tuple<string, string>(data.TitleID, data.Version != null ? data.Version : ""), data);
+                    result.Add(new Tuple<string, string>(data.TitleID, data.Version), data);
                 }
             }
 
@@ -845,9 +845,9 @@ namespace Switch_Backup_Manager
             foreach (FileData data in list1.Values)
             {
                 FileData dummy;
-                if (list2.TryGetValue(new Tuple<string, string>(data.TitleID, data.Version != null ? data.Version : ""), out dummy))
+                if (list2.TryGetValue(new Tuple<string, string>(data.TitleID, data.Version), out dummy))
                 {
-                    result.Add(new Tuple<string, string>(data.TitleID, data.Version != null ? data.Version : ""), data);
+                    result.Add(new Tuple<string, string>(data.TitleID, data.Version), data);
                 }
             }
 

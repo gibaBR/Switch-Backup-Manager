@@ -964,28 +964,7 @@ namespace Switch_Backup_Manager
             {
                 try
                 {
-                    string version = xe.Element("firmware").Value;
-                    switch (version)
-                    {
-                        //Use Number of files in Update Partition to guess XCI revision number by Firmware
-
-                        case "1.0.0": version = "167"; break;
-                        case "2.0.1": version = ""; break; //167?
-                        case "2.0.3": version = ""; break; //167?
-                        case "2.1.0": version = "183"; break;
-                        case "2.3.0": version = "183"; break;
-                        case "3.0.0": version = "191"; break;
-                        case "3.0.1": version = "191"; break;
-                        case "3.0.2": version = ""; break; //191?
-                        case "4.0.1": version = "201"; break;
-                        case "4.1.0": version = "201"; break;
-                        case "5.0.2": version = ""; break; //207?
-                        case "5.1.0": version = ""; break; //207?
-                        case "5.x.x":
-                        case "5.X.X": version = "207"; break;
-                        default: version = ""; break;
-                    }
-                    result.Add(new Tuple<string, string>(xe.Element("titleid").Value, version), GetFileData(xe, true));
+                    result.Add(new Tuple<string, string>(xe.Element("titleid").Value, xe.Element("firmware").Value.ToLower()), GetFileData(xe, true));
                 } catch { System.ArgumentException ex; }
                 {
                     //If TitleID is already on the list, ignore
@@ -2099,8 +2078,6 @@ namespace Switch_Backup_Manager
                 result.IsTrimmed = (result.UsedSpaceBytes == result.ROMSizeBytes);
                 result.CartSize = GetCapacity(XCI.XCI_Headers[0].CardSize1);
 
-                Process process = new Process();
-
                 //Load Deep File Info (Probably we should clean it a bit more)
                 string actualHash;
                 byte[] hashBuffer;
@@ -2187,6 +2164,36 @@ namespace Switch_Backup_Manager
                         fileStream.Read(hashBuffer, 0, array6[j].HashedRegionSize);
                         actualHash = SHA256Bytes(hashBuffer);
                     }
+                    if (array[i].Name == "update")
+                    {
+                        List<string> UpdateFiles = array6.Select(x => x.Name).ToList();
+                        UpdateFiles.Sort();
+
+                        foreach (var firmware in Consts.UPDATE_FILES.Keys)
+                        {
+                            if (UpdateFiles.Count == Consts.UPDATE_NUMBER_OF_FILES[firmware])
+                            {
+                                if (UpdateFiles.SequenceEqual(Consts.UPDATE_FILES[firmware]))
+                                {
+                                    result.Version = firmware;
+                                    break;
+                                }
+                            }
+                        }
+
+                        //Last resort, guess by Number of files in Update Partition
+                        if (String.IsNullOrEmpty(result.Version))
+                        {
+                            foreach (var firmware in Consts.UPDATE_NUMBER_OF_FILES.Keys)
+                            {
+                                if (UpdateFiles.Count == Consts.UPDATE_NUMBER_OF_FILES[firmware])
+                                {
+                                    result.Version = firmware;
+                                    break;
+                                }
+                            }
+                        }
+                    }
                 }
                 long num3 = -9223372036854775808L;
                 for (int k = 0; k < SecureSize.Length; k++)
@@ -2269,7 +2276,7 @@ namespace Switch_Backup_Manager
                             fileStream2.Close();
                         }
 
-                        process = new Process();
+                        Process process = new Process();
                         process.StartInfo = new ProcessStartInfo
                         {
                             WindowStyle = ProcessWindowStyle.Hidden,
@@ -2356,39 +2363,6 @@ namespace Switch_Backup_Manager
                     fileStream.Close();
                 }
 
-                process = new Process();
-                process.StartInfo = new ProcessStartInfo
-                {
-                    WindowStyle = ProcessWindowStyle.Hidden,
-                    FileName = "hactool.exe",
-                    Arguments = "-t xci -i " + filepath,
-                    RedirectStandardOutput = true,
-                    UseShellExecute = false,
-                    CreateNoWindow = true
-                };
-                process.Start();
-                StreamReader sr = process.StandardOutput;
-
-                bool update = false;
-                while (sr.Peek() >= 0)
-                {
-                    string str;
-                    string[] strArray;
-                    str = sr.ReadLine();
-                    strArray = str.Split(':');
-                    if (strArray[0] == "Update Partition")
-                    {
-                        update = true;
-                    }
-                    else if (update && strArray[0].Trim() == "Number of files")
-                    {
-                        result.Version = strArray[1].Trim();
-                        break;
-                    }
-                }
-                process.WaitForExit();
-                process.Close();
-
                 FileData result_tmp = null;
                 Dictionary<Tuple<string, string>, FileData> SceneList = Util.LoadSceneXMLToFileDataDictionary(XML_NSWDB);
                 SceneList.TryGetValue(new Tuple<string, string>(result.TitleID, result.Version), out result_tmp); //Try to find on Scene List using TitleID and Version
@@ -2411,6 +2385,7 @@ namespace Switch_Backup_Manager
                     result.Region = result_tmp.Region;
                     result.Languages_resumed = result_tmp.Languages_resumed;
                     result.IdScene = result_tmp.IdScene;
+                    result.Version = result_tmp.Version;
                 }
                 //GetExtraInfoFromScene(result);
 
@@ -2650,28 +2625,8 @@ namespace Switch_Backup_Manager
             result.Languages_resumed = xe.Element("languages").Value;
             result.IdScene = Convert.ToInt32(xe.Element("id").Value);
 
-            string version = xe.Element("firmware").Value;
-            switch (version)
-            {
-                //Use Number of files in Update Partition to guess XCI revision number by Firmware
-
-                case "1.0.0": version = "167"; break;
-                case "2.0.1": version = ""; break; //167?
-                case "2.0.3": version = ""; break; //167?
-                case "2.1.0": version = "183"; break;
-                case "2.3.0": version = "183"; break;
-                case "3.0.0": version = "191"; break;
-                case "3.0.1": version = "191"; break;
-                case "3.0.2": version = ""; break; //191?
-                case "4.0.1": version = "201"; break;
-                case "4.1.0": version = "201"; break;
-                case "5.0.2": version = ""; break; //207?
-                case "5.1.0": version = ""; break; //207?
-                case "5.x.x":
-                case "5.X.X": version = "207"; break;
-                default: version = ""; break;
-            }
-            result.Version = version;
+            //Use Firmware to guess XCI revision number
+            result.Version = xe.Element("firmware").Value.ToLower();
 
             List<string> languages = new List<string>();
             string[] languages_ = xe.Element("languages").Value.Split(",".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
@@ -2689,10 +2644,6 @@ namespace Switch_Backup_Manager
             FileData  result = new FileData();
 
             dictionary.TryGetValue(new Tuple<string, string>(titleID, version), out result);
-            if (result == null)
-            {
-                dictionary.TryGetValue(new Tuple<string, string>(titleID, ""), out result);
-            }
             if (result == null)
             {
                 List<Tuple<string, string>> keys = Enumerable.ToList(dictionary.Keys);

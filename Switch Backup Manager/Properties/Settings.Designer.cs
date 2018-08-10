@@ -70,5 +70,29 @@ namespace Switch_Backup_Manager.Properties {
                 this["Minimised"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("350")]
+        public int SplitterDistanceVert {
+            get {
+                return ((int)(this["SplitterDistanceVert"]));
+            }
+            set {
+                this["SplitterDistanceVert"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("670")]
+        public int SplitterDistanceHor {
+            get {
+                return ((int)(this["SplitterDistanceHor"]));
+            }
+            set {
+                this["SplitterDistanceHor"] = value;
+            }
+        }
     }
 }

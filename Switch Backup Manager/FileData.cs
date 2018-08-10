@@ -40,6 +40,13 @@ namespace Switch_Backup_Manager
             this.IdScene = 0;
             this.ContentType = "";
             this.Version = "";
+            this.HasExtendedInfo = false;
+            this.Description = "";
+            this.Publisher = "";
+            this.ReleaseDate = "";
+            this.NumberOfPlayers = "";
+            this.Categories = new List<string>();
+            this.ESRB = 0;
         }
 
         public string FilePath { get; set; }
@@ -72,5 +79,14 @@ namespace Switch_Backup_Manager
         public int IdScene { get; set; }
         public string ContentType { get; set; } //Patch, AddOnContent, Application
         public string Version { get; set; } //Used by NSP Only
+
+        //Info from web
+        public bool HasExtendedInfo { get; set; }
+        public string Description { get; set; }
+        public string Publisher { get; set; }
+        public string ReleaseDate { get; set; }
+        public string NumberOfPlayers { get; set; }
+        public List<string> Categories { get; set; }
+        public int ESRB { get; set; }        
     }
 }

@@ -5,11 +5,13 @@ using System.Data;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml.Linq;
 using BrightIdeasSoftware;
+using HtmlAgilityPack;
 using Microsoft.WindowsAPICodePack.Dialogs;
 
 namespace Switch_Backup_Manager
@@ -203,6 +205,9 @@ namespace Switch_Backup_Manager
                 Properties.Settings.Default.Maximised = false;
                 Properties.Settings.Default.Minimised = true;
             }
+
+            Properties.Settings.Default.SplitterDistanceVert = splitContainer1.SplitterDistance;
+            Properties.Settings.Default.SplitterDistanceHor = splitContainer2.SplitterDistance;
             Properties.Settings.Default.Save();
         }
 
@@ -219,6 +224,21 @@ namespace Switch_Backup_Manager
                 timer1.Enabled = true;
                 //object[] parameters = { selectedPath, "xci" }; //0: FilesList (string[]), 1: FileType ("xci", "nsp") 
                 backgroundWorkerScanNewFiles.RunWorkerAsync();
+            }
+        }
+
+        private void ScrapExtraInfoFromWeb()
+        {
+            if (!backgroundWorkerScrapExtraInfo.IsBusy)
+            {
+                toolStripStatusFilesOperation.Text = Properties.Resources.EN_FileOperationsScrapFromWeb;
+                toolStripStatusFilesOperation.Visible = true;
+                toolStripProgressAddingFiles.Visible = true;
+                toolStripStatusLabelGame.Text = "";
+                toolStripStatusLabelGame.Visible = true;
+                toolStripProgressAddingFiles.Value = 0;
+                timer1.Enabled = true;
+                backgroundWorkerScrapExtraInfo.RunWorkerAsync();
             }
         }
 
@@ -245,55 +265,109 @@ namespace Switch_Backup_Manager
 
             olvColumnLanguagesLocal.AspectToStringConverter = delegate (object x) {
                 string result = "";
-                foreach (string language in (List<string>)x)
+                try
                 {
-                    result += language + ", ";
+                    foreach (string language in (List<string>)x)
+                    {
+                        result += language + ", ";
+                    }
+                    if (result.Trim().Length > 1)
+                    {
+                        result = result.Remove(result.Length - 2);
+                    }
                 }
-                if (result.Trim().Length > 1)
-                {
-                    result = result.Remove(result.Length - 2);
-                }
+                catch { }
                 return result;
             };
 
             olvColumnLanguagesEShop.AspectToStringConverter = delegate (object x) {
                 string result = "";
-                foreach (string language in (List<string>)x)
+                try
                 {
-                    result += language + ", ";
+                    foreach (string language in (List<string>)x)
+                    {
+                        result += language + ", ";
+                    }
+                    if (result.Trim().Length > 1)
+                    {
+                        result = result.Remove(result.Length - 2);
+                    }
                 }
-                if (result.Trim().Length > 1)
-                {
-                    result = result.Remove(result.Length - 2);
-                }
+                catch { }
                 return result;
             };
 
             olvColumnLanguagesSD.AspectToStringConverter = delegate (object x) {
                 string result = "";
-                foreach (string language in (List<string>)x)
+                try
                 {
-                    result += language + ", ";
+                    foreach (string language in (List<string>)x)
+                    {
+                        result += language + ", ";
+                    }
+                    if (result.Trim().Length > 1)
+                    {
+                        result = result.Remove(result.Length - 2);
+                    }
                 }
-                if (result.Trim().Length > 1)
-                {
-                    result = result.Remove(result.Length - 2);
-                }
+                catch { }
                 return result;
             };
 
             olvColumnLanguagesScene.AspectToStringConverter = delegate (object x) {
                 string result = "";
-                foreach (string language in (List<string>)x)
+                try
                 {
-                    result += language + ", ";
+                    foreach (string language in (List<string>)x)
+                    {
+                        result += language + ", ";
+                    }
+                    if (result.Trim().Length > 1)
+                    {
+                        result = result.Remove(result.Length - 2);
+                    }
                 }
-                if (result.Trim().Length > 1)
-                {
-                    result = result.Remove(result.Length - 2);
-                }
+                catch { }
                 return result;
             };
+
+
+            olvColumnCategoriesLocal.AspectToStringConverter = delegate (object x) {
+                string result = "";
+
+                try
+                {
+                    foreach (string category in (List<string>)x)
+                    {
+                        result += category + ", ";
+                    }
+                    if (result.Trim().Length > 1)
+                    {
+                        result = result.Remove(result.Length - 2);
+                    }
+                }
+                catch { }
+                return result;
+            };
+
+            olvColumnCategoriesEShop.AspectToStringConverter = delegate (object x) {
+                string result = "";
+
+                try
+                {
+                    foreach (string category in (List<string>)x)
+                    {
+                        result += category + ", ";
+                    }
+                    if (result.Trim().Length > 1)
+                    {
+                        result = result.Remove(result.Length - 2);
+                    }
+                }
+                catch { }
+                return result;
+            };
+
 
             olvColumnGameNameEShop.AspectGetter = delegate (object x)
             {
@@ -343,7 +417,10 @@ namespace Switch_Backup_Manager
                             result += " [DLC]";
                             break;
                     }
-                    result += " [" + data.Version + "]";
+                    if (data.DistributionType == "Download")
+                    {
+                        result += " [" + data.Version + "]";
+                    }
                 }
 
                 return result;
@@ -397,19 +474,12 @@ namespace Switch_Backup_Manager
             SceneReleasesList = Util.LoadSceneXMLToFileDataDictionary(Util.XML_NSWDB);
             OLVSceneList.SetObjects(SceneReleasesList.Values);
 
-            //Prevent crash caused by null Tag values
-            foreach (ListViewItem item in OLVSceneList.Items)
-            {
-                item.Tag = "";
-            }
-
             SceneReleasesSelectedItems = new Dictionary<Tuple<string, string>, FileData>();
             SumarizeLocalGamesList("scene");
         }
 
         public void UpdateSDCardList()
         {
-            //Support for NSP files on SD Card for Now is VERY slow. But we can put it as an option on .INI
             if (Util.ScrapXCIOnSDCard & Util.ScrapNSPOnSDCard)
             {
                 SDCardList = Util.GetFileDataCollectionAll(SDCardSelected);
@@ -429,12 +499,6 @@ namespace Switch_Backup_Manager
             LocalFilesList = Util.LoadXMLToFileDataDictionary(Util.XML_Local);
             OLVLocalFiles.SetObjects(LocalFilesList.Values);
 
-            //Prevent crash caused by null Tag values
-            foreach (ListViewItem item in OLVLocalFiles.Items)
-            {
-                item.Tag = "";
-            }
-
             LocalFilesListSelectedItems = new Dictionary<Tuple<string, string>, FileData>();
             SumarizeLocalGamesList("local");
         }
@@ -443,14 +507,6 @@ namespace Switch_Backup_Manager
         {
             LocalNSPFilesList = Util.LoadXMLToFileDataDictionary(Util.XML_NSP_Local);
             OLVEshop.SetObjects(LocalNSPFilesList.Values);
-
-            List<Tuple<string, string>> keys = new List<Tuple<string, string>>(LocalNSPFilesList.Keys);
-            int i = 0;
-            foreach (ListViewItem item in OLVEshop.Items)
-            {
-                item.Tag = keys[i].Item2;
-                i++;
-            }
 
             LocalNSPFilesListSelectedItems = new Dictionary<Tuple<string, string>, FileData>();
             SumarizeLocalGamesList("eshop");
@@ -504,9 +560,11 @@ namespace Switch_Backup_Manager
             toolStripStatusLabel2.Text = Convert.ToString(count) + " Total (" + Util.BytesToGB(size) + ")";
         }
 
-        private void DisplayGameInformation(string TitleID, string Version, Dictionary<Tuple<string, string>, FileData> list, string sourceList) //Possible values for sourceList ("local", "sdcard", "scene")
+        private void DisplayGameInformation(string TitleID, string TitleIDBase, string Version, Dictionary<Tuple<string, string>, FileData> list, string sourceList) //Possible values for sourceList ("local", "sdcard", "scene")
         {
-            FileData data = Util.GetFileData(TitleID, Version, list);
+            ClearGameInformation();
+            FileData data = Util.GetFileData(TitleIDBase, Version, list);
+            FileData data2 = Util.GetFileData(TitleID, Version, list);
 
             if (sourceList == "local" || sourceList == "sdcard")
             {
@@ -536,6 +594,10 @@ namespace Switch_Backup_Manager
                 {
                     //Example: icon_0100A7F002830000_AmericanEnglish
                     string[] files = Directory.GetFiles(Util.CACHE_FOLDER, "icon_" + TitleID + "*.bmp");
+                    if (files.Length == 0)
+                    {
+                        files = Directory.GetFiles(Util.CACHE_FOLDER, "icon_" + TitleIDBase + "*.bmp");
+                    }
                     if (files.Length > 0)
                     {
                         PB_GameIcon.BackgroundImage = Image.FromFile(@files[0]);
@@ -547,11 +609,68 @@ namespace Switch_Backup_Manager
                     }
                 }
             }
+
+            string url = "https://ec.nintendo.com/apps/" + TitleID + "/US";
+            lnkInfo.Links.Clear();
+            lnkInfo.Links.Add(0, lnkInfo.Text.Length, url);
+            lnkInfo.Visible = true;
+
+            if (data2 != null)
+            {
+                if (data2.HasExtendedInfo)
+                {
+                    string categories = "";
+                    foreach (string cat in data2.Categories)
+                    {
+                        categories += cat + "\n";
+                    }
+
+                    richTextBoxGameDescription.Text = (data2.Description.Trim() != "") ? data2.Description : Properties.Resources.EN_Not_Available;
+                    lblNumberOfPlayers.Text = (data2.NumberOfPlayers.Trim() != "") ? data2.NumberOfPlayers : Properties.Resources.EN_Not_Available;
+                    lblReleaseDate.Text = (data2.ReleaseDate.Trim() != "") ? data2.ReleaseDate : Properties.Resources.EN_Not_Available;
+                    lblPublisher.Text = (data2.Publisher.Trim() != "") ? data2.Publisher : Properties.Resources.EN_Not_Available;
+                    lblCategory.Text = (categories.Trim() != "") ? categories : Properties.Resources.EN_Not_Available;
+                }
+            }
+            panelGameExtraInfo.Visible = true;
+        }
+
+        private void GetWebInfo(string url)
+        {
+            try
+            {
+                HtmlWeb web = new HtmlWeb();
+                HtmlAgilityPack.HtmlDocument doc = web.Load(url);
+                string releaseDate = doc.DocumentNode.SelectNodes("//*[@id=\"overview\"]/div[2]/dl/div[2]")[0].InnerText;
+                string numberOfPlayers = doc.DocumentNode.SelectNodes("//*[@id=\"overview\"]/div[2]/dl/div[3]")[0].InnerText; 
+                string category = doc.DocumentNode.SelectNodes("//*[@id=\"overview\"]/div[2]/dl/div[4]")[0].InnerText;
+                string publisher = doc.DocumentNode.SelectNodes("//*[@id=\"overview\"]/div[2]/dl/div[5]")[0].InnerText;
+                string developer = doc.DocumentNode.SelectNodes("//*[@id=\"overview\"]/div[2]/dl/div[6]")[0].InnerText;                
+                lblReleaseDate.Text = releaseDate;
+                lblNumberOfPlayers.Text = numberOfPlayers;
+                lblCategory.Text = category;
+            }
+            catch (Exception e)
+            {
+                Util.logger.Error(e.StackTrace);
+            }
         }
 
         public void ClearGameInformation()
         {
             PB_GameIcon.BackgroundImage = null;
+            PB_GameIcon.Refresh();
+
+            lnkInfo.Visible = false;
+            lnkInfo.Links.Clear();
+
+            richTextBoxGameDescription.Clear();
+            richTextBoxGameDescription.Text = "";
+            lblNumberOfPlayers.Text = Properties.Resources.EN_Not_Available;
+            lblReleaseDate.Text = Properties.Resources.EN_Not_Available;
+            lblPublisher.Text = Properties.Resources.EN_Not_Available;
+            lblCategory.Text = Properties.Resources.EN_Not_Available;
+            panelGameExtraInfo.Visible = false;
         }
 
         private void InvertSelection(ListView lv)
@@ -710,9 +829,9 @@ namespace Switch_Backup_Manager
             foreach (FileData data in list1.Values)
             {
                 FileData dummy;
-                if (!list2.TryGetValue(new Tuple<string, string>(data.TitleID, data.Version != null ? data.Version : ""), out dummy))
+                if (!list2.TryGetValue(new Tuple<string, string>(data.TitleID, data.Version), out dummy))
                 {
-                    result.Add(new Tuple<string, string>(data.TitleID, data.Version != null ? data.Version : ""), data);
+                    result.Add(new Tuple<string, string>(data.TitleID, data.Version), data);
                 }
             }
 
@@ -726,9 +845,9 @@ namespace Switch_Backup_Manager
             foreach (FileData data in list1.Values)
             {
                 FileData dummy;
-                if (list2.TryGetValue(new Tuple<string, string>(data.TitleID, data.Version != null ? data.Version : ""), out dummy))
+                if (list2.TryGetValue(new Tuple<string, string>(data.TitleID, data.Version), out dummy))
                 {
-                    result.Add(new Tuple<string, string>(data.TitleID, data.Version != null ? data.Version : ""), data);
+                    result.Add(new Tuple<string, string>(data.TitleID, data.Version), data);
                 }
             }
 
@@ -783,6 +902,8 @@ namespace Switch_Backup_Manager
 
                     LocalFilesListSelectedItems.Clear();
                     string titleID = selectedItems[0].Text;
+                    string titleIDBase = titleID;
+                    string version = Convert.ToString(((FileData)((OLVListItem)selectedItems[0]).RowObject).Version);
 
                     int count = 0;
                     long size = 0;
@@ -790,15 +911,17 @@ namespace Switch_Backup_Manager
                     foreach (ListViewItem item in selectedItems)
                     {
                         titleID = item.Text;
-                        FileData data = Util.GetFileData(titleID, "", LocalFilesList);
-                        LocalFilesListSelectedItems.Add(new Tuple<string, string>(titleID, ""), data);
+                        version = Convert.ToString(((FileData)((OLVListItem)item).RowObject).Version);
+                        FileData data = Util.GetFileData(titleID, version, LocalFilesList);
+                        LocalFilesListSelectedItems.Add(new Tuple<string, string>(titleID, version), data);
+                        titleIDBase = data.TitleIDBaseGame;
                         count++;
                         size += Convert.ToInt64(data.UsedSpaceBytes);
                     }
 
                     toolStripStatusLabel1.Text = Convert.ToString(count) + " Selected (" + Util.BytesToGB(size) + ")";
                     //Display information of the last selected item
-                    DisplayGameInformation(titleID, "", LocalFilesList, "local");
+                    DisplayGameInformation(titleID, titleIDBase, version, LocalFilesList, "local");
                 }
                 else
                 {
@@ -809,8 +932,9 @@ namespace Switch_Backup_Manager
                     foreach (ListViewItem item in selectedItems)
                     {
                         string titleID = item.Text;
-                        FileData data = Util.GetFileData(titleID, "", LocalFilesList);
-                        LocalFilesListSelectedItems.Add(new Tuple<string, string>(titleID, ""), data);
+                        string version = Convert.ToString(((FileData)((OLVListItem)item).RowObject).Version);
+                        FileData data = Util.GetFileData(titleID, version, LocalFilesList);
+                        LocalFilesListSelectedItems.Add(new Tuple<string, string>(titleID, version), data);
                         count++;
                         size += Convert.ToInt64(data.UsedSpaceBytes);
                     }
@@ -875,21 +999,25 @@ namespace Switch_Backup_Manager
 
                     SceneReleasesSelectedItems.Clear();
                     string titleID = selectedItems[0].Text;
+                    string titleIDBase = titleID;
+                    string version = Convert.ToString(((FileData)((OLVListItem)selectedItems[0]).RowObject).Version);
 
                     int count = 0;
                     long size = 0;
                     foreach (ListViewItem item in selectedItems)
                     {
                         titleID = item.Text;
-                        FileData data = Util.GetFileData(titleID, "", SceneReleasesList);
-                        SceneReleasesSelectedItems.Add(new Tuple<string, string>(titleID, ""), data);
+                        version = Convert.ToString(((FileData)((OLVListItem)item).RowObject).Version);
+                        FileData data = Util.GetFileData(titleID, version, SceneReleasesList);
+                        SceneReleasesSelectedItems.Add(new Tuple<string, string>(titleID, version), data);
+                        titleIDBase = data.TitleIDBaseGame;
                         count++;
                         size += Convert.ToInt64(data.ROMSizeBytes);
                     }
 
                     toolStripStatusLabel1.Text = Convert.ToString(count) + " Selected (" + Util.BytesToGB(size) + ")";
                     //Display information of the first selected item
-                    DisplayGameInformation(titleID, "", LocalFilesList, "scene"); //Has to be Locallist as we dont store scene info other than its xml file...
+                    DisplayGameInformation(titleID, titleIDBase, version, LocalFilesList, "scene"); //Has to be Locallist as we dont store scene info other than its xml file...
                 }
                 else
                 {
@@ -900,8 +1028,9 @@ namespace Switch_Backup_Manager
                     foreach (ListViewItem item in selectedItems)
                     {
                         string titleID = item.Text;
-                        FileData data = Util.GetFileData(titleID, "", SceneReleasesList);
-                        SceneReleasesSelectedItems.Add(new Tuple<string, string>(titleID, ""), data);
+                        string version = Convert.ToString(((FileData)((OLVListItem)item).RowObject).Version);
+                        FileData data = Util.GetFileData(titleID, version, SceneReleasesList);
+                        SceneReleasesSelectedItems.Add(new Tuple<string, string>(titleID, version), data);
                         count++;
                         size += Convert.ToInt64(data.ROMSizeBytes);
                     }
@@ -1128,25 +1257,27 @@ namespace Switch_Backup_Manager
 
                     SDCardListSelectedItems.Clear();
                     string titleID = selectedItems[0].Text;
-                    string version = Convert.ToString(selectedItems[0].Tag);
+                    string titleIDBase = titleID;
+                    string version = Convert.ToString(((FileData)((OLVListItem)selectedItems[0]).RowObject).Version);
 
                     int count = 0;
                     long size = 0;
                     foreach (ListViewItem item in selectedItems)
                     {
                         titleID = item.Text;
-                        version = Convert.ToString(item.Tag);
+                        version = Convert.ToString(((FileData)((OLVListItem)item).RowObject).Version);
                         FileData data = Util.GetFileData(titleID, version, SDCardList);
                         //string icon_titleID_filename = data.Region_Icon.First().Value;
 
                         SDCardListSelectedItems.Add(new Tuple<string, string>(titleID, version), data);
+                        titleIDBase = data.TitleIDBaseGame;
                         count++;
                         size += Convert.ToInt64(data.UsedSpaceBytes);
                     }
 
                     toolStripStatusLabel1.Text = Convert.ToString(count) + " Selected (" + Util.BytesToGB(size) + ")";
                     //Display information of the first selected item
-                    DisplayGameInformation(titleID, version, SDCardList, "sdcard");
+                    DisplayGameInformation(titleID, titleIDBase, version, SDCardList, "sdcard");
                 }
                 else
                 {
@@ -1157,7 +1288,7 @@ namespace Switch_Backup_Manager
                     foreach (ListViewItem item in selectedItems)
                     {
                         string titleID = item.Text;
-                        string version = Convert.ToString(item.Tag);
+                        string version = Convert.ToString(((FileData)((OLVListItem)item).RowObject).Version);
                         FileData data = Util.GetFileData(titleID, version, SDCardList);
                         SDCardListSelectedItems.Add(new Tuple<string, string>(titleID, version), data);
                         count++;
@@ -1178,7 +1309,7 @@ namespace Switch_Backup_Manager
             OLVLocalFiles.SelectedItems.Clear();
             foreach (ListViewItem item in OLVLocalFiles.Items)
             {
-                if (list.TryGetValue(new Tuple<string, string>(item.Text, Convert.ToString(item.Tag)), out dummy))
+                if (list.TryGetValue(new Tuple<string, string>(item.Text, Convert.ToString(((FileData)((OLVListItem)item).RowObject).Version)), out dummy))
                 {
                     item.Selected = true;
                 }
@@ -1194,7 +1325,7 @@ namespace Switch_Backup_Manager
             OLVLocalFiles.SelectedItems.Clear();
             foreach (ListViewItem item in OLVLocalFiles.Items)
             {
-                if (list.TryGetValue(new Tuple<string, string>(item.Text, Convert.ToString(item.Tag)), out dummy))
+                if (list.TryGetValue(new Tuple<string, string>(item.Text, Convert.ToString(((FileData)((OLVListItem)item).RowObject).Version)), out dummy))
                 {
                     item.Selected = true;
                 }
@@ -1212,7 +1343,7 @@ namespace Switch_Backup_Manager
                 OLVLocalFiles.SelectedItems.Clear();
                 foreach (ListViewItem item in OLVLocalFiles.Items)
                 {
-                    if (list.TryGetValue(new Tuple<string, string>(item.Text, Convert.ToString(item.Tag)), out dummy))
+                    if (list.TryGetValue(new Tuple<string, string>(item.Text, Convert.ToString(((FileData)((OLVListItem)item).RowObject).Version)), out dummy))
                     {
                         item.Selected = true;
                     }
@@ -1235,7 +1366,7 @@ namespace Switch_Backup_Manager
                 OLVLocalFiles.SelectedItems.Clear();
                 foreach (ListViewItem item in OLVLocalFiles.Items)
                 {
-                    if (list.TryGetValue(new Tuple<string, string>(item.Text, Convert.ToString(item.Tag)), out dummy))
+                    if (list.TryGetValue(new Tuple<string, string>(item.Text, Convert.ToString(((FileData)((OLVListItem)item).RowObject).Version)), out dummy))
                     {
                         item.Selected = true;
                     }
@@ -1258,7 +1389,7 @@ namespace Switch_Backup_Manager
                 OLV_SDCard.SelectedItems.Clear();
                 foreach (ListViewItem item in OLV_SDCard.Items)
                 {
-                    if (list.TryGetValue(new Tuple<string, string>(item.Text, Convert.ToString(item.Tag)), out dummy))
+                    if (list.TryGetValue(new Tuple<string, string>(item.Text, Convert.ToString(((FileData)((OLVListItem)item).RowObject).Version)), out dummy))
                     {
                         item.Selected = true;
                     }
@@ -1281,7 +1412,7 @@ namespace Switch_Backup_Manager
                 OLV_SDCard.SelectedItems.Clear();
                 foreach (ListViewItem item in OLV_SDCard.Items)
                 {
-                    if (list.TryGetValue(new Tuple<string, string>(item.Text, Convert.ToString(item.Tag)), out dummy))
+                    if (list.TryGetValue(new Tuple<string, string>(item.Text, Convert.ToString(((FileData)((OLVListItem)item).RowObject).Version)), out dummy))
                     {
                         item.Selected = true;
                     }
@@ -1320,7 +1451,7 @@ namespace Switch_Backup_Manager
                 OLV_SDCard.SelectedItems.Clear();
                 foreach (ListViewItem item in OLV_SDCard.Items)
                 {
-                    if (list.TryGetValue(new Tuple<string, string>(item.Text, Convert.ToString(item.Tag)), out dummy))
+                    if (list.TryGetValue(new Tuple<string, string>(item.Text, Convert.ToString(((FileData)((OLVListItem)item).RowObject).Version)), out dummy))
                     {
                         item.Selected = true;
                     }
@@ -1343,7 +1474,7 @@ namespace Switch_Backup_Manager
                 OLV_SDCard.SelectedItems.Clear();
                 foreach (ListViewItem item in OLV_SDCard.Items)
                 {
-                    if (list.TryGetValue(new Tuple<string, string>(item.Text, Convert.ToString(item.Tag)), out dummy))
+                    if (list.TryGetValue(new Tuple<string, string>(item.Text, Convert.ToString(((FileData)((OLVListItem)item).RowObject).Version)), out dummy))
                     {
                         item.Selected = true;
                     }
@@ -1364,7 +1495,7 @@ namespace Switch_Backup_Manager
             OLVSceneList.SelectedItems.Clear();
             foreach (ListViewItem item in OLVSceneList.Items)
             {
-                if (list.TryGetValue(new Tuple<string, string>(item.Text, Convert.ToString(item.Tag)), out dummy))
+                if (list.TryGetValue(new Tuple<string, string>(item.Text, Convert.ToString(((FileData)((OLVListItem)item).RowObject).Version)), out dummy))
                 {
                     item.Selected = true;
                 }
@@ -1380,7 +1511,7 @@ namespace Switch_Backup_Manager
             OLVSceneList.SelectedItems.Clear();
             foreach (ListViewItem item in OLVSceneList.Items)
             {
-                if (list.TryGetValue(new Tuple<string, string>(item.Text, Convert.ToString(item.Tag)), out dummy))
+                if (list.TryGetValue(new Tuple<string, string>(item.Text, Convert.ToString(((FileData)((OLVListItem)item).RowObject).Version)), out dummy))
                 {
                     item.Selected = true;
                 }
@@ -1398,7 +1529,7 @@ namespace Switch_Backup_Manager
                 OLVSceneList.SelectedItems.Clear();
                 foreach (ListViewItem item in OLVSceneList.Items)
                 {
-                    if (list.TryGetValue(new Tuple<string, string>(item.Text, Convert.ToString(item.Tag)), out dummy))
+                    if (list.TryGetValue(new Tuple<string, string>(item.Text, Convert.ToString(((FileData)((OLVListItem)item).RowObject).Version)), out dummy))
                     {
                         item.Selected = true;
                     }
@@ -1420,7 +1551,7 @@ namespace Switch_Backup_Manager
                 OLVSceneList.SelectedItems.Clear();
                 foreach (ListViewItem item in OLVSceneList.Items)
                 {
-                    if (list.TryGetValue(new Tuple<string, string>(item.Text, Convert.ToString(item.Tag)), out dummy))
+                    if (list.TryGetValue(new Tuple<string, string>(item.Text, Convert.ToString(((FileData)((OLVListItem)item).RowObject).Version)), out dummy))
                     {
                         item.Selected = true;
                     }
@@ -1634,16 +1765,7 @@ namespace Switch_Backup_Manager
 
         private void backgroundWorkerLoadSDCardFiles_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            //Move UI operations here as it's unsafe to do this on worker thread
             OLV_SDCard.SetObjects(SDCardList.Values);
-
-            List<Tuple<string, string>> keys = new List<Tuple<string, string>>(SDCardList.Keys);
-            int i = 0;
-            foreach (ListViewItem item in OLV_SDCard.Items)
-            {
-                item.Tag = keys[i].Item2;
-                i++;
-            }
 
             SDCardListSelectedItems = new Dictionary<Tuple<string, string>, FileData>();
             SumarizeLocalGamesList("sdcard");
@@ -1690,10 +1812,7 @@ namespace Switch_Backup_Manager
 
         private void updateLocalDatabaseToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            //            Util.RemoveMissingFilesFromXML(Util.XML_Local, Util.LOCAL_FILES_DB);
-            //            UpdateLocalGamesList();
             ScanFolders();
-        //    MessageBox.Show("Done.");
         }
 
         private void updateNswdbcomListToolStripMenuItem1_Click(object sender, EventArgs e)
@@ -2607,7 +2726,19 @@ namespace Switch_Backup_Manager
                     break;
                 case "Trimmed":
                     filterText.Columns = new[] { olvColumnIsTrimmedLocal };
-                    break;                    
+                    break;
+                case "Publisher":
+                    filterText.Columns = new[] { olvColumnPublisherLocal };
+                    break;
+                case "Release date":
+                    filterText.Columns = new[] { olvColumnReleaseDateLocal };
+                    break;
+                case "Nº of players":
+                    filterText.Columns = new[] { olvColumnNumberOfPlayersLocal };
+                    break;
+                case "Category":
+                    filterText.Columns = new[] { olvColumnCategoriesLocal };
+                    break;
                 default:
                     filterText = null;
                     break;
@@ -2615,12 +2746,6 @@ namespace Switch_Backup_Manager
             
             OLVLocalFiles.ModelFilter = new CompositeAllFilter(new List<IModelFilter> { filterText });
             OLVLocalFiles.DefaultRenderer = new HighlightTextRenderer(filterText);
-//            SumarizeLocalGamesList("local");
-        }
-
-        private void btnClearFilter_Click(object sender, EventArgs e)
-        {
-            textBoxFilterLocal.Clear();
         }
 
         private void cbxFilterLocal_SelectedIndexChanged(object sender, EventArgs e)
@@ -2799,7 +2924,7 @@ namespace Switch_Backup_Manager
 
                     LocalNSPFilesListSelectedItems.Clear();
                     string titleID = selectedItems[0].Text;
-                    string version = Convert.ToString(selectedItems[0].Tag);
+                    string version = Convert.ToString(((FileData)((OLVListItem)selectedItems[0]).RowObject).Version);
                     string titleIDBaseGame = "";
 
                     int count = 0;
@@ -2807,7 +2932,7 @@ namespace Switch_Backup_Manager
                     foreach (ListViewItem item in selectedItems)
                     {
                         titleID = item.Text;
-                        version = Convert.ToString(item.Tag);
+                        version = Convert.ToString(((FileData)((OLVListItem)item).RowObject).Version);
                         FileData data = Util.GetFileData(titleID, version, LocalNSPFilesList);
                         titleIDBaseGame = data.TitleIDBaseGame;
                         LocalNSPFilesListSelectedItems.Add(new Tuple<string, string>(titleID, version), data);
@@ -2817,11 +2942,13 @@ namespace Switch_Backup_Manager
 
                     toolStripStatusLabel1.Text = Convert.ToString(count) + " Selected (" + Util.BytesToGB(size) + ")";
                     //Display information of the last selected item
+                    /*
                     if (titleIDBaseGame != "")
                     {
                         titleID = titleIDBaseGame;
                     }
-                    DisplayGameInformation(titleID, version, LocalNSPFilesList, "eshop");
+                    */
+                    DisplayGameInformation(titleID, titleIDBaseGame, version, LocalNSPFilesList, "eshop");
                 }
                 else
                 {
@@ -2832,7 +2959,7 @@ namespace Switch_Backup_Manager
                     foreach (ListViewItem item in selectedItems)
                     {
                         string titleID = item.Text;
-                        string version = Convert.ToString(item.Tag);
+                        string version = Convert.ToString(((FileData)((OLVListItem)item).RowObject).Version);
                         FileData data = Util.GetFileData(titleID, version, LocalNSPFilesList);
                         LocalNSPFilesListSelectedItems.Add(new Tuple<string, string>(titleID, version), data);
                         count++;
@@ -2904,7 +3031,7 @@ namespace Switch_Backup_Manager
                 OLVEshop.SelectedItems.Clear();
                 foreach (ListViewItem item in OLVEshop.Items)
                 {
-                    if (list.TryGetValue(new Tuple<string, string>(item.Text, Convert.ToString(item.Tag)), out dummy))
+                    if (list.TryGetValue(new Tuple<string, string>(item.Text, Convert.ToString(((FileData)((OLVListItem)item).RowObject).Version)), out dummy))
                     {
                         item.Selected = true;
                     }
@@ -2928,7 +3055,7 @@ namespace Switch_Backup_Manager
                 OLVEshop.SelectedItems.Clear();
                 foreach (ListViewItem item in OLVEshop.Items)
                 {
-                    if (list.TryGetValue(new Tuple<string, string>(item.Text, Convert.ToString(item.Tag)), out dummy))
+                    if (list.TryGetValue(new Tuple<string, string>(item.Text, Convert.ToString(((FileData)((OLVListItem)item).RowObject).Version)), out dummy))
                     {
                         item.Selected = true;
                     }
@@ -3184,6 +3311,18 @@ namespace Switch_Backup_Manager
                 case "Distribution":
                     filterText.Columns = new[] { olvColumnDistributionType };
                     break;
+                case "Publisher":
+                    filterText.Columns = new[] { olvColumnPublisherEshop };
+                    break;
+                case "Release date":
+                    filterText.Columns = new[] { olvColumnReleaseDateEshop };
+                    break;
+                case "Nº of players":
+                    filterText.Columns = new[] { olvColumnNumberOfPlayersEshop };
+                    break;
+                case "Category":
+                    filterText.Columns = new[] { olvColumnCategoriesEShop };
+                    break;
                 default:
                     filterText = null;
                     break;
@@ -3327,6 +3466,137 @@ namespace Switch_Backup_Manager
                 Location = Properties.Settings.Default.Location;
                 Size = Properties.Settings.Default.Size;
             }
+            splitContainer1.SplitterDistance = Properties.Settings.Default.SplitterDistanceVert;
+            splitContainer2.SplitterDistance = Properties.Settings.Default.SplitterDistanceHor;
+        }
+
+        private void lnkInfo_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            lnkInfo.LinkVisited = true;
+            System.Diagnostics.Process.Start(e.Link.LinkData as string);
+        }
+
+        private void scrapExtendedInfoFromWebToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            /*
+            FileData test = new FileData();
+            test.TitleID = "0100EE80098E6000";
+            Util.GetExtendedInfo(test);
+            string a = test.TitleID;
+            */
+            ScrapExtraInfoFromWeb();
+        }
+
+
+        /// <summary>
+        /// Update a list of files with information from web
+        /// </summary>
+        /// <param name="source">Which list? Valid values are local, sdcard, eshop, scene</param>
+        private void UpdateGamesInfoFromWeb(string source)
+        {
+            Dictionary<Tuple<string, string>, FileData> list = null;
+
+            switch (source)
+            {
+                case "local":
+                    list = LocalFilesListSelectedItems;
+                    break;
+                case "sdcard":
+                    list = SDCardListSelectedItems;
+                    break;
+                case "eshop":
+                    list = LocalNSPFilesListSelectedItems;
+                    break;
+                case "scene":
+                    list = SceneReleasesSelectedItems;
+                    break;
+            }
+
+            if (list != null)
+            {
+                if (list.Count > 0)
+                {
+                    if (!backgroundWorkerScrapExtraInfo.IsBusy)
+                    {
+                        switch (source)
+                        {
+                            case "local":
+                                menuLocalFiles.Enabled = false;
+                                break;
+                            case "eshop":
+                                menuEShop.Enabled = false;
+                                break;
+                        }
+                        
+                        toolStripStatusFilesOperation.Text = Properties.Resources.EN_FileOperationsScrapFromWeb;
+                        toolStripStatusFilesOperation.Visible = true;
+                        toolStripProgressAddingFiles.Visible = true;
+                        toolStripStatusLabelGame.Text = "";
+                        toolStripStatusLabelGame.Visible = true;
+                        toolStripProgressAddingFiles.Value = 0;
+                        timer1.Enabled = true;
+                        object[] parameters = { list, source }; //0: FilesList (Dictionary), 1: source ("local", "sdcard", "eshop", "scene") 
+                        backgroundWorkerScrapExtraInfo.RunWorkerAsync(parameters);
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("No files selected");
+                    return;
+                }
+            }
+        }
+
+        private void backgroundWorkerScrapExtraInfo_DoWork(object sender, DoWorkEventArgs e)
+        {
+            BackgroundWorker worker = sender as BackgroundWorker;
+            object[] parameters = e.Argument as object[];
+
+            Dictionary<Tuple<string, string>, FileData> filesList = (Dictionary<Tuple<string, string>, FileData>)parameters[0];
+            string source = (string)parameters[1];
+            
+
+            Util.GetExtendedInfo(filesList, source);
+            e.Result = source;
+        }
+
+        private void backgroundWorkerScrapExtraInfo_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            timer1.Enabled = false;
+            toolStripStatusFilesOperation.Visible = false;
+            toolStripProgressAddingFiles.Visible = false;
+            toolStripStatusLabelGame.Text = "";
+            toolStripStatusLabelGame.Visible = false;
+
+            string source = e.Result as string;
+
+            if (source == "local")
+            {
+                UpdateLocalGamesList();
+                menuLocalFiles.Enabled = true;
+            } else if (source == "shop")
+            {
+                UpdateLocalNSPGamesList();
+                menuEShop.Enabled = true;
+            }
+
+            tabControl1_SelectedIndexChanged(this, new EventArgs());
+            MessageBox.Show("Done");
+        }
+
+        private void updateGameInfoFromWebToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            UpdateGamesInfoFromWeb("local");
+        }
+
+        private void btnClearFilterLocal_Click(object sender, EventArgs e)
+        {
+            textBoxFilterLocal.Clear();
+        }
+
+        private void updateGameInfoFromWebToolStripMenuItemEshop_Click(object sender, EventArgs e)
+        {
+            UpdateGamesInfoFromWeb("eshop");
         }
     }
 }

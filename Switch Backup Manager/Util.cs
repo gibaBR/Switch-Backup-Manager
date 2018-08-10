@@ -498,7 +498,7 @@ namespace Switch_Backup_Manager
                 result = result.Replace(AutoRenamingTags[6], data.Region);
                 result = result.Replace(AutoRenamingTags[7], data.Firmware);
                 result = result.Replace(AutoRenamingTags[8], data.Languages_resumed);
-                result = result.Replace(AutoRenamingTags[9], Convert.ToString(data.IdScene));
+                result = result.Replace(AutoRenamingTags[9], string.Format("{0:D4}", data.IdScene));
                 result = result.Replace(AutoRenamingTags[10], data.Version);
 
                 result += Path.GetExtension(data.FilePath);

@@ -136,7 +136,10 @@ namespace Switch_Backup_Manager
                             description = doc.DocumentNode.SelectNodes("//*[@id=\"overview\"]/div[1]/p")[0].InnerText;
                             result = true;
                         }
-                        catch { }                        
+                        catch {
+                            tryNextCountry = true;
+                            goto nextCountry;
+                        }                        
                     }
 
                     try {
@@ -168,7 +171,9 @@ namespace Switch_Backup_Manager
                     }
                     catch { }                                        
                 }
-                else //Lets try the GB Site
+
+                nextCountry: //Sorry for using that but we need speed :(
+                if (tryNextCountry) //Lets try the GB Site
                 {
                     url = "https://ec.nintendo.com/apps/" + data.TitleIDBaseGame + country2;
                     doc = web.Load(url);
@@ -315,7 +320,9 @@ namespace Switch_Backup_Manager
             int i = 0;
             logger.Info("Start getting extra info from web.");
 
-            foreach (KeyValuePair<Tuple<string, string>, FileData> entry in files)
+            Dictionary<Tuple<string, string>, FileData> _files =  CloneDictionary(files);
+
+            foreach (KeyValuePair<Tuple<string, string>, FileData> entry in _files)
             {
                 FrmMain.progressCurrentfile = entry.Value.GameName;
 
@@ -2986,6 +2993,44 @@ namespace Switch_Backup_Manager
         public static XDocument CloneXDocument(XDocument xml)
         {
             return new XDocument(xml);
+        }
+
+        public static string ListToComaSeparatedString(List<string> list)
+        {
+            string result = "";
+
+            if (list != null)
+            {
+                foreach (string language in list)
+                {
+                    result += language + ",";
+                }
+                if (result.Trim().Length > 1)
+                {
+                    try
+                    {
+                        result = result.Remove(result.Length - 1);
+                    }
+                    catch (Exception e)
+                    {
+                        result = "";
+                    }
+                }
+            }
+            return result;
+        }
+
+        public static List<string> ComaSeparatedStringToList(string list)
+        {
+            List<string> result = new List<string>();
+
+            string[] list_ = list.Split(",".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
+            for (int i = 0; i < list_.Length; i++)
+            {
+                result.Add(list_[i]);
+            }
+
+            return result;
         }
     }
 }

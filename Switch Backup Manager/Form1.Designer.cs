@@ -399,6 +399,29 @@
             this.updateEshopLocalDatabaseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.updateNswdbcomListToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.scrapExtendedInfoFromWebToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.panelEditTitle = new System.Windows.Forms.Panel();
+            this.groupBox10 = new System.Windows.Forms.GroupBox();
+            this.textBoxReleaseDate = new System.Windows.Forms.TextBox();
+            this.groupBox9 = new System.Windows.Forms.GroupBox();
+            this.textBoxCategory = new System.Windows.Forms.TextBox();
+            this.groupBox8 = new System.Windows.Forms.GroupBox();
+            this.textBoxPublisher = new System.Windows.Forms.TextBox();
+            this.groupBox7 = new System.Windows.Forms.GroupBox();
+            this.textBoxDeveloper = new System.Windows.Forms.TextBox();
+            this.groupBox6 = new System.Windows.Forms.GroupBox();
+            this.textBoxPlayers = new System.Windows.Forms.TextBox();
+            this.groupBox5 = new System.Windows.Forms.GroupBox();
+            this.textBoxFirmware = new System.Windows.Forms.TextBox();
+            this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.textBoxCardType = new System.Windows.Forms.TextBox();
+            this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.textBoxLanguages = new System.Windows.Forms.TextBox();
+            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.richTextBoxDescription = new System.Windows.Forms.RichTextBox();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.textBoxGameTitle = new System.Windows.Forms.TextBox();
+            this.panel14 = new System.Windows.Forms.Panel();
+            this.panel15 = new System.Windows.Forms.Panel();
             this.backgroundWorkerAddFilesFromDirectory = new System.ComponentModel.BackgroundWorker();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.backgroundWorkerAddFile = new System.ComponentModel.BackgroundWorker();
@@ -407,6 +430,7 @@
             this.backgroundWorkerScanNewFiles = new System.ComponentModel.BackgroundWorker();
             this.backgroundWorkerUpdateFiles = new System.ComponentModel.BackgroundWorker();
             this.backgroundWorkerScrapExtraInfo = new System.ComponentModel.BackgroundWorker();
+            this.button1 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -417,6 +441,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.PB_GameIcon)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).BeginInit();
             this.splitContainer2.Panel1.SuspendLayout();
+            this.splitContainer2.Panel2.SuspendLayout();
             this.splitContainer2.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -450,6 +475,19 @@
             this.panel7.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
+            this.panelEditTitle.SuspendLayout();
+            this.groupBox10.SuspendLayout();
+            this.groupBox9.SuspendLayout();
+            this.groupBox8.SuspendLayout();
+            this.groupBox7.SuspendLayout();
+            this.groupBox6.SuspendLayout();
+            this.groupBox5.SuspendLayout();
+            this.groupBox4.SuspendLayout();
+            this.groupBox3.SuspendLayout();
+            this.groupBox2.SuspendLayout();
+            this.groupBox1.SuspendLayout();
+            this.panel14.SuspendLayout();
+            this.panel15.SuspendLayout();
             this.SuspendLayout();
             // 
             // splitContainer1
@@ -560,7 +598,7 @@
             this.pnlGameDescription.Dock = System.Windows.Forms.DockStyle.Top;
             this.pnlGameDescription.Location = new System.Drawing.Point(0, 0);
             this.pnlGameDescription.Name = "pnlGameDescription";
-            this.pnlGameDescription.Padding = new System.Windows.Forms.Padding(5);
+            this.pnlGameDescription.Padding = new System.Windows.Forms.Padding(10);
             this.pnlGameDescription.Size = new System.Drawing.Size(348, 208);
             this.pnlGameDescription.TabIndex = 9;
             // 
@@ -570,10 +608,10 @@
             this.richTextBoxGameDescription.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.richTextBoxGameDescription.Dock = System.Windows.Forms.DockStyle.Fill;
             this.richTextBoxGameDescription.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.richTextBoxGameDescription.Location = new System.Drawing.Point(5, 5);
+            this.richTextBoxGameDescription.Location = new System.Drawing.Point(10, 10);
             this.richTextBoxGameDescription.Name = "richTextBoxGameDescription";
             this.richTextBoxGameDescription.ReadOnly = true;
-            this.richTextBoxGameDescription.Size = new System.Drawing.Size(338, 198);
+            this.richTextBoxGameDescription.Size = new System.Drawing.Size(328, 188);
             this.richTextBoxGameDescription.TabIndex = 9;
             this.richTextBoxGameDescription.Text = "";
             // 
@@ -641,8 +679,13 @@
             this.splitContainer2.Panel1.Controls.Add(this.tabControl1);
             this.splitContainer2.Panel1.Controls.Add(this.statusStrip1);
             this.splitContainer2.Panel1.Controls.Add(this.menuStrip1);
+            // 
+            // splitContainer2.Panel2
+            // 
+            this.splitContainer2.Panel2.Controls.Add(this.panelEditTitle);
+            this.splitContainer2.Panel2MinSize = 220;
             this.splitContainer2.Size = new System.Drawing.Size(1529, 816);
-            this.splitContainer2.SplitterDistance = 669;
+            this.splitContainer2.SplitterDistance = 568;
             this.splitContainer2.SplitterWidth = 1;
             this.splitContainer2.TabIndex = 0;
             // 
@@ -657,7 +700,7 @@
             this.tabControl1.Location = new System.Drawing.Point(0, 24);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(1527, 619);
+            this.tabControl1.Size = new System.Drawing.Size(1527, 518);
             this.tabControl1.TabIndex = 1;
             this.tabControl1.SelectedIndexChanged += new System.EventHandler(this.tabControl1_SelectedIndexChanged);
             this.tabControl1.TabIndexChanged += new System.EventHandler(this.tabControl1_TabIndexChanged);
@@ -669,7 +712,7 @@
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(1519, 593);
+            this.tabPage1.Size = new System.Drawing.Size(1519, 492);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Local files";
             this.tabPage1.UseVisualStyleBackColor = true;
@@ -680,7 +723,7 @@
             this.panel2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel2.Location = new System.Drawing.Point(3, 31);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(1513, 559);
+            this.panel2.Size = new System.Drawing.Size(1513, 458);
             this.panel2.TabIndex = 1;
             // 
             // OLVLocalFiles
@@ -731,7 +774,7 @@
             this.OLVLocalFiles.Location = new System.Drawing.Point(0, 0);
             this.OLVLocalFiles.Name = "OLVLocalFiles";
             this.OLVLocalFiles.ShowGroups = false;
-            this.OLVLocalFiles.Size = new System.Drawing.Size(1513, 559);
+            this.OLVLocalFiles.Size = new System.Drawing.Size(1513, 458);
             this.OLVLocalFiles.TabIndex = 1;
             this.OLVLocalFiles.UseCellFormatEvents = true;
             this.OLVLocalFiles.UseCompatibleStateImageBehavior = false;
@@ -1476,7 +1519,7 @@
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(1517, 591);
+            this.tabPage2.Size = new System.Drawing.Size(1517, 490);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "SD card";
             this.tabPage2.UseVisualStyleBackColor = true;
@@ -1558,7 +1601,7 @@
             this.OLV_SDCard.Location = new System.Drawing.Point(3, 55);
             this.OLV_SDCard.Name = "OLV_SDCard";
             this.OLV_SDCard.ShowGroups = false;
-            this.OLV_SDCard.Size = new System.Drawing.Size(1511, 533);
+            this.OLV_SDCard.Size = new System.Drawing.Size(1511, 432);
             this.OLV_SDCard.TabIndex = 6;
             this.OLV_SDCard.UseCellFormatEvents = true;
             this.OLV_SDCard.UseCompatibleStateImageBehavior = false;
@@ -2185,7 +2228,7 @@
             this.tabPage3.Location = new System.Drawing.Point(4, 22);
             this.tabPage3.Name = "tabPage3";
             this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage3.Size = new System.Drawing.Size(1517, 591);
+            this.tabPage3.Size = new System.Drawing.Size(1517, 490);
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Text = "Scene releases";
             this.tabPage3.UseVisualStyleBackColor = true;
@@ -2201,7 +2244,7 @@
             this.panel4.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel4.Location = new System.Drawing.Point(3, 3);
             this.panel4.Name = "panel4";
-            this.panel4.Size = new System.Drawing.Size(1511, 585);
+            this.panel4.Size = new System.Drawing.Size(1511, 484);
             this.panel4.TabIndex = 0;
             // 
             // btnClearFilterScene
@@ -2277,7 +2320,7 @@
             this.OLVSceneList.Location = new System.Drawing.Point(0, 24);
             this.OLVSceneList.Name = "OLVSceneList";
             this.OLVSceneList.ShowGroups = false;
-            this.OLVSceneList.Size = new System.Drawing.Size(1511, 561);
+            this.OLVSceneList.Size = new System.Drawing.Size(1511, 460);
             this.OLVSceneList.TabIndex = 6;
             this.OLVSceneList.UseCellFormatEvents = true;
             this.OLVSceneList.UseCompatibleStateImageBehavior = false;
@@ -2785,7 +2828,7 @@
             this.tabPage4.Location = new System.Drawing.Point(4, 22);
             this.tabPage4.Name = "tabPage4";
             this.tabPage4.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage4.Size = new System.Drawing.Size(1519, 593);
+            this.tabPage4.Size = new System.Drawing.Size(1517, 490);
             this.tabPage4.TabIndex = 3;
             this.tabPage4.Text = "E-shop files";
             this.tabPage4.UseVisualStyleBackColor = true;
@@ -2796,7 +2839,7 @@
             this.panel10.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel10.Location = new System.Drawing.Point(3, 31);
             this.panel10.Name = "panel10";
-            this.panel10.Size = new System.Drawing.Size(1513, 559);
+            this.panel10.Size = new System.Drawing.Size(1511, 456);
             this.panel10.TabIndex = 11;
             // 
             // OLVEshop
@@ -2841,7 +2884,7 @@
             this.OLVEshop.Location = new System.Drawing.Point(0, 0);
             this.OLVEshop.Name = "OLVEshop";
             this.OLVEshop.ShowGroups = false;
-            this.OLVEshop.Size = new System.Drawing.Size(1513, 559);
+            this.OLVEshop.Size = new System.Drawing.Size(1511, 456);
             this.OLVEshop.TabIndex = 3;
             this.OLVEshop.UseCellFormatEvents = true;
             this.OLVEshop.UseCompatibleStateImageBehavior = false;
@@ -3066,7 +3109,7 @@
             this.panel11.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel11.Location = new System.Drawing.Point(3, 3);
             this.panel11.Name = "panel11";
-            this.panel11.Size = new System.Drawing.Size(1513, 28);
+            this.panel11.Size = new System.Drawing.Size(1511, 28);
             this.panel11.TabIndex = 10;
             // 
             // panel13
@@ -3076,7 +3119,7 @@
             this.panel13.Controls.Add(this.label5);
             this.panel13.Controls.Add(this.cbxFilterEshop);
             this.panel13.Dock = System.Windows.Forms.DockStyle.Right;
-            this.panel13.Location = new System.Drawing.Point(800, 0);
+            this.panel13.Location = new System.Drawing.Point(798, 0);
             this.panel13.Name = "panel13";
             this.panel13.Size = new System.Drawing.Size(713, 28);
             this.panel13.TabIndex = 1;
@@ -3418,7 +3461,7 @@
             this.tabPage5.Location = new System.Drawing.Point(4, 22);
             this.tabPage5.Name = "tabPage5";
             this.tabPage5.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage5.Size = new System.Drawing.Size(1517, 591);
+            this.tabPage5.Size = new System.Drawing.Size(1517, 490);
             this.tabPage5.TabIndex = 4;
             this.tabPage5.Text = "Log";
             this.tabPage5.UseVisualStyleBackColor = true;
@@ -3429,7 +3472,7 @@
             this.panel6.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel6.Location = new System.Drawing.Point(3, 3);
             this.panel6.Name = "panel6";
-            this.panel6.Size = new System.Drawing.Size(1511, 559);
+            this.panel6.Size = new System.Drawing.Size(1511, 458);
             this.panel6.TabIndex = 2;
             // 
             // richTextBoxLog
@@ -3439,7 +3482,7 @@
             this.richTextBoxLog.Location = new System.Drawing.Point(0, 0);
             this.richTextBoxLog.Name = "richTextBoxLog";
             this.richTextBoxLog.ReadOnly = true;
-            this.richTextBoxLog.Size = new System.Drawing.Size(1511, 559);
+            this.richTextBoxLog.Size = new System.Drawing.Size(1511, 458);
             this.richTextBoxLog.TabIndex = 3;
             this.richTextBoxLog.Text = "";
             this.richTextBoxLog.TextChanged += new System.EventHandler(this.richTextBoxLog_TextChanged);
@@ -3448,7 +3491,7 @@
             // 
             this.panel7.Controls.Add(this.btnClearLogFile);
             this.panel7.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel7.Location = new System.Drawing.Point(3, 562);
+            this.panel7.Location = new System.Drawing.Point(3, 461);
             this.panel7.Name = "panel7";
             this.panel7.Size = new System.Drawing.Size(1511, 26);
             this.panel7.TabIndex = 1;
@@ -3471,7 +3514,7 @@
             this.toolStripStatusFilesOperation,
             this.toolStripProgressAddingFiles,
             this.toolStripStatusLabelGame});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 643);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 542);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.Size = new System.Drawing.Size(1527, 24);
             this.statusStrip1.TabIndex = 0;
@@ -3598,6 +3641,215 @@
             this.scrapExtendedInfoFromWebToolStripMenuItem.Text = "Scrap extended info from web";
             this.scrapExtendedInfoFromWebToolStripMenuItem.Click += new System.EventHandler(this.scrapExtendedInfoFromWebToolStripMenuItem_Click);
             // 
+            // panelEditTitle
+            // 
+            this.panelEditTitle.Controls.Add(this.groupBox10);
+            this.panelEditTitle.Controls.Add(this.groupBox9);
+            this.panelEditTitle.Controls.Add(this.groupBox8);
+            this.panelEditTitle.Controls.Add(this.groupBox7);
+            this.panelEditTitle.Controls.Add(this.groupBox6);
+            this.panelEditTitle.Controls.Add(this.groupBox5);
+            this.panelEditTitle.Controls.Add(this.groupBox4);
+            this.panelEditTitle.Controls.Add(this.groupBox3);
+            this.panelEditTitle.Controls.Add(this.groupBox2);
+            this.panelEditTitle.Controls.Add(this.groupBox1);
+            this.panelEditTitle.Controls.Add(this.panel14);
+            this.panelEditTitle.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panelEditTitle.Location = new System.Drawing.Point(0, 0);
+            this.panelEditTitle.Name = "panelEditTitle";
+            this.panelEditTitle.Size = new System.Drawing.Size(1527, 245);
+            this.panelEditTitle.TabIndex = 0;
+            // 
+            // groupBox10
+            // 
+            this.groupBox10.Controls.Add(this.textBoxReleaseDate);
+            this.groupBox10.Location = new System.Drawing.Point(227, 121);
+            this.groupBox10.Name = "groupBox10";
+            this.groupBox10.Size = new System.Drawing.Size(121, 50);
+            this.groupBox10.TabIndex = 7;
+            this.groupBox10.TabStop = false;
+            this.groupBox10.Text = "Release Date";
+            // 
+            // textBoxReleaseDate
+            // 
+            this.textBoxReleaseDate.Location = new System.Drawing.Point(7, 20);
+            this.textBoxReleaseDate.Name = "textBoxReleaseDate";
+            this.textBoxReleaseDate.Size = new System.Drawing.Size(108, 20);
+            this.textBoxReleaseDate.TabIndex = 0;
+            // 
+            // groupBox9
+            // 
+            this.groupBox9.Controls.Add(this.textBoxCategory);
+            this.groupBox9.Location = new System.Drawing.Point(683, 123);
+            this.groupBox9.Name = "groupBox9";
+            this.groupBox9.Size = new System.Drawing.Size(346, 50);
+            this.groupBox9.TabIndex = 10;
+            this.groupBox9.TabStop = false;
+            this.groupBox9.Text = "Category";
+            // 
+            // textBoxCategory
+            // 
+            this.textBoxCategory.Location = new System.Drawing.Point(7, 20);
+            this.textBoxCategory.Name = "textBoxCategory";
+            this.textBoxCategory.Size = new System.Drawing.Size(333, 20);
+            this.textBoxCategory.TabIndex = 0;
+            // 
+            // groupBox8
+            // 
+            this.groupBox8.Controls.Add(this.textBoxPublisher);
+            this.groupBox8.Location = new System.Drawing.Point(683, 66);
+            this.groupBox8.Name = "groupBox8";
+            this.groupBox8.Size = new System.Drawing.Size(452, 50);
+            this.groupBox8.TabIndex = 9;
+            this.groupBox8.TabStop = false;
+            this.groupBox8.Text = "Publisher";
+            // 
+            // textBoxPublisher
+            // 
+            this.textBoxPublisher.Location = new System.Drawing.Point(7, 20);
+            this.textBoxPublisher.Name = "textBoxPublisher";
+            this.textBoxPublisher.Size = new System.Drawing.Size(437, 20);
+            this.textBoxPublisher.TabIndex = 0;
+            // 
+            // groupBox7
+            // 
+            this.groupBox7.Controls.Add(this.textBoxDeveloper);
+            this.groupBox7.Location = new System.Drawing.Point(683, 9);
+            this.groupBox7.Name = "groupBox7";
+            this.groupBox7.Size = new System.Drawing.Size(452, 50);
+            this.groupBox7.TabIndex = 8;
+            this.groupBox7.TabStop = false;
+            this.groupBox7.Text = "Developer";
+            // 
+            // textBoxDeveloper
+            // 
+            this.textBoxDeveloper.Location = new System.Drawing.Point(7, 20);
+            this.textBoxDeveloper.Name = "textBoxDeveloper";
+            this.textBoxDeveloper.Size = new System.Drawing.Size(437, 20);
+            this.textBoxDeveloper.TabIndex = 0;
+            // 
+            // groupBox6
+            // 
+            this.groupBox6.Controls.Add(this.textBoxPlayers);
+            this.groupBox6.Location = new System.Drawing.Point(1035, 123);
+            this.groupBox6.Name = "groupBox6";
+            this.groupBox6.Size = new System.Drawing.Size(100, 50);
+            this.groupBox6.TabIndex = 7;
+            this.groupBox6.TabStop = false;
+            this.groupBox6.Text = "Players";
+            // 
+            // textBoxPlayers
+            // 
+            this.textBoxPlayers.Location = new System.Drawing.Point(7, 20);
+            this.textBoxPlayers.Name = "textBoxPlayers";
+            this.textBoxPlayers.Size = new System.Drawing.Size(85, 20);
+            this.textBoxPlayers.TabIndex = 0;
+            // 
+            // groupBox5
+            // 
+            this.groupBox5.Controls.Add(this.textBoxFirmware);
+            this.groupBox5.Location = new System.Drawing.Point(100, 121);
+            this.groupBox5.Name = "groupBox5";
+            this.groupBox5.Size = new System.Drawing.Size(121, 50);
+            this.groupBox5.TabIndex = 6;
+            this.groupBox5.TabStop = false;
+            this.groupBox5.Text = "Firmware";
+            // 
+            // textBoxFirmware
+            // 
+            this.textBoxFirmware.Location = new System.Drawing.Point(7, 20);
+            this.textBoxFirmware.Name = "textBoxFirmware";
+            this.textBoxFirmware.Size = new System.Drawing.Size(108, 20);
+            this.textBoxFirmware.TabIndex = 0;
+            // 
+            // groupBox4
+            // 
+            this.groupBox4.Controls.Add(this.textBoxCardType);
+            this.groupBox4.Location = new System.Drawing.Point(7, 121);
+            this.groupBox4.Name = "groupBox4";
+            this.groupBox4.Size = new System.Drawing.Size(87, 50);
+            this.groupBox4.TabIndex = 5;
+            this.groupBox4.TabStop = false;
+            this.groupBox4.Text = "Card type";
+            // 
+            // textBoxCardType
+            // 
+            this.textBoxCardType.Location = new System.Drawing.Point(7, 20);
+            this.textBoxCardType.Name = "textBoxCardType";
+            this.textBoxCardType.Size = new System.Drawing.Size(74, 20);
+            this.textBoxCardType.TabIndex = 0;
+            // 
+            // groupBox3
+            // 
+            this.groupBox3.Controls.Add(this.textBoxLanguages);
+            this.groupBox3.Location = new System.Drawing.Point(7, 65);
+            this.groupBox3.Name = "groupBox3";
+            this.groupBox3.Size = new System.Drawing.Size(341, 50);
+            this.groupBox3.TabIndex = 4;
+            this.groupBox3.TabStop = false;
+            this.groupBox3.Text = "Languages";
+            // 
+            // textBoxLanguages
+            // 
+            this.textBoxLanguages.Location = new System.Drawing.Point(7, 20);
+            this.textBoxLanguages.Name = "textBoxLanguages";
+            this.textBoxLanguages.Size = new System.Drawing.Size(328, 20);
+            this.textBoxLanguages.TabIndex = 0;
+            // 
+            // groupBox2
+            // 
+            this.groupBox2.Controls.Add(this.richTextBoxDescription);
+            this.groupBox2.Location = new System.Drawing.Point(354, 9);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Size = new System.Drawing.Size(323, 162);
+            this.groupBox2.TabIndex = 3;
+            this.groupBox2.TabStop = false;
+            this.groupBox2.Text = "Description";
+            // 
+            // richTextBoxDescription
+            // 
+            this.richTextBoxDescription.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.richTextBoxDescription.Location = new System.Drawing.Point(3, 16);
+            this.richTextBoxDescription.Name = "richTextBoxDescription";
+            this.richTextBoxDescription.Size = new System.Drawing.Size(317, 143);
+            this.richTextBoxDescription.TabIndex = 0;
+            this.richTextBoxDescription.Text = "";
+            // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.textBoxGameTitle);
+            this.groupBox1.Location = new System.Drawing.Point(7, 9);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(341, 50);
+            this.groupBox1.TabIndex = 2;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "Game title";
+            // 
+            // textBoxGameTitle
+            // 
+            this.textBoxGameTitle.Location = new System.Drawing.Point(7, 20);
+            this.textBoxGameTitle.Name = "textBoxGameTitle";
+            this.textBoxGameTitle.Size = new System.Drawing.Size(328, 20);
+            this.textBoxGameTitle.TabIndex = 0;
+            // 
+            // panel14
+            // 
+            this.panel14.Controls.Add(this.panel15);
+            this.panel14.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.panel14.Location = new System.Drawing.Point(0, 211);
+            this.panel14.Name = "panel14";
+            this.panel14.Size = new System.Drawing.Size(1527, 34);
+            this.panel14.TabIndex = 1;
+            // 
+            // panel15
+            // 
+            this.panel15.Controls.Add(this.button1);
+            this.panel15.Dock = System.Windows.Forms.DockStyle.Left;
+            this.panel15.Location = new System.Drawing.Point(0, 0);
+            this.panel15.Name = "panel15";
+            this.panel15.Size = new System.Drawing.Size(86, 34);
+            this.panel15.TabIndex = 0;
+            // 
             // backgroundWorkerAddFilesFromDirectory
             // 
             this.backgroundWorkerAddFilesFromDirectory.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorkerAddFiles_DoWork);
@@ -3636,6 +3888,16 @@
             this.backgroundWorkerScrapExtraInfo.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorkerScrapExtraInfo_DoWork);
             this.backgroundWorkerScrapExtraInfo.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backgroundWorkerScrapExtraInfo_RunWorkerCompleted);
             // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(6, 6);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(75, 23);
+            this.button1.TabIndex = 1;
+            this.button1.Text = "Save";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
             // FrmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -3660,6 +3922,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.PB_GameIcon)).EndInit();
             this.splitContainer2.Panel1.ResumeLayout(false);
             this.splitContainer2.Panel1.PerformLayout();
+            this.splitContainer2.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).EndInit();
             this.splitContainer2.ResumeLayout(false);
             this.tabControl1.ResumeLayout(false);
@@ -3707,6 +3970,28 @@
             this.statusStrip1.PerformLayout();
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
+            this.panelEditTitle.ResumeLayout(false);
+            this.groupBox10.ResumeLayout(false);
+            this.groupBox10.PerformLayout();
+            this.groupBox9.ResumeLayout(false);
+            this.groupBox9.PerformLayout();
+            this.groupBox8.ResumeLayout(false);
+            this.groupBox8.PerformLayout();
+            this.groupBox7.ResumeLayout(false);
+            this.groupBox7.PerformLayout();
+            this.groupBox6.ResumeLayout(false);
+            this.groupBox6.PerformLayout();
+            this.groupBox5.ResumeLayout(false);
+            this.groupBox5.PerformLayout();
+            this.groupBox4.ResumeLayout(false);
+            this.groupBox4.PerformLayout();
+            this.groupBox3.ResumeLayout(false);
+            this.groupBox3.PerformLayout();
+            this.groupBox2.ResumeLayout(false);
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
+            this.panel14.ResumeLayout(false);
+            this.panel15.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -4091,6 +4376,30 @@
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem69;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemCopyFilesToFolderEShop;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemMoveFilesToFolderEShop;
+        private System.Windows.Forms.Panel panelEditTitle;
+        private System.Windows.Forms.Panel panel14;
+        private System.Windows.Forms.Panel panel15;
+        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.TextBox textBoxGameTitle;
+        private System.Windows.Forms.GroupBox groupBox2;
+        private System.Windows.Forms.RichTextBox richTextBoxDescription;
+        private System.Windows.Forms.GroupBox groupBox9;
+        private System.Windows.Forms.TextBox textBoxCategory;
+        private System.Windows.Forms.GroupBox groupBox8;
+        private System.Windows.Forms.TextBox textBoxPublisher;
+        private System.Windows.Forms.GroupBox groupBox7;
+        private System.Windows.Forms.TextBox textBoxDeveloper;
+        private System.Windows.Forms.GroupBox groupBox6;
+        private System.Windows.Forms.TextBox textBoxPlayers;
+        private System.Windows.Forms.GroupBox groupBox5;
+        private System.Windows.Forms.TextBox textBoxFirmware;
+        private System.Windows.Forms.GroupBox groupBox4;
+        private System.Windows.Forms.TextBox textBoxCardType;
+        private System.Windows.Forms.GroupBox groupBox3;
+        private System.Windows.Forms.TextBox textBoxLanguages;
+        private System.Windows.Forms.GroupBox groupBox10;
+        private System.Windows.Forms.TextBox textBoxReleaseDate;
+        private System.Windows.Forms.Button button1;
     }
 }
 

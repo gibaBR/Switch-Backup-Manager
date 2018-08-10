@@ -26,6 +26,7 @@ namespace Switch_Backup_Manager
         private Dictionary<Tuple<string, string>, FileData> SceneReleasesSelectedItems;
         private Dictionary<Tuple<string, string>, FileData> SDCardList;
         private Dictionary<Tuple<string, string>, FileData> SDCardListSelectedItems;
+        private FileData TitleToEdit;
 
         private bool updateCbxRemoveableFiles;
         private bool updateFileListAfterMove;
@@ -891,6 +892,8 @@ namespace Switch_Backup_Manager
                     return;
                 }
 
+                FileData data = null;
+                int count = 0;
                 if (e.IsSelected)
                 {
                     ListView.SelectedListViewItemCollection selectedItems = OLVLocalFiles.SelectedItems;
@@ -901,13 +904,12 @@ namespace Switch_Backup_Manager
                     string titleID = selectedItems[0].Text;
                     string titleIDBase = titleID;
 
-                    int count = 0;
                     long size = 0;
 
                     foreach (ListViewItem item in selectedItems)
                     {
                         titleID = item.Text;
-                        FileData data = Util.GetFileData(titleID, "", LocalFilesList);
+                        data = Util.GetFileData(titleID, "", LocalFilesList);
                         LocalFilesListSelectedItems.Add(new Tuple<string, string>(titleID, ""), data);
                         titleIDBase = data.TitleIDBaseGame;
                         count++;
@@ -921,28 +923,74 @@ namespace Switch_Backup_Manager
                 else
                 {
                     ListView.SelectedListViewItemCollection selectedItems = OLVLocalFiles.SelectedItems;
-                    int count = 0;
                     long size = 0;
                     LocalFilesListSelectedItems.Clear();
                     foreach (ListViewItem item in selectedItems)
                     {
                         string titleID = item.Text;
-                        FileData data = Util.GetFileData(titleID, "", LocalFilesList);
+                        data = Util.GetFileData(titleID, "", LocalFilesList);
                         LocalFilesListSelectedItems.Add(new Tuple<string, string>(titleID, ""), data);
                         count++;
                         size += Convert.ToInt64(data.UsedSpaceBytes);
                     }
 
                     toolStripStatusLabel1.Text = Convert.ToString(count) + " Selected (" + Util.BytesToGB(size) + ")";
-
+                }
+                if (count == 1)
+                {
+                    panelEditTitle.Visible = true;
+                    TitleToEdit = data;
+                    LoadFieldsForEdition();
+                } else
+                {
+                    panelEditTitle.Visible = false;
                 }
             }
+        }
+
+        private void LoadFieldsForEdition()
+        {
+            if (this.TitleToEdit != null)
+            {
+                textBoxGameTitle.Text = this.TitleToEdit.GameName;
+                textBoxCardType.Text = this.TitleToEdit.Cardtype;
+                textBoxCategory.Text = Util.ListToComaSeparatedString(this.TitleToEdit.Categories);
+                textBoxLanguages.Text = Util.ListToComaSeparatedString(this.TitleToEdit.Languages);
+                textBoxDeveloper.Text = this.TitleToEdit.Developer;
+                textBoxPublisher.Text = this.TitleToEdit.Publisher;
+                textBoxFirmware.Text = this.TitleToEdit.Firmware;
+                textBoxReleaseDate.Text = this.TitleToEdit.ReleaseDate;
+                textBoxPlayers.Text = this.TitleToEdit.NumberOfPlayers;
+                richTextBoxDescription.Text = this.TitleToEdit.Description;
+            }
+        }
+
+        private void SaveEditedTitle(string source) //source = "local", "eshop"
+        {
+            TitleToEdit.GameName = textBoxGameTitle.Text;
+            TitleToEdit.Languages = Util.ComaSeparatedStringToList(textBoxLanguages.Text);
+            TitleToEdit.Cardtype = textBoxCardType.Text;
+            TitleToEdit.Developer = textBoxDeveloper.Text;
+            TitleToEdit.Publisher = textBoxPublisher.Text;
+            TitleToEdit.Firmware = textBoxFirmware.Text;
+            TitleToEdit.ReleaseDate = textBoxReleaseDate.Text;
+            TitleToEdit.NumberOfPlayers = textBoxPlayers.Text;
+            TitleToEdit.Categories = Util.ComaSeparatedStringToList(textBoxCategory.Text);
+            TitleToEdit.Description = richTextBoxDescription.Text;
+            TitleToEdit.HasExtendedInfo = true;
+
+            if (this.TitleToEdit != null)
+            {
+                Util.UpdateXMLFromFileData(TitleToEdit, source);
+            }
+            UpdateLocalGamesList();
         }
 
         private void tabControl1_SelectedIndexChanged(object sender, EventArgs e)
         {
             OLVLocalFiles.SelectedItems.Clear();
             OLVSceneList.SelectedItems.Clear();
+            panelEditTitle.Visible = false;
 
             switch (tabControl1.SelectedIndex)
             {
@@ -3478,7 +3526,6 @@ namespace Switch_Backup_Manager
             ScrapExtraInfoFromWeb();
         }
 
-
         /// <summary>
         /// Update a list of files with information from web
         /// </summary>
@@ -3509,6 +3556,7 @@ namespace Switch_Backup_Manager
                 {
                     if (!backgroundWorkerScrapExtraInfo.IsBusy)
                     {
+                        //updateFileListAfterMove = true;
                         switch (source)
                         {
                             case "local":
@@ -3553,6 +3601,7 @@ namespace Switch_Backup_Manager
 
         private void backgroundWorkerScrapExtraInfo_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
+            //updateFileListAfterMove = false;
             timer1.Enabled = false;
             toolStripStatusFilesOperation.Visible = false;
             toolStripProgressAddingFiles.Visible = false;
@@ -3563,10 +3612,12 @@ namespace Switch_Backup_Manager
 
             if (source == "local")
             {
+                LocalFilesListSelectedItems.Clear();
                 UpdateLocalGamesList();
                 menuLocalFiles.Enabled = true;
             } else if (source == "shop")
             {
+                LocalNSPFilesListSelectedItems.Clear();
                 UpdateLocalNSPGamesList();
                 menuEShop.Enabled = true;
             }
@@ -3588,6 +3639,29 @@ namespace Switch_Backup_Manager
         private void updateGameInfoFromWebToolStripMenuItemEshop_Click(object sender, EventArgs e)
         {
             UpdateGamesInfoFromWeb("eshop");
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            string source_list = "";
+
+            switch (tabControl1.SelectedIndex)
+            {
+                case 0: //Files
+                    source_list = "local";
+                    break;
+                case 1: //SD Card
+                    source_list = "sdcard";
+                    break;
+                case 2: //Scene
+                    source_list = "scene";
+                    break;
+                case 3: //Eshop
+                    source_list = "eshop";
+                    break;
+            }
+
+            SaveEditedTitle(source_list);
         }
     }
 }

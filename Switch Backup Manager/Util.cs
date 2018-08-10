@@ -735,7 +735,7 @@ namespace Switch_Backup_Manager
             {
                 if (!File.Exists(xe.Element("FilePath").Value))
                 {
-                    RemoveTitleIDFromXML(xe.Attribute("TitleID").Value, source_xml == LOCAL_NSP_FILES_DB ? xe.Element("Version").Value : "", @source_xml);
+                    RemoveTitleIDFromXML(xe.Attribute("TitleID").Value, xe.Element("Version").Value, @source_xml);
                     logger.Info(xe.Element("FilePath").Value + " removed.");
                     i++;
                 }                
@@ -760,7 +760,7 @@ namespace Switch_Backup_Manager
             if (xml == LOCAL_FILES_DB)
             {
                 element = XML_Local.Descendants("Game")
-                   .FirstOrDefault(el => (string)el.Attribute("TitleID") == titleID);
+                   .FirstOrDefault(el => (string)el.Attribute("TitleID") == titleID && (string)el.Element("Version") == version);
             } else
             {
                 element = XML_NSP_Local.Descendants("Game")
@@ -965,7 +965,7 @@ namespace Switch_Backup_Manager
             Dictionary<Tuple<string, string>, FileData> result = new Dictionary<Tuple<string, string>, FileData>();
             foreach (XElement xe in xml.Descendants("Game"))
             {
-                result.Add(new Tuple<string, string>(xe.Attribute("TitleID").Value, xe.Element("CardType").Value == "e-shop" ? xe.Element("Version").Value : ""), GetFileData(xe));
+                result.Add(new Tuple<string, string>(xe.Attribute("TitleID").Value, xe.Element("Version").Value), GetFileData(xe));
             }
             return result;
         }
@@ -978,7 +978,7 @@ namespace Switch_Backup_Manager
             {
                 try
                 {
-                    result.Add(new Tuple<string, string>(xe.Element("titleid").Value, ""), GetFileData(xe, true));
+                    result.Add(new Tuple<string, string>(xe.Element("titleid").Value, xe.Element("firmware").Value.ToLower()), GetFileData(xe, true));
                 } catch { System.ArgumentException ex; }
                 {
                     //If TitleID is already on the list, ignore
@@ -1355,7 +1355,7 @@ namespace Switch_Backup_Manager
                         FrmMain.progressCurrentfile = data.FilePath;
                         try
                         {
-                            dictionary.Add(new Tuple<string, string>(data.TitleID, data.Cardtype == "e-shop" ? data.Version : ""), data);
+                            dictionary.Add(new Tuple<string, string>(data.TitleID, data.Version), data);
                         }
                         catch (ArgumentException ex)
                         {
@@ -1413,7 +1413,7 @@ namespace Switch_Backup_Manager
                     FrmMain.progressCurrentfile = data.FilePath;
                     try
                     {
-                        dictionary.Add(new Tuple<string, string>(data.TitleID, data.Cardtype == "e-shop" ? data.Version : ""), data);
+                        dictionary.Add(new Tuple<string, string>(data.TitleID, data.Version), data);
                     }
                     catch (ArgumentException ex)
                     {
@@ -1804,7 +1804,12 @@ namespace Switch_Backup_Manager
                             {
                                 data_tmp = null;
                                 Dictionary<Tuple<string, string>, FileData> SceneList = Util.LoadSceneXMLToFileDataDictionary(XML_NSWDB);
-                                SceneList.TryGetValue(new Tuple<string, string>(data.TitleIDBaseGame, ""), out data_tmp); //Try to find on Scene List
+                                List<Tuple<string, string>> keys = Enumerable.ToList(SceneList.Keys);
+                                int index = keys.FindIndex(key => key.Item1 == data.TitleIDBaseGame);
+                                if (index != -1)
+                                {
+                                    SceneList.TryGetValue(keys[index], out data_tmp); //Try to find on Scene List
+                                }
                                 if (data_tmp != null)
                                 {
                                     data.Region_Icon = data_tmp.Region_Icon;
@@ -1822,7 +1827,12 @@ namespace Switch_Backup_Manager
                             {
                                 data_tmp = null;
                                 Dictionary<Tuple<string, string>, FileData> XCIList = Util.LoadXMLToFileDataDictionary(XML_Local);
-                                XCIList.TryGetValue(new Tuple<string, string>(data.TitleIDBaseGame, ""), out data_tmp); //Try to find on Local XCI List
+                                List<Tuple<string, string>> keys = Enumerable.ToList(XCIList.Keys);
+                                int index = keys.FindIndex(key => key.Item1 == data.TitleIDBaseGame);
+                                if (index != -1)
+                                {
+                                    XCIList.TryGetValue(keys[index], out data_tmp); //Try to find on Local XCI List
+                                }
                                 if (data_tmp != null)
                                 {
                                     data.Region_Icon = data_tmp.Region_Icon;
@@ -2168,6 +2178,36 @@ namespace Switch_Backup_Manager
                         fileStream.Read(hashBuffer, 0, array6[j].HashedRegionSize);
                         actualHash = SHA256Bytes(hashBuffer);
                     }
+                    if (array[i].Name == "update")
+                    {
+                        List<string> UpdateFiles = array6.Select(x => x.Name).ToList();
+                        UpdateFiles.Sort();
+
+                        foreach (var firmware in Consts.UPDATE_FILES.Keys)
+                        {
+                            if (UpdateFiles.Count == Consts.UPDATE_NUMBER_OF_FILES[firmware])
+                            {
+                                if (UpdateFiles.SequenceEqual(Consts.UPDATE_FILES[firmware]))
+                                {
+                                    result.Version = firmware;
+                                    break;
+                                }
+                            }
+                        }
+
+                        //Last resort, guess by Number of files in Update Partition
+                        if (String.IsNullOrEmpty(result.Version))
+                        {
+                            foreach (var firmware in Consts.UPDATE_NUMBER_OF_FILES.Keys)
+                            {
+                                if (UpdateFiles.Count == Consts.UPDATE_NUMBER_OF_FILES[firmware])
+                                {
+                                    result.Version = firmware;
+                                    break;
+                                }
+                            }
+                        }
+                    }
                 }
                 long num3 = -9223372036854775808L;
                 for (int k = 0; k < SecureSize.Length; k++)
@@ -2336,7 +2376,33 @@ namespace Switch_Backup_Manager
                     }
                     fileStream.Close();
                 }
-                GetExtraInfoFromScene(result);
+
+                FileData result_tmp = null;
+                Dictionary<Tuple<string, string>, FileData> SceneList = Util.LoadSceneXMLToFileDataDictionary(XML_NSWDB);
+                SceneList.TryGetValue(new Tuple<string, string>(result.TitleID, result.Version), out result_tmp); //Try to find on Scene List using TitleID and Version
+                if (result_tmp == null)
+                {
+                    List<Tuple<string, string>> keys = Enumerable.ToList(SceneList.Keys);
+                    int index = keys.FindIndex(key => key.Item1 == result.TitleID);
+                    if (index != -1)
+                    {
+                        SceneList.TryGetValue(keys[index], out result_tmp); //Try to find on Scene List using TitleID only
+                    }
+                }
+                if (result_tmp != null)
+                {
+                    result.GameName = result_tmp.GameName;
+                    result.Cardtype = result_tmp.Cardtype;
+                    result.Group = result_tmp.Group;
+                    result.Serial = result_tmp.Serial;
+                    result.Firmware = result_tmp.Firmware;
+                    result.Region = result_tmp.Region;
+                    result.Languages_resumed = result_tmp.Languages_resumed;
+                    result.IdScene = result_tmp.IdScene;
+                    result.Version = result_tmp.Version;
+                }
+                //GetExtraInfoFromScene(result);
+
                 if (ScrapExtraInfoFromWeb)
                 {
                     GetExtendedInfo(result);
@@ -2573,6 +2639,9 @@ namespace Switch_Backup_Manager
             result.Languages_resumed = xe.Element("languages").Value;
             result.IdScene = Convert.ToInt32(xe.Element("id").Value);
 
+            //Use Firmware to guess XCI revision number
+            result.Version = xe.Element("firmware").Value.ToLower();
+
             List<string> languages = new List<string>();
             string[] languages_ = xe.Element("languages").Value.Split(",".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
             for (int i=0; i < languages_.Length; i++)
@@ -2591,7 +2660,12 @@ namespace Switch_Backup_Manager
             dictionary.TryGetValue(new Tuple<string, string>(titleID, version), out result);
             if (result == null)
             {
-                dictionary.TryGetValue(new Tuple<string, string>(titleID, ""), out result);
+                List<Tuple<string, string>> keys = Enumerable.ToList(dictionary.Keys);
+                int index = keys.FindIndex(key => key.Item1 == titleID);
+                if (index != -1)
+                {
+                    dictionary.TryGetValue(keys[index], out result);
+                }
             }
 
             return result;
@@ -2641,7 +2715,7 @@ namespace Switch_Backup_Manager
                 FileData data = GetFileData(file);
                 try
                 {
-                    result.Add(new Tuple<string, string>(data.TitleID, ""), data);
+                    result.Add(new Tuple<string, string>(data.TitleID, data.Version), data);
                 } catch
                 {
                     logger.Error("Found duplicate file (same TitleID = " + data.TitleID + " on " + Path.GetDirectoryName(data.FilePath) + ".");
@@ -2678,7 +2752,7 @@ namespace Switch_Backup_Manager
                 
                 try
                 {
-                    result.Add(new Tuple<string, string>(data.TitleID, Path.GetExtension(file) == ".xci" ? "" : data.Version), data);
+                    result.Add(new Tuple<string, string>(data.TitleID, data.Version), data);
                 }
                 catch
                 {

@@ -418,7 +418,10 @@ namespace Switch_Backup_Manager
                             result += " [DLC]";
                             break;
                     }
-                    result += " [" + data.Version + "]";
+                    if (data.DistributionType == "Download")
+                    {
+                        result += " [" + data.Version + "]";
+                    }
                 }
 
                 return result;
@@ -827,9 +830,9 @@ namespace Switch_Backup_Manager
             foreach (FileData data in list1.Values)
             {
                 FileData dummy;
-                if (!list2.TryGetValue(new Tuple<string, string>(data.TitleID, data.Version != null ? data.Version : ""), out dummy))
+                if (!list2.TryGetValue(new Tuple<string, string>(data.TitleID, data.Version), out dummy))
                 {
-                    result.Add(new Tuple<string, string>(data.TitleID, data.Version != null ? data.Version : ""), data);
+                    result.Add(new Tuple<string, string>(data.TitleID, data.Version), data);
                 }
             }
 
@@ -843,9 +846,9 @@ namespace Switch_Backup_Manager
             foreach (FileData data in list1.Values)
             {
                 FileData dummy;
-                if (list2.TryGetValue(new Tuple<string, string>(data.TitleID, data.Version != null ? data.Version : ""), out dummy))
+                if (list2.TryGetValue(new Tuple<string, string>(data.TitleID, data.Version), out dummy))
                 {
-                    result.Add(new Tuple<string, string>(data.TitleID, data.Version != null ? data.Version : ""), data);
+                    result.Add(new Tuple<string, string>(data.TitleID, data.Version), data);
                 }
             }
 
@@ -903,14 +906,16 @@ namespace Switch_Backup_Manager
                     LocalFilesListSelectedItems.Clear();
                     string titleID = selectedItems[0].Text;
                     string titleIDBase = titleID;
+                    string version = Convert.ToString(((FileData)((OLVListItem)selectedItems[0]).RowObject).Version);
 
                     long size = 0;
 
                     foreach (ListViewItem item in selectedItems)
                     {
-                        titleID = item.Text;
-                        data = Util.GetFileData(titleID, "", LocalFilesList);
-                        LocalFilesListSelectedItems.Add(new Tuple<string, string>(titleID, ""), data);
+                        titleID = item.Text;                      
+                        version = Convert.ToString(((FileData)((OLVListItem)item).RowObject).Version);
+                        data = Util.GetFileData(titleID, version, LocalFilesList);
+                        LocalFilesListSelectedItems.Add(new Tuple<string, string>(titleID, version), data);
                         titleIDBase = data.TitleIDBaseGame;
                         count++;
                         size += Convert.ToInt64(data.UsedSpaceBytes);
@@ -918,7 +923,7 @@ namespace Switch_Backup_Manager
 
                     toolStripStatusLabel1.Text = Convert.ToString(count) + " Selected (" + Util.BytesToGB(size) + ")";
                     //Display information of the last selected item
-                    DisplayGameInformation(titleID, titleIDBase, "", LocalFilesList, "local");
+                    DisplayGameInformation(titleID, titleIDBase, version, LocalFilesList, "local");
                 }
                 else
                 {
@@ -928,8 +933,9 @@ namespace Switch_Backup_Manager
                     foreach (ListViewItem item in selectedItems)
                     {
                         string titleID = item.Text;
-                        data = Util.GetFileData(titleID, "", LocalFilesList);
-                        LocalFilesListSelectedItems.Add(new Tuple<string, string>(titleID, ""), data);
+                        string version = Convert.ToString(((FileData)((OLVListItem)item).RowObject).Version);
+                        data = Util.GetFileData(titleID, version, LocalFilesList);
+                        LocalFilesListSelectedItems.Add(new Tuple<string, string>(titleID, version), data);
                         count++;
                         size += Convert.ToInt64(data.UsedSpaceBytes);
                     }
@@ -1042,14 +1048,16 @@ namespace Switch_Backup_Manager
                     SceneReleasesSelectedItems.Clear();
                     string titleID = selectedItems[0].Text;
                     string titleIDBase = titleID;
+                    string version = Convert.ToString(((FileData)((OLVListItem)selectedItems[0]).RowObject).Version);
 
                     int count = 0;
                     long size = 0;
                     foreach (ListViewItem item in selectedItems)
                     {
                         titleID = item.Text;
-                        FileData data = Util.GetFileData(titleID, "", SceneReleasesList);
-                        SceneReleasesSelectedItems.Add(new Tuple<string, string>(titleID, ""), data);
+                        version = Convert.ToString(((FileData)((OLVListItem)item).RowObject).Version);
+                        FileData data = Util.GetFileData(titleID, version, SceneReleasesList);
+                        SceneReleasesSelectedItems.Add(new Tuple<string, string>(titleID, version), data);
                         titleIDBase = data.TitleIDBaseGame;
                         count++;
                         size += Convert.ToInt64(data.ROMSizeBytes);
@@ -1057,7 +1065,7 @@ namespace Switch_Backup_Manager
 
                     toolStripStatusLabel1.Text = Convert.ToString(count) + " Selected (" + Util.BytesToGB(size) + ")";
                     //Display information of the first selected item
-                    DisplayGameInformation(titleID, titleIDBase, "", LocalFilesList, "scene"); //Has to be Locallist as we dont store scene info other than its xml file...
+                    DisplayGameInformation(titleID, titleIDBase, version, LocalFilesList, "scene"); //Has to be Locallist as we dont store scene info other than its xml file...
                 }
                 else
                 {
@@ -1068,8 +1076,9 @@ namespace Switch_Backup_Manager
                     foreach (ListViewItem item in selectedItems)
                     {
                         string titleID = item.Text;
-                        FileData data = Util.GetFileData(titleID, "", SceneReleasesList);
-                        SceneReleasesSelectedItems.Add(new Tuple<string, string>(titleID, ""), data);
+                        string version = Convert.ToString(((FileData)((OLVListItem)item).RowObject).Version);
+                        FileData data = Util.GetFileData(titleID, version, SceneReleasesList);
+                        SceneReleasesSelectedItems.Add(new Tuple<string, string>(titleID, version), data);
                         count++;
                         size += Convert.ToInt64(data.ROMSizeBytes);
                     }

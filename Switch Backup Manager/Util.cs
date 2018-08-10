@@ -750,8 +750,15 @@ namespace Switch_Backup_Manager
             bool result = false;
             XElement element;
 
-            element = XML_Local.Descendants("Game")
-                .FirstOrDefault(el => (string)el.Attribute("TitleID") == titleID && (string)el.Element("Version") == version);
+            if (xml == LOCAL_FILES_DB)
+            {
+                element = XML_Local.Descendants("Game")
+                   .FirstOrDefault(el => (string)el.Attribute("TitleID") == titleID && (string)el.Element("Version") == version);
+            } else
+            {
+                element = XML_NSP_Local.Descendants("Game")
+                   .FirstOrDefault(el => (string)el.Attribute("TitleID") == titleID && (string)el.Element("Version") == version);
+            }
 
             if (element != null)
             {

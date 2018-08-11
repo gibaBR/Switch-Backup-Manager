@@ -80,7 +80,6 @@ namespace Switch_Backup_Manager
                 Util.ini.IniWriteValue("AutoScan", "Folder_0" + Convert.ToString(i), item+"?" + (checkedListBoxAutoScanFolders.CheckedItems.IndexOf(item) == -1 ? "0" : "1"));
                 i++;
             }
-
         }
 
         public void LoadConfig()
@@ -102,6 +101,9 @@ namespace Switch_Backup_Manager
                     break;
                 case "{gamename} ({region}) ({firmware})":
                     rbRenamingGameNameRegionFirmware.Checked = true;
+                    break;
+                case "{CDNSP}":
+                    rbRenamingCDNSP.Checked = true;
                     break;
                 default:
                     textBoxCustomPatern.Text = autoRenamingPattern;
@@ -165,6 +167,13 @@ namespace Switch_Backup_Manager
         {
             gbCustom.Visible = false;
             this.autoRenamingPattern = "{gamename} ({region}) ({firmware})";
+            lblExample.Text = Util.GetRenamingString(gameExample, this.autoRenamingPattern);
+        }
+
+        private void rbRenamingCDNSP_CheckedChanged(object sender, EventArgs e)
+        {
+            gbCustom.Visible = false;
+            this.autoRenamingPattern = "{CDNSP}";
             lblExample.Text = Util.GetRenamingString(gameExample, this.autoRenamingPattern);
         }
 

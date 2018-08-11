@@ -35,6 +35,7 @@
             this.panel2 = new System.Windows.Forms.Panel();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.cbScrapExtraInfoFromWeb = new System.Windows.Forms.CheckBox();
             this.cbUseTitleKeys = new System.Windows.Forms.CheckBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.btnRemFolderAutoScan = new System.Windows.Forms.Button();
@@ -59,7 +60,7 @@
             this.cbxTags = new System.Windows.Forms.ComboBox();
             this.rbRenamingTitleIDGameName = new System.Windows.Forms.RadioButton();
             this.rbRenamingGameName = new System.Windows.Forms.RadioButton();
-            this.cbScrapExtraInfoFromWeb = new System.Windows.Forms.CheckBox();
+            this.rbRenamingCDNSP = new System.Windows.Forms.RadioButton();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.tabControl1.SuspendLayout();
@@ -147,6 +148,16 @@
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "General";
             this.tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // cbScrapExtraInfoFromWeb
+            // 
+            this.cbScrapExtraInfoFromWeb.AutoSize = true;
+            this.cbScrapExtraInfoFromWeb.Location = new System.Drawing.Point(6, 304);
+            this.cbScrapExtraInfoFromWeb.Name = "cbScrapExtraInfoFromWeb";
+            this.cbScrapExtraInfoFromWeb.Size = new System.Drawing.Size(300, 17);
+            this.cbScrapExtraInfoFromWeb.TabIndex = 5;
+            this.cbScrapExtraInfoFromWeb.Text = "Scrap extra info from web when new files are added (slow)";
+            this.cbScrapExtraInfoFromWeb.UseVisualStyleBackColor = true;
             // 
             // cbUseTitleKeys
             // 
@@ -276,6 +287,7 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.rbRenamingCDNSP);
             this.groupBox1.Controls.Add(this.rbRenamingGameNameRegionFirmware);
             this.groupBox1.Controls.Add(this.rbRenamingGameNameRegion);
             this.groupBox1.Controls.Add(this.lblExample);
@@ -326,7 +338,7 @@
             // rbRenamingCustom
             // 
             this.rbRenamingCustom.AutoSize = true;
-            this.rbRenamingCustom.Location = new System.Drawing.Point(19, 145);
+            this.rbRenamingCustom.Location = new System.Drawing.Point(19, 168);
             this.rbRenamingCustom.Name = "rbRenamingCustom";
             this.rbRenamingCustom.Size = new System.Drawing.Size(60, 17);
             this.rbRenamingCustom.TabIndex = 4;
@@ -350,7 +362,7 @@
             this.gbCustom.Controls.Add(this.btnAdd);
             this.gbCustom.Controls.Add(this.textBoxCustomPatern);
             this.gbCustom.Controls.Add(this.cbxTags);
-            this.gbCustom.Location = new System.Drawing.Point(19, 168);
+            this.gbCustom.Location = new System.Drawing.Point(19, 199);
             this.gbCustom.Name = "gbCustom";
             this.gbCustom.Size = new System.Drawing.Size(563, 50);
             this.gbCustom.TabIndex = 2;
@@ -416,15 +428,16 @@
             this.rbRenamingGameName.UseVisualStyleBackColor = true;
             this.rbRenamingGameName.CheckedChanged += new System.EventHandler(this.rbRenamingGameName_CheckedChanged);
             // 
-            // cbScrapExtraInfoFromWeb
+            // rbRenamingCDNSP
             // 
-            this.cbScrapExtraInfoFromWeb.AutoSize = true;
-            this.cbScrapExtraInfoFromWeb.Location = new System.Drawing.Point(6, 304);
-            this.cbScrapExtraInfoFromWeb.Name = "cbScrapExtraInfoFromWeb";
-            this.cbScrapExtraInfoFromWeb.Size = new System.Drawing.Size(300, 17);
-            this.cbScrapExtraInfoFromWeb.TabIndex = 5;
-            this.cbScrapExtraInfoFromWeb.Text = "Scrap extra info from web when new files are added (slow)";
-            this.cbScrapExtraInfoFromWeb.UseVisualStyleBackColor = true;
+            this.rbRenamingCDNSP.AutoSize = true;
+            this.rbRenamingCDNSP.Location = new System.Drawing.Point(19, 145);
+            this.rbRenamingCDNSP.Name = "rbRenamingCDNSP";
+            this.rbRenamingCDNSP.Size = new System.Drawing.Size(119, 17);
+            this.rbRenamingCDNSP.TabIndex = 7;
+            this.rbRenamingCDNSP.Text = "CDNSP GUI Format";
+            this.rbRenamingCDNSP.UseVisualStyleBackColor = true;
+            this.rbRenamingCDNSP.CheckedChanged += new System.EventHandler(this.rbRenamingCDNSP_CheckedChanged);
             // 
             // FormConfigs
             // 
@@ -491,5 +504,6 @@
         private System.Windows.Forms.CheckedListBox checkedListBoxAutoScanFolders;
         private System.Windows.Forms.CheckBox cbUseTitleKeys;
         private System.Windows.Forms.CheckBox cbScrapExtraInfoFromWeb;
+        private System.Windows.Forms.RadioButton rbRenamingCDNSP;
     }
 }

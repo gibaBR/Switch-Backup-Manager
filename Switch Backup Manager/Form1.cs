@@ -3011,6 +3011,8 @@ namespace Switch_Backup_Manager
                     return;
                 }
 
+                FileData data = null;
+                int count = 0;
                 if (e.IsSelected)
                 {
                     ListView.SelectedListViewItemCollection selectedItems = OLVEshop.SelectedItems;
@@ -3022,13 +3024,13 @@ namespace Switch_Backup_Manager
                     string version = Convert.ToString(((FileData)((OLVListItem)selectedItems[0]).RowObject).Version);
                     string titleIDBaseGame = "";
 
-                    int count = 0;
+                    count = 0;
                     long size = 0;
                     foreach (ListViewItem item in selectedItems)
                     {
                         titleID = item.Text;
                         version = Convert.ToString(((FileData)((OLVListItem)item).RowObject).Version);
-                        FileData data = Util.GetFileData(titleID, version, LocalNSPFilesList);
+                        data = Util.GetFileData(titleID, version, LocalNSPFilesList);
                         titleIDBaseGame = data.TitleIDBaseGame;
                         LocalNSPFilesListSelectedItems.Add(new Tuple<string, string>(titleID, version), data);
                         count++;
@@ -3048,14 +3050,14 @@ namespace Switch_Backup_Manager
                 else
                 {
                     ListView.SelectedListViewItemCollection selectedItems = OLVEshop.SelectedItems;
-                    int count = 0;
+                    count = 0;
                     long size = 0;
                     LocalNSPFilesListSelectedItems.Clear();
                     foreach (ListViewItem item in selectedItems)
                     {
                         string titleID = item.Text;
                         string version = Convert.ToString(((FileData)((OLVListItem)item).RowObject).Version);
-                        FileData data = Util.GetFileData(titleID, version, LocalNSPFilesList);
+                        data = Util.GetFileData(titleID, version, LocalNSPFilesList);
                         LocalNSPFilesListSelectedItems.Add(new Tuple<string, string>(titleID, version), data);
                         count++;
                         size += Convert.ToInt64(data.UsedSpaceBytes);
@@ -3063,6 +3065,17 @@ namespace Switch_Backup_Manager
 
                     toolStripStatusLabel1.Text = Convert.ToString(count) + " Selected (" + Util.BytesToGB(size) + ")";
                 }
+                if (count == 1)
+                {
+                    panelEditTitle.Visible = true;
+                    TitleToEdit = data;
+                    LoadFieldsForEdition();
+                }
+                else
+                {
+                    panelEditTitle.Visible = false;
+                }
+
             }
         }
 

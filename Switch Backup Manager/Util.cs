@@ -497,17 +497,34 @@ namespace Switch_Backup_Manager
             if (data != null)
             {
                 result = pattern;
-                result = result.Replace(AutoRenamingTags[0], data.GameName);
-                result = result.Replace(AutoRenamingTags[1], data.TitleID);
-                result = result.Replace(AutoRenamingTags[2], data.Developer);
-                result = result.Replace(AutoRenamingTags[3], (data.IsTrimmed ? "Trimmed" : "Full ROM"));
-                result = result.Replace(AutoRenamingTags[4], data.GameRevision);
-                result = result.Replace(AutoRenamingTags[5], data.Group);
-                result = result.Replace(AutoRenamingTags[6], data.Region);
-                result = result.Replace(AutoRenamingTags[7], data.Firmware);
-                result = result.Replace(AutoRenamingTags[8], data.Languages_resumed);
-                result = result.Replace(AutoRenamingTags[9], string.Format("{0:D4}", data.IdScene));
-                result = result.Replace(AutoRenamingTags[10], data.Version);
+
+                if (pattern == "{CDNSP}" )
+                {
+                    if (data.ContentType == "AddOnContent")
+                    {
+                        result = "[DLC] " + data.GameName + " [" + data.TitleID.ToLower() + "]" + "[v" + data.Version + "]";
+                    } else if (data.ContentType == "Patch")
+                    {
+                        result = data.GameName + " [UPD]" + "[" + data.TitleID.ToLower() + "]" + "[v" + data.Version + "]";
+                    } else
+                    {
+                        result = data.GameName + " [" + data.TitleID.ToLower() + "]" + "[v" + data.Version + "]";
+                    }
+                }
+                else
+                {
+                    result = result.Replace(AutoRenamingTags[0], data.GameName);
+                    result = result.Replace(AutoRenamingTags[1], data.TitleID);
+                    result = result.Replace(AutoRenamingTags[2], data.Developer);
+                    result = result.Replace(AutoRenamingTags[3], (data.IsTrimmed ? "Trimmed" : "Full ROM"));
+                    result = result.Replace(AutoRenamingTags[4], data.GameRevision);
+                    result = result.Replace(AutoRenamingTags[5], data.Group);
+                    result = result.Replace(AutoRenamingTags[6], data.Region);
+                    result = result.Replace(AutoRenamingTags[7], data.Firmware);
+                    result = result.Replace(AutoRenamingTags[8], data.Languages_resumed);
+                    result = result.Replace(AutoRenamingTags[9], string.Format("{0:D4}", data.IdScene));
+                    result = result.Replace(AutoRenamingTags[10], data.Version);
+                }
 
                 result += Path.GetExtension(data.FilePath);
             }
@@ -636,60 +653,64 @@ namespace Switch_Backup_Manager
                 Regex illegalInFileName = new Regex(@"[\\/:*?""<>|™®]");
                 string newFileName = Path.GetDirectoryName(file.FilePath) + "\\" + illegalInFileName.Replace(GetRenamingString(file, autoRenamingPattern), "");
                 string newFileName_ = "";
+                string originalFile = file.FilePath;
+                string tmp_name = originalFile + "_tmp";
+                
                 if (File.Exists(newFileName))
                 {
-                    logger.Warning("File " + illegalInFileName.Replace(GetRenamingString(file, autoRenamingPattern), "") + " already exists at destination path. Ignoring this file!");
-                    return false;
+                    Microsoft.VisualBasic.FileIO.FileSystem.MoveFile(originalFile, tmp_name, true);
+                    originalFile = tmp_name;
                 }
-                else
-                {
-                    switch (extension.ToLower())
-                    {
-                        case ".xci":
-                            logger.Info("Old name: " + file.FileNameWithExt + ". New name: " + illegalInFileName.Replace(GetRenamingString(file, autoRenamingPattern), ""));
-                            try
-                            {
-                                System.IO.File.Move(file.FilePath, newFileName);
-                            }
-                            catch (Exception e)
-                            {
-                                logger.Error("Failed to rename file.\n" + e.StackTrace);
-                                return false;
-                            }
-                            break;
-                        case ".nsp":
-                            logger.Info("Old name: " + file.FileNameWithExt + ". New name: " + illegalInFileName.Replace(GetRenamingString(file, autoRenamingPattern), ""));
-                            try
-                            {
-                                System.IO.File.Move(file.FilePath, newFileName);
-                            }
-                            catch (Exception e)
-                            {
-                                logger.Error("Failed to rename file.\n" + e.StackTrace);
-                                return false;
-                            }                            
-                            break;
-                        default: //(.xc0, xc1, etc)
-                            List<string> splited_files = GetSplitedXCIsFiles(file.FilePath);
-                            newFileName_ = newFileName;
 
-                            foreach (string splited_file in splited_files)
+                switch (extension.ToLower())
+                {
+                    case ".xci":
+                        logger.Info("Old name: " + file.FileNameWithExt + ". New name: " + illegalInFileName.Replace(GetRenamingString(file, autoRenamingPattern), ""));
+                        try
+                        {
+                            Microsoft.VisualBasic.FileIO.FileSystem.MoveFile(originalFile, newFileName, true);
+                            //System.IO.File.Move(file.FilePath, newFileName);
+                        }
+                        catch (Exception e)
+                        {
+                            logger.Error("Failed to rename file.\n" + e.StackTrace);
+                            return false;
+                        }
+                        break;
+                    case ".nsp":
+                        logger.Info("Old name: " + file.FileNameWithExt + ". New name: " + illegalInFileName.Replace(GetRenamingString(file, autoRenamingPattern), ""));
+                        try
+                        {
+                            Microsoft.VisualBasic.FileIO.FileSystem.MoveFile(originalFile, newFileName, true);
+                            //System.IO.File.Move(file.FilePath, newFileName);
+                        }
+                        catch (Exception e)
+                        {
+                            logger.Error("Failed to rename file.\n" + e.StackTrace);
+                            return false;
+                        }
+                        break;
+                    default: //(.xc0, xc1, etc)
+                        List<string> splited_files = GetSplitedXCIsFiles(file.FilePath);
+                        newFileName_ = newFileName;
+
+                        foreach (string splited_file in splited_files)
+                        {
+                            string extension_ = Path.GetExtension(splited_file);
+                            logger.Info("Old name: " + Path.GetFileName(splited_file) + ". New name: " + illegalInFileName.Replace(GetRenamingString(file, autoRenamingPattern), "").Replace(extension, "") + extension_);
+                            newFileName = Path.GetDirectoryName(file.FilePath) + "\\" + illegalInFileName.Replace(GetRenamingString(file, autoRenamingPattern), "").Replace(extension, "") + extension_;
+                            try
                             {
-                                string extension_ = Path.GetExtension(splited_file);
-                                logger.Info("Old name: " + Path.GetFileName(splited_file) + ". New name: " + illegalInFileName.Replace(GetRenamingString(file, autoRenamingPattern), "").Replace(extension, "") + extension_);
-                                newFileName = Path.GetDirectoryName(file.FilePath) + "\\" + illegalInFileName.Replace(GetRenamingString(file, autoRenamingPattern), "").Replace(extension, "") + extension_;
-                                try
-                                {
-                                    System.IO.File.Move(splited_file, newFileName);
-                                }
-                                catch (Exception e)
-                                {
-                                    logger.Error("Failed to rename file.\n" + e.StackTrace);
-                                }
+                                Microsoft.VisualBasic.FileIO.FileSystem.MoveFile(splited_file, newFileName, true);
+                                //System.IO.File.Move(splited_file, newFileName);
                             }
-                            newFileName = newFileName_;
-                            break;
-                    }
+                            catch (Exception e)
+                            {
+                                logger.Error("Failed to rename file.\n" + e.StackTrace);
+                            }
+                        }
+                        newFileName = newFileName_;
+                        break;
                 }
 
                 file.FileName = Path.GetFileNameWithoutExtension(newFileName);

@@ -2831,7 +2831,7 @@
             this.tabPage4.Location = new System.Drawing.Point(4, 22);
             this.tabPage4.Name = "tabPage4";
             this.tabPage4.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage4.Size = new System.Drawing.Size(1517, 490);
+            this.tabPage4.Size = new System.Drawing.Size(1519, 492);
             this.tabPage4.TabIndex = 3;
             this.tabPage4.Text = "E-shop files";
             this.tabPage4.UseVisualStyleBackColor = true;
@@ -2842,7 +2842,7 @@
             this.panel10.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel10.Location = new System.Drawing.Point(3, 31);
             this.panel10.Name = "panel10";
-            this.panel10.Size = new System.Drawing.Size(1511, 456);
+            this.panel10.Size = new System.Drawing.Size(1513, 458);
             this.panel10.TabIndex = 11;
             // 
             // OLVEshop
@@ -2887,7 +2887,7 @@
             this.OLVEshop.Location = new System.Drawing.Point(0, 0);
             this.OLVEshop.Name = "OLVEshop";
             this.OLVEshop.ShowGroups = false;
-            this.OLVEshop.Size = new System.Drawing.Size(1511, 456);
+            this.OLVEshop.Size = new System.Drawing.Size(1513, 458);
             this.OLVEshop.TabIndex = 3;
             this.OLVEshop.UseCellFormatEvents = true;
             this.OLVEshop.UseCompatibleStateImageBehavior = false;
@@ -3112,7 +3112,7 @@
             this.panel11.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel11.Location = new System.Drawing.Point(3, 3);
             this.panel11.Name = "panel11";
-            this.panel11.Size = new System.Drawing.Size(1511, 28);
+            this.panel11.Size = new System.Drawing.Size(1513, 28);
             this.panel11.TabIndex = 10;
             // 
             // panel13
@@ -3122,7 +3122,7 @@
             this.panel13.Controls.Add(this.label5);
             this.panel13.Controls.Add(this.cbxFilterEshop);
             this.panel13.Dock = System.Windows.Forms.DockStyle.Right;
-            this.panel13.Location = new System.Drawing.Point(798, 0);
+            this.panel13.Location = new System.Drawing.Point(800, 0);
             this.panel13.Name = "panel13";
             this.panel13.Size = new System.Drawing.Size(713, 28);
             this.panel13.TabIndex = 1;
@@ -3657,14 +3657,14 @@
             // bottonPanelToolStripMenuItem
             // 
             this.bottonPanelToolStripMenuItem.Name = "bottonPanelToolStripMenuItem";
-            this.bottonPanelToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.bottonPanelToolStripMenuItem.Size = new System.Drawing.Size(142, 22);
             this.bottonPanelToolStripMenuItem.Text = "&Botton panel";
             this.bottonPanelToolStripMenuItem.Click += new System.EventHandler(this.bottonPanelToolStripMenuItem_Click);
             // 
             // leftPanelToolStripMenuItem
             // 
             this.leftPanelToolStripMenuItem.Name = "leftPanelToolStripMenuItem";
-            this.leftPanelToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.leftPanelToolStripMenuItem.Size = new System.Drawing.Size(142, 22);
             this.leftPanelToolStripMenuItem.Text = "&Left panel";
             this.leftPanelToolStripMenuItem.Click += new System.EventHandler(this.leftPanelToolStripMenuItem_Click);
             // 

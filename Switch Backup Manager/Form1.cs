@@ -178,6 +178,50 @@ namespace Switch_Backup_Manager
                 }
         */
 
+        private void FrmMain_Load(object sender, EventArgs e)
+        {
+            if (Properties.Settings.Default.Maximised)
+            {
+                WindowState = FormWindowState.Maximized;
+                Location = Properties.Settings.Default.Location;
+                Size = Properties.Settings.Default.Size;
+            }
+            else if (Properties.Settings.Default.Minimised)
+            {
+                WindowState = FormWindowState.Minimized;
+                Location = Properties.Settings.Default.Location;
+                Size = Properties.Settings.Default.Size;
+            }
+            else
+            {
+                Location = Properties.Settings.Default.Location;
+                Size = Properties.Settings.Default.Size;
+            }
+            splitContainer1.SplitterDistance = Properties.Settings.Default.SplitterDistanceVert;
+            splitContainer2.SplitterDistance = Properties.Settings.Default.SplitterDistanceHor;
+
+            if (!Properties.Settings.Default.LeftPanelVisible)
+            {
+                splitContainer1.Panel1Collapsed = true;
+                leftPanelToolStripMenuItem.Checked = false;
+            }
+            else
+            {
+                splitContainer1.Panel1Collapsed = false;
+                leftPanelToolStripMenuItem.Checked = true;
+            }
+            if (!Properties.Settings.Default.BottomPanelVisible)
+            {
+                splitContainer2.Panel2Collapsed = true;
+                bottonPanelToolStripMenuItem.Checked = false;
+            }
+            else
+            {
+                splitContainer2.Panel2Collapsed = false;
+                bottonPanelToolStripMenuItem.Checked = true;
+            }
+        }
+
         private void SaveEnvironment()
         {
             File.WriteAllBytes("confXCI.bin", OLVLocalFiles.SaveState());
@@ -209,6 +253,9 @@ namespace Switch_Backup_Manager
 
             Properties.Settings.Default.SplitterDistanceVert = splitContainer1.SplitterDistance;
             Properties.Settings.Default.SplitterDistanceHor = splitContainer2.SplitterDistance;
+            Properties.Settings.Default.LeftPanelVisible = !splitContainer1.Panel1Collapsed;
+            Properties.Settings.Default.BottomPanelVisible = !splitContainer2.Panel2Collapsed;
+
             Properties.Settings.Default.Save();
         }
 
@@ -3495,29 +3542,6 @@ namespace Switch_Backup_Manager
             SaveEnvironment();
         }
 
-        private void FrmMain_Load(object sender, EventArgs e)
-        {
-            if (Properties.Settings.Default.Maximised)
-            {
-                WindowState = FormWindowState.Maximized;
-                Location = Properties.Settings.Default.Location;
-                Size = Properties.Settings.Default.Size;
-            }
-            else if (Properties.Settings.Default.Minimised)
-            {
-                WindowState = FormWindowState.Minimized;
-                Location = Properties.Settings.Default.Location;
-                Size = Properties.Settings.Default.Size;
-            }
-            else
-            {
-                Location = Properties.Settings.Default.Location;
-                Size = Properties.Settings.Default.Size;
-            }
-            splitContainer1.SplitterDistance = Properties.Settings.Default.SplitterDistanceVert;
-            splitContainer2.SplitterDistance = Properties.Settings.Default.SplitterDistanceHor;
-        }
-
         private void lnkInfo_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             lnkInfo.LinkVisited = true;
@@ -3671,6 +3695,18 @@ namespace Switch_Backup_Manager
             }
 
             SaveEditedTitle(source_list);
+        }
+
+        private void leftPanelToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            splitContainer1.Panel1Collapsed = !splitContainer1.Panel1Collapsed;
+            leftPanelToolStripMenuItem.Checked = !leftPanelToolStripMenuItem.Checked;
+        }
+
+        private void bottonPanelToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            splitContainer2.Panel2Collapsed = !splitContainer2.Panel2Collapsed;
+            bottonPanelToolStripMenuItem.Checked = !bottonPanelToolStripMenuItem.Checked;
         }
     }
 }

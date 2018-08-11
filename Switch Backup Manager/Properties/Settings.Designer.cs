@@ -94,5 +94,29 @@ namespace Switch_Backup_Manager.Properties {
                 this["SplitterDistanceHor"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool LeftPanelVisible {
+            get {
+                return ((bool)(this["LeftPanelVisible"]));
+            }
+            set {
+                this["LeftPanelVisible"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool BottomPanelVisible {
+            get {
+                return ((bool)(this["BottomPanelVisible"]));
+            }
+            set {
+                this["BottomPanelVisible"] = value;
+            }
+        }
     }
 }

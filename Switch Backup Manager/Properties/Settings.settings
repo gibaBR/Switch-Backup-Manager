@@ -20,5 +20,11 @@
     <Setting Name="SplitterDistanceHor" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">670</Value>
     </Setting>
+    <Setting Name="LeftPanelVisible" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="BottomPanelVisible" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

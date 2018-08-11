@@ -399,6 +399,9 @@
             this.updateEshopLocalDatabaseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.updateNswdbcomListToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.scrapExtendedInfoFromWebToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.viewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.bottonPanelToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.leftPanelToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panelEditTitle = new System.Windows.Forms.Panel();
             this.groupBox10 = new System.Windows.Forms.GroupBox();
             this.textBoxReleaseDate = new System.Windows.Forms.TextBox();
@@ -422,6 +425,7 @@
             this.textBoxGameTitle = new System.Windows.Forms.TextBox();
             this.panel14 = new System.Windows.Forms.Panel();
             this.panel15 = new System.Windows.Forms.Panel();
+            this.button1 = new System.Windows.Forms.Button();
             this.backgroundWorkerAddFilesFromDirectory = new System.ComponentModel.BackgroundWorker();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.backgroundWorkerAddFile = new System.ComponentModel.BackgroundWorker();
@@ -430,7 +434,6 @@
             this.backgroundWorkerScanNewFiles = new System.ComponentModel.BackgroundWorker();
             this.backgroundWorkerUpdateFiles = new System.ComponentModel.BackgroundWorker();
             this.backgroundWorkerScrapExtraInfo = new System.ComponentModel.BackgroundWorker();
-            this.button1 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -3565,7 +3568,8 @@
             // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fileToolStripMenuItem,
-            this.toolsToolStripMenuItem1});
+            this.toolsToolStripMenuItem1,
+            this.viewToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(1527, 24);
@@ -3640,6 +3644,29 @@
             this.scrapExtendedInfoFromWebToolStripMenuItem.Size = new System.Drawing.Size(232, 22);
             this.scrapExtendedInfoFromWebToolStripMenuItem.Text = "Scrap extended info from web";
             this.scrapExtendedInfoFromWebToolStripMenuItem.Click += new System.EventHandler(this.scrapExtendedInfoFromWebToolStripMenuItem_Click);
+            // 
+            // viewToolStripMenuItem
+            // 
+            this.viewToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.bottonPanelToolStripMenuItem,
+            this.leftPanelToolStripMenuItem});
+            this.viewToolStripMenuItem.Name = "viewToolStripMenuItem";
+            this.viewToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
+            this.viewToolStripMenuItem.Text = "&View";
+            // 
+            // bottonPanelToolStripMenuItem
+            // 
+            this.bottonPanelToolStripMenuItem.Name = "bottonPanelToolStripMenuItem";
+            this.bottonPanelToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.bottonPanelToolStripMenuItem.Text = "&Botton panel";
+            this.bottonPanelToolStripMenuItem.Click += new System.EventHandler(this.bottonPanelToolStripMenuItem_Click);
+            // 
+            // leftPanelToolStripMenuItem
+            // 
+            this.leftPanelToolStripMenuItem.Name = "leftPanelToolStripMenuItem";
+            this.leftPanelToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.leftPanelToolStripMenuItem.Text = "&Left panel";
+            this.leftPanelToolStripMenuItem.Click += new System.EventHandler(this.leftPanelToolStripMenuItem_Click);
             // 
             // panelEditTitle
             // 
@@ -3850,6 +3877,16 @@
             this.panel15.Size = new System.Drawing.Size(86, 34);
             this.panel15.TabIndex = 0;
             // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(6, 6);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(75, 23);
+            this.button1.TabIndex = 1;
+            this.button1.Text = "Save";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
             // backgroundWorkerAddFilesFromDirectory
             // 
             this.backgroundWorkerAddFilesFromDirectory.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorkerAddFiles_DoWork);
@@ -3887,16 +3924,6 @@
             // 
             this.backgroundWorkerScrapExtraInfo.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorkerScrapExtraInfo_DoWork);
             this.backgroundWorkerScrapExtraInfo.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backgroundWorkerScrapExtraInfo_RunWorkerCompleted);
-            // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(6, 6);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 1;
-            this.button1.Text = "Save";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // FrmMain
             // 
@@ -4400,6 +4427,9 @@
         private System.Windows.Forms.GroupBox groupBox10;
         private System.Windows.Forms.TextBox textBoxReleaseDate;
         private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.ToolStripMenuItem viewToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem bottonPanelToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem leftPanelToolStripMenuItem;
     }
 }
 

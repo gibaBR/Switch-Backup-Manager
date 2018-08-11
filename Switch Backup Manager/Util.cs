@@ -658,7 +658,7 @@ namespace Switch_Backup_Manager
                 
                 if (File.Exists(newFileName))
                 {
-                    Microsoft.VisualBasic.FileIO.FileSystem.MoveFile(originalFile, tmp_name, false);
+                    Microsoft.VisualBasic.FileIO.FileSystem.MoveFile(originalFile, tmp_name, true);
                     originalFile = tmp_name;
                 }
 

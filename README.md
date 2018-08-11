@@ -2,12 +2,12 @@
 Complete Switch Backups management tool
 
 ## Main Features
-* Manage your local and SD card Switch backups
-* See game info (just image for now, but more is comming)
+* Manage your local (XCI & NSP) and SD card Switch backups
+* See game info retrieved from web or edit them manually
 * Group and sort files list
 * Keep track of scene releases using nswdb.com database
 * Trim your files
-* Auto rename your files to match game name (other options in near future)
+* Auto rename your files using a user define pattern
 * Copy and move files between your local collection and SD card (either way)
 
 ## Requirements
@@ -16,21 +16,36 @@ Complete Switch Backups management tool
 
 ## Screenshots
 
-![main](https://i.imgur.com/SHlcuGp.png)
+![main](https://i.imgur.com/Nwbj0oj.png)
 
-![main](https://i.imgur.com/dH5t3Vi.png)
+![main](https://i.imgur.com/KZzojbS.png)
 
-![main](https://i.imgur.com/Ufhn64p.png)
+![main](https://i.imgur.com/1MDpIr9.png)
 
-![main](https://i.imgur.com/dHRvZ4J.png)
+![main](https://i.imgur.com/M4tmrN0.png)
 
-![main](https://i.imgur.com/3Qyat3W.png)
+![main](https://i.imgur.com/AtkY36y.png)
 
-![main](https://i.imgur.com/vENGuJn.png)
-
-![main](https://i.imgur.com/wABgTLS.png)
 
 ## Changelog
+
+* 1.1.1
+  - Now you can add NSP titles with the same TitleID. Thanks to @garoxas
+  - add support for multiple XCI revisions Thanks to @garoxas
+  - Game information like description, release date, nº o players, publisher and categories can now be scraped from web (optional, can be set on config screen)
+  - User can manually edit information of the games.
+  - Fixed #32 (Auto renaming problem)
+  - Add CDNSP Renaming pattern (Detects if its a base game, DLC our Update)
+
+* 1.1.0
+  - nstoolmod.exe is no more! Thanks @iriez!
+  - Lists position, sort order, size, Window Size and position, etc, are now saved when you exit the program.
+  - many bugs removed.
+
+* 1.0.9
+  - Now NSP files works fast! Using nstoolmod.exe (provided with this release). Thanks to StudentBlake!!
+  - Removed Fixed [DLC] [UPD] and [Version] from NSP Files (Issue #22). Added those options to renaming patterns in config screen. 
+  - Changed Scene ID format to NNNN. Change affects auto renaming feature (Issue #21).
 
 * 1.0.8
   - **Now you can configure folders to autoscan at startup** (FinnYoung's suggestion)

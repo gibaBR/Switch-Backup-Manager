@@ -658,7 +658,7 @@ namespace Switch_Backup_Manager
                 
                 if (File.Exists(newFileName))
                 {
-                    Microsoft.VisualBasic.FileIO.FileSystem.MoveFile(originalFile, tmp_name, false);
+                    Microsoft.VisualBasic.FileIO.FileSystem.MoveFile(originalFile, tmp_name, true);
                     originalFile = tmp_name;
                 }
 
@@ -668,7 +668,7 @@ namespace Switch_Backup_Manager
                         logger.Info("Old name: " + file.FileNameWithExt + ". New name: " + illegalInFileName.Replace(GetRenamingString(file, autoRenamingPattern), ""));
                         try
                         {
-                            Microsoft.VisualBasic.FileIO.FileSystem.MoveFile(originalFile, newFileName, false);
+                            Microsoft.VisualBasic.FileIO.FileSystem.MoveFile(originalFile, newFileName, true);
                             //System.IO.File.Move(file.FilePath, newFileName);
                         }
                         catch (Exception e)
@@ -681,7 +681,7 @@ namespace Switch_Backup_Manager
                         logger.Info("Old name: " + file.FileNameWithExt + ". New name: " + illegalInFileName.Replace(GetRenamingString(file, autoRenamingPattern), ""));
                         try
                         {
-                            Microsoft.VisualBasic.FileIO.FileSystem.MoveFile(originalFile, newFileName, false);
+                            Microsoft.VisualBasic.FileIO.FileSystem.MoveFile(originalFile, newFileName, true);
                             //System.IO.File.Move(file.FilePath, newFileName);
                         }
                         catch (Exception e)
@@ -701,7 +701,7 @@ namespace Switch_Backup_Manager
                             newFileName = Path.GetDirectoryName(file.FilePath) + "\\" + illegalInFileName.Replace(GetRenamingString(file, autoRenamingPattern), "").Replace(extension, "") + extension_;
                             try
                             {
-                                Microsoft.VisualBasic.FileIO.FileSystem.MoveFile(splited_file, newFileName, false);
+                                Microsoft.VisualBasic.FileIO.FileSystem.MoveFile(splited_file, newFileName, true);
                                 //System.IO.File.Move(splited_file, newFileName);
                             }
                             catch (Exception e)

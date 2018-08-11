@@ -15,6 +15,7 @@ using Microsoft.VisualBasic.FileIO;
 using System.Text.RegularExpressions;
 using System.Threading;
 using HtmlAgilityPack;
+using System.Collections;
 
 namespace Switch_Backup_Manager
 {
@@ -1940,7 +1941,7 @@ namespace Switch_Backup_Manager
                             if (NACP.NACP_Strings[i].Check != 0)
                             {
                                 string icon_filename = "tmp\\icon_" + Language[i].Replace(" ", "") + ".dat";
-                                string icon_titleID_filename = CACHE_FOLDER + "\\icon_" + data.TitleID + "_" + Language[i].Replace(" ", "") + ".bmp";
+                                string icon_titleID_filename = CACHE_FOLDER + "\\icon_" + data.TitleIDBaseGame + "_" + Language[i].Replace(" ", "") + ".bmp";
 
                                 if (File.Exists(icon_filename))
                                 {
@@ -2183,26 +2184,23 @@ namespace Switch_Backup_Manager
                         List<string> UpdateFiles = array6.Select(x => x.Name).ToList();
                         UpdateFiles.Sort();
 
-                        foreach (var firmware in Consts.UPDATE_FILES.Keys)
+                        foreach (KeyValuePair<string, List<string>> kv in Consts.UPDATE_FILES)
                         {
-                            if (UpdateFiles.Count == Consts.UPDATE_NUMBER_OF_FILES[firmware])
+                            if (UpdateFiles.Count == Consts.UPDATE_NUMBER_OF_FILES[kv.Key] && UpdateFiles.SequenceEqual(kv.Value))
                             {
-                                if (UpdateFiles.SequenceEqual(Consts.UPDATE_FILES[firmware]))
-                                {
-                                    result.Version = firmware;
-                                    break;
-                                }
+                                result.Version = kv.Key;
+                                break;
                             }
                         }
 
                         //Last resort, guess by Number of files in Update Partition
                         if (String.IsNullOrEmpty(result.Version))
                         {
-                            foreach (var firmware in Consts.UPDATE_NUMBER_OF_FILES.Keys)
+                            foreach (KeyValuePair<string, int> kv in Consts.UPDATE_NUMBER_OF_FILES)
                             {
-                                if (UpdateFiles.Count == Consts.UPDATE_NUMBER_OF_FILES[firmware])
+                                if (UpdateFiles.Count == kv.Value)
                                 {
-                                    result.Version = firmware;
+                                    result.Version = kv.Key;
                                     break;
                                 }
                             }
@@ -2314,13 +2312,13 @@ namespace Switch_Backup_Manager
                                 if (NACP.NACP_Strings[i].Check != 0)
                                 {
                                     string icon_filename = "data\\icon_" + Language[i].Replace(" ", "") + ".dat";
-                                    string icon_titleID_filename = CACHE_FOLDER + "\\icon_" + result.TitleID + "_" + Language[i].Replace(" ", "") + ".bmp";
+                                    string icon_titleID_filename = CACHE_FOLDER + "\\icon_" + result.TitleIDBaseGame + "_" + Language[i].Replace(" ", "") + ".bmp";
 
                                     if (i == 13) //Taiwanese titles are localized as Traditional Chinese
                                     {
                                         if (!File.Exists(icon_filename)) { //If no taiwanese icon is found... Use Traditional Chinese
                                             icon_filename = "data\\icon_" + Language[14].Replace(" ", "") + ".dat";
-                                            icon_titleID_filename = CACHE_FOLDER + "\\icon_" + result.TitleID + "_" + Language[14].Replace(" ", "") + ".bmp";
+                                            icon_titleID_filename = CACHE_FOLDER + "\\icon_" + result.TitleIDBaseGame + "_" + Language[14].Replace(" ", "") + ".bmp";
                                         }
                                     }
 

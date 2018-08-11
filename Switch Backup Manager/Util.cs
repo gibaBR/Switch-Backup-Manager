@@ -673,7 +673,7 @@ namespace Switch_Backup_Manager
                         }
                         catch (Exception e)
                         {
-                            logger.Warning("Failed to rename file.\n" + e.StackTrace);
+                            logger.Error("Failed to rename file.\n" + e.StackTrace);
                             return false;
                         }
                         break;

@@ -658,7 +658,7 @@ namespace Switch_Backup_Manager
                 
                 if (File.Exists(newFileName))
                 {
-                    Microsoft.VisualBasic.FileIO.FileSystem.MoveFile(originalFile, tmp_name, true);
+                    Microsoft.VisualBasic.FileIO.FileSystem.MoveFile(originalFile, tmp_name, false);
                     originalFile = tmp_name;
                 }
 
@@ -668,12 +668,12 @@ namespace Switch_Backup_Manager
                         logger.Info("Old name: " + file.FileNameWithExt + ". New name: " + illegalInFileName.Replace(GetRenamingString(file, autoRenamingPattern), ""));
                         try
                         {
-                            Microsoft.VisualBasic.FileIO.FileSystem.MoveFile(originalFile, newFileName, true);
+                            Microsoft.VisualBasic.FileIO.FileSystem.MoveFile(originalFile, newFileName, false);
                             //System.IO.File.Move(file.FilePath, newFileName);
                         }
                         catch (Exception e)
                         {
-                            logger.Error("Failed to rename file.\n" + e.StackTrace);
+                            logger.Warning("Failed to rename file.\n" + e.StackTrace);
                             return false;
                         }
                         break;
@@ -681,7 +681,7 @@ namespace Switch_Backup_Manager
                         logger.Info("Old name: " + file.FileNameWithExt + ". New name: " + illegalInFileName.Replace(GetRenamingString(file, autoRenamingPattern), ""));
                         try
                         {
-                            Microsoft.VisualBasic.FileIO.FileSystem.MoveFile(originalFile, newFileName, true);
+                            Microsoft.VisualBasic.FileIO.FileSystem.MoveFile(originalFile, newFileName, false);
                             //System.IO.File.Move(file.FilePath, newFileName);
                         }
                         catch (Exception e)
@@ -701,7 +701,7 @@ namespace Switch_Backup_Manager
                             newFileName = Path.GetDirectoryName(file.FilePath) + "\\" + illegalInFileName.Replace(GetRenamingString(file, autoRenamingPattern), "").Replace(extension, "") + extension_;
                             try
                             {
-                                Microsoft.VisualBasic.FileIO.FileSystem.MoveFile(splited_file, newFileName, true);
+                                Microsoft.VisualBasic.FileIO.FileSystem.MoveFile(splited_file, newFileName, false);
                                 //System.IO.File.Move(splited_file, newFileName);
                             }
                             catch (Exception e)

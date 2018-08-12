@@ -3658,7 +3658,7 @@
             // 
             this.bottonPanelToolStripMenuItem.Name = "bottonPanelToolStripMenuItem";
             this.bottonPanelToolStripMenuItem.Size = new System.Drawing.Size(142, 22);
-            this.bottonPanelToolStripMenuItem.Text = "&Botton panel";
+            this.bottonPanelToolStripMenuItem.Text = "&Bottom panel";
             this.bottonPanelToolStripMenuItem.Click += new System.EventHandler(this.bottonPanelToolStripMenuItem_Click);
             // 
             // leftPanelToolStripMenuItem

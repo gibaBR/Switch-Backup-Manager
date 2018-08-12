@@ -274,10 +274,7 @@ namespace Switch_Backup_Manager
 
                 try
                 {
-                    description = System.Net.WebUtility.HtmlDecode(description);
-                    if (!String.IsNullOrEmpty(description))
-                        description = Regex.Replace(Regex.Replace(description.Trim(), "(\n +){2,}", "\n\n"), "\n +", " ");
-                    data.Description = description;
+                    data.Description = System.Net.WebUtility.HtmlDecode(description);
                 } catch { }
                 
                 try
@@ -2589,10 +2586,7 @@ namespace Switch_Backup_Manager
                 }
                 if (xe.Element("Description") != null)
                 {
-                    string description = xe.Element("Description").Value;
-                    if (!String.IsNullOrEmpty(description))
-                        description = Regex.Replace(Regex.Replace(description.Trim(), "(\n +){2,}", "\n\n"), "\n +", " ");
-                    result.Description = description;
+                    result.Description = xe.Element("Description").Value;
                 }
                 if (xe.Element("Publisher") != null)
                 {

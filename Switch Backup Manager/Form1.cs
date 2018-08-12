@@ -276,21 +276,6 @@ namespace Switch_Backup_Manager
             }
         }
 
-        private void ScrapExtraInfoFromWeb()
-        {
-            if (!backgroundWorkerScrapExtraInfo.IsBusy)
-            {
-                toolStripStatusFilesOperation.Text = Properties.Resources.EN_FileOperationsScrapFromWeb;
-                toolStripStatusFilesOperation.Visible = true;
-                toolStripProgressAddingFiles.Visible = true;
-                toolStripStatusLabelGame.Text = "";
-                toolStripStatusLabelGame.Visible = true;
-                toolStripProgressAddingFiles.Value = 0;
-                timer1.Enabled = true;
-                backgroundWorkerScrapExtraInfo.RunWorkerAsync();
-            }
-        }
-
         private void SetupOLVs()
         {
             OLVLocalFiles.OwnerDraw = true;
@@ -3564,15 +3549,19 @@ namespace Switch_Backup_Manager
             System.Diagnostics.Process.Start(e.Link.LinkData as string);
         }
 
-        private void scrapExtendedInfoFromWebToolStripMenuItem_Click(object sender, EventArgs e)
+        private void ScrapExtraInfoFromWeb(string source)
         {
-            /*
-            FileData test = new FileData();
-            test.TitleID = "0100EE80098E6000";
-            Util.GetExtendedInfo(test);
-            string a = test.TitleID;
-            */
-            ScrapExtraInfoFromWeb();
+            switch (source)
+            {
+                case "local":
+                    Util.logger.Info("Start scraping info from web for XCI files.");
+                    UpdateGamesInfoFromWeb("local_all");
+                    break;
+                case "eshop":
+                    Util.logger.Info("Start scraping info from web for NSP files.");
+                    UpdateGamesInfoFromWeb("eshop_all");
+                    break;
+            }
         }
 
         /// <summary>
@@ -3588,11 +3577,17 @@ namespace Switch_Backup_Manager
                 case "local":
                     list = LocalFilesListSelectedItems;
                     break;
+                case "local_all":
+                    list = LocalFilesList;
+                    break;
                 case "sdcard":
                     list = SDCardListSelectedItems;
                     break;
                 case "eshop":
                     list = LocalNSPFilesListSelectedItems;
+                    break;
+                case "eshop_all":
+                    list = LocalNSPFilesList;
                     break;
                 case "scene":
                     list = SceneReleasesSelectedItems;
@@ -3611,7 +3606,13 @@ namespace Switch_Backup_Manager
                             case "local":
                                 menuLocalFiles.Enabled = false;
                                 break;
+                            case "local_all":
+                                menuLocalFiles.Enabled = false;
+                                break;
                             case "eshop":
+                                menuEShop.Enabled = false;
+                                break;
+                            case "eshop_all":
                                 menuEShop.Enabled = false;
                                 break;
                         }
@@ -3643,7 +3644,6 @@ namespace Switch_Backup_Manager
             Dictionary<Tuple<string, string>, FileData> filesList = (Dictionary<Tuple<string, string>, FileData>)parameters[0];
             string source = (string)parameters[1];
             
-
             Util.GetExtendedInfo(filesList, source);
             e.Result = source;
         }
@@ -3659,12 +3659,12 @@ namespace Switch_Backup_Manager
 
             string source = e.Result as string;
 
-            if (source == "local")
+            if (source == "local" || source == "local_all")
             {
                 LocalFilesListSelectedItems.Clear();
                 UpdateLocalGamesList();
                 menuLocalFiles.Enabled = true;
-            } else if (source == "shop")
+            } else if (source == "eshop" || source == "eshop_all")
             {
                 LocalNSPFilesListSelectedItems.Clear();
                 UpdateLocalNSPGamesList();
@@ -3711,6 +3711,29 @@ namespace Switch_Backup_Manager
             }
 
             SaveEditedTitle(source_list);
+        }
+
+        private void scrapExtendedInfoFromWebToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            string source_list = "";
+
+            switch (tabControl1.SelectedIndex)
+            {
+                case 0: //Files
+                    source_list = "local";
+                    break;
+                case 1: //SD Card
+                    source_list = "sdcard";
+                    break;
+                case 2: //Scene
+                    source_list = "scene";
+                    break;
+                case 3: //Eshop
+                    source_list = "eshop";
+                    break;
+            }
+
+            ScrapExtraInfoFromWeb(source_list);
         }
 
         private void leftPanelToolStripMenuItem_Click(object sender, EventArgs e)

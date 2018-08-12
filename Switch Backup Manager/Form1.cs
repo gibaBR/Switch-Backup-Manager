@@ -13,6 +13,7 @@ using System.Xml.Linq;
 using BrightIdeasSoftware;
 using HtmlAgilityPack;
 using Microsoft.WindowsAPICodePack.Dialogs;
+using System.Text.RegularExpressions;
 
 namespace Switch_Backup_Manager
 {
@@ -673,7 +674,8 @@ namespace Switch_Backup_Manager
                         categories += cat + "\n";
                     }
 
-                    richTextBoxGameDescription.Text = (data2.Description.Trim() != "") ? data2.Description : Properties.Resources.EN_Not_Available;
+                    richTextBoxGameDescription.Text = (data2.Description.Trim() != "") ?
+                        Regex.Replace(Regex.Replace(data2.Description.Trim(), "(\n +){2,}", "\n\n"), "\n +", " ") : Properties.Resources.EN_Not_Available;
                     lblNumberOfPlayers.Text = (data2.NumberOfPlayers.Trim() != "") ? data2.NumberOfPlayers : Properties.Resources.EN_Not_Available;
                     lblReleaseDate.Text = (data2.ReleaseDate.Trim() != "") ? data2.ReleaseDate : Properties.Resources.EN_Not_Available;
                     lblPublisher.Text = (data2.Publisher.Trim() != "") ? data2.Publisher : Properties.Resources.EN_Not_Available;
@@ -1014,7 +1016,8 @@ namespace Switch_Backup_Manager
                 textBoxFirmware.Text = this.TitleToEdit.Firmware;
                 textBoxReleaseDate.Text = this.TitleToEdit.ReleaseDate;
                 textBoxPlayers.Text = this.TitleToEdit.NumberOfPlayers;
-                richTextBoxDescription.Text = this.TitleToEdit.Description;
+                richTextBoxDescription.Text = (this.TitleToEdit.Description.Trim() != "") ?
+                    Regex.Replace(Regex.Replace(this.TitleToEdit.Description.Trim(), "(\n +){2,}", "\n\n"), "\n +", " ") : "";
             }
         }
 

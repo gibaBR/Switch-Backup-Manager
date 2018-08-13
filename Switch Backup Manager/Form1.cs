@@ -1031,6 +1031,9 @@ namespace Switch_Backup_Manager
         {
             OLVLocalFiles.SelectedItems.Clear();
             OLVSceneList.SelectedItems.Clear();
+            ClearGameInformation();
+            toolStripStatusLabel1.Text = "0 Selected (0MB)";
+
             panelEditTitle.Visible = false;
 
             switch (tabControl1.SelectedIndex)

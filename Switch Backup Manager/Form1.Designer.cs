@@ -320,6 +320,7 @@
             this.olvColumnReleaseDateEshop = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnNumberOfPlayersEshop = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnCategoriesEShop = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.olvColumnContentTypeEShop = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.contextMenuEShopList = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.toolStripMenuItemEShopShowInExplorer = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItemEShopUpdateInfo = new System.Windows.Forms.ToolStripMenuItem();
@@ -2865,6 +2866,7 @@
             this.OLVEshop.AllColumns.Add(this.olvColumnReleaseDateEshop);
             this.OLVEshop.AllColumns.Add(this.olvColumnNumberOfPlayersEshop);
             this.OLVEshop.AllColumns.Add(this.olvColumnCategoriesEShop);
+            this.OLVEshop.AllColumns.Add(this.olvColumnContentTypeEShop);
             this.OLVEshop.CellEditUseWholeCell = false;
             this.OLVEshop.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.olvColumnTitleIDEShop,
@@ -2993,6 +2995,13 @@
             // 
             this.olvColumnCategoriesEShop.AspectName = "Categories ";
             this.olvColumnCategoriesEShop.Text = "Category";
+            // 
+            // olvColumnContentTypeEShop
+            // 
+            this.olvColumnContentTypeEShop.AspectName = "ContentType";
+            this.olvColumnContentTypeEShop.DisplayIndex = 15;
+            this.olvColumnContentTypeEShop.IsVisible = false;
+            this.olvColumnContentTypeEShop.Text = "Content Type";
             // 
             // contextMenuEShopList
             // 
@@ -3144,6 +3153,7 @@
             this.cbBaseGame.TabIndex = 20;
             this.cbBaseGame.Text = "Base game";
             this.cbBaseGame.UseVisualStyleBackColor = true;
+            this.cbBaseGame.CheckedChanged += new System.EventHandler(this.cbBaseGame_CheckedChanged);
             // 
             // cbUpdates
             // 
@@ -3156,6 +3166,7 @@
             this.cbUpdates.TabIndex = 19;
             this.cbUpdates.Text = "Update";
             this.cbUpdates.UseVisualStyleBackColor = true;
+            this.cbUpdates.CheckedChanged += new System.EventHandler(this.cbUpdates_CheckedChanged);
             // 
             // cbDLC
             // 
@@ -3168,6 +3179,7 @@
             this.cbDLC.TabIndex = 18;
             this.cbDLC.Text = "DLC";
             this.cbDLC.UseVisualStyleBackColor = true;
+            this.cbDLC.CheckedChanged += new System.EventHandler(this.cbDLC_CheckedChanged);
             // 
             // btnClearFilterEShop
             // 
@@ -4475,6 +4487,7 @@
         private System.Windows.Forms.CheckBox cbBaseGame;
         private System.Windows.Forms.CheckBox cbUpdates;
         private System.Windows.Forms.CheckBox cbDLC;
+        private BrightIdeasSoftware.OLVColumn olvColumnContentTypeEShop;
     }
 }
 

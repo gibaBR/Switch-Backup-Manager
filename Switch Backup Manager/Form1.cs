@@ -113,7 +113,8 @@ namespace Switch_Backup_Manager
 
             foreach (ColumnHeader column in OLVEshop.Columns)
             {
-                cbxFilterEshop.Items.Add(column.Text);
+                if (column.Text != "Content Type")
+                    cbxFilterEshop.Items.Add(column.Text);
             }
             cbxFilterEshop.SelectedIndex = cbxFilterEshop.Items.IndexOf("Game title");
             OLVEshop.UseFiltering = true;
@@ -283,6 +284,7 @@ namespace Switch_Backup_Manager
             OLVSceneList.OwnerDraw = true;
             noneToolStripMenuItem1.Checked = true;
 
+            olvColumnContentTypeEShop.IsVisible = false; //Does not work! WTF!?
             OLVEshop.Sort(olvColumnGameNameLocal, SortOrder.Ascending);
 
             OLVLocalFiles.SetObjects(LocalFilesList.Values);
@@ -296,6 +298,24 @@ namespace Switch_Backup_Manager
             olvColumnROMSizeSD.AspectToStringConverter = delegate (object x) { return Util.BytesToGB((long)x); };
             olvColumnUsedSpaceSD.AspectToStringConverter = delegate (object x) { return Util.BytesToGB((long)x); };
             olvColumnROMSizeEshop.AspectToStringConverter = delegate (object x) { return Util.BytesToGB((long)x); };
+
+            olvColumnContentTypeEShop.AspectToStringConverter = delegate (object x)
+            {
+                string content = (string)x;
+                switch (content)
+                {
+                    case "AddOnContent":
+                        content = "DLC";
+                        break;
+                    case "Patch":
+                        content = "Update";
+                        break;
+                    case "Application":
+                        content = "Base Game";
+                        break;
+                }
+                return content;
+            };
 
             olvColumnLanguagesLocal.AspectToStringConverter = delegate (object x) {
                 string result = "";
@@ -3763,6 +3783,45 @@ namespace Switch_Backup_Manager
         {
             splitContainer2.Panel2Collapsed = !splitContainer2.Panel2Collapsed;
             bottonPanelToolStripMenuItem.Checked = !bottonPanelToolStripMenuItem.Checked;
+        }
+
+        private void FilterEshopByContentType()
+        {
+            string[] filter = { "ABCBDBABD^", "ABCBDBABD^", "ABCBDBABD^" };
+            if (cbBaseGame.Checked)
+            {
+                filter[0] = "Base Game";
+            }
+            if (cbDLC.Checked)
+            {
+                filter[1] = "DLC";
+            }
+            if (cbUpdates.Checked)
+            {
+                filter[2] = "Update";
+            }
+
+            TextMatchFilter filterText = TextMatchFilter.Contains(OLVEshop, filter);
+
+            filterText.Columns = new[] { olvColumnContentTypeEShop };
+
+            OLVEshop.ModelFilter = new CompositeAllFilter(new List<IModelFilter> { filterText });
+            OLVEshop.DefaultRenderer = new HighlightTextRenderer(filterText);
+            SumarizeLocalGamesList("eshop");
+        }
+        private void cbBaseGame_CheckedChanged(object sender, EventArgs e)
+        {
+            FilterEshopByContentType();
+        }
+
+        private void cbUpdates_CheckedChanged(object sender, EventArgs e)
+        {
+            FilterEshopByContentType();
+        }
+
+        private void cbDLC_CheckedChanged(object sender, EventArgs e)
+        {
+            FilterEshopByContentType();
         }
     }
 }

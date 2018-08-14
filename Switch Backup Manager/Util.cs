@@ -988,6 +988,19 @@ namespace Switch_Backup_Manager
         /// <returns></returns>
         public static Dictionary<Tuple<string, string>, FileData> LoadXMLToFileDataDictionary(XDocument xml)
         {
+            return LoadXMLToFileDataDictionary(xml ,true, true, true);
+        }
+
+        /// <summary>
+        /// Creates a Dictionary <string, FileData> from a given XDocument. Works for local files xml </string>
+        /// </summary>
+        /// <param name="xml">XDocument object</param>
+        /// <param name="showBaseGames">bool: Include Base games on the list</param>
+        /// <param name="showDLC">bool: Include DLC files on the list</param>
+        /// <param name="showUpdate">bool: Include Update files on the list</param>
+        /// <returns></returns>
+        public static Dictionary<Tuple<string, string>, FileData> LoadXMLToFileDataDictionary(XDocument xml, bool showBaseGames, bool showDLC, bool showUpdate)
+        {
             Dictionary<Tuple<string, string>, FileData> result = new Dictionary<Tuple<string, string>, FileData>();
             foreach (XElement xe in xml.Descendants("Game"))
             {

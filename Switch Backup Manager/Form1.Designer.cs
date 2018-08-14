@@ -337,6 +337,9 @@
             this.updateGameInfoFromWebToolStripMenuItemEshop = new System.Windows.Forms.ToolStripMenuItem();
             this.panel11 = new System.Windows.Forms.Panel();
             this.panel13 = new System.Windows.Forms.Panel();
+            this.cbBaseGame = new System.Windows.Forms.CheckBox();
+            this.cbUpdates = new System.Windows.Forms.CheckBox();
+            this.cbDLC = new System.Windows.Forms.CheckBox();
             this.btnClearFilterEShop = new System.Windows.Forms.Button();
             this.textBoxFilterEShop = new System.Windows.Forms.TextBox();
             this.label5 = new System.Windows.Forms.Label();
@@ -2831,7 +2834,7 @@
             this.tabPage4.Location = new System.Drawing.Point(4, 22);
             this.tabPage4.Name = "tabPage4";
             this.tabPage4.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage4.Size = new System.Drawing.Size(1517, 490);
+            this.tabPage4.Size = new System.Drawing.Size(1519, 492);
             this.tabPage4.TabIndex = 3;
             this.tabPage4.Text = "E-shop files";
             this.tabPage4.UseVisualStyleBackColor = true;
@@ -2842,7 +2845,7 @@
             this.panel10.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel10.Location = new System.Drawing.Point(3, 31);
             this.panel10.Name = "panel10";
-            this.panel10.Size = new System.Drawing.Size(1511, 456);
+            this.panel10.Size = new System.Drawing.Size(1513, 458);
             this.panel10.TabIndex = 11;
             // 
             // OLVEshop
@@ -2887,7 +2890,7 @@
             this.OLVEshop.Location = new System.Drawing.Point(0, 0);
             this.OLVEshop.Name = "OLVEshop";
             this.OLVEshop.ShowGroups = false;
-            this.OLVEshop.Size = new System.Drawing.Size(1511, 456);
+            this.OLVEshop.Size = new System.Drawing.Size(1513, 458);
             this.OLVEshop.TabIndex = 3;
             this.OLVEshop.UseCellFormatEvents = true;
             this.OLVEshop.UseCompatibleStateImageBehavior = false;
@@ -3112,20 +3115,59 @@
             this.panel11.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel11.Location = new System.Drawing.Point(3, 3);
             this.panel11.Name = "panel11";
-            this.panel11.Size = new System.Drawing.Size(1511, 28);
+            this.panel11.Size = new System.Drawing.Size(1513, 28);
             this.panel11.TabIndex = 10;
             // 
             // panel13
             // 
+            this.panel13.Controls.Add(this.cbBaseGame);
+            this.panel13.Controls.Add(this.cbUpdates);
+            this.panel13.Controls.Add(this.cbDLC);
             this.panel13.Controls.Add(this.btnClearFilterEShop);
             this.panel13.Controls.Add(this.textBoxFilterEShop);
             this.panel13.Controls.Add(this.label5);
             this.panel13.Controls.Add(this.cbxFilterEshop);
             this.panel13.Dock = System.Windows.Forms.DockStyle.Right;
-            this.panel13.Location = new System.Drawing.Point(798, 0);
+            this.panel13.Location = new System.Drawing.Point(800, 0);
             this.panel13.Name = "panel13";
             this.panel13.Size = new System.Drawing.Size(713, 28);
             this.panel13.TabIndex = 1;
+            // 
+            // cbBaseGame
+            // 
+            this.cbBaseGame.AutoSize = true;
+            this.cbBaseGame.Checked = true;
+            this.cbBaseGame.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.cbBaseGame.Location = new System.Drawing.Point(126, 5);
+            this.cbBaseGame.Name = "cbBaseGame";
+            this.cbBaseGame.Size = new System.Drawing.Size(79, 17);
+            this.cbBaseGame.TabIndex = 20;
+            this.cbBaseGame.Text = "Base game";
+            this.cbBaseGame.UseVisualStyleBackColor = true;
+            // 
+            // cbUpdates
+            // 
+            this.cbUpdates.AutoSize = true;
+            this.cbUpdates.Checked = true;
+            this.cbUpdates.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.cbUpdates.Location = new System.Drawing.Point(58, 5);
+            this.cbUpdates.Name = "cbUpdates";
+            this.cbUpdates.Size = new System.Drawing.Size(61, 17);
+            this.cbUpdates.TabIndex = 19;
+            this.cbUpdates.Text = "Update";
+            this.cbUpdates.UseVisualStyleBackColor = true;
+            // 
+            // cbDLC
+            // 
+            this.cbDLC.AutoSize = true;
+            this.cbDLC.Checked = true;
+            this.cbDLC.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.cbDLC.Location = new System.Drawing.Point(4, 5);
+            this.cbDLC.Name = "cbDLC";
+            this.cbDLC.Size = new System.Drawing.Size(47, 17);
+            this.cbDLC.TabIndex = 18;
+            this.cbDLC.Text = "DLC";
+            this.cbDLC.UseVisualStyleBackColor = true;
             // 
             // btnClearFilterEShop
             // 
@@ -4430,6 +4472,9 @@
         private System.Windows.Forms.ToolStripMenuItem viewToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem bottonPanelToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem leftPanelToolStripMenuItem;
+        private System.Windows.Forms.CheckBox cbBaseGame;
+        private System.Windows.Forms.CheckBox cbUpdates;
+        private System.Windows.Forms.CheckBox cbDLC;
     }
 }
 

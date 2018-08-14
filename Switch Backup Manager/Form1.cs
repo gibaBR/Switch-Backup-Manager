@@ -558,34 +558,30 @@ namespace Switch_Backup_Manager
             switch (list)
             {
                 case "local":
-                    foreach (KeyValuePair<Tuple<string, string>, FileData> entry in LocalFilesList)
+                    foreach (ListViewItem item in OLVLocalFiles.Items)
                     {
-                        FileData data = entry.Value;
-                        size += Convert.ToInt64(data.UsedSpaceBytes);
+                        size += Convert.ToInt64(((FileData)((OLVListItem)item).RowObject).ROMSizeBytes);
                         count++;
                     }
                     break;
                 case ("sdcard"):
-                    foreach (KeyValuePair<Tuple<string, string>, FileData> entry in SDCardList)
+                    foreach (ListViewItem item in OLV_SDCard.Items)
                     {
-                        FileData data = entry.Value;
-                        size += Convert.ToInt64(data.ROMSizeBytes);
+                        size += Convert.ToInt64(((FileData)((OLVListItem)item).RowObject).ROMSizeBytes);
                         count++;
                     }
                     break;
                 case ("scene"):
-                    foreach (KeyValuePair<Tuple<string, string>, FileData> entry in SceneReleasesList)
+                    foreach (ListViewItem item in OLVSceneList.Items)
                     {
-                        FileData data = entry.Value;
-                        size += Convert.ToInt64(data.ROMSizeBytes);
+                        size += Convert.ToInt64(((FileData)((OLVListItem)item).RowObject).ROMSizeBytes);
                         count++;
                     }
                     break;
                 case ("eshop"):
-                    foreach (KeyValuePair<Tuple<string, string>, FileData> entry in LocalNSPFilesList)
+                    foreach (ListViewItem item in OLVEshop.Items)
                     {
-                        FileData data = entry.Value;
-                        size += Convert.ToInt64(data.ROMSizeBytes);
+                        size += Convert.ToInt64(((FileData)((OLVListItem)item).RowObject).ROMSizeBytes);
                         count++;
                     }
                     break;
@@ -2773,6 +2769,10 @@ namespace Switch_Backup_Manager
 
         private void textBoxFilterLocal_TextChanged(object sender, EventArgs e)
         {
+            OLVLocalFiles.SelectedItems.Clear();
+            ClearGameInformation();
+            toolStripStatusLabel1.Text = "0 Selected (0MB)";
+
             TextMatchFilter filterText = TextMatchFilter.Contains(OLVLocalFiles, textBoxFilterLocal.Text);
 
             switch (cbxFilterLocal.Text)
@@ -2832,6 +2832,7 @@ namespace Switch_Backup_Manager
             
             OLVLocalFiles.ModelFilter = new CompositeAllFilter(new List<IModelFilter> { filterText });
             OLVLocalFiles.DefaultRenderer = new HighlightTextRenderer(filterText);
+            SumarizeLocalGamesList("local");
         }
 
         private void cbxFilterLocal_SelectedIndexChanged(object sender, EventArgs e)
@@ -2846,6 +2847,10 @@ namespace Switch_Backup_Manager
 
         private void textBoxFilterSD_TextChanged(object sender, EventArgs e)
         {
+            OLV_SDCard.SelectedItems.Clear();
+            ClearGameInformation();
+            toolStripStatusLabel1.Text = "0 Selected (0MB)";
+
             TextMatchFilter filterText = TextMatchFilter.Contains(OLV_SDCard, textBoxFilterSD.Text);
 
             switch (cbxFilterSD.Text)
@@ -2893,7 +2898,7 @@ namespace Switch_Backup_Manager
 
             OLV_SDCard.ModelFilter = new CompositeAllFilter(new List<IModelFilter> { filterText });
             OLV_SDCard.DefaultRenderer = new HighlightTextRenderer(filterText);
-            //            SumarizeLocalGamesList("local");
+            SumarizeLocalGamesList("sdcard");
         }
 
         private void btnClearFilterSD_Click(object sender, EventArgs e)
@@ -2908,6 +2913,10 @@ namespace Switch_Backup_Manager
 
         private void textBoxFilterScene_TextChanged(object sender, EventArgs e)
         {
+            OLVSceneList.SelectedItems.Clear();
+            ClearGameInformation();
+            toolStripStatusLabel1.Text = "0 Selected (0MB)";
+
             TextMatchFilter filterText = TextMatchFilter.Contains(OLVSceneList, textBoxFilterScene.Text);
 
             switch (cbxFilterScene.Text)
@@ -2958,7 +2967,7 @@ namespace Switch_Backup_Manager
 
             OLVSceneList.ModelFilter = new CompositeAllFilter(new List<IModelFilter> { filterText });
             OLVSceneList.DefaultRenderer = new HighlightTextRenderer(filterText);
-            //            SumarizeLocalGamesList("local");
+            SumarizeLocalGamesList("scene");
         }
 
         private void filesToolStripMenuItem1_Click(object sender, EventArgs e)
@@ -3379,6 +3388,10 @@ namespace Switch_Backup_Manager
 
         private void textBoxFilterEShop_TextChanged(object sender, EventArgs e)
         {
+            OLVEshop.SelectedItems.Clear();
+            ClearGameInformation();
+            toolStripStatusLabel1.Text = "0 Selected (0MB)";
+
             TextMatchFilter filterText = TextMatchFilter.Contains(OLVEshop, textBoxFilterEShop.Text);
 
             switch (cbxFilterEshop.Text)
@@ -3429,6 +3442,7 @@ namespace Switch_Backup_Manager
 
             OLVEshop.ModelFilter = new CompositeAllFilter(new List<IModelFilter> { filterText });
             OLVEshop.DefaultRenderer = new HighlightTextRenderer(filterText);
+            SumarizeLocalGamesList("eshop");
         }
 
         private void btnClearFilterScene_Click(object sender, EventArgs e)

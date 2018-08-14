@@ -38,7 +38,7 @@ namespace Switch_Backup_Manager
             gameExample.Firmware = "3.0.1";
             gameExample.Languages_resumed = "en,fr,de,it,es,nl,ru,ja";
             gameExample.IdScene = 38;
-            gameExample.ContentType = "Application";
+            gameExample.ContentType = "Patch";
             gameExample.Version = "0";
 
             cbxTags.Items.Clear();
@@ -59,10 +59,12 @@ namespace Switch_Backup_Manager
             Util.ScrapNSPOnSDCard = this.cbScrapNSPOnSD.Checked;
             Util.ScrapExtraInfoFromWeb = this.cbScrapExtraInfoFromWeb.Checked;
             Util.ScrapInstalledEshopSDCard = this.cbScrapLayerFSOnSD.Checked;
+            Util.AutoRemoveMissingFiles = this.cbAutoRemoveMissingFiles.Checked;
             Util.ini.IniWriteValue("SD", "scrapXCI", cbScrapXCIOnSD.Checked ? "true" : "false");
             Util.ini.IniWriteValue("SD", "scrapNSP", cbScrapNSPOnSD.Checked ? "true" : "false");
             Util.ini.IniWriteValue("SD", "scrapInstalledNSP", cbScrapLayerFSOnSD.Checked ? "true" : "false");
             Util.ini.IniWriteValue("Config", "scrapExtraInfoFromWeb", cbScrapExtraInfoFromWeb.Checked ? "true" : "false");
+            Util.ini.IniWriteValue("Config", "autoRemoveMissingFiles", cbAutoRemoveMissingFiles.Checked ? "true" : "false");
 
             Util.AutoUpdateNSDBOnStartup = this.cbAutoUpdateScene.Checked;
             Util.ini.IniWriteValue("Config", "autoUpdateNSWDB", cbAutoUpdateScene.Checked ? "true" : "false");
@@ -117,6 +119,7 @@ namespace Switch_Backup_Manager
             this.cbScrapNSPOnSD.Checked = Util.ScrapNSPOnSDCard;
             this.cbScrapXCIOnSD.Checked = Util.ScrapXCIOnSDCard;
             this.cbScrapExtraInfoFromWeb.Checked = Util.ScrapExtraInfoFromWeb;
+            this.cbAutoRemoveMissingFiles.Checked = Util.AutoRemoveMissingFiles;
 
             for (int i = 1; i <= 5; i++ )
             {

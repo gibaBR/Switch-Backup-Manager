@@ -49,6 +49,7 @@
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.rbRenamingCDNSP = new System.Windows.Forms.RadioButton();
             this.rbRenamingGameNameRegionFirmware = new System.Windows.Forms.RadioButton();
             this.rbRenamingGameNameRegion = new System.Windows.Forms.RadioButton();
             this.lblExample = new System.Windows.Forms.Label();
@@ -60,7 +61,7 @@
             this.cbxTags = new System.Windows.Forms.ComboBox();
             this.rbRenamingTitleIDGameName = new System.Windows.Forms.RadioButton();
             this.rbRenamingGameName = new System.Windows.Forms.RadioButton();
-            this.rbRenamingCDNSP = new System.Windows.Forms.RadioButton();
+            this.cbAutoRemoveMissingFiles = new System.Windows.Forms.CheckBox();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.tabControl1.SuspendLayout();
@@ -136,6 +137,7 @@
             // 
             // tabPage1
             // 
+            this.tabPage1.Controls.Add(this.cbAutoRemoveMissingFiles);
             this.tabPage1.Controls.Add(this.cbScrapExtraInfoFromWeb);
             this.tabPage1.Controls.Add(this.cbUseTitleKeys);
             this.tabPage1.Controls.Add(this.groupBox3);
@@ -152,7 +154,7 @@
             // cbScrapExtraInfoFromWeb
             // 
             this.cbScrapExtraInfoFromWeb.AutoSize = true;
-            this.cbScrapExtraInfoFromWeb.Location = new System.Drawing.Point(6, 304);
+            this.cbScrapExtraInfoFromWeb.Location = new System.Drawing.Point(6, 323);
             this.cbScrapExtraInfoFromWeb.Name = "cbScrapExtraInfoFromWeb";
             this.cbScrapExtraInfoFromWeb.Size = new System.Drawing.Size(300, 17);
             this.cbScrapExtraInfoFromWeb.TabIndex = 5;
@@ -162,7 +164,7 @@
             // cbUseTitleKeys
             // 
             this.cbUseTitleKeys.AutoSize = true;
-            this.cbUseTitleKeys.Location = new System.Drawing.Point(6, 281);
+            this.cbUseTitleKeys.Location = new System.Drawing.Point(6, 301);
             this.cbUseTitleKeys.Name = "cbUseTitleKeys";
             this.cbUseTitleKeys.Size = new System.Drawing.Size(248, 17);
             this.cbUseTitleKeys.TabIndex = 4;
@@ -303,6 +305,17 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Choose pattern";
             // 
+            // rbRenamingCDNSP
+            // 
+            this.rbRenamingCDNSP.AutoSize = true;
+            this.rbRenamingCDNSP.Location = new System.Drawing.Point(19, 145);
+            this.rbRenamingCDNSP.Name = "rbRenamingCDNSP";
+            this.rbRenamingCDNSP.Size = new System.Drawing.Size(119, 17);
+            this.rbRenamingCDNSP.TabIndex = 7;
+            this.rbRenamingCDNSP.Text = "CDNSP GUI Format";
+            this.rbRenamingCDNSP.UseVisualStyleBackColor = true;
+            this.rbRenamingCDNSP.CheckedChanged += new System.EventHandler(this.rbRenamingCDNSP_CheckedChanged);
+            // 
             // rbRenamingGameNameRegionFirmware
             // 
             this.rbRenamingGameNameRegionFirmware.AutoSize = true;
@@ -428,16 +441,15 @@
             this.rbRenamingGameName.UseVisualStyleBackColor = true;
             this.rbRenamingGameName.CheckedChanged += new System.EventHandler(this.rbRenamingGameName_CheckedChanged);
             // 
-            // rbRenamingCDNSP
+            // cbAutoRemoveMissingFiles
             // 
-            this.rbRenamingCDNSP.AutoSize = true;
-            this.rbRenamingCDNSP.Location = new System.Drawing.Point(19, 145);
-            this.rbRenamingCDNSP.Name = "rbRenamingCDNSP";
-            this.rbRenamingCDNSP.Size = new System.Drawing.Size(119, 17);
-            this.rbRenamingCDNSP.TabIndex = 7;
-            this.rbRenamingCDNSP.Text = "CDNSP GUI Format";
-            this.rbRenamingCDNSP.UseVisualStyleBackColor = true;
-            this.rbRenamingCDNSP.CheckedChanged += new System.EventHandler(this.rbRenamingCDNSP_CheckedChanged);
+            this.cbAutoRemoveMissingFiles.AutoSize = true;
+            this.cbAutoRemoveMissingFiles.Location = new System.Drawing.Point(6, 279);
+            this.cbAutoRemoveMissingFiles.Name = "cbAutoRemoveMissingFiles";
+            this.cbAutoRemoveMissingFiles.Size = new System.Drawing.Size(219, 17);
+            this.cbAutoRemoveMissingFiles.TabIndex = 6;
+            this.cbAutoRemoveMissingFiles.Text = "Automatic remove missing files on startup";
+            this.cbAutoRemoveMissingFiles.UseVisualStyleBackColor = true;
             // 
             // FormConfigs
             // 
@@ -505,5 +517,6 @@
         private System.Windows.Forms.CheckBox cbUseTitleKeys;
         private System.Windows.Forms.CheckBox cbScrapExtraInfoFromWeb;
         private System.Windows.Forms.RadioButton rbRenamingCDNSP;
+        private System.Windows.Forms.CheckBox cbAutoRemoveMissingFiles;
     }
 }

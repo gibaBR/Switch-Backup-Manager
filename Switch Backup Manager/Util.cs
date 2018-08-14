@@ -50,6 +50,7 @@ namespace Switch_Backup_Manager
         public static bool ScrapNSPOnSDCard = true;
         public static bool ScrapInstalledEshopSDCard = true;
         public static bool ScrapExtraInfoFromWeb = false;
+        public static bool AutoRemoveMissingFiles = false;
 
         private static string[] Language = new string[16]
         {
@@ -463,8 +464,11 @@ namespace Switch_Backup_Manager
 
         public static void UpdateDirectories()
         {
-            RemoveMissingFilesFromXML(XML_Local, LOCAL_FILES_DB);
-            RemoveMissingFilesFromXML(XML_NSP_Local, LOCAL_NSP_FILES_DB);
+            if (AutoRemoveMissingFiles)
+            {
+                RemoveMissingFilesFromXML(XML_Local, LOCAL_FILES_DB);
+                RemoveMissingFilesFromXML(XML_NSP_Local, LOCAL_NSP_FILES_DB);
+            }
 
             // DLC NSP Files, have no info about the game thay belong to, other then Title ID. So, if we add them prior to adding the main game, there will be problems.
             // So, we create a list of those files, and try to add them after processing all other files.
@@ -1152,10 +1156,12 @@ namespace Switch_Backup_Manager
             string scrapNSP = ini.IniReadValue("SD", "scrapNSP").Trim().ToLower();
             string scrapInstalledNSP = ini.IniReadValue("SD", "scrapInstalledNSP").Trim().ToLower();
             string scrapExtraInfo = ini.IniReadValue("Config", "scrapExtraInfoFromWeb").Trim().ToLower();
+            string autoRemoveMissingFilesAtStartup = ini.IniReadValue("Config", "autoRemoveMissingFiles").Trim().ToLower();
             if (scrapXCI != "") { ScrapXCIOnSDCard = (scrapXCI == "true"); } else { ini.IniWriteValue("SD", "scrapXCI", "true"); };
             if (scrapNSP != "") { ScrapNSPOnSDCard = (scrapNSP == "true"); } else { ini.IniWriteValue("SD", "scrapNSP", "true"); };
             if (scrapInstalledNSP != "") { ScrapInstalledEshopSDCard = (scrapInstalledNSP == "true"); } else { ini.IniWriteValue("SD", "scrapInstalledNSP", "false"); };
             if (scrapExtraInfo != "") { ScrapExtraInfoFromWeb = (scrapExtraInfo == "true"); } else { ini.IniWriteValue("Config", "scrapExtraInfoFromWeb", "false"); };
+            if (autoRemoveMissingFilesAtStartup != "") { AutoRemoveMissingFiles = (autoRemoveMissingFilesAtStartup == "true"); } else { ini.IniWriteValue("Config", "autoRemoveMissingFiles", "false"); };            
 
             XML_NSWDB = XDocument.Load(@NSWDB_FILE);
 

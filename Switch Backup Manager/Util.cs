@@ -21,7 +21,7 @@ namespace Switch_Backup_Manager
 {
     internal static class Util
     {
-        public const string VERSION = "1.1.1";   //Actual application version
+        public const string VERSION = "1.1.2";   //Actual application version
         public const string MIN_DB_Version = "1.1.1"; //This is the minimum version of the DB that can work
 
         public const string INI_FILE = "sbm.ini";
@@ -1031,7 +1031,7 @@ namespace Switch_Backup_Manager
         {
             bool result = false;
             int ver_db  = 0;
-            int ver_min = Convert.ToInt32(VERSION.Replace(".", "")); //Ex 1.0.8 -> 108
+            int ver_min = Convert.ToInt32(MIN_DB_Version.Replace(".", "")); //Ex 1.0.8 -> 108
 
             //Check if DB is on minimum version
             XDocument xml_temp = XDocument.Load(xml);

@@ -2028,7 +2028,7 @@ namespace Switch_Backup_Manager
                     }
                     catch (Exception e)
                     {
-                        logger.Error(data.TitleID + " seems to be broken! Some info will be missing.");
+                        logger.Error(data.TitleID + " seems to be broken! Some info will be missing.\n"+e.StackTrace);
                     }
 
                     if (data.ContentType == "Patch")
@@ -2081,13 +2081,19 @@ namespace Switch_Backup_Manager
             }
             finally
             {
-                Directory.Delete("tmp", true);
+                try
+                {
+                    Directory.Delete("tmp", true);
+                }
+                catch { }                
             }
-
-            if (ScrapExtraInfoFromWeb)
+            try
             {
-                GetExtendedInfo(data);
-            }
+                if (ScrapExtraInfoFromWeb)
+                {
+                    GetExtendedInfo(data);
+                }
+            } catch { }
 
             return data;
         }

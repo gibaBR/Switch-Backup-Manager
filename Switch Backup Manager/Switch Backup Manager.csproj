@@ -75,6 +75,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CNMT.cs" />
     <Compile Include="Consts.cs" />
     <Compile Include="ControlExtensions.cs" />
     <Compile Include="FileData.cs" />

@@ -1998,8 +1998,8 @@ namespace Switch_Backup_Manager
                                 }
                             }
                         }
-                        data.GameRevision = NACP.NACP_Datas[0].GameVer.Replace("\0", ""); ;
-                        data.ProductCode = NACP.NACP_Datas[0].GameProd.Replace("\0", ""); ;
+                        data.GameRevision = NACP.NACP_Datas[0].GameVer.Replace("\0", "");
+                        data.ProductCode = NACP.NACP_Datas[0].GameProd.Replace("\0", "");
                         if (data.ProductCode == "")
                         {
                             data.ProductCode = "No Prod. ID";
@@ -2148,6 +2148,7 @@ namespace Switch_Backup_Manager
                 long[] NormalSize = { };
                 long[] SecureOffset = { };
                 long[] NormalOffset = { };
+                string[] SecureName = { };
                 long gameNcaOffset = -1;
                 long gameNcaSize = -1;
                 long PFS0Offset = -1;
@@ -2189,6 +2190,7 @@ namespace Switch_Backup_Manager
                     {
                         SecureSize = new long[array5[0].FileCount];
                         SecureOffset = new long[array5[0].FileCount];
+                        SecureName = new string[array5[0].FileCount];
                     }
                     if (array[i].Name == "normal")
                     {
@@ -2202,22 +2204,23 @@ namespace Switch_Backup_Manager
                         fileStream.Read(array2, 0, 64);
                         array6[j] = new HFS0.HSF0_Entry(array2);
                         fileStream.Position = array[i].Offset + num + 16 + 64 * array5[0].FileCount + array6[j].Name_ptr;
-                        if (array[i].Name == "secure")
-                        {
-                            SecureSize[j] = array6[j].Size;
-                            SecureOffset[j] = array[i].Offset + array6[j].Offset + num + 16 + array5[0].StringTableSize + array5[0].FileCount * 64;
-                        }
-                        if (array[i].Name == "normal")
-                        {
-                            NormalSize[j] = array6[j].Size;
-                            NormalOffset[j] = array[i].Offset + array6[j].Offset + num + 16 + array5[0].StringTableSize + array5[0].FileCount * 64;
-                        }
                         while ((num2 = fileStream.ReadByte()) != 0 && num2 != 0)
                         {
                             chars.Add((char)num2);
                         }
                         array6[j].Name = new string(chars.ToArray());
                         chars.Clear();
+                        if (array[i].Name == "secure")
+                        {
+                            SecureSize[j] = array6[j].Size;
+                            SecureOffset[j] = array[i].Offset + array6[j].Offset + num + 16 + array5[0].StringTableSize + array5[0].FileCount * 64;
+                            SecureName[j] = array6[j].Name;
+                        }
+                        if (array[i].Name == "normal")
+                        {
+                            NormalSize[j] = array6[j].Size;
+                            NormalOffset[j] = array[i].Offset + array6[j].Offset + num + 16 + array5[0].StringTableSize + array5[0].FileCount * 64;
+                        }
 
                         offset = array[i].Offset + array6[j].Offset + num + 16 + array5[0].StringTableSize + array5[0].FileCount * 64;
                         hashBuffer = new byte[array6[j].HashedRegionSize];
@@ -2309,105 +2312,15 @@ namespace Switch_Backup_Manager
                 //Extra Info Is Got Here
                 if (getMKey())
                 {
-                    //fileStream = GetFileStream(filepath);
+                    List<string> ncaTarget = new List<string>();
+                    Version GameRevision = new Version();
+
                     for (int si = 0; si < SecureSize.Length; si++)
                     {
                         if (SecureSize[si] > 0x4E20000) continue;
-                        try
+
+                        if (SecureName[si].EndsWith(".cnmt.nca"))
                         {
-                            File.Delete("meta");
-                            Directory.Delete("data", true);
-                        }
-                        catch { }
-
-                        using (FileStream fileStream2 = File.OpenWrite("meta"))
-                        {
-                            fileStream.Position = SecureOffset[si];
-                            byte[] buffer = new byte[8192];
-                            num = SecureSize[si];
-                            int num2;
-                            while ((num2 = fileStream.Read(buffer, 0, 8192)) > 0 && num > 0)
-                            {
-                                fileStream2.Write(buffer, 0, num2);
-                                num -= num2;
-                            }
-                            fileStream2.Close();
-                        }
-
-                        Process process = new Process();
-                        process.StartInfo = new ProcessStartInfo
-                        {
-                            WindowStyle = ProcessWindowStyle.Hidden,
-                            FileName = "hactool.exe",
-                            Arguments = "-k keys.txt --romfsdir=data meta"
-                        };
-                        process.Start();
-                        process.WaitForExit();
-
-                        if (File.Exists("data\\control.nacp"))
-                        {
-                            byte[] source = File.ReadAllBytes("data\\control.nacp");
-                            NACP.NACP_Datas[0] = new NACP.NACP_Data(source.Skip(0x3000).Take(0x1000).ToArray());
-
-                            result.Region_Icon = new Dictionary<string, string>();
-                            result.Languages = new List<string>();
-                            for (int i = 0; i < NACP.NACP_Strings.Length; i++)
-                            {
-                                NACP.NACP_Strings[i] = new NACP.NACP_String(source.Skip(i * 0x300).Take(0x300).ToArray());
-
-                                if (NACP.NACP_Strings[i].Check != 0)
-                                {
-                                    string icon_filename = "data\\icon_" + Language[i].Replace(" ", "") + ".dat";
-                                    string icon_titleID_filename = CACHE_FOLDER + "\\icon_" + result.TitleIDBaseGame + "_" + Language[i].Replace(" ", "") + ".bmp";
-
-                                    if (i == 13) //Taiwanese titles are localized as Traditional Chinese
-                                    {
-                                        if (!File.Exists(icon_filename)) { //If no taiwanese icon is found... Use Traditional Chinese
-                                            icon_filename = "data\\icon_" + Language[14].Replace(" ", "") + ".dat";
-                                            icon_titleID_filename = CACHE_FOLDER + "\\icon_" + result.TitleIDBaseGame + "_" + Language[14].Replace(" ", "") + ".bmp";
-                                        }
-                                    }
-
-                                    if (File.Exists(icon_filename))
-                                    {
-                                        try
-                                        {
-                                            File.Copy(icon_filename, icon_titleID_filename, true);
-                                        }
-                                        catch (System.IO.IOException e)
-                                        {
-                                            logger.Error(e.StackTrace); //File in use?
-                                        }
-                                        result.Region_Icon.Add(Language[i], icon_titleID_filename);
-                                        result.Languages.Add(Language[i]);
-                                    }
-                                }
-                            }
-                            result.GameRevision = NACP.NACP_Datas[0].GameVer.Replace("\0", ""); ;
-                            result.ProductCode = NACP.NACP_Datas[0].GameProd.Replace("\0", ""); ;
-
-                            for (int z = 0; z < NACP.NACP_Strings.Length; z++)
-                            {
-                                if (NACP.NACP_Strings[z].GameName.Replace("\0", "") != "")
-                                {
-                                    result.GameName = NACP.NACP_Strings[z].GameName.Replace("\0", "");
-                                    break;
-                                }
-                            }
-
-                            for (int z = 0; z < NACP.NACP_Strings.Length; z++)
-                            {
-                                if (NACP.NACP_Strings[z].GameAuthor.Replace("\0", "") != "")
-                                {
-                                    result.Developer = NACP.NACP_Strings[z].GameAuthor.Replace("\0", "");
-                                    break;
-                                }
-                            }
-
-                            if (result.ProductCode == "")
-                            {
-                                result.ProductCode = "No Prod. ID";
-                            }
                             try
                             {
                                 File.Delete("meta");
@@ -2415,11 +2328,182 @@ namespace Switch_Backup_Manager
                             }
                             catch { }
 
-                            break;
+                            using (FileStream fileStream2 = File.OpenWrite("meta"))
+                            {
+                                fileStream.Position = SecureOffset[si];
+                                byte[] buffer = new byte[8192];
+                                num = SecureSize[si];
+                                int num4;
+                                while ((num4 = fileStream.Read(buffer, 0, 8192)) > 0 && num > 0)
+                                {
+                                    fileStream2.Write(buffer, 0, num4);
+                                    num -= num4;
+                                }
+                                fileStream2.Close();
+                            }
+
+                            Process process = new Process();
+                            process.StartInfo = new ProcessStartInfo
+                            {
+                                WindowStyle = ProcessWindowStyle.Hidden,
+                                FileName = "hactool.exe",
+                                Arguments = "-k keys.txt --section0dir=data meta"
+                            };
+                            process.Start();
+                            process.WaitForExit();
+
+                            string[] cnmt = Directory.GetFiles("data", "*.cnmt");
+                            if (cnmt.Length != 0)
+                            {
+                                using (FileStream fileStream3 = File.OpenRead(cnmt[0]))
+                                {
+                                    byte[] buffer = new byte[32];
+                                    byte[] buffer2 = new byte[56];
+                                    CNMT.CNMT_Header[] array7 = new CNMT.CNMT_Header[1];
+
+                                    fileStream3.Read(buffer, 0, 32);
+                                    array7[0] = new CNMT.CNMT_Header(buffer);
+
+                                    fileStream3.Position = array7[0].Offset + 32;
+                                    CNMT.CNMT_Entry[] array9 = new CNMT.CNMT_Entry[array7[0].ContentCount];
+                                    for (int k = 0; k < array7[0].ContentCount; k++)
+                                    {
+                                        fileStream3.Read(buffer2, 0, 56);
+                                        array9[k] = new CNMT.CNMT_Entry(buffer2);
+                                        if (array9[k].Type == (byte)CNMT.CNMT_Entry.ContentType.CONTROL)
+                                        {
+                                            ncaTarget.Add(BitConverter.ToString(array9[k].NcaId).ToLower().Replace("-", "") + ".nca");
+                                            break;
+                                        }
+                                    }
+
+                                    fileStream3.Close();
+                                }
+                            }
                         }
                     }
-                    fileStream.Close();
+
+                    for (int si = 0; si < SecureSize.Length; si++)
+                    {
+                        if (SecureSize[si] > 0x4E20000) continue;
+
+                        if (ncaTarget.Contains(SecureName[si]))
+                        {
+                            try
+                            {
+                                File.Delete("meta");
+                                Directory.Delete("data", true);
+                            }
+                            catch { }
+
+                            using (FileStream fileStream2 = File.OpenWrite("meta"))
+                            {
+                                fileStream.Position = SecureOffset[si];
+                                byte[] buffer = new byte[8192];
+                                num = SecureSize[si];
+                                int num4;
+                                while ((num4 = fileStream.Read(buffer, 0, 8192)) > 0 && num > 0)
+                                {
+                                    fileStream2.Write(buffer, 0, num4);
+                                    num -= num4;
+                                }
+                                fileStream2.Close();
+                            }
+
+                            Process process = new Process();
+                            process.StartInfo = new ProcessStartInfo
+                            {
+                                WindowStyle = ProcessWindowStyle.Hidden,
+                                FileName = "hactool.exe",
+                                Arguments = "-k keys.txt --romfsdir=data meta"
+                            };
+                            process.Start();
+                            process.WaitForExit();
+
+                            if (File.Exists("data\\control.nacp"))
+                            {
+                                byte[] source = File.ReadAllBytes("data\\control.nacp");
+                                NACP.NACP_Datas[0] = new NACP.NACP_Data(source.Skip(0x3000).Take(0x1000).ToArray());
+
+                                string GameVer = NACP.NACP_Datas[0].GameVer.Replace("\0", "");
+                                if (Version.Parse(GameVer).CompareTo(GameRevision) > 0)
+                                {
+                                    GameRevision = Version.Parse(GameVer);
+
+                                    result.Region_Icon = new Dictionary<string, string>();
+                                    result.Languages = new List<string>();
+                                    for (int k = 0; k < NACP.NACP_Strings.Length; k++)
+                                    {
+                                        NACP.NACP_Strings[k] = new NACP.NACP_String(source.Skip(k * 0x300).Take(0x300).ToArray());
+
+                                        if (NACP.NACP_Strings[k].Check != 0)
+                                        {
+                                            string icon_filename = "data\\icon_" + Language[k].Replace(" ", "") + ".dat";
+                                            string icon_titleID_filename = CACHE_FOLDER + "\\icon_" + result.TitleIDBaseGame + "_" + Language[k].Replace(" ", "") + ".bmp";
+
+                                            if (k == 13) //Taiwanese titles are localized as Traditional Chinese
+                                            {
+                                                if (!File.Exists(icon_filename))
+                                                { //If no taiwanese icon is found... Use Traditional Chinese
+                                                    icon_filename = "data\\icon_" + Language[14].Replace(" ", "") + ".dat";
+                                                    icon_titleID_filename = CACHE_FOLDER + "\\icon_" + result.TitleIDBaseGame + "_" + Language[14].Replace(" ", "") + ".bmp";
+                                                }
+                                            }
+
+                                            if (File.Exists(icon_filename))
+                                            {
+                                                try
+                                                {
+                                                    File.Copy(icon_filename, icon_titleID_filename, true);
+                                                }
+                                                catch (System.IO.IOException e)
+                                                {
+                                                    logger.Error(e.StackTrace); //File in use?
+                                                }
+                                                result.Region_Icon.Add(Language[k], icon_titleID_filename);
+                                                result.Languages.Add(Language[k]);
+                                            }
+                                        }
+                                    }
+                                    result.GameRevision = GameVer;
+                                    result.ProductCode = NACP.NACP_Datas[0].GameProd.Replace("\0", "");
+
+                                    for (int z = 0; z < NACP.NACP_Strings.Length; z++)
+                                    {
+                                        if (NACP.NACP_Strings[z].GameName.Replace("\0", "") != "")
+                                        {
+                                            result.GameName = NACP.NACP_Strings[z].GameName.Replace("\0", "");
+                                            break;
+                                        }
+                                    }
+
+                                    for (int z = 0; z < NACP.NACP_Strings.Length; z++)
+                                    {
+                                        if (NACP.NACP_Strings[z].GameAuthor.Replace("\0", "") != "")
+                                        {
+                                            result.Developer = NACP.NACP_Strings[z].GameAuthor.Replace("\0", "");
+                                            break;
+                                        }
+                                    }
+
+                                    if (result.ProductCode == "")
+                                    {
+                                        result.ProductCode = "No Prod. ID";
+                                    }
+                                }
+
+                                try
+                                {
+                                    File.Delete("meta");
+                                    Directory.Delete("data", true);
+                                }
+                                catch { }
+                            }
+                        }
+                    }
                 }
+
+                fileStream.Close();
 
                 FileData result_tmp = null;
                 Dictionary<Tuple<string, string>, FileData> SceneList = Util.LoadSceneXMLToFileDataDictionary(XML_NSWDB);

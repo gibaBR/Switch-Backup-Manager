@@ -28,6 +28,7 @@ namespace Switch_Backup_Manager
         private Dictionary<Tuple<string, string>, FileData> SDCardList;
         private Dictionary<Tuple<string, string>, FileData> SDCardListSelectedItems;
         private FileData TitleToEdit;
+        private TextMatchFilter filterContentTypeEShop;
 
         private bool updateCbxRemoveableFiles;
         private bool updateFileListAfterMove;
@@ -124,6 +125,7 @@ namespace Switch_Backup_Manager
             UpdateSceneReleasesList();
             UpdateLocalGamesList();
             UpdateLocalNSPGamesList();
+            FilterEshopByContentType();
 
             try
             {
@@ -222,6 +224,10 @@ namespace Switch_Backup_Manager
                 splitContainer2.Panel2Collapsed = false;
                 bottonPanelToolStripMenuItem.Checked = true;
             }
+
+            cbBaseGame.Checked = Properties.Settings.Default.ShowBaseGames;
+            cbDLC.Checked = Properties.Settings.Default.ShowDLCFilterEshop;
+            cbUpdates.Checked = Properties.Settings.Default.ShowUpdatesFilterEShop;
         }
 
         private void SaveEnvironment()
@@ -257,6 +263,10 @@ namespace Switch_Backup_Manager
             Properties.Settings.Default.SplitterDistanceHor = splitContainer2.SplitterDistance;
             Properties.Settings.Default.LeftPanelVisible = !splitContainer1.Panel1Collapsed;
             Properties.Settings.Default.BottomPanelVisible = !splitContainer2.Panel2Collapsed;
+
+            Properties.Settings.Default.ShowBaseGames = cbBaseGame.Checked;
+            Properties.Settings.Default.ShowDLCFilterEshop = cbDLC.Checked;
+            Properties.Settings.Default.ShowUpdatesFilterEShop = cbUpdates.Checked;
 
             Properties.Settings.Default.Save();
         }
@@ -3169,7 +3179,6 @@ namespace Switch_Backup_Manager
             {
                 MessageBox.Show("Please, first select a SD card from the list.");
             }
-
         }
 
         private void toolStripMenuItemSelectSDCardItemsNotOnSDCardEShop_Click(object sender, EventArgs e)
@@ -3413,7 +3422,6 @@ namespace Switch_Backup_Manager
             toolStripStatusLabel1.Text = "0 Selected (0MB)";
 
             TextMatchFilter filterText = TextMatchFilter.Contains(OLVEshop, textBoxFilterEShop.Text);
-
             switch (cbxFilterEshop.Text)
             {
                 case "Title ID":
@@ -3460,7 +3468,7 @@ namespace Switch_Backup_Manager
                     break;
             }
 
-            OLVEshop.ModelFilter = new CompositeAllFilter(new List<IModelFilter> { filterText });
+            OLVEshop.ModelFilter = new CompositeAllFilter(new List<IModelFilter> { filterText, filterContentTypeEShop });
             OLVEshop.DefaultRenderer = new HighlightTextRenderer(filterText);
             SumarizeLocalGamesList("eshop");
         }
@@ -3802,14 +3810,16 @@ namespace Switch_Backup_Manager
                 filter[2] = "Update";
             }
 
-            TextMatchFilter filterText = TextMatchFilter.Contains(OLVEshop, filter);
+            filterContentTypeEShop = TextMatchFilter.Contains(OLVEshop, filter);
+            filterContentTypeEShop.Columns = new[] { olvColumnContentTypeEShop };
 
-            filterText.Columns = new[] { olvColumnContentTypeEShop };
+            OLVEshop.ModelFilter = new CompositeAllFilter(new List<IModelFilter> { filterContentTypeEShop });
+            OLVEshop.DefaultRenderer = new HighlightTextRenderer(filterContentTypeEShop);
+            textBoxFilterEShop_TextChanged(this, new EventArgs());
 
-            OLVEshop.ModelFilter = new CompositeAllFilter(new List<IModelFilter> { filterText });
-            OLVEshop.DefaultRenderer = new HighlightTextRenderer(filterText);
             SumarizeLocalGamesList("eshop");
         }
+
         private void cbBaseGame_CheckedChanged(object sender, EventArgs e)
         {
             FilterEshopByContentType();

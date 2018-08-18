@@ -118,5 +118,41 @@ namespace Switch_Backup_Manager.Properties {
                 this["BottomPanelVisible"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool ShowDLCFilterEshop {
+            get {
+                return ((bool)(this["ShowDLCFilterEshop"]));
+            }
+            set {
+                this["ShowDLCFilterEshop"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool ShowUpdatesFilterEShop {
+            get {
+                return ((bool)(this["ShowUpdatesFilterEShop"]));
+            }
+            set {
+                this["ShowUpdatesFilterEShop"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool ShowBaseGames {
+            get {
+                return ((bool)(this["ShowBaseGames"]));
+            }
+            set {
+                this["ShowBaseGames"] = value;
+            }
+        }
     }
 }

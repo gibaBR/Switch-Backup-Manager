@@ -3000,7 +3000,6 @@
             // 
             this.olvColumnContentTypeEShop.AspectName = "ContentType";
             this.olvColumnContentTypeEShop.DisplayIndex = 15;
-            //this.olvColumnContentTypeEShop.IsVisible = false;
             this.olvColumnContentTypeEShop.Text = "Content Type";
             // 
             // contextMenuEShopList
@@ -3171,8 +3170,6 @@
             // cbDLC
             // 
             this.cbDLC.AutoSize = true;
-            this.cbDLC.Checked = true;
-            this.cbDLC.CheckState = System.Windows.Forms.CheckState.Checked;
             this.cbDLC.Location = new System.Drawing.Point(4, 5);
             this.cbDLC.Name = "cbDLC";
             this.cbDLC.Size = new System.Drawing.Size(47, 17);

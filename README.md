@@ -29,6 +29,15 @@ Complete Switch Backups management tool
 
 ## Changelog
 
+* 1.1.2
+  - Correct text format for game description by @garoxas / @Garou
+  - Fixed #38 (Issue witch manual scrape.)
+  - Autoremove missing files at startup is now optional (config)
+  - Fixed wrong sumary when using filters
+  - Add DLC, Update and Base game Filter on E-shop list
+  - Fix minor error on auto scan folder, where scan was stopped when a single file failed
+  - Fix for program check to the minimum DB version.
+
 * 1.1.1
   - Now you can add NSP titles with the same TitleID. Thanks to @garoxas
   - add support for multiple XCI revisions Thanks to @garoxas

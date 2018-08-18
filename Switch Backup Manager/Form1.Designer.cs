@@ -3000,7 +3000,7 @@
             // 
             this.olvColumnContentTypeEShop.AspectName = "ContentType";
             this.olvColumnContentTypeEShop.DisplayIndex = 15;
-            this.olvColumnContentTypeEShop.IsVisible = false;
+            //this.olvColumnContentTypeEShop.IsVisible = false;
             this.olvColumnContentTypeEShop.Text = "Content Type";
             // 
             // contextMenuEShopList

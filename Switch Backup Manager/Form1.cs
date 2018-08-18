@@ -284,7 +284,7 @@ namespace Switch_Backup_Manager
             OLVSceneList.OwnerDraw = true;
             noneToolStripMenuItem1.Checked = true;
 
-            olvColumnContentTypeEShop.IsVisible = false; //Does not work! WTF!?
+            //olvColumnContentTypeEShop.IsVisible = false; //Does not work! WTF!?
             OLVEshop.Sort(olvColumnGameNameLocal, SortOrder.Ascending);
 
             OLVLocalFiles.SetObjects(LocalFilesList.Values);
@@ -3787,6 +3787,7 @@ namespace Switch_Backup_Manager
 
         private void FilterEshopByContentType()
         {
+            olvColumnContentTypeEShop.IsVisible = true;
             string[] filter = { "ABCBDBABD^", "ABCBDBABD^", "ABCBDBABD^" };
             if (cbBaseGame.Checked)
             {

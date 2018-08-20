@@ -43,6 +43,8 @@ namespace Switch_Backup_Manager
         public static Logger logger;
         public static string log_Level = "debug";
         public static string autoRenamingPattern = "{gamename}";
+        public static string autoRenamingPatternNSP = "{gamename}";
+        public static int MaxSizeFilenameNSP = 0;
 
         public static bool AutoUpdateNSDBOnStartup = false;
         public static bool UseTitleKeys = false;
@@ -525,11 +527,20 @@ namespace Switch_Backup_Manager
                     result = result.Replace(AutoRenamingTags[5], data.Group);
                     result = result.Replace(AutoRenamingTags[6], data.Region);
                     result = result.Replace(AutoRenamingTags[7], data.Firmware);
-                    result = result.Replace(AutoRenamingTags[8], data.Languages_resumed);
+                    result = result.Replace(AutoRenamingTags[8], ListToComaSeparatedString(data.Languages));
                     result = result.Replace(AutoRenamingTags[9], string.Format("{0:D4}", data.IdScene));
                     result = result.Replace(AutoRenamingTags[10], data.Version);
                 }
-
+                if (MaxSizeFilenameNSP != 0)
+                {
+                    string result_ = result;
+                    try
+                    {
+                        result = result.Substring(0, MaxSizeFilenameNSP);
+                    } catch {
+                        result = result_;
+                    }                    
+                }
                 result += Path.GetExtension(data.FilePath);
             }
 
@@ -653,9 +664,12 @@ namespace Switch_Backup_Manager
 
             if (file != null)
             {
+                string renamingPattern = "";
                 string extension = Path.GetExtension(file.FilePath);
+                renamingPattern = extension.ToLower() == ".nsp" ? autoRenamingPatternNSP : autoRenamingPattern;
+
                 Regex illegalInFileName = new Regex(@"[\\/:*?""<>|™®]");
-                string newFileName = Path.GetDirectoryName(file.FilePath) + "\\" + illegalInFileName.Replace(GetRenamingString(file, autoRenamingPattern), "");
+                string newFileName = Path.GetDirectoryName(file.FilePath) + "\\" + illegalInFileName.Replace(GetRenamingString(file, renamingPattern), "");
                 string newFileName_ = "";
                 string originalFile = file.FilePath;
                 string tmp_name = originalFile + "_tmp";
@@ -1112,6 +1126,29 @@ namespace Switch_Backup_Manager
                 autoRenamingPattern = "{gamename}";
             }
 
+            autoRenamingPatternNSP = ini.IniReadValue("AutoRenaming", "patternNSP");
+            if (autoRenamingPatternNSP.Trim() == "")
+            {
+                ini.IniWriteValue("AutoRenaming", "patternNSP", "{gamename}");
+                autoRenamingPatternNSP = "{gamename}";
+            }
+
+            string MaxSizeFilenameNSP_str = ini.IniReadValue("AutoRenaming", "MaxSizeFilenameNSP");
+            if (MaxSizeFilenameNSP_str.Trim() == "")
+            {
+                ini.IniWriteValue("AutoRenaming", "MaxSizeFilenameNSP", "0");
+                MaxSizeFilenameNSP = 0;
+            } else
+            {
+                try
+                {
+                    MaxSizeFilenameNSP = Convert.ToInt16(MaxSizeFilenameNSP_str);
+                } catch
+                {
+                    MaxSizeFilenameNSP = 0;
+                }
+            }
+            
             //Searches for keys.txt
             if (!File.Exists(keys_file))
             {

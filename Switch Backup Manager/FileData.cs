@@ -29,6 +29,7 @@ namespace Switch_Backup_Manager
             this.MasterKeyRevision = "";
             this.Region_Icon = new Dictionary<string, string>();
             this.Languages = new List<string>();
+            this.Languages_resumed = "";
             this.IsTrimmed = false;
             this.Group = "";
             this.Serial = "";
@@ -47,6 +48,53 @@ namespace Switch_Backup_Manager
             this.NumberOfPlayers = "";
             this.Categories = new List<string>();
             this.ESRB = 0;
+        }
+
+        public FileData(string FilePath, string FileName, string FileNameWithExt, string ROMSize, long ROMSizeBytes, 
+            string UsedSpace, long UsedSpaceBytes, string TitleID, string TitleIDBaseGame, string GameName, 
+            string Developer, string GameRevision, string ProductCode, string SDKVersion, string CartSize, 
+            string MasterKeyRevision, Dictionary<string, string> Region_Icon, List<string> Languages, string Languages_resumed, 
+            bool IsTrimmed, string Group, string Serial, string Firmware, string Cardtype, string Region, bool IsSplit, 
+            string DistributionType, int IdScene, string ContentType, string Version, bool HasExtendedInfo, string Description, 
+            string Publisher, string ReleaseDate, string NumberOfPlayers, List<string> Categories, int ESRB)
+        {
+            this.FilePath = FilePath;
+            this.FileName = FileName;
+            this.FileNameWithExt = FileNameWithExt;
+            this.ROMSize = ROMSize;
+            this.ROMSizeBytes = ROMSizeBytes;
+            this.UsedSpace = UsedSpace;
+            this.UsedSpaceBytes = UsedSpaceBytes;
+            this.TitleID = TitleID;
+            this.TitleIDBaseGame = TitleIDBaseGame;
+            this.GameName = GameName;
+            this.Developer = Developer;
+            this.GameRevision = GameRevision;
+            this.ProductCode = ProductCode;
+            this.SDKVersion = SDKVersion;
+            this.CartSize = CartSize;
+            this.MasterKeyRevision = MasterKeyRevision;
+            this.Region_Icon = Region_Icon;
+            this.Languages = Languages;
+            this.Languages_resumed = Languages_resumed;
+            this.IsTrimmed = IsTrimmed;
+            this.Group = Group;
+            this.Serial = Serial;
+            this.Firmware = Firmware;
+            this.Cardtype = Cardtype;
+            this.Region = Region;
+            this.IsSplit = IsSplit;
+            this.DistributionType = DistributionType;
+            this.IdScene = IdScene;
+            this.ContentType = ContentType;
+            this.Version = Version;
+            this.HasExtendedInfo = HasExtendedInfo;
+            this.Description = Description;
+            this.Publisher = Publisher;
+            this.ReleaseDate = ReleaseDate;
+            this.NumberOfPlayers = NumberOfPlayers;
+            this.Categories = Categories;
+            this.ESRB = ESRB;
         }
 
         public string FilePath { get; set; }

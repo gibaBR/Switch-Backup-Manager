@@ -2465,11 +2465,11 @@ namespace Switch_Backup_Manager
                                 string GameVer = NACP.NACP_Datas[0].GameVer.Replace("\0", "");
 
                                 Version version1, version2;
-                                if (!Version.TryParse(Regex.Replace(GameRevision, @"[^\d.]", ""), out version1))
+                                if (!Version.TryParse(Regex.Replace(GameRevision, @"[^\d.].*$", ""), out version1))
                                 {
                                     version1 = new Version();
                                 }
-                                if (!Version.TryParse(Regex.Replace(GameVer, @"[^\d.]", ""), out version2))
+                                if (!Version.TryParse(Regex.Replace(GameVer, @"[^\d.].*$", ""), out version2))
                                 {
                                     version2 = new Version();
                                 }

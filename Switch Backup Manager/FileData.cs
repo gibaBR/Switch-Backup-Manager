@@ -11,6 +11,7 @@ namespace Switch_Backup_Manager
     {
         public FileData () //Default constructor
         {
+            this.Found = "";
             this.FilePath = "";
             this.FileName = "";
             this.FileNameWithExt = "";
@@ -50,7 +51,7 @@ namespace Switch_Backup_Manager
             this.ESRB = 0;
         }
 
-        public FileData(string FilePath, string FileName, string FileNameWithExt, string ROMSize, long ROMSizeBytes, 
+        public FileData(string Found, string FilePath, string FileName, string FileNameWithExt, string ROMSize, long ROMSizeBytes, 
             string UsedSpace, long UsedSpaceBytes, string TitleID, string TitleIDBaseGame, string GameName, 
             string Developer, string GameRevision, string ProductCode, string SDKVersion, string CartSize, 
             string MasterKeyRevision, Dictionary<string, string> Region_Icon, List<string> Languages, string Languages_resumed, 
@@ -58,6 +59,7 @@ namespace Switch_Backup_Manager
             string DistributionType, int IdScene, string ContentType, string Version, bool HasExtendedInfo, string Description, 
             string Publisher, string ReleaseDate, string NumberOfPlayers, List<string> Categories, int ESRB)
         {
+            this.Found = Found;
             this.FilePath = FilePath;
             this.FileName = FileName;
             this.FileNameWithExt = FileNameWithExt;
@@ -97,6 +99,7 @@ namespace Switch_Backup_Manager
             this.ESRB = ESRB;
         }
 
+        public string Found { get; set; }
         public string FilePath { get; set; }
         public string FileName { get; set; }
         public string FileNameWithExt { get; set; }

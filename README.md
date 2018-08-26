@@ -29,6 +29,16 @@ Complete Switch Backups management tool
 
 ## Changelog
 
+* 1.1.4
+  - Fix #47: Some NSP update files were showing errors when adding to database (010065e003fd8800, 0100830004fb6800, 0100760002048800, 01005ee0036ec800, ..)
+  - fix XCI files skipped when version number is non standard, fix #42 #44
+
+* 1.1.3
+  - get correct XCI Game Revision, fix #37 by @garoxas / @Garou;
+  - Fixed filter for content type (dlc, base game, update) not working. Also, this filter is now saved on program preferences (will persist between sessions);
+  - Separate renaming paterns for XCI and NSP files;
+  - User can now limit filename size for NSP files.
+
 * 1.1.2
   - Correct text format for game description by @garoxas / @Garou
   - Fixed #38 (Issue witch manual scrape.)

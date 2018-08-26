@@ -21,7 +21,7 @@ namespace Switch_Backup_Manager
 {
     internal static class Util
     {
-        public const string VERSION = "1.1.2";   //Actual application version
+        public const string VERSION = "1.1.4";   //Actual application version
         public const string MIN_DB_Version = "1.1.1"; //This is the minimum version of the DB that can work
 
         public const string INI_FILE = "sbm.ini";
@@ -1712,7 +1712,7 @@ namespace Switch_Backup_Manager
                     return data;
                 }
                 PFS0.PFS0_Entry[] array3;
-                array3 = new PFS0.PFS0_Entry[Math.Max(PFS0.PFS0_Headers[0].FileCount, 20)]; //Dump of TitleID 01009AA000FAA000 reports more than 10000000 files here, so it breaks the program. Standard is to have only 20 files
+                array3 = new PFS0.PFS0_Entry[Math.Max(PFS0.PFS0_Headers[0].FileCount, 150)]; //Dump of TitleID 01009AA000FAA000 reports more than 10000000 files here, so it breaks the program. We need to put some reasonable number here.
 
                 for (int m = 0; m < PFS0.PFS0_Headers[0].FileCount; m++)
                 {
@@ -1720,7 +1720,7 @@ namespace Switch_Backup_Manager
                     fileStream.Read(array2, 0, 24);
                     array3[m] = new PFS0.PFS0_Entry(array2);
 
-                    if (m == 19) //Dump of TitleID 01009AA000FAA000 reports more than 10000000 files here, so it breaks the program. Standard is to have only 20 files
+                    if (m == 149) //Dump of TitleID 01009AA000FAA000 reports more than 10000000 files here, so it breaks the program. We need to put some reasonable number here.
                     {
                         break;
                     }
@@ -1950,7 +1950,7 @@ namespace Switch_Backup_Manager
                         //break;
                     }
 
-                    if (n == 19) //Dump of TitleID 01009AA000FAA000 reports more than 10000000 files here, so it breaks the program. Standard is to have only 20 files
+                    if (n == 149) //Dump of TitleID 01009AA000FAA000 reports more than 10000000 files here, so it breaks the program. We need to put some reasonable number here.
                     {
                         break;
                     }
@@ -1982,7 +1982,7 @@ namespace Switch_Backup_Manager
                         break;
                     }
 
-                    if (n == 19) //Dump of TitleID 01009AA000FAA000 reports more than 10000000 files here, so it breaks the program. Standard is to have only 20 files
+                    if (n == 149) //Dump of TitleID 01009AA000FAA000 reports more than 10000000 files here, so it breaks the program. We need to put some reasonable number here.
                     {
                         break;
                     }

@@ -1861,11 +1861,63 @@ namespace Switch_Backup_Manager
                                 ncaTarget = xe.Element("Id").Value + ".cnmt.nca";
                                 break;
                             }
-                            bool found = false;
+                        }
 
-                            FileData data_tmp = null;
-                            Dictionary<Tuple<string, string>, FileData> NSPList = Util.LoadXMLToFileDataDictionary(XML_NSP_Local);
-                            NSPList.TryGetValue(new Tuple<string, string>(data.TitleIDBaseGame, data.Version), out data_tmp); //Try to find on NSP List
+                        bool found = false;
+                        FileData data_tmp = null;
+                        Dictionary<Tuple<string, string>, FileData> NSPList = Util.LoadXMLToFileDataDictionary(XML_NSP_Local);
+                        NSPList.TryGetValue(new Tuple<string, string>(data.TitleIDBaseGame, data.Version), out data_tmp); //Try to find on NSP List
+                        if (data_tmp != null)
+                        {
+                            data.Region_Icon = data_tmp.Region_Icon;
+                            data.Languages = data_tmp.Languages;
+                            data.GameRevision = data_tmp.GameRevision;
+                            data.ProductCode = data_tmp.ProductCode;
+                            data.GameName = data_tmp.GameName;// + " [DLC]";
+                            data.Developer = data_tmp.Developer;
+                            found = true;
+                            logger.Debug("Found extra info for DLC on NSP local database");
+                        }
+
+                        if (!found)
+                        {
+                            data_tmp = null;
+                            Dictionary<Tuple<string, string>, FileData> SceneList = Util.LoadSceneXMLToFileDataDictionary(XML_NSWDB);
+                            List<Tuple<string, string>> keys = Enumerable.ToList(SceneList.Keys);
+                            int index = keys.FindIndex(key => key.Item1 == data.TitleIDBaseGame);
+                            if (index != -1)
+                            {
+                                SceneList.TryGetValue(keys[index], out data_tmp); //Try to find on Scene List
+                            }
+                            if (data_tmp != null)
+                            {
+                                data.Region_Icon = data_tmp.Region_Icon;
+                                data.Languages = data_tmp.Languages;
+                                data.GameRevision = data_tmp.GameRevision;
+                                data.ProductCode = data_tmp.ProductCode;
+                                data.GameName = data_tmp.GameName;// + " [DLC]";
+                                data.Developer = data_tmp.Developer;
+                                data.Group = data_tmp.Group;
+                                data.IdScene = data_tmp.IdScene;
+                                data.Region = data_tmp.Region;
+                                data.Version = data_tmp.Version;
+                                data.Serial = data_tmp.Serial;
+
+                                found = true;
+                                logger.Debug("Found extra info for DLC on Scene database");
+                            }
+                        }
+
+                        if (!found)
+                        {
+                            data_tmp = null;
+                            Dictionary<Tuple<string, string>, FileData> XCIList = Util.LoadXMLToFileDataDictionary(XML_Local);
+                            List<Tuple<string, string>> keys = Enumerable.ToList(XCIList.Keys);
+                            int index = keys.FindIndex(key => key.Item1 == data.TitleIDBaseGame);
+                            if (index != -1)
+                            {
+                                XCIList.TryGetValue(keys[index], out data_tmp); //Try to find on Local XCI List
+                            }
                             if (data_tmp != null)
                             {
                                 data.Region_Icon = data_tmp.Region_Icon;
@@ -1875,79 +1927,31 @@ namespace Switch_Backup_Manager
                                 data.GameName = data_tmp.GameName;// + " [DLC]";
                                 data.Developer = data_tmp.Developer;
                                 found = true;
-                                logger.Debug("Found extra info for DLC on NSP local database");
-                            }
-
-                            if (!found)
-                            {
-                                data_tmp = null;
-                                Dictionary<Tuple<string, string>, FileData> SceneList = Util.LoadSceneXMLToFileDataDictionary(XML_NSWDB);
-                                List<Tuple<string, string>> keys = Enumerable.ToList(SceneList.Keys);
-                                int index = keys.FindIndex(key => key.Item1 == data.TitleIDBaseGame);
-                                if (index != -1)
-                                {
-                                    SceneList.TryGetValue(keys[index], out data_tmp); //Try to find on Scene List
-                                }
-                                if (data_tmp != null)
-                                {
-                                    data.Region_Icon = data_tmp.Region_Icon;
-                                    data.Languages = data_tmp.Languages;
-                                    data.GameRevision = data_tmp.GameRevision;
-                                    data.ProductCode = data_tmp.ProductCode;
-                                    data.GameName = data_tmp.GameName;// + " [DLC]";
-                                    data.Developer = data_tmp.Developer;
-                                    found = true;
-                                    logger.Debug("Found extra info for DLC on Scene database");
-                                }
-                            }
-
-                            if (!found)
-                            {
-                                data_tmp = null;
-                                Dictionary<Tuple<string, string>, FileData> XCIList = Util.LoadXMLToFileDataDictionary(XML_Local);
-                                List<Tuple<string, string>> keys = Enumerable.ToList(XCIList.Keys);
-                                int index = keys.FindIndex(key => key.Item1 == data.TitleIDBaseGame);
-                                if (index != -1)
-                                {
-                                    XCIList.TryGetValue(keys[index], out data_tmp); //Try to find on Local XCI List
-                                }
-                                if (data_tmp != null)
-                                {
-                                    data.Region_Icon = data_tmp.Region_Icon;
-                                    data.Languages = data_tmp.Languages;
-                                    data.GameRevision = data_tmp.GameRevision;
-                                    data.ProductCode = data_tmp.ProductCode;
-                                    data.GameName = data_tmp.GameName;// + " [DLC]";
-                                    data.Developer = data_tmp.Developer;
-                                    found = true;
-                                    logger.Debug("Found extra info for DLC on XCI local database");
-                                }
-                            }
-
-                            //Last resource, look at titlekeys
-                            if (!found)
-                            {
-                                if (UseTitleKeys && File.Exists(TITLE_KEYS))
-                                {
-                                    string gameName = "";
-                                    try
-                                    {
-                                        gameName = (from x in File.ReadAllLines(TITLE_KEYS)
-                                                    select x.Split('|') into x
-                                                    where x.Length > 1
-                                                    select x).ToDictionary((string[] x) => x[0].Trim(), (string[] x) => x[2])[data.TitleIDBaseGame].ToLower();
-                                    }
-                                    catch (Exception e)
-                                    {
-                                        logger.Warning("Could not find game name! Don't worry, will try again later\n"+e.StackTrace);
-                                    }
-
-                                    data.GameName = gameName;
-                                }
+                                logger.Debug("Found extra info for DLC on XCI local database");
                             }
                         }
 
-                        //break;
+                        //Last resource, look at titlekeys
+                        if (!found)
+                        {
+                            if (UseTitleKeys && File.Exists(TITLE_KEYS))
+                            {
+                                string gameName = "";
+                                try
+                                {
+                                    gameName = (from x in File.ReadAllLines(TITLE_KEYS)
+                                                select x.Split('|') into x
+                                                where x.Length > 1
+                                                select x).ToDictionary((string[] x) => x[0].Trim(), (string[] x) => x[2])[data.TitleIDBaseGame].ToLower();
+                                }
+                                catch (Exception e)
+                                {
+                                    logger.Warning("Could not find game name! Don't worry, will try again later\n"+e.StackTrace);
+                                }
+
+                                data.GameName = gameName;
+                            }
+                        }
                     }
 
                     if (n == 19) //Dump of TitleID 01009AA000FAA000 reports more than 10000000 files here, so it breaks the program. Standard is to have only 20 files

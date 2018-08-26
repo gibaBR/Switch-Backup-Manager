@@ -2350,7 +2350,7 @@ namespace Switch_Backup_Manager
                 if (getMKey())
                 {
                     List<string> ncaTarget = new List<string>();
-                    Version GameRevision = new Version();
+                    string GameRevision = "";
 
                     for (int si = 0; si < SecureSize.Length; si++)
                     {
@@ -2463,9 +2463,19 @@ namespace Switch_Backup_Manager
                                 NACP.NACP_Datas[0] = new NACP.NACP_Data(source.Skip(0x3000).Take(0x1000).ToArray());
 
                                 string GameVer = NACP.NACP_Datas[0].GameVer.Replace("\0", "");
-                                if (Version.Parse(GameVer).CompareTo(GameRevision) > 0)
+
+                                Version version1, version2;
+                                if (!Version.TryParse(Regex.Replace(GameRevision, @"[^\d.].*$", ""), out version1))
                                 {
-                                    GameRevision = Version.Parse(GameVer);
+                                    version1 = new Version();
+                                }
+                                if (!Version.TryParse(Regex.Replace(GameVer, @"[^\d.].*$", ""), out version2))
+                                {
+                                    version2 = new Version();
+                                }
+                                if (version2.CompareTo(version1) > 0)
+                                {
+                                    GameRevision = GameVer;
 
                                     result.Region_Icon = new Dictionary<string, string>();
                                     result.Languages = new List<string>();

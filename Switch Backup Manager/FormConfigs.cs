@@ -65,6 +65,7 @@ namespace Switch_Backup_Manager
         public void WriteConfig()
         {
             Util.autoRenamingPattern = this.autoRenamingPattern;
+            Util.autoRenamingPatternNSP = this.autoRenamingPatternNSP;
             Util.ini.IniWriteValue("AutoRenaming", "pattern", this.autoRenamingPattern);
             Util.ini.IniWriteValue("AutoRenaming", "patternNSP", this.autoRenamingPatternNSP);
             int maxFileNameSize = 0;

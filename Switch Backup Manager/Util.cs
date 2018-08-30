@@ -21,7 +21,7 @@ namespace Switch_Backup_Manager
 {
     internal static class Util
     {
-        public const string VERSION = "1.1.4";   //Actual application version
+        public const string VERSION = "1.1.5";   //Actual application version
         public const string MIN_DB_Version = "1.1.1"; //This is the minimum version of the DB that can work
 
         public const string INI_FILE = "sbm.ini";
@@ -1027,15 +1027,19 @@ namespace Switch_Backup_Manager
         {
             Dictionary<Tuple<string, string>, FileData> result = new Dictionary<Tuple<string, string>, FileData>();
 
-            foreach (XElement xe in xml.Descendants("release"))
+            if (xml != null)
             {
-                try
+                foreach (XElement xe in xml.Descendants("release"))
                 {
-                    result.Add(new Tuple<string, string>(xe.Element("titleid").Value, xe.Element("firmware").Value.ToLower()), GetFileData(xe, true));
-                } catch { System.ArgumentException ex; }
-                {
-                    //If TitleID is already on the list, ignore
-                }                
+                    try
+                    {
+                        result.Add(new Tuple<string, string>(xe.Element("titleid").Value, xe.Element("firmware").Value.ToLower()), GetFileData(xe, true));
+                    }
+                    catch { System.ArgumentException ex; }
+                    {
+                        //If TitleID is already on the list, ignore
+                    }
+                }
             }
 
             return result;
@@ -1213,7 +1217,13 @@ namespace Switch_Backup_Manager
             if (scrapExtraInfo != "") { ScrapExtraInfoFromWeb = (scrapExtraInfo == "true"); } else { ini.IniWriteValue("Config", "scrapExtraInfoFromWeb", "false"); };
             if (autoRemoveMissingFilesAtStartup != "") { AutoRemoveMissingFiles = (autoRemoveMissingFilesAtStartup == "true"); } else { ini.IniWriteValue("Config", "autoRemoveMissingFiles", "false"); };            
 
-            XML_NSWDB = XDocument.Load(@NSWDB_FILE);
+            try
+            {
+                XML_NSWDB = XDocument.Load(@NSWDB_FILE);
+            } catch
+            {
+                logger.Error("Could not load Scene list xml. Scene list will not be available.");
+            }
 
             //Searches for local dabases (xml) and loads it
             if (!File.Exists(LOCAL_FILES_DB))
@@ -1250,18 +1260,62 @@ namespace Switch_Backup_Manager
             GetKeys();
         }
 
-        public static void UpdateNSWDB()
+        //Old Method is not working anymore...
+        public static void UpdateNSWDB_()
         {
             using (var client = new WebClient())
             {
                 try
-                {
+                {                    
                     client.DownloadFile(@NSWDB_DOWNLOAD_SITE, NSWDB_FILE);
                 } catch (WebException ex)
                 {
                     MessageBox.Show("Could not download NSWDB File from nswdb.com! \n Please check your internet connection.");
                 }
                 
+            }
+        }
+
+        public static void UpdateNSWDB()
+        {
+            try
+            {
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(@NSWDB_DOWNLOAD_SITE);
+                request.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
+                using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
+                {
+                    using (Stream streamResponse = response.GetResponseStream())
+                    {
+                        using (StreamReader streamRead = new StreamReader(streamResponse))
+                        {
+                            Char[] readBuff = new Char[1000000];
+                            int count = streamRead.Read(readBuff, 0, 1000000);
+                            try
+                            {
+                                if (File.Exists(NSWDB_FILE))
+                                {
+                                    File.Delete(NSWDB_FILE);
+                                }
+                            }
+                            catch { }
+
+                            while (count > 0)
+                            {
+                                String outputData = new String(readBuff, 0, count);
+                                count = streamRead.Read(readBuff, 0, 1000000);
+                                using (StreamWriter sw = File.AppendText(NSWDB_FILE))
+                                {
+                                    sw.WriteLine(outputData);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                logger.Error("Could not download NSWDB file. " + ex.StackTrace);
+                MessageBox.Show("Could not download NSWDB File from nswdb.com! \n Please check your internet connection.");
             }
         }
 

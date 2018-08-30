@@ -29,6 +29,10 @@ Complete Switch Backups management tool
 
 ## Changelog
 
+v 1.1.5
+  - Fix #50: New autorenaming pattern is not used at runtime;
+  - Fix #52: NSWDB site changed something that prevents the program of downloading their xml file. 
+
 * 1.1.4
   - Fix #47: Some NSP update files were showing errors when adding to database (010065e003fd8800, 0100830004fb6800, 0100760002048800, 01005ee0036ec800, ..)
   - fix XCI files skipped when version number is non standard, fix #42 #44
@@ -109,6 +113,6 @@ Complete Switch Backups management tool
 
 ## Source & Binaries
 * [GitHub](https://github.com/gibaBR/Switch-Backup-Manager/archive/master.zip)
-* [Release 1.1.1](https://github.com/gibaBR/Switch-Backup-Manager/releases/tag/v1.1.1)
+* [Release 1.1.5](https://github.com/gibaBR/Switch-Backup-Manager/releases/tag/v1.1.5)
 
 

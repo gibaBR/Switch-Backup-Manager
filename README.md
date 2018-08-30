@@ -29,7 +29,7 @@ Complete Switch Backups management tool
 
 ## Changelog
 
-v 1.1.5
+* 1.1.5
   - Fix #50: New autorenaming pattern is not used at runtime;
   - Fix #52: NSWDB site changed something that prevents the program of downloading their xml file. 
 

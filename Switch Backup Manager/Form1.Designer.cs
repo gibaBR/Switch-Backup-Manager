@@ -238,7 +238,7 @@
             this.cbxFilterScene = new System.Windows.Forms.ComboBox();
             this.OLVSceneList = new BrightIdeasSoftware.ObjectListView();
             this.olvColumnFound = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
-            this.olvColumnTitleIDScene = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.olvColumnSceneID = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnGameNameScene = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.sizeColumnROMSizeScene = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnDeveloperScene = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
@@ -246,10 +246,10 @@
             this.olvColumnLanguagesScene = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnGroupScene = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnCartSizeScene = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.olvColumnTitleIDScene = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnSerialScene = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnFirmwareScene = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnCardTypeScene = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
-            this.olvColumnSceneID = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.contextMenuStripScene = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.copyInfoToClipboardToolStripMenuItem3 = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip3 = new System.Windows.Forms.MenuStrip();
@@ -2236,7 +2236,7 @@
             this.tabPage3.Location = new System.Drawing.Point(4, 22);
             this.tabPage3.Name = "tabPage3";
             this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage3.Size = new System.Drawing.Size(1519, 492);
+            this.tabPage3.Size = new System.Drawing.Size(1517, 490);
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Text = "Scene releases";
             this.tabPage3.UseVisualStyleBackColor = true;
@@ -2252,7 +2252,7 @@
             this.panel4.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel4.Location = new System.Drawing.Point(3, 3);
             this.panel4.Name = "panel4";
-            this.panel4.Size = new System.Drawing.Size(1513, 486);
+            this.panel4.Size = new System.Drawing.Size(1511, 484);
             this.panel4.TabIndex = 0;
             // 
             // btnClearFilterScene
@@ -2295,7 +2295,7 @@
             // OLVSceneList
             // 
             this.OLVSceneList.AllColumns.Add(this.olvColumnFound);
-            this.OLVSceneList.AllColumns.Add(this.olvColumnTitleIDScene);
+            this.OLVSceneList.AllColumns.Add(this.olvColumnSceneID);
             this.OLVSceneList.AllColumns.Add(this.olvColumnGameNameScene);
             this.OLVSceneList.AllColumns.Add(this.sizeColumnROMSizeScene);
             this.OLVSceneList.AllColumns.Add(this.olvColumnDeveloperScene);
@@ -2303,14 +2303,14 @@
             this.OLVSceneList.AllColumns.Add(this.olvColumnLanguagesScene);
             this.OLVSceneList.AllColumns.Add(this.olvColumnGroupScene);
             this.OLVSceneList.AllColumns.Add(this.olvColumnCartSizeScene);
+            this.OLVSceneList.AllColumns.Add(this.olvColumnTitleIDScene);
             this.OLVSceneList.AllColumns.Add(this.olvColumnSerialScene);
             this.OLVSceneList.AllColumns.Add(this.olvColumnFirmwareScene);
             this.OLVSceneList.AllColumns.Add(this.olvColumnCardTypeScene);
-            this.OLVSceneList.AllColumns.Add(this.olvColumnSceneID);
             this.OLVSceneList.CellEditUseWholeCell = false;
             this.OLVSceneList.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.olvColumnFound,
-            this.olvColumnTitleIDScene,
+            this.olvColumnSceneID,
             this.olvColumnGameNameScene,
             this.sizeColumnROMSizeScene,
             this.olvColumnDeveloperScene,
@@ -2318,10 +2318,10 @@
             this.olvColumnLanguagesScene,
             this.olvColumnGroupScene,
             this.olvColumnCartSizeScene,
+            this.olvColumnTitleIDScene,
             this.olvColumnSerialScene,
             this.olvColumnFirmwareScene,
-            this.olvColumnCardTypeScene,
-            this.olvColumnSceneID});
+            this.olvColumnCardTypeScene});
             this.OLVSceneList.ContextMenuStrip = this.contextMenuStripScene;
             this.OLVSceneList.Cursor = System.Windows.Forms.Cursors.Default;
             this.OLVSceneList.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -2330,7 +2330,7 @@
             this.OLVSceneList.Location = new System.Drawing.Point(0, 24);
             this.OLVSceneList.Name = "OLVSceneList";
             this.OLVSceneList.ShowGroups = false;
-            this.OLVSceneList.Size = new System.Drawing.Size(1513, 462);
+            this.OLVSceneList.Size = new System.Drawing.Size(1511, 460);
             this.OLVSceneList.TabIndex = 6;
             this.OLVSceneList.UseCellFormatEvents = true;
             this.OLVSceneList.UseCompatibleStateImageBehavior = false;
@@ -2344,11 +2344,12 @@
             this.olvColumnFound.AspectName = "Found";
             this.olvColumnFound.Text = "Found";
             // 
-            // olvColumnTitleIDScene
+            // olvColumnSceneID
             // 
-            this.olvColumnTitleIDScene.AspectName = "TitleID";
-            this.olvColumnTitleIDScene.Text = "Title ID";
-            this.olvColumnTitleIDScene.Width = 124;
+            this.olvColumnSceneID.AspectName = "IdScene";
+            this.olvColumnSceneID.DisplayIndex = 12;
+            this.olvColumnSceneID.Text = "ID";
+            this.olvColumnSceneID.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // olvColumnGameNameScene
             // 
@@ -2395,9 +2396,17 @@
             this.olvColumnCartSizeScene.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.olvColumnCartSizeScene.Width = 74;
             // 
+            // olvColumnTitleIDScene
+            // 
+            this.olvColumnTitleIDScene.AspectName = "TitleID";
+            this.olvColumnTitleIDScene.DisplayIndex = 1;
+            this.olvColumnTitleIDScene.Text = "Title ID";
+            this.olvColumnTitleIDScene.Width = 124;
+            // 
             // olvColumnSerialScene
             // 
             this.olvColumnSerialScene.AspectName = "Serial";
+            this.olvColumnSerialScene.DisplayIndex = 9;
             this.olvColumnSerialScene.Text = "Serial number";
             this.olvColumnSerialScene.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.olvColumnSerialScene.Width = 83;
@@ -2405,6 +2414,7 @@
             // olvColumnFirmwareScene
             // 
             this.olvColumnFirmwareScene.AspectName = "Firmware";
+            this.olvColumnFirmwareScene.DisplayIndex = 10;
             this.olvColumnFirmwareScene.Text = "Firmware";
             this.olvColumnFirmwareScene.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.olvColumnFirmwareScene.Width = 93;
@@ -2412,15 +2422,10 @@
             // olvColumnCardTypeScene
             // 
             this.olvColumnCardTypeScene.AspectName = "Cardtype";
+            this.olvColumnCardTypeScene.DisplayIndex = 11;
             this.olvColumnCardTypeScene.Text = "Card type";
             this.olvColumnCardTypeScene.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.olvColumnCardTypeScene.Width = 57;
-            // 
-            // olvColumnSceneID
-            // 
-            this.olvColumnSceneID.AspectName = "IdScene";
-            this.olvColumnSceneID.Text = "ID";
-            this.olvColumnSceneID.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // contextMenuStripScene
             // 
@@ -2449,7 +2454,7 @@
             this.toolStripMenuItem85});
             this.menuStrip3.Location = new System.Drawing.Point(0, 0);
             this.menuStrip3.Name = "menuStrip3";
-            this.menuStrip3.Size = new System.Drawing.Size(1513, 24);
+            this.menuStrip3.Size = new System.Drawing.Size(1511, 24);
             this.menuStrip3.TabIndex = 5;
             this.menuStrip3.Text = "menuStrip3";
             // 
@@ -2880,7 +2885,8 @@
             this.olvColumnSDKVersionEShop,
             this.olvColumnReleaseDateEshop,
             this.olvColumnNumberOfPlayersEshop,
-            this.olvColumnCategoriesEShop});
+            this.olvColumnCategoriesEShop,
+            this.olvColumnContentTypeEShop});
             this.OLVEshop.ContextMenuStrip = this.contextMenuEShopList;
             this.OLVEshop.Cursor = System.Windows.Forms.Cursors.Default;
             this.OLVEshop.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -2996,7 +3002,6 @@
             // olvColumnContentTypeEShop
             // 
             this.olvColumnContentTypeEShop.AspectName = "ContentType";
-            this.olvColumnContentTypeEShop.DisplayIndex = 15;
             this.olvColumnContentTypeEShop.Text = "Content Type";
             // 
             // contextMenuEShopList

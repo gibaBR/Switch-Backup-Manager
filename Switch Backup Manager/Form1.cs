@@ -125,6 +125,8 @@ namespace Switch_Backup_Manager
             UpdateSceneReleasesList();
             UpdateLocalGamesList();
             UpdateLocalNSPGamesList();
+            UpdateSceneReleaseListFoundColumn();
+
             FilterEshopByContentType();
 
             try
@@ -552,6 +554,32 @@ namespace Switch_Backup_Manager
 
             SceneReleasesSelectedItems = new Dictionary<Tuple<string, string>, FileData>();
             SumarizeLocalGamesList("scene");
+        }
+
+        public void UpdateSceneReleaseListFoundColumn()
+        {
+            foreach (FileData release in OLVSceneList.Objects)
+            {
+                if (LocalFilesList.ContainsKey(new Tuple<string, string>(release.TitleID, release.Version)))
+                {
+                    release.Found = "xci";
+                    OLVSceneList.RefreshObject(release);
+                }
+
+                if (LocalNSPFilesList.ContainsKey(new Tuple<string, string>(release.TitleID, release.Version)))
+                {
+                    if (String.IsNullOrEmpty(release.Found))
+                    {
+                        release.Found = "nsp";
+                    }
+                    else
+                    {
+                        release.Found = "both";
+                    }
+                    OLVSceneList.RefreshObject(release);
+                }
+
+            }
         }
 
         public void UpdateSDCardList()
@@ -1130,7 +1158,7 @@ namespace Switch_Backup_Manager
                     long size = 0;
                     foreach (ListViewItem item in selectedItems)
                     {
-                        titleID = item.Text;
+                        titleID = item.SubItems[9].Text;
                         version = Convert.ToString(((FileData)((OLVListItem)item).RowObject).Version);
                         FileData data = Util.GetFileData(titleID, version, SceneReleasesList);
                         SceneReleasesSelectedItems.Add(new Tuple<string, string>(titleID, version), data);
@@ -1931,6 +1959,7 @@ namespace Switch_Backup_Manager
             Util.UpdateNSWDB();
             Util.XML_NSWDB = XDocument.Load(@Util.NSWDB_FILE);
             UpdateSceneReleasesList();
+            UpdateSceneReleaseListFoundColumn();
             MessageBox.Show("Done.");
         }
 
@@ -1944,6 +1973,7 @@ namespace Switch_Backup_Manager
             Util.UpdateNSWDB();
             Util.XML_NSWDB = XDocument.Load(@Util.NSWDB_FILE);
             UpdateSceneReleasesList();
+            UpdateSceneReleaseListFoundColumn();
             MessageBox.Show("Done.");
         }
 

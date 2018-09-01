@@ -1790,7 +1790,7 @@ namespace Switch_Backup_Manager
                     array3[n].Name = new string(chars.ToArray());
                     chars.Clear();
 
-                    if (array3[n].Name.EndsWith(".xml"))
+                    if (array3[n].Name.EndsWith(".cnmt.xml"))
                     {
                         logger.Debug("Analyzing xml file.");
                         byte[] array4 = new byte[array3[n].Size];

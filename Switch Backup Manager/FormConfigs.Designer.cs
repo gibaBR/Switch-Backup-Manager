@@ -51,7 +51,6 @@
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.tabControl2 = new System.Windows.Forms.TabControl();
             this.tabPage4 = new System.Windows.Forms.TabPage();
-            this.tabPage5 = new System.Windows.Forms.TabPage();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.rbRenamingGameNameRegionFirmwareXCI = new System.Windows.Forms.RadioButton();
             this.rbRenamingGameNameRegionXCI = new System.Windows.Forms.RadioButton();
@@ -64,7 +63,11 @@
             this.cbxTagsXCI = new System.Windows.Forms.ComboBox();
             this.rbRenamingTitleIDGameNameXCI = new System.Windows.Forms.RadioButton();
             this.rbRenamingGameNameXCI = new System.Windows.Forms.RadioButton();
+            this.tabPage5 = new System.Windows.Forms.TabPage();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.groupBox6 = new System.Windows.Forms.GroupBox();
+            this.textLimitFileNameSizeNSP = new System.Windows.Forms.NumericUpDown();
+            this.label2 = new System.Windows.Forms.Label();
             this.rbRenamingCDNSP = new System.Windows.Forms.RadioButton();
             this.rbRenamingGameNameRegionFirmwareNSP = new System.Windows.Forms.RadioButton();
             this.rbRenamingGameNameRegionNSP = new System.Windows.Forms.RadioButton();
@@ -77,25 +80,24 @@
             this.cbxTagsNSP = new System.Windows.Forms.ComboBox();
             this.rbRenamingTitleIDGameNameNSP = new System.Windows.Forms.RadioButton();
             this.rbRenamingGameNameNSP = new System.Windows.Forms.RadioButton();
-            this.groupBox6 = new System.Windows.Forms.GroupBox();
-            this.label2 = new System.Windows.Forms.Label();
-            this.textLimitFileNameSizeNSP = new System.Windows.Forms.NumericUpDown();
+            this.cbShowCompletePaths = new System.Windows.Forms.CheckBox();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.groupBox2.SuspendLayout();
+            this.tabPage2.SuspendLayout();
             this.tabPage3.SuspendLayout();
             this.tabControl2.SuspendLayout();
             this.tabPage4.SuspendLayout();
-            this.tabPage5.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.gbCustom.SuspendLayout();
+            this.tabPage5.SuspendLayout();
             this.groupBox4.SuspendLayout();
-            this.gbCustomNSP.SuspendLayout();
             this.groupBox6.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.textLimitFileNameSizeNSP)).BeginInit();
+            this.gbCustomNSP.SuspendLayout();
             this.SuspendLayout();
             // 
             // panel1
@@ -276,9 +278,9 @@
             this.cbScrapLayerFSOnSD.Enabled = false;
             this.cbScrapLayerFSOnSD.Location = new System.Drawing.Point(17, 71);
             this.cbScrapLayerFSOnSD.Name = "cbScrapLayerFSOnSD";
-            this.cbScrapLayerFSOnSD.Size = new System.Drawing.Size(166, 17);
+            this.cbScrapLayerFSOnSD.Size = new System.Drawing.Size(124, 17);
             this.cbScrapLayerFSOnSD.TabIndex = 3;
-            this.cbScrapLayerFSOnSD.Text = "Installed e-shop titles (layer fs)";
+            this.cbScrapLayerFSOnSD.Text = "Installed e-shop titles";
             this.cbScrapLayerFSOnSD.UseVisualStyleBackColor = true;
             // 
             // cbScrapNSPOnSD
@@ -303,6 +305,7 @@
             // 
             // tabPage2
             // 
+            this.tabPage2.Controls.Add(this.cbShowCompletePaths);
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
@@ -343,17 +346,6 @@
             this.tabPage4.TabIndex = 0;
             this.tabPage4.Text = "XCI files";
             this.tabPage4.UseVisualStyleBackColor = true;
-            // 
-            // tabPage5
-            // 
-            this.tabPage5.Controls.Add(this.groupBox4);
-            this.tabPage5.Location = new System.Drawing.Point(4, 22);
-            this.tabPage5.Name = "tabPage5";
-            this.tabPage5.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage5.Size = new System.Drawing.Size(595, 368);
-            this.tabPage5.TabIndex = 1;
-            this.tabPage5.Text = "NSP files";
-            this.tabPage5.UseVisualStyleBackColor = true;
             // 
             // groupBox1
             // 
@@ -497,6 +489,17 @@
             this.rbRenamingGameNameXCI.UseVisualStyleBackColor = true;
             this.rbRenamingGameNameXCI.CheckedChanged += new System.EventHandler(this.rbRenamingGameNameXCI_CheckedChanged);
             // 
+            // tabPage5
+            // 
+            this.tabPage5.Controls.Add(this.groupBox4);
+            this.tabPage5.Location = new System.Drawing.Point(4, 22);
+            this.tabPage5.Name = "tabPage5";
+            this.tabPage5.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage5.Size = new System.Drawing.Size(595, 368);
+            this.tabPage5.TabIndex = 1;
+            this.tabPage5.Text = "NSP files";
+            this.tabPage5.UseVisualStyleBackColor = true;
+            // 
             // groupBox4
             // 
             this.groupBox4.Controls.Add(this.groupBox6);
@@ -515,6 +518,39 @@
             this.groupBox4.TabIndex = 3;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "Choose pattern";
+            // 
+            // groupBox6
+            // 
+            this.groupBox6.Controls.Add(this.textLimitFileNameSizeNSP);
+            this.groupBox6.Controls.Add(this.label2);
+            this.groupBox6.Location = new System.Drawing.Point(19, 191);
+            this.groupBox6.Name = "groupBox6";
+            this.groupBox6.Size = new System.Drawing.Size(132, 50);
+            this.groupBox6.TabIndex = 8;
+            this.groupBox6.TabStop = false;
+            this.groupBox6.Text = "Limit filename size";
+            // 
+            // textLimitFileNameSizeNSP
+            // 
+            this.textLimitFileNameSizeNSP.Location = new System.Drawing.Point(6, 22);
+            this.textLimitFileNameSizeNSP.Maximum = new decimal(new int[] {
+            255,
+            0,
+            0,
+            0});
+            this.textLimitFileNameSizeNSP.Name = "textLimitFileNameSizeNSP";
+            this.textLimitFileNameSizeNSP.Size = new System.Drawing.Size(55, 20);
+            this.textLimitFileNameSizeNSP.TabIndex = 2;
+            this.textLimitFileNameSizeNSP.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textLimitFileNameSizeNSP_KeyPress);
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(67, 24);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(57, 13);
+            this.label2.TabIndex = 1;
+            this.label2.Text = "0 = no limit";
             // 
             // rbRenamingCDNSP
             // 
@@ -652,38 +688,15 @@
             this.rbRenamingGameNameNSP.UseVisualStyleBackColor = true;
             this.rbRenamingGameNameNSP.CheckedChanged += new System.EventHandler(this.rbRenamingGameNameNSP_CheckedChanged);
             // 
-            // groupBox6
+            // cbShowCompletePaths
             // 
-            this.groupBox6.Controls.Add(this.textLimitFileNameSizeNSP);
-            this.groupBox6.Controls.Add(this.label2);
-            this.groupBox6.Location = new System.Drawing.Point(19, 191);
-            this.groupBox6.Name = "groupBox6";
-            this.groupBox6.Size = new System.Drawing.Size(132, 50);
-            this.groupBox6.TabIndex = 8;
-            this.groupBox6.TabStop = false;
-            this.groupBox6.Text = "Limit filename size";
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(67, 24);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(57, 13);
-            this.label2.TabIndex = 1;
-            this.label2.Text = "0 = no limit";
-            // 
-            // textLimitFileNameSizeNSP
-            // 
-            this.textLimitFileNameSizeNSP.Location = new System.Drawing.Point(6, 22);
-            this.textLimitFileNameSizeNSP.Maximum = new decimal(new int[] {
-            255,
-            0,
-            0,
-            0});
-            this.textLimitFileNameSizeNSP.Name = "textLimitFileNameSizeNSP";
-            this.textLimitFileNameSizeNSP.Size = new System.Drawing.Size(55, 20);
-            this.textLimitFileNameSizeNSP.TabIndex = 2;
-            this.textLimitFileNameSizeNSP.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textLimitFileNameSizeNSP_KeyPress);
+            this.cbShowCompletePaths.AutoSize = true;
+            this.cbShowCompletePaths.Location = new System.Drawing.Point(6, 16);
+            this.cbShowCompletePaths.Name = "cbShowCompletePaths";
+            this.cbShowCompletePaths.Size = new System.Drawing.Size(285, 17);
+            this.cbShowCompletePaths.TabIndex = 0;
+            this.cbShowCompletePaths.Text = "Show complete path of files on the lists   (needs restart)";
+            this.cbShowCompletePaths.UseVisualStyleBackColor = true;
             // 
             // FormConfigs
             // 
@@ -707,21 +720,23 @@
             this.groupBox3.ResumeLayout(false);
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
+            this.tabPage2.ResumeLayout(false);
+            this.tabPage2.PerformLayout();
             this.tabPage3.ResumeLayout(false);
             this.tabControl2.ResumeLayout(false);
             this.tabPage4.ResumeLayout(false);
-            this.tabPage5.ResumeLayout(false);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.gbCustom.ResumeLayout(false);
             this.gbCustom.PerformLayout();
+            this.tabPage5.ResumeLayout(false);
             this.groupBox4.ResumeLayout(false);
             this.groupBox4.PerformLayout();
-            this.gbCustomNSP.ResumeLayout(false);
-            this.gbCustomNSP.PerformLayout();
             this.groupBox6.ResumeLayout(false);
             this.groupBox6.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.textLimitFileNameSizeNSP)).EndInit();
+            this.gbCustomNSP.ResumeLayout(false);
+            this.gbCustomNSP.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -780,5 +795,6 @@
         private System.Windows.Forms.GroupBox groupBox6;
         private System.Windows.Forms.NumericUpDown textLimitFileNameSizeNSP;
         private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.CheckBox cbShowCompletePaths;
     }
 }

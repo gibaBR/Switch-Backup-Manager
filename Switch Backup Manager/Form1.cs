@@ -1146,7 +1146,7 @@ namespace Switch_Backup_Manager
                     long size = 0;
                     foreach (ListViewItem item in selectedItems)
                     {
-                        titleID = item.Text;
+                        titleID = item.SubItems[9].Text;
                         version = Convert.ToString(((FileData)((OLVListItem)item).RowObject).Version);
                         FileData data = Util.GetFileData(titleID, version, SceneReleasesList);
                         SceneReleasesSelectedItems.Add(new Tuple<string, string>(titleID, version), data);

@@ -1527,7 +1527,7 @@
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(1517, 490);
+            this.tabPage2.Size = new System.Drawing.Size(1519, 492);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "SD card";
             this.tabPage2.UseVisualStyleBackColor = true;
@@ -1609,7 +1609,7 @@
             this.OLV_SDCard.Location = new System.Drawing.Point(3, 55);
             this.OLV_SDCard.Name = "OLV_SDCard";
             this.OLV_SDCard.ShowGroups = false;
-            this.OLV_SDCard.Size = new System.Drawing.Size(1511, 432);
+            this.OLV_SDCard.Size = new System.Drawing.Size(1513, 434);
             this.OLV_SDCard.TabIndex = 6;
             this.OLV_SDCard.UseCellFormatEvents = true;
             this.OLV_SDCard.UseCompatibleStateImageBehavior = false;
@@ -1792,7 +1792,7 @@
             this.panel5.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel5.Location = new System.Drawing.Point(3, 27);
             this.panel5.Name = "panel5";
-            this.panel5.Size = new System.Drawing.Size(1511, 28);
+            this.panel5.Size = new System.Drawing.Size(1513, 28);
             this.panel5.TabIndex = 5;
             // 
             // lblSpaceAvailabeOnSD
@@ -1838,7 +1838,7 @@
             this.toolStripMenuItem39});
             this.menuSDFiles.Location = new System.Drawing.Point(3, 3);
             this.menuSDFiles.Name = "menuSDFiles";
-            this.menuSDFiles.Size = new System.Drawing.Size(1511, 24);
+            this.menuSDFiles.Size = new System.Drawing.Size(1513, 24);
             this.menuSDFiles.TabIndex = 4;
             // 
             // toolStripMenuItem4

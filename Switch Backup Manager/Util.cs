@@ -21,7 +21,7 @@ namespace Switch_Backup_Manager
 {
     internal static class Util
     {
-        public const string VERSION = "1.1.5";   //Actual application version
+        public const string VERSION = "1.1.6";   //Actual application version
         public const string MIN_DB_Version = "1.1.1"; //This is the minimum version of the DB that can work
 
         public const string INI_FILE = "sbm.ini";
@@ -53,6 +53,7 @@ namespace Switch_Backup_Manager
         public static bool ScrapInstalledEshopSDCard = true;
         public static bool ScrapExtraInfoFromWeb = false;
         public static bool AutoRemoveMissingFiles = false;
+        public static bool ShowCompletePathFiles = false;
 
         private static string[] Language = new string[16]
         {
@@ -1211,11 +1212,13 @@ namespace Switch_Backup_Manager
             string scrapInstalledNSP = ini.IniReadValue("SD", "scrapInstalledNSP").Trim().ToLower();
             string scrapExtraInfo = ini.IniReadValue("Config", "scrapExtraInfoFromWeb").Trim().ToLower();
             string autoRemoveMissingFilesAtStartup = ini.IniReadValue("Config", "autoRemoveMissingFiles").Trim().ToLower();
+            string showCompletePathFiles = ini.IniReadValue("Visual", "showCompletePathFiles").Trim().ToLower();
             if (scrapXCI != "") { ScrapXCIOnSDCard = (scrapXCI == "true"); } else { ini.IniWriteValue("SD", "scrapXCI", "true"); };
             if (scrapNSP != "") { ScrapNSPOnSDCard = (scrapNSP == "true"); } else { ini.IniWriteValue("SD", "scrapNSP", "true"); };
             if (scrapInstalledNSP != "") { ScrapInstalledEshopSDCard = (scrapInstalledNSP == "true"); } else { ini.IniWriteValue("SD", "scrapInstalledNSP", "false"); };
             if (scrapExtraInfo != "") { ScrapExtraInfoFromWeb = (scrapExtraInfo == "true"); } else { ini.IniWriteValue("Config", "scrapExtraInfoFromWeb", "false"); };
-            if (autoRemoveMissingFilesAtStartup != "") { AutoRemoveMissingFiles = (autoRemoveMissingFilesAtStartup == "true"); } else { ini.IniWriteValue("Config", "autoRemoveMissingFiles", "false"); };            
+            if (autoRemoveMissingFilesAtStartup != "") { AutoRemoveMissingFiles = (autoRemoveMissingFilesAtStartup == "true"); } else { ini.IniWriteValue("Config", "autoRemoveMissingFiles", "false"); };
+            if (showCompletePathFiles != "") { ShowCompletePathFiles = (showCompletePathFiles == "true"); } else { ini.IniWriteValue("Visual", "showCompletePathFiles", "fasle"); };
 
             try
             {

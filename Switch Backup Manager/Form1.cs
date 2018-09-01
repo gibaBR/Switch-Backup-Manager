@@ -294,6 +294,18 @@ namespace Switch_Backup_Manager
             OLVSceneList.OwnerDraw = true;
             noneToolStripMenuItem1.Checked = true;
 
+            if (Util.ShowCompletePathFiles)
+            {
+                olvColumnFilePathLocal.AspectName = "FilePath";
+                olvColumnFilePathSD.AspectName = "FilePath";
+                olvColumnFilePathEShop.AspectName = "FilePath";
+            } else
+            {
+                olvColumnFilePathLocal.AspectName = "FileNameWithExt";
+                olvColumnFilePathSD.AspectName = "FileNameWithExt";
+                olvColumnFilePathEShop.AspectName = "FileNameWithExt";
+            }
+
             //olvColumnContentTypeEShop.IsVisible = false; //Does not work! WTF!?
             OLVEshop.Sort(olvColumnGameNameLocal, SortOrder.Ascending);
 

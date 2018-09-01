@@ -23,10 +23,6 @@ namespace Switch_Backup_Manager
             InitializeComponent();
             this.AutoScaleMode = AutoScaleMode.Dpi;
 
-            //Hide tabs not ready
-            //tabControl1.TabPages.Remove(tabPage1);
-            tabControl1.TabPages.Remove(tabPage2);
-
             //This is Just an example, to put in the Label
             gameExample = new FileData();
             gameExample.GameName = "SUPER MARIO ODYSSEY";
@@ -87,6 +83,7 @@ namespace Switch_Backup_Manager
             Util.ini.IniWriteValue("SD", "scrapInstalledNSP", cbScrapLayerFSOnSD.Checked ? "true" : "false");
             Util.ini.IniWriteValue("Config", "scrapExtraInfoFromWeb", cbScrapExtraInfoFromWeb.Checked ? "true" : "false");
             Util.ini.IniWriteValue("Config", "autoRemoveMissingFiles", cbAutoRemoveMissingFiles.Checked ? "true" : "false");
+            Util.ini.IniWriteValue("Visual", "showCompletePathFiles", cbShowCompletePaths.Checked ? "true" : "false");
 
             Util.AutoUpdateNSDBOnStartup = this.cbAutoUpdateScene.Checked;
             Util.ini.IniWriteValue("Config", "autoUpdateNSWDB", cbAutoUpdateScene.Checked ? "true" : "false");
@@ -171,6 +168,7 @@ namespace Switch_Backup_Manager
             this.cbScrapXCIOnSD.Checked = Util.ScrapXCIOnSDCard;
             this.cbScrapExtraInfoFromWeb.Checked = Util.ScrapExtraInfoFromWeb;
             this.cbAutoRemoveMissingFiles.Checked = Util.AutoRemoveMissingFiles;
+            this.cbShowCompletePaths.Checked = Util.ShowCompletePathFiles;
 
             for (int i = 1; i <= 5; i++ )
             {

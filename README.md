@@ -32,6 +32,12 @@ Complete Switch Backups management tool
 
 ## Changelog
 
+* 1.1.6
+  - Fix: Unable to process 'Scene' NSP releases #45. Thanks to garoxas;
+  - Filename on the lists now shows only filename by default, user can however choose to show complete path in options;
+  - Highlights on the scene list the files you already have (NSP, XCI or both) with custom colors;
+  - Now you can donate using paypal - if you want to. Link is on github page :-)
+
 * 1.1.5
   - Fix #50: New autorenaming pattern is not used at runtime;
   - Fix #52: NSWDB site changed something that prevents the program of downloading their xml file. 

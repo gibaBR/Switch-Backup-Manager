@@ -1,6 +1,9 @@
 # Switch-Backup-Manager
 Complete Switch Backups management tool
 
+
+[![paypal](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=WR5ZZ7RH55NTG)
+
 ## Main Features
 * Manage your local (XCI & NSP) and SD card Switch backups
 * See game info retrieved from web or edit them manually

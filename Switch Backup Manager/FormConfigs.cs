@@ -85,6 +85,20 @@ namespace Switch_Backup_Manager
             Util.ini.IniWriteValue("Config", "autoRemoveMissingFiles", cbAutoRemoveMissingFiles.Checked ? "true" : "false");
             Util.ini.IniWriteValue("Visual", "showCompletePathFiles", cbShowCompletePaths.Checked ? "true" : "false");
 
+            Util.HighlightXCIOnScene = cbHighlightXCIOnScene.Checked;
+            Util.HighlightNSPOnScene = cbHighlightNSPOnScene.Checked;
+            Util.HighlightBothOnScene = cbHighlightBothOnScene.Checked;
+            Util.HighlightXCIOnScene_color = btnColorXCI.BackColor;
+            Util.HighlightNSPOnScene_color = btnColorEshop.BackColor;
+            Util.HighlightBothOnScene_color = btnColorBoth.BackColor;
+
+            Util.ini.IniWriteValue("Visual", "highlightXCIOnScene", Util.HighlightXCIOnScene ? "true" : "false");
+            Util.ini.IniWriteValue("Visual", "highlightNSPOnScene", Util.HighlightNSPOnScene ? "true" : "false");
+            Util.ini.IniWriteValue("Visual", "highlightBOTHOnScene", Util.HighlightBothOnScene ? "true" : "false");
+            Util.ini.IniWriteValue("Visual", "highlightXCIOnScene_color", System.Drawing.ColorTranslator.ToHtml(Util.HighlightXCIOnScene_color));
+            Util.ini.IniWriteValue("Visual", "highlightNSPOnScene_color", System.Drawing.ColorTranslator.ToHtml(Util.HighlightNSPOnScene_color));
+            Util.ini.IniWriteValue("Visual", "highlightBOTHOnScene_color", System.Drawing.ColorTranslator.ToHtml(Util.HighlightBothOnScene_color));
+
             Util.AutoUpdateNSDBOnStartup = this.cbAutoUpdateScene.Checked;
             Util.ini.IniWriteValue("Config", "autoUpdateNSWDB", cbAutoUpdateScene.Checked ? "true" : "false");
             Util.UseTitleKeys = this.cbUseTitleKeys.Checked;
@@ -169,6 +183,13 @@ namespace Switch_Backup_Manager
             this.cbScrapExtraInfoFromWeb.Checked = Util.ScrapExtraInfoFromWeb;
             this.cbAutoRemoveMissingFiles.Checked = Util.AutoRemoveMissingFiles;
             this.cbShowCompletePaths.Checked = Util.ShowCompletePathFiles;
+
+            cbHighlightXCIOnScene.Checked = Util.HighlightXCIOnScene;
+            cbHighlightNSPOnScene.Checked = Util.HighlightNSPOnScene;
+            cbHighlightBothOnScene.Checked = Util.HighlightBothOnScene;
+            this.btnColorXCI.BackColor = Util.HighlightXCIOnScene_color;
+            this.btnColorEshop.BackColor = Util.HighlightNSPOnScene_color;
+            this.btnColorBoth.BackColor = Util.HighlightBothOnScene_color;
 
             for (int i = 1; i <= 5; i++ )
             {
@@ -367,6 +388,51 @@ namespace Switch_Backup_Manager
             gbCustomNSP.Visible = false;
             this.autoRenamingPatternNSP = "{titleid} - {gamename} - {releasegroup}";
             lblExampleNSP.Text = Util.GetRenamingString(gameExampleNSP, this.autoRenamingPatternNSP);
+        }
+
+        private void btnColorXCI_Click(object sender, EventArgs e)
+        {
+            ColorDialog MyDialog = new ColorDialog();
+            // Keeps the user from selecting a custom color.
+            MyDialog.AllowFullOpen = false;
+            // Allows the user to get help. (The default is false.)
+            MyDialog.ShowHelp = true;
+            // Sets the initial color select to the current text color.
+            MyDialog.Color = btnColorXCI.BackColor;
+
+            // Update the text box color if the user clicks OK 
+            if (MyDialog.ShowDialog() == DialogResult.OK)
+                btnColorXCI.BackColor = MyDialog.Color;
+        }
+
+        private void btnColorEshop_Click(object sender, EventArgs e)
+        {
+            ColorDialog MyDialog = new ColorDialog();
+            // Keeps the user from selecting a custom color.
+            MyDialog.AllowFullOpen = false;
+            // Allows the user to get help. (The default is false.)
+            MyDialog.ShowHelp = true;
+            // Sets the initial color select to the current text color.
+            MyDialog.Color = btnColorEshop.BackColor;
+
+            // Update the text box color if the user clicks OK 
+            if (MyDialog.ShowDialog() == DialogResult.OK)
+                btnColorEshop.BackColor = MyDialog.Color;
+        }
+
+        private void btnColorBoth_Click(object sender, EventArgs e)
+        {
+            ColorDialog MyDialog = new ColorDialog();
+            // Keeps the user from selecting a custom color.
+            MyDialog.AllowFullOpen = false;
+            // Allows the user to get help. (The default is false.)
+            MyDialog.ShowHelp = true;
+            // Sets the initial color select to the current text color.
+            MyDialog.Color = btnColorBoth.BackColor;
+
+            // Update the text box color if the user clicks OK 
+            if (MyDialog.ShowDialog() == DialogResult.OK)
+                btnColorBoth.BackColor = MyDialog.Color;
         }
     }
 }

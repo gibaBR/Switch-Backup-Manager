@@ -54,6 +54,13 @@ namespace Switch_Backup_Manager
         public static bool ScrapExtraInfoFromWeb = false;
         public static bool AutoRemoveMissingFiles = false;
         public static bool ShowCompletePathFiles = false;
+        public static bool HighlightXCIOnScene = false;
+        public static bool HighlightNSPOnScene = false;
+        public static bool HighlightBothOnScene = false;
+
+        public static Color HighlightXCIOnScene_color = Color.Green;
+        public static Color HighlightNSPOnScene_color = Color.Orange;
+        public static Color HighlightBothOnScene_color = Color.Yellow;
 
         private static string[] Language = new string[16]
         {
@@ -816,6 +823,29 @@ namespace Switch_Backup_Manager
             return result;
         }
 
+        public static bool IsTitleIDOnXML(string titleID, string xml)
+        {
+            bool result = false;
+            XElement element;
+
+            if (xml == LOCAL_FILES_DB)
+            {
+                element = XML_Local.Descendants("Game")
+                   .FirstOrDefault(el => (string)el.Attribute("TitleID") == titleID);
+            } else
+            {
+                element = XML_NSP_Local.Descendants("Game")
+                   .FirstOrDefault(el => (string)el.Attribute("TitleID") == titleID);
+            }
+
+            if (element != null)
+            {
+                result = true;
+            }
+
+            return result;
+        }
+
         private static void GetExtraInfoFromScene(FileData data)
         {
             XElement element = XML_NSWDB.Descendants("release")
@@ -1213,12 +1243,26 @@ namespace Switch_Backup_Manager
             string scrapExtraInfo = ini.IniReadValue("Config", "scrapExtraInfoFromWeb").Trim().ToLower();
             string autoRemoveMissingFilesAtStartup = ini.IniReadValue("Config", "autoRemoveMissingFiles").Trim().ToLower();
             string showCompletePathFiles = ini.IniReadValue("Visual", "showCompletePathFiles").Trim().ToLower();
+            string highlightXCIOnScene = ini.IniReadValue("Visual", "highlightXCIOnScene").Trim().ToLower();
+            string highlightNSPOnScene = ini.IniReadValue("Visual", "highlightNSPOnScene").Trim().ToLower();
+            string highlightBothOnScene = ini.IniReadValue("Visual", "highlightBOTHOnScene").Trim().ToLower();
+            string highlightXCIOnScene_color = ini.IniReadValue("Visual", "highlightXCIOnScene_color").Trim().ToLower();
+            string highlightNSPOnScene_color = ini.IniReadValue("Visual", "highlightNSPOnScene_color").Trim().ToLower();
+            string highlightBothOnScene_color = ini.IniReadValue("Visual", "highlightBOTHOnScene_color").Trim().ToLower();
+
             if (scrapXCI != "") { ScrapXCIOnSDCard = (scrapXCI == "true"); } else { ini.IniWriteValue("SD", "scrapXCI", "true"); };
             if (scrapNSP != "") { ScrapNSPOnSDCard = (scrapNSP == "true"); } else { ini.IniWriteValue("SD", "scrapNSP", "true"); };
             if (scrapInstalledNSP != "") { ScrapInstalledEshopSDCard = (scrapInstalledNSP == "true"); } else { ini.IniWriteValue("SD", "scrapInstalledNSP", "false"); };
             if (scrapExtraInfo != "") { ScrapExtraInfoFromWeb = (scrapExtraInfo == "true"); } else { ini.IniWriteValue("Config", "scrapExtraInfoFromWeb", "false"); };
             if (autoRemoveMissingFilesAtStartup != "") { AutoRemoveMissingFiles = (autoRemoveMissingFilesAtStartup == "true"); } else { ini.IniWriteValue("Config", "autoRemoveMissingFiles", "false"); };
-            if (showCompletePathFiles != "") { ShowCompletePathFiles = (showCompletePathFiles == "true"); } else { ini.IniWriteValue("Visual", "showCompletePathFiles", "fasle"); };
+            if (showCompletePathFiles != "") { ShowCompletePathFiles = (showCompletePathFiles == "true"); } else { ini.IniWriteValue("Visual", "showCompletePathFiles", "false"); };
+            if (highlightXCIOnScene != "") { HighlightXCIOnScene = (highlightXCIOnScene == "true"); } else { ini.IniWriteValue("Visual", "highlightXCIOnScene", "false"); };
+            if (highlightNSPOnScene != "") { HighlightNSPOnScene = (highlightNSPOnScene == "true"); } else { ini.IniWriteValue("Visual", "highlightNSPOnScene", "false"); };
+            if (highlightBothOnScene != "") { HighlightBothOnScene = (highlightBothOnScene == "true"); } else { ini.IniWriteValue("Visual", "highlightBothOnScene", "false"); };
+
+            if (highlightXCIOnScene_color != "") { HighlightXCIOnScene_color = System.Drawing.ColorTranslator.FromHtml(highlightXCIOnScene_color); } else { ini.IniWriteValue("Visual", "highlightXCIOnScene_color", System.Drawing.ColorTranslator.ToHtml(HighlightXCIOnScene_color)); };
+            if (highlightNSPOnScene_color != "") { HighlightNSPOnScene_color = System.Drawing.ColorTranslator.FromHtml(highlightNSPOnScene_color); } else { ini.IniWriteValue("Visual", "highlightNSPOnScene_color", System.Drawing.ColorTranslator.ToHtml(HighlightNSPOnScene_color)); };
+            if (highlightBothOnScene_color != "") { HighlightBothOnScene_color = System.Drawing.ColorTranslator.FromHtml(highlightBothOnScene_color); } else { ini.IniWriteValue("Visual", "highlightBothOnScene_color", System.Drawing.ColorTranslator.ToHtml(HighlightBothOnScene_color)); };
 
             try
             {
@@ -2882,6 +2926,23 @@ namespace Switch_Backup_Manager
             }
 
             result.Languages = languages;
+
+            if (isSceneXML)
+            {
+                if (IsTitleIDOnXML(result.TitleID,LOCAL_NSP_FILES_DB))
+                {
+                    if (IsTitleIDOnXML(result.TitleID, LOCAL_FILES_DB)) {
+                        result.sceneFound = "BOTH";
+                    } else
+                    {
+                        result.sceneFound = "NSP";
+                    }                    
+                } else if (IsTitleIDOnXML(result.TitleID, LOCAL_FILES_DB))
+                {
+                    result.sceneFound = "XCI";
+                }
+            }
+
             return result;
         }
 
@@ -3219,6 +3280,18 @@ namespace Switch_Backup_Manager
                 result.Add(entry.Key, entry.Value);
             }
 
+            return result;
+        }
+
+        public static bool IsTupleOnDictionary(Tuple<string, string> TitleIDAndVersion, Dictionary<Tuple<string, string>, FileData> dictionary)
+        {
+            bool result = false;
+            if (dictionary != null)
+            {
+                FileData data_tmp = new FileData();
+                dictionary.TryGetValue(TitleIDAndVersion, out data_tmp);
+                result = (data_tmp != null);
+            }
             return result;
         }
 

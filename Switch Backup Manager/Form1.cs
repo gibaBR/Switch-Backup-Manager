@@ -1073,6 +1073,9 @@ namespace Switch_Backup_Manager
             toolStripStatusLabel1.Text = "0 Selected (0MB)";
 
             panelEditTitle.Visible = false;
+            toolStripStatusLabel3.Visible = false;
+            toolStripStatusLabel4.Visible = false;
+            toolStripStatusLabel5.Visible = false;
 
             switch (tabControl1.SelectedIndex)
             {
@@ -1083,6 +1086,22 @@ namespace Switch_Backup_Manager
                     SumarizeLocalGamesList("sdcard");
                     break;
                 case 2: //Scene
+                    if (Util.HighlightXCIOnScene)
+                    {
+                        toolStripStatusLabel3.BackColor = Util.HighlightXCIOnScene_color;
+                        toolStripStatusLabel3.Visible = true;
+                    }
+                    if (Util.HighlightNSPOnScene)
+                    {
+                        toolStripStatusLabel4.BackColor = Util.HighlightNSPOnScene_color;
+                        toolStripStatusLabel4.Visible = true;
+                    }
+                    if (Util.HighlightBothOnScene)
+                    {
+                        toolStripStatusLabel5.BackColor = Util.HighlightBothOnScene_color;
+                        toolStripStatusLabel5.Visible = true;
+                    }
+
                     SumarizeLocalGamesList("scene");
                     break;
                 case 3: //Eshop
@@ -1703,6 +1722,29 @@ namespace Switch_Backup_Manager
             if (e.ColumnIndex == this.columnSceneRegionScene.Index)
             {
                 e.SubItem.Text = "";
+            }
+
+            FileData data = (FileData)e.Model;
+            switch (data.sceneFound)
+            {
+                case "NSP":
+                    if (Util.HighlightNSPOnScene)
+                    {
+                        e.SubItem.BackColor = Util.HighlightNSPOnScene_color;
+                    }
+                    break;
+                case "XCI":
+                    if (Util.HighlightXCIOnScene)
+                    {
+                        e.SubItem.BackColor = Util.HighlightXCIOnScene_color;
+                    }                    
+                    break;
+                case "BOTH":
+                    if (Util.HighlightBothOnScene)
+                    {
+                        e.SubItem.BackColor = Util.HighlightBothOnScene_color;
+                    }
+                    break;
             }
         }
 

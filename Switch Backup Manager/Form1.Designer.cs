@@ -393,6 +393,9 @@
             this.toolStripStatusFilesOperation = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripProgressAddingFiles = new System.Windows.Forms.ToolStripProgressBar();
             this.toolStripStatusLabelGame = new System.Windows.Forms.ToolStripStatusLabel();
+            this.toolStripStatusLabel3 = new System.Windows.Forms.ToolStripStatusLabel();
+            this.toolStripStatusLabel4 = new System.Windows.Forms.ToolStripStatusLabel();
+            this.toolStripStatusLabel5 = new System.Windows.Forms.ToolStripStatusLabel();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.optionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -1526,7 +1529,7 @@
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(1519, 492);
+            this.tabPage2.Size = new System.Drawing.Size(1517, 490);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "SD card";
             this.tabPage2.UseVisualStyleBackColor = true;
@@ -1608,7 +1611,7 @@
             this.OLV_SDCard.Location = new System.Drawing.Point(3, 55);
             this.OLV_SDCard.Name = "OLV_SDCard";
             this.OLV_SDCard.ShowGroups = false;
-            this.OLV_SDCard.Size = new System.Drawing.Size(1513, 434);
+            this.OLV_SDCard.Size = new System.Drawing.Size(1511, 432);
             this.OLV_SDCard.TabIndex = 6;
             this.OLV_SDCard.UseCellFormatEvents = true;
             this.OLV_SDCard.UseCompatibleStateImageBehavior = false;
@@ -1791,7 +1794,7 @@
             this.panel5.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel5.Location = new System.Drawing.Point(3, 27);
             this.panel5.Name = "panel5";
-            this.panel5.Size = new System.Drawing.Size(1513, 28);
+            this.panel5.Size = new System.Drawing.Size(1511, 28);
             this.panel5.TabIndex = 5;
             // 
             // lblSpaceAvailabeOnSD
@@ -1837,7 +1840,7 @@
             this.toolStripMenuItem39});
             this.menuSDFiles.Location = new System.Drawing.Point(3, 3);
             this.menuSDFiles.Name = "menuSDFiles";
-            this.menuSDFiles.Size = new System.Drawing.Size(1513, 24);
+            this.menuSDFiles.Size = new System.Drawing.Size(1511, 24);
             this.menuSDFiles.TabIndex = 4;
             // 
             // toolStripMenuItem4
@@ -2235,7 +2238,7 @@
             this.tabPage3.Location = new System.Drawing.Point(4, 22);
             this.tabPage3.Name = "tabPage3";
             this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage3.Size = new System.Drawing.Size(1519, 492);
+            this.tabPage3.Size = new System.Drawing.Size(1517, 490);
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Text = "Scene releases";
             this.tabPage3.UseVisualStyleBackColor = true;
@@ -2251,7 +2254,7 @@
             this.panel4.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel4.Location = new System.Drawing.Point(3, 3);
             this.panel4.Name = "panel4";
-            this.panel4.Size = new System.Drawing.Size(1513, 486);
+            this.panel4.Size = new System.Drawing.Size(1511, 484);
             this.panel4.TabIndex = 0;
             // 
             // btnClearFilterScene
@@ -2327,7 +2330,7 @@
             this.OLVSceneList.Location = new System.Drawing.Point(0, 24);
             this.OLVSceneList.Name = "OLVSceneList";
             this.OLVSceneList.ShowGroups = false;
-            this.OLVSceneList.Size = new System.Drawing.Size(1513, 462);
+            this.OLVSceneList.Size = new System.Drawing.Size(1511, 460);
             this.OLVSceneList.TabIndex = 6;
             this.OLVSceneList.UseCellFormatEvents = true;
             this.OLVSceneList.UseCompatibleStateImageBehavior = false;
@@ -2452,7 +2455,7 @@
             this.toolStripMenuItem85});
             this.menuStrip3.Location = new System.Drawing.Point(0, 0);
             this.menuStrip3.Name = "menuStrip3";
-            this.menuStrip3.Size = new System.Drawing.Size(1513, 24);
+            this.menuStrip3.Size = new System.Drawing.Size(1511, 24);
             this.menuStrip3.TabIndex = 5;
             this.menuStrip3.Text = "menuStrip3";
             // 
@@ -2835,7 +2838,7 @@
             this.tabPage4.Location = new System.Drawing.Point(4, 22);
             this.tabPage4.Name = "tabPage4";
             this.tabPage4.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage4.Size = new System.Drawing.Size(1519, 492);
+            this.tabPage4.Size = new System.Drawing.Size(1517, 490);
             this.tabPage4.TabIndex = 3;
             this.tabPage4.Text = "E-shop files";
             this.tabPage4.UseVisualStyleBackColor = true;
@@ -2846,7 +2849,7 @@
             this.panel10.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel10.Location = new System.Drawing.Point(3, 31);
             this.panel10.Name = "panel10";
-            this.panel10.Size = new System.Drawing.Size(1513, 458);
+            this.panel10.Size = new System.Drawing.Size(1511, 456);
             this.panel10.TabIndex = 11;
             // 
             // OLVEshop
@@ -2893,7 +2896,7 @@
             this.OLVEshop.Location = new System.Drawing.Point(0, 0);
             this.OLVEshop.Name = "OLVEshop";
             this.OLVEshop.ShowGroups = false;
-            this.OLVEshop.Size = new System.Drawing.Size(1513, 458);
+            this.OLVEshop.Size = new System.Drawing.Size(1511, 456);
             this.OLVEshop.TabIndex = 3;
             this.OLVEshop.UseCellFormatEvents = true;
             this.OLVEshop.UseCompatibleStateImageBehavior = false;
@@ -3123,7 +3126,7 @@
             this.panel11.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel11.Location = new System.Drawing.Point(3, 3);
             this.panel11.Name = "panel11";
-            this.panel11.Size = new System.Drawing.Size(1513, 28);
+            this.panel11.Size = new System.Drawing.Size(1511, 28);
             this.panel11.TabIndex = 10;
             // 
             // panel13
@@ -3136,7 +3139,7 @@
             this.panel13.Controls.Add(this.label5);
             this.panel13.Controls.Add(this.cbxFilterEshop);
             this.panel13.Dock = System.Windows.Forms.DockStyle.Right;
-            this.panel13.Location = new System.Drawing.Point(800, 0);
+            this.panel13.Location = new System.Drawing.Point(798, 0);
             this.panel13.Name = "panel13";
             this.panel13.Size = new System.Drawing.Size(713, 28);
             this.panel13.TabIndex = 1;
@@ -3567,7 +3570,10 @@
             this.toolStripStatusLabel2,
             this.toolStripStatusFilesOperation,
             this.toolStripProgressAddingFiles,
-            this.toolStripStatusLabelGame});
+            this.toolStripStatusLabelGame,
+            this.toolStripStatusLabel3,
+            this.toolStripStatusLabel4,
+            this.toolStripStatusLabel5});
             this.statusStrip1.Location = new System.Drawing.Point(0, 542);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.Size = new System.Drawing.Size(1527, 24);
@@ -3614,6 +3620,27 @@
             this.toolStripStatusLabelGame.Size = new System.Drawing.Size(58, 19);
             this.toolStripStatusLabelGame.Text = "game aaa";
             this.toolStripStatusLabelGame.Visible = false;
+            // 
+            // toolStripStatusLabel3
+            // 
+            this.toolStripStatusLabel3.Name = "toolStripStatusLabel3";
+            this.toolStripStatusLabel3.Size = new System.Drawing.Size(86, 19);
+            this.toolStripStatusLabel3.Text = "Files on XCI list";
+            this.toolStripStatusLabel3.Visible = false;
+            // 
+            // toolStripStatusLabel4
+            // 
+            this.toolStripStatusLabel4.Name = "toolStripStatusLabel4";
+            this.toolStripStatusLabel4.Size = new System.Drawing.Size(105, 19);
+            this.toolStripStatusLabel4.Text = "Files on E-shop list";
+            this.toolStripStatusLabel4.Visible = false;
+            // 
+            // toolStripStatusLabel5
+            // 
+            this.toolStripStatusLabel5.Name = "toolStripStatusLabel5";
+            this.toolStripStatusLabel5.Size = new System.Drawing.Size(180, 19);
+            this.toolStripStatusLabel5.Text = "Files on Both lists (XCI && E-shop)";
+            this.toolStripStatusLabel5.Visible = false;
             // 
             // menuStrip1
             // 
@@ -4485,6 +4512,9 @@
         private System.Windows.Forms.CheckBox cbUpdates;
         private System.Windows.Forms.CheckBox cbDLC;
         private BrightIdeasSoftware.OLVColumn olvColumnContentTypeEShop;
+        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel3;
+        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel4;
+        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel5;
     }
 }
 

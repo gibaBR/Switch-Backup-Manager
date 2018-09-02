@@ -81,6 +81,14 @@
             this.rbRenamingTitleIDGameNameNSP = new System.Windows.Forms.RadioButton();
             this.rbRenamingGameNameNSP = new System.Windows.Forms.RadioButton();
             this.cbShowCompletePaths = new System.Windows.Forms.CheckBox();
+            this.groupBox5 = new System.Windows.Forms.GroupBox();
+            this.cbHighlightXCIOnScene = new System.Windows.Forms.CheckBox();
+            this.cbHighlightNSPOnScene = new System.Windows.Forms.CheckBox();
+            this.cbHighlightBothOnScene = new System.Windows.Forms.CheckBox();
+            this.btnColorXCI = new System.Windows.Forms.Button();
+            this.btnColorEshop = new System.Windows.Forms.Button();
+            this.btnColorBoth = new System.Windows.Forms.Button();
+            this.label1 = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.tabControl1.SuspendLayout();
@@ -98,6 +106,7 @@
             this.groupBox6.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.textLimitFileNameSizeNSP)).BeginInit();
             this.gbCustomNSP.SuspendLayout();
+            this.groupBox5.SuspendLayout();
             this.SuspendLayout();
             // 
             // panel1
@@ -305,6 +314,8 @@
             // 
             // tabPage2
             // 
+            this.tabPage2.Controls.Add(this.label1);
+            this.tabPage2.Controls.Add(this.groupBox5);
             this.tabPage2.Controls.Add(this.cbShowCompletePaths);
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
@@ -691,12 +702,96 @@
             // cbShowCompletePaths
             // 
             this.cbShowCompletePaths.AutoSize = true;
-            this.cbShowCompletePaths.Location = new System.Drawing.Point(6, 16);
+            this.cbShowCompletePaths.Location = new System.Drawing.Point(10, 135);
             this.cbShowCompletePaths.Name = "cbShowCompletePaths";
-            this.cbShowCompletePaths.Size = new System.Drawing.Size(285, 17);
+            this.cbShowCompletePaths.Size = new System.Drawing.Size(209, 17);
             this.cbShowCompletePaths.TabIndex = 0;
-            this.cbShowCompletePaths.Text = "Show complete path of files on the lists   (needs restart)";
+            this.cbShowCompletePaths.Text = "Show complete path of files on the lists";
             this.cbShowCompletePaths.UseVisualStyleBackColor = true;
+            // 
+            // groupBox5
+            // 
+            this.groupBox5.Controls.Add(this.btnColorBoth);
+            this.groupBox5.Controls.Add(this.btnColorEshop);
+            this.groupBox5.Controls.Add(this.btnColorXCI);
+            this.groupBox5.Controls.Add(this.cbHighlightBothOnScene);
+            this.groupBox5.Controls.Add(this.cbHighlightNSPOnScene);
+            this.groupBox5.Controls.Add(this.cbHighlightXCIOnScene);
+            this.groupBox5.Location = new System.Drawing.Point(10, 18);
+            this.groupBox5.Name = "groupBox5";
+            this.groupBox5.Size = new System.Drawing.Size(285, 93);
+            this.groupBox5.TabIndex = 1;
+            this.groupBox5.TabStop = false;
+            this.groupBox5.Text = "Highlights on scene list";
+            // 
+            // cbHighlightXCIOnScene
+            // 
+            this.cbHighlightXCIOnScene.AutoSize = true;
+            this.cbHighlightXCIOnScene.Location = new System.Drawing.Point(7, 20);
+            this.cbHighlightXCIOnScene.Name = "cbHighlightXCIOnScene";
+            this.cbHighlightXCIOnScene.Size = new System.Drawing.Size(109, 17);
+            this.cbHighlightXCIOnScene.TabIndex = 0;
+            this.cbHighlightXCIOnScene.Text = "Games on XCI list";
+            this.cbHighlightXCIOnScene.UseVisualStyleBackColor = true;
+            // 
+            // cbHighlightNSPOnScene
+            // 
+            this.cbHighlightNSPOnScene.AutoSize = true;
+            this.cbHighlightNSPOnScene.Location = new System.Drawing.Point(7, 44);
+            this.cbHighlightNSPOnScene.Name = "cbHighlightNSPOnScene";
+            this.cbHighlightNSPOnScene.Size = new System.Drawing.Size(121, 17);
+            this.cbHighlightNSPOnScene.TabIndex = 1;
+            this.cbHighlightNSPOnScene.Text = "Games on eshop list";
+            this.cbHighlightNSPOnScene.UseVisualStyleBackColor = true;
+            // 
+            // cbHighlightBothOnScene
+            // 
+            this.cbHighlightBothOnScene.AutoSize = true;
+            this.cbHighlightBothOnScene.Location = new System.Drawing.Point(7, 67);
+            this.cbHighlightBothOnScene.Name = "cbHighlightBothOnScene";
+            this.cbHighlightBothOnScene.Size = new System.Drawing.Size(118, 17);
+            this.cbHighlightBothOnScene.TabIndex = 2;
+            this.cbHighlightBothOnScene.Text = "Games on both lists";
+            this.cbHighlightBothOnScene.UseVisualStyleBackColor = true;
+            // 
+            // btnColorXCI
+            // 
+            this.btnColorXCI.BackColor = System.Drawing.Color.Green;
+            this.btnColorXCI.Location = new System.Drawing.Point(148, 12);
+            this.btnColorXCI.Name = "btnColorXCI";
+            this.btnColorXCI.Size = new System.Drawing.Size(24, 24);
+            this.btnColorXCI.TabIndex = 3;
+            this.btnColorXCI.UseVisualStyleBackColor = false;
+            this.btnColorXCI.Click += new System.EventHandler(this.btnColorXCI_Click);
+            // 
+            // btnColorEshop
+            // 
+            this.btnColorEshop.BackColor = System.Drawing.Color.Orange;
+            this.btnColorEshop.Location = new System.Drawing.Point(148, 36);
+            this.btnColorEshop.Name = "btnColorEshop";
+            this.btnColorEshop.Size = new System.Drawing.Size(24, 24);
+            this.btnColorEshop.TabIndex = 4;
+            this.btnColorEshop.UseVisualStyleBackColor = false;
+            this.btnColorEshop.Click += new System.EventHandler(this.btnColorEshop_Click);
+            // 
+            // btnColorBoth
+            // 
+            this.btnColorBoth.BackColor = System.Drawing.Color.Yellow;
+            this.btnColorBoth.Location = new System.Drawing.Point(148, 60);
+            this.btnColorBoth.Name = "btnColorBoth";
+            this.btnColorBoth.Size = new System.Drawing.Size(24, 24);
+            this.btnColorBoth.TabIndex = 5;
+            this.btnColorBoth.UseVisualStyleBackColor = false;
+            this.btnColorBoth.Click += new System.EventHandler(this.btnColorBoth_Click);
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(10, 369);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(261, 13);
+            this.label1.TabIndex = 2;
+            this.label1.Text = "* Changes made here requires a restart of the program";
             // 
             // FormConfigs
             // 
@@ -737,6 +832,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.textLimitFileNameSizeNSP)).EndInit();
             this.gbCustomNSP.ResumeLayout(false);
             this.gbCustomNSP.PerformLayout();
+            this.groupBox5.ResumeLayout(false);
+            this.groupBox5.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -796,5 +893,13 @@
         private System.Windows.Forms.NumericUpDown textLimitFileNameSizeNSP;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.CheckBox cbShowCompletePaths;
+        private System.Windows.Forms.GroupBox groupBox5;
+        private System.Windows.Forms.Button btnColorBoth;
+        private System.Windows.Forms.Button btnColorEshop;
+        private System.Windows.Forms.Button btnColorXCI;
+        private System.Windows.Forms.CheckBox cbHighlightBothOnScene;
+        private System.Windows.Forms.CheckBox cbHighlightNSPOnScene;
+        private System.Windows.Forms.CheckBox cbHighlightXCIOnScene;
+        private System.Windows.Forms.Label label1;
     }
 }

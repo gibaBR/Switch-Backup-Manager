@@ -136,5 +136,8 @@ namespace Switch_Backup_Manager
         public string NumberOfPlayers { get; set; }
         public List<string> Categories { get; set; }
         public int ESRB { get; set; }        
+
+        //Available at runtime only
+        public string sceneFound { get; set; }
     }
 }

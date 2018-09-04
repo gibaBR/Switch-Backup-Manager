@@ -70,5 +70,89 @@ namespace Switch_Backup_Manager.Properties {
                 this["Minimised"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("350")]
+        public int SplitterDistanceVert {
+            get {
+                return ((int)(this["SplitterDistanceVert"]));
+            }
+            set {
+                this["SplitterDistanceVert"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("670")]
+        public int SplitterDistanceHor {
+            get {
+                return ((int)(this["SplitterDistanceHor"]));
+            }
+            set {
+                this["SplitterDistanceHor"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool LeftPanelVisible {
+            get {
+                return ((bool)(this["LeftPanelVisible"]));
+            }
+            set {
+                this["LeftPanelVisible"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool BottomPanelVisible {
+            get {
+                return ((bool)(this["BottomPanelVisible"]));
+            }
+            set {
+                this["BottomPanelVisible"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool ShowDLCFilterEshop {
+            get {
+                return ((bool)(this["ShowDLCFilterEshop"]));
+            }
+            set {
+                this["ShowDLCFilterEshop"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool ShowUpdatesFilterEShop {
+            get {
+                return ((bool)(this["ShowUpdatesFilterEShop"]));
+            }
+            set {
+                this["ShowUpdatesFilterEShop"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool ShowBaseGames {
+            get {
+                return ((bool)(this["ShowBaseGames"]));
+            }
+            set {
+                this["ShowBaseGames"] = value;
+            }
+        }
     }
 }

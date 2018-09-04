@@ -169,4 +169,10 @@
   <data name="EN_FileOperationUpdateFiles" xml:space="preserve">
     <value>Updating files info...</value>
   </data>
+  <data name="EN_FileOperationsScrapFromWeb" xml:space="preserve">
+    <value>Scraping extra info from web</value>
+  </data>
+  <data name="EN_Not_Available" xml:space="preserve">
+    <value>Not Available</value>
+  </data>
 </root>

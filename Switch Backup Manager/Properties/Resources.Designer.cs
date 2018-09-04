@@ -107,11 +107,29 @@ namespace Switch_Backup_Manager.Properties {
         }
         
         /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Scraping extra info from web.
+        /// </summary>
+        internal static string EN_FileOperationsScrapFromWeb {
+            get {
+                return ResourceManager.GetString("EN_FileOperationsScrapFromWeb", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Consulta uma cadeia de caracteres localizada semelhante a Updating files info....
         /// </summary>
         internal static string EN_FileOperationUpdateFiles {
             get {
                 return ResourceManager.GetString("EN_FileOperationUpdateFiles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Not Available.
+        /// </summary>
+        internal static string EN_Not_Available {
+            get {
+                return ResourceManager.GetString("EN_Not_Available", resourceCulture);
             }
         }
         

@@ -35,6 +35,9 @@
             this.panel2 = new System.Windows.Forms.Panel();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.cbAutoRemoveMissingFiles = new System.Windows.Forms.CheckBox();
+            this.cbScrapExtraInfoFromWeb = new System.Windows.Forms.CheckBox();
+            this.cbUseTitleKeys = new System.Windows.Forms.CheckBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.btnRemFolderAutoScan = new System.Windows.Forms.Button();
             this.btnAddFolderAutoScan = new System.Windows.Forms.Button();
@@ -46,28 +49,64 @@
             this.cbScrapXCIOnSD = new System.Windows.Forms.CheckBox();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.tabControl2 = new System.Windows.Forms.TabControl();
+            this.tabPage4 = new System.Windows.Forms.TabPage();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.rbRenamingGameNameRegionFirmware = new System.Windows.Forms.RadioButton();
-            this.rbRenamingGameNameRegion = new System.Windows.Forms.RadioButton();
+            this.rbRenamingGameNameRegionFirmwareXCI = new System.Windows.Forms.RadioButton();
+            this.rbRenamingGameNameRegionXCI = new System.Windows.Forms.RadioButton();
             this.lblExample = new System.Windows.Forms.Label();
-            this.rbRenamingCustom = new System.Windows.Forms.RadioButton();
-            this.rbRenamingTitleIDGameNameReleaseGroup = new System.Windows.Forms.RadioButton();
+            this.rbRenamingCustomXCI = new System.Windows.Forms.RadioButton();
+            this.rbRenamingTitleIDGameNameReleaseGroupXCI = new System.Windows.Forms.RadioButton();
             this.gbCustom = new System.Windows.Forms.GroupBox();
-            this.btnAdd = new System.Windows.Forms.Button();
-            this.textBoxCustomPatern = new System.Windows.Forms.TextBox();
-            this.cbxTags = new System.Windows.Forms.ComboBox();
-            this.rbRenamingTitleIDGameName = new System.Windows.Forms.RadioButton();
-            this.rbRenamingGameName = new System.Windows.Forms.RadioButton();
-            this.cbUseTitleKeys = new System.Windows.Forms.CheckBox();
+            this.btnAddXCI = new System.Windows.Forms.Button();
+            this.textBoxCustomPaternXCI = new System.Windows.Forms.TextBox();
+            this.cbxTagsXCI = new System.Windows.Forms.ComboBox();
+            this.rbRenamingTitleIDGameNameXCI = new System.Windows.Forms.RadioButton();
+            this.rbRenamingGameNameXCI = new System.Windows.Forms.RadioButton();
+            this.tabPage5 = new System.Windows.Forms.TabPage();
+            this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.groupBox6 = new System.Windows.Forms.GroupBox();
+            this.textLimitFileNameSizeNSP = new System.Windows.Forms.NumericUpDown();
+            this.label2 = new System.Windows.Forms.Label();
+            this.rbRenamingCDNSP = new System.Windows.Forms.RadioButton();
+            this.rbRenamingGameNameRegionFirmwareNSP = new System.Windows.Forms.RadioButton();
+            this.rbRenamingGameNameRegionNSP = new System.Windows.Forms.RadioButton();
+            this.lblExampleNSP = new System.Windows.Forms.Label();
+            this.rbRenamingCustomNSP = new System.Windows.Forms.RadioButton();
+            this.rbRenamingTitleIDGameNameReleaseGroupNSP = new System.Windows.Forms.RadioButton();
+            this.gbCustomNSP = new System.Windows.Forms.GroupBox();
+            this.btnAddNSP = new System.Windows.Forms.Button();
+            this.textBoxCustomPaternNSP = new System.Windows.Forms.TextBox();
+            this.cbxTagsNSP = new System.Windows.Forms.ComboBox();
+            this.rbRenamingTitleIDGameNameNSP = new System.Windows.Forms.RadioButton();
+            this.rbRenamingGameNameNSP = new System.Windows.Forms.RadioButton();
+            this.cbShowCompletePaths = new System.Windows.Forms.CheckBox();
+            this.groupBox5 = new System.Windows.Forms.GroupBox();
+            this.cbHighlightXCIOnScene = new System.Windows.Forms.CheckBox();
+            this.cbHighlightNSPOnScene = new System.Windows.Forms.CheckBox();
+            this.cbHighlightBothOnScene = new System.Windows.Forms.CheckBox();
+            this.btnColorXCI = new System.Windows.Forms.Button();
+            this.btnColorEshop = new System.Windows.Forms.Button();
+            this.btnColorBoth = new System.Windows.Forms.Button();
+            this.label1 = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.groupBox2.SuspendLayout();
+            this.tabPage2.SuspendLayout();
             this.tabPage3.SuspendLayout();
+            this.tabControl2.SuspendLayout();
+            this.tabPage4.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.gbCustom.SuspendLayout();
+            this.tabPage5.SuspendLayout();
+            this.groupBox4.SuspendLayout();
+            this.groupBox6.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.textLimitFileNameSizeNSP)).BeginInit();
+            this.gbCustomNSP.SuspendLayout();
+            this.groupBox5.SuspendLayout();
             this.SuspendLayout();
             // 
             // panel1
@@ -134,6 +173,8 @@
             // 
             // tabPage1
             // 
+            this.tabPage1.Controls.Add(this.cbAutoRemoveMissingFiles);
+            this.tabPage1.Controls.Add(this.cbScrapExtraInfoFromWeb);
             this.tabPage1.Controls.Add(this.cbUseTitleKeys);
             this.tabPage1.Controls.Add(this.groupBox3);
             this.tabPage1.Controls.Add(this.cbAutoUpdateScene);
@@ -145,6 +186,36 @@
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "General";
             this.tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // cbAutoRemoveMissingFiles
+            // 
+            this.cbAutoRemoveMissingFiles.AutoSize = true;
+            this.cbAutoRemoveMissingFiles.Location = new System.Drawing.Point(6, 279);
+            this.cbAutoRemoveMissingFiles.Name = "cbAutoRemoveMissingFiles";
+            this.cbAutoRemoveMissingFiles.Size = new System.Drawing.Size(219, 17);
+            this.cbAutoRemoveMissingFiles.TabIndex = 6;
+            this.cbAutoRemoveMissingFiles.Text = "Automatic remove missing files on startup";
+            this.cbAutoRemoveMissingFiles.UseVisualStyleBackColor = true;
+            // 
+            // cbScrapExtraInfoFromWeb
+            // 
+            this.cbScrapExtraInfoFromWeb.AutoSize = true;
+            this.cbScrapExtraInfoFromWeb.Location = new System.Drawing.Point(6, 323);
+            this.cbScrapExtraInfoFromWeb.Name = "cbScrapExtraInfoFromWeb";
+            this.cbScrapExtraInfoFromWeb.Size = new System.Drawing.Size(300, 17);
+            this.cbScrapExtraInfoFromWeb.TabIndex = 5;
+            this.cbScrapExtraInfoFromWeb.Text = "Scrap extra info from web when new files are added (slow)";
+            this.cbScrapExtraInfoFromWeb.UseVisualStyleBackColor = true;
+            // 
+            // cbUseTitleKeys
+            // 
+            this.cbUseTitleKeys.AutoSize = true;
+            this.cbUseTitleKeys.Location = new System.Drawing.Point(6, 301);
+            this.cbUseTitleKeys.Name = "cbUseTitleKeys";
+            this.cbUseTitleKeys.Size = new System.Drawing.Size(248, 17);
+            this.cbUseTitleKeys.TabIndex = 4;
+            this.cbUseTitleKeys.Text = "Use titlekeys.txt to get missing info on NSP files";
+            this.cbUseTitleKeys.UseVisualStyleBackColor = true;
             // 
             // groupBox3
             // 
@@ -216,9 +287,9 @@
             this.cbScrapLayerFSOnSD.Enabled = false;
             this.cbScrapLayerFSOnSD.Location = new System.Drawing.Point(17, 71);
             this.cbScrapLayerFSOnSD.Name = "cbScrapLayerFSOnSD";
-            this.cbScrapLayerFSOnSD.Size = new System.Drawing.Size(166, 17);
+            this.cbScrapLayerFSOnSD.Size = new System.Drawing.Size(124, 17);
             this.cbScrapLayerFSOnSD.TabIndex = 3;
-            this.cbScrapLayerFSOnSD.Text = "Installed e-shop titles (layer fs)";
+            this.cbScrapLayerFSOnSD.Text = "Installed e-shop titles";
             this.cbScrapLayerFSOnSD.UseVisualStyleBackColor = true;
             // 
             // cbScrapNSPOnSD
@@ -243,6 +314,9 @@
             // 
             // tabPage2
             // 
+            this.tabPage2.Controls.Add(this.label1);
+            this.tabPage2.Controls.Add(this.groupBox5);
+            this.tabPage2.Controls.Add(this.cbShowCompletePaths);
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
@@ -253,7 +327,7 @@
             // 
             // tabPage3
             // 
-            this.tabPage3.Controls.Add(this.groupBox1);
+            this.tabPage3.Controls.Add(this.tabControl2);
             this.tabPage3.Location = new System.Drawing.Point(4, 22);
             this.tabPage3.Name = "tabPage3";
             this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
@@ -262,44 +336,66 @@
             this.tabPage3.Text = "Auto renaming";
             this.tabPage3.UseVisualStyleBackColor = true;
             // 
+            // tabControl2
+            // 
+            this.tabControl2.Controls.Add(this.tabPage4);
+            this.tabControl2.Controls.Add(this.tabPage5);
+            this.tabControl2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tabControl2.Location = new System.Drawing.Point(3, 3);
+            this.tabControl2.Name = "tabControl2";
+            this.tabControl2.SelectedIndex = 0;
+            this.tabControl2.Size = new System.Drawing.Size(603, 394);
+            this.tabControl2.TabIndex = 2;
+            // 
+            // tabPage4
+            // 
+            this.tabPage4.Controls.Add(this.groupBox1);
+            this.tabPage4.Location = new System.Drawing.Point(4, 22);
+            this.tabPage4.Name = "tabPage4";
+            this.tabPage4.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage4.Size = new System.Drawing.Size(595, 368);
+            this.tabPage4.TabIndex = 0;
+            this.tabPage4.Text = "XCI files";
+            this.tabPage4.UseVisualStyleBackColor = true;
+            // 
             // groupBox1
             // 
-            this.groupBox1.Controls.Add(this.rbRenamingGameNameRegionFirmware);
-            this.groupBox1.Controls.Add(this.rbRenamingGameNameRegion);
+            this.groupBox1.Controls.Add(this.rbRenamingGameNameRegionFirmwareXCI);
+            this.groupBox1.Controls.Add(this.rbRenamingGameNameRegionXCI);
             this.groupBox1.Controls.Add(this.lblExample);
-            this.groupBox1.Controls.Add(this.rbRenamingCustom);
-            this.groupBox1.Controls.Add(this.rbRenamingTitleIDGameNameReleaseGroup);
+            this.groupBox1.Controls.Add(this.rbRenamingCustomXCI);
+            this.groupBox1.Controls.Add(this.rbRenamingTitleIDGameNameReleaseGroupXCI);
             this.groupBox1.Controls.Add(this.gbCustom);
-            this.groupBox1.Controls.Add(this.rbRenamingTitleIDGameName);
-            this.groupBox1.Controls.Add(this.rbRenamingGameName);
-            this.groupBox1.Location = new System.Drawing.Point(10, 18);
+            this.groupBox1.Controls.Add(this.rbRenamingTitleIDGameNameXCI);
+            this.groupBox1.Controls.Add(this.rbRenamingGameNameXCI);
+            this.groupBox1.Location = new System.Drawing.Point(3, 2);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(588, 364);
-            this.groupBox1.TabIndex = 1;
+            this.groupBox1.TabIndex = 2;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Choose pattern";
             // 
-            // rbRenamingGameNameRegionFirmware
+            // rbRenamingGameNameRegionFirmwareXCI
             // 
-            this.rbRenamingGameNameRegionFirmware.AutoSize = true;
-            this.rbRenamingGameNameRegionFirmware.Location = new System.Drawing.Point(19, 75);
-            this.rbRenamingGameNameRegionFirmware.Name = "rbRenamingGameNameRegionFirmware";
-            this.rbRenamingGameNameRegionFirmware.Size = new System.Drawing.Size(176, 17);
-            this.rbRenamingGameNameRegionFirmware.TabIndex = 6;
-            this.rbRenamingGameNameRegionFirmware.Text = "Game name (Region) (Firmware)";
-            this.rbRenamingGameNameRegionFirmware.UseVisualStyleBackColor = true;
-            this.rbRenamingGameNameRegionFirmware.CheckedChanged += new System.EventHandler(this.rbRenamingGameNameRegionFirmware_CheckedChanged);
+            this.rbRenamingGameNameRegionFirmwareXCI.AutoSize = true;
+            this.rbRenamingGameNameRegionFirmwareXCI.Location = new System.Drawing.Point(19, 75);
+            this.rbRenamingGameNameRegionFirmwareXCI.Name = "rbRenamingGameNameRegionFirmwareXCI";
+            this.rbRenamingGameNameRegionFirmwareXCI.Size = new System.Drawing.Size(176, 17);
+            this.rbRenamingGameNameRegionFirmwareXCI.TabIndex = 6;
+            this.rbRenamingGameNameRegionFirmwareXCI.Text = "Game name (Region) (Firmware)";
+            this.rbRenamingGameNameRegionFirmwareXCI.UseVisualStyleBackColor = true;
+            this.rbRenamingGameNameRegionFirmwareXCI.CheckedChanged += new System.EventHandler(this.rbRenamingGameNameRegionFirmwareXCI_CheckedChanged);
             // 
-            // rbRenamingGameNameRegion
+            // rbRenamingGameNameRegionXCI
             // 
-            this.rbRenamingGameNameRegion.AutoSize = true;
-            this.rbRenamingGameNameRegion.Location = new System.Drawing.Point(19, 52);
-            this.rbRenamingGameNameRegion.Name = "rbRenamingGameNameRegion";
-            this.rbRenamingGameNameRegion.Size = new System.Drawing.Size(125, 17);
-            this.rbRenamingGameNameRegion.TabIndex = 5;
-            this.rbRenamingGameNameRegion.Text = "Game name (Region)";
-            this.rbRenamingGameNameRegion.UseVisualStyleBackColor = true;
-            this.rbRenamingGameNameRegion.CheckedChanged += new System.EventHandler(this.rbRenamingGameNameRegion_CheckedChanged);
+            this.rbRenamingGameNameRegionXCI.AutoSize = true;
+            this.rbRenamingGameNameRegionXCI.Location = new System.Drawing.Point(19, 52);
+            this.rbRenamingGameNameRegionXCI.Name = "rbRenamingGameNameRegionXCI";
+            this.rbRenamingGameNameRegionXCI.Size = new System.Drawing.Size(125, 17);
+            this.rbRenamingGameNameRegionXCI.TabIndex = 5;
+            this.rbRenamingGameNameRegionXCI.Text = "Game name (Region)";
+            this.rbRenamingGameNameRegionXCI.UseVisualStyleBackColor = true;
+            this.rbRenamingGameNameRegionXCI.CheckedChanged += new System.EventHandler(this.rbRenamingGameNameRegionXCI_CheckedChanged);
             // 
             // lblExample
             // 
@@ -311,34 +407,34 @@
             this.lblExample.Text = "Super Mario Odyssey.xci";
             this.lblExample.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // rbRenamingCustom
+            // rbRenamingCustomXCI
             // 
-            this.rbRenamingCustom.AutoSize = true;
-            this.rbRenamingCustom.Location = new System.Drawing.Point(19, 145);
-            this.rbRenamingCustom.Name = "rbRenamingCustom";
-            this.rbRenamingCustom.Size = new System.Drawing.Size(60, 17);
-            this.rbRenamingCustom.TabIndex = 4;
-            this.rbRenamingCustom.Text = "Custom";
-            this.rbRenamingCustom.UseVisualStyleBackColor = true;
-            this.rbRenamingCustom.CheckedChanged += new System.EventHandler(this.rbRenamingCustom_CheckedChanged);
+            this.rbRenamingCustomXCI.AutoSize = true;
+            this.rbRenamingCustomXCI.Location = new System.Drawing.Point(19, 145);
+            this.rbRenamingCustomXCI.Name = "rbRenamingCustomXCI";
+            this.rbRenamingCustomXCI.Size = new System.Drawing.Size(60, 17);
+            this.rbRenamingCustomXCI.TabIndex = 4;
+            this.rbRenamingCustomXCI.Text = "Custom";
+            this.rbRenamingCustomXCI.UseVisualStyleBackColor = true;
+            this.rbRenamingCustomXCI.CheckedChanged += new System.EventHandler(this.rbRenamingCustomXCI_CheckedChanged);
             // 
-            // rbRenamingTitleIDGameNameReleaseGroup
+            // rbRenamingTitleIDGameNameReleaseGroupXCI
             // 
-            this.rbRenamingTitleIDGameNameReleaseGroup.AutoSize = true;
-            this.rbRenamingTitleIDGameNameReleaseGroup.Location = new System.Drawing.Point(19, 122);
-            this.rbRenamingTitleIDGameNameReleaseGroup.Name = "rbRenamingTitleIDGameNameReleaseGroup";
-            this.rbRenamingTitleIDGameNameReleaseGroup.Size = new System.Drawing.Size(203, 17);
-            this.rbRenamingTitleIDGameNameReleaseGroup.TabIndex = 3;
-            this.rbRenamingTitleIDGameNameReleaseGroup.Text = "Title ID - Game name - Release group";
-            this.rbRenamingTitleIDGameNameReleaseGroup.UseVisualStyleBackColor = true;
-            this.rbRenamingTitleIDGameNameReleaseGroup.CheckedChanged += new System.EventHandler(this.rbRenamingTitleIDGameNameReleaseGroup_CheckedChanged);
+            this.rbRenamingTitleIDGameNameReleaseGroupXCI.AutoSize = true;
+            this.rbRenamingTitleIDGameNameReleaseGroupXCI.Location = new System.Drawing.Point(19, 122);
+            this.rbRenamingTitleIDGameNameReleaseGroupXCI.Name = "rbRenamingTitleIDGameNameReleaseGroupXCI";
+            this.rbRenamingTitleIDGameNameReleaseGroupXCI.Size = new System.Drawing.Size(203, 17);
+            this.rbRenamingTitleIDGameNameReleaseGroupXCI.TabIndex = 3;
+            this.rbRenamingTitleIDGameNameReleaseGroupXCI.Text = "Title ID - Game name - Release group";
+            this.rbRenamingTitleIDGameNameReleaseGroupXCI.UseVisualStyleBackColor = true;
+            this.rbRenamingTitleIDGameNameReleaseGroupXCI.CheckedChanged += new System.EventHandler(this.rbRenamingTitleIDGameNameReleaseGroupXCI_CheckedChanged);
             // 
             // gbCustom
             // 
-            this.gbCustom.Controls.Add(this.btnAdd);
-            this.gbCustom.Controls.Add(this.textBoxCustomPatern);
-            this.gbCustom.Controls.Add(this.cbxTags);
-            this.gbCustom.Location = new System.Drawing.Point(19, 168);
+            this.gbCustom.Controls.Add(this.btnAddXCI);
+            this.gbCustom.Controls.Add(this.textBoxCustomPaternXCI);
+            this.gbCustom.Controls.Add(this.cbxTagsXCI);
+            this.gbCustom.Location = new System.Drawing.Point(19, 199);
             this.gbCustom.Name = "gbCustom";
             this.gbCustom.Size = new System.Drawing.Size(563, 50);
             this.gbCustom.TabIndex = 2;
@@ -346,73 +442,356 @@
             this.gbCustom.Text = "Custom pattern";
             this.gbCustom.Visible = false;
             // 
-            // btnAdd
+            // btnAddXCI
             // 
-            this.btnAdd.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnAdd.Location = new System.Drawing.Point(85, 18);
-            this.btnAdd.Name = "btnAdd";
-            this.btnAdd.Size = new System.Drawing.Size(25, 23);
-            this.btnAdd.TabIndex = 2;
-            this.btnAdd.Text = "+";
-            this.btnAdd.UseVisualStyleBackColor = true;
-            this.btnAdd.Click += new System.EventHandler(this.btnAdd_Click);
+            this.btnAddXCI.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnAddXCI.Location = new System.Drawing.Point(85, 18);
+            this.btnAddXCI.Name = "btnAddXCI";
+            this.btnAddXCI.Size = new System.Drawing.Size(25, 23);
+            this.btnAddXCI.TabIndex = 2;
+            this.btnAddXCI.Text = "+";
+            this.btnAddXCI.UseVisualStyleBackColor = true;
+            this.btnAddXCI.Click += new System.EventHandler(this.btnAdd_Click);
             // 
-            // textBoxCustomPatern
+            // textBoxCustomPaternXCI
             // 
-            this.textBoxCustomPatern.Location = new System.Drawing.Point(115, 19);
-            this.textBoxCustomPatern.Name = "textBoxCustomPatern";
-            this.textBoxCustomPatern.Size = new System.Drawing.Size(442, 20);
-            this.textBoxCustomPatern.TabIndex = 1;
-            this.textBoxCustomPatern.TextChanged += new System.EventHandler(this.textBoxCustomPatern_TextChanged);
+            this.textBoxCustomPaternXCI.Location = new System.Drawing.Point(115, 19);
+            this.textBoxCustomPaternXCI.Name = "textBoxCustomPaternXCI";
+            this.textBoxCustomPaternXCI.Size = new System.Drawing.Size(442, 20);
+            this.textBoxCustomPaternXCI.TabIndex = 1;
+            this.textBoxCustomPaternXCI.TextChanged += new System.EventHandler(this.textBoxCustomPatern_TextChanged);
             // 
-            // cbxTags
+            // cbxTagsXCI
             // 
-            this.cbxTags.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cbxTags.FormattingEnabled = true;
-            this.cbxTags.Items.AddRange(new object[] {
+            this.cbxTagsXCI.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbxTagsXCI.FormattingEnabled = true;
+            this.cbxTagsXCI.Items.AddRange(new object[] {
             "Name",
             "Title ID",
             "Developer",
             "Trimmed",
             "Revision"});
-            this.cbxTags.Location = new System.Drawing.Point(6, 19);
-            this.cbxTags.Name = "cbxTags";
-            this.cbxTags.Size = new System.Drawing.Size(74, 21);
-            this.cbxTags.TabIndex = 0;
+            this.cbxTagsXCI.Location = new System.Drawing.Point(6, 19);
+            this.cbxTagsXCI.Name = "cbxTagsXCI";
+            this.cbxTagsXCI.Size = new System.Drawing.Size(74, 21);
+            this.cbxTagsXCI.TabIndex = 0;
             // 
-            // rbRenamingTitleIDGameName
+            // rbRenamingTitleIDGameNameXCI
             // 
-            this.rbRenamingTitleIDGameName.AutoSize = true;
-            this.rbRenamingTitleIDGameName.Location = new System.Drawing.Point(19, 99);
-            this.rbRenamingTitleIDGameName.Name = "rbRenamingTitleIDGameName";
-            this.rbRenamingTitleIDGameName.Size = new System.Drawing.Size(125, 17);
-            this.rbRenamingTitleIDGameName.TabIndex = 1;
-            this.rbRenamingTitleIDGameName.Text = "Title ID - Game name";
-            this.rbRenamingTitleIDGameName.UseVisualStyleBackColor = true;
-            this.rbRenamingTitleIDGameName.CheckedChanged += new System.EventHandler(this.rbRenamingTitleIDGameName_CheckedChanged);
+            this.rbRenamingTitleIDGameNameXCI.AutoSize = true;
+            this.rbRenamingTitleIDGameNameXCI.Location = new System.Drawing.Point(19, 99);
+            this.rbRenamingTitleIDGameNameXCI.Name = "rbRenamingTitleIDGameNameXCI";
+            this.rbRenamingTitleIDGameNameXCI.Size = new System.Drawing.Size(125, 17);
+            this.rbRenamingTitleIDGameNameXCI.TabIndex = 1;
+            this.rbRenamingTitleIDGameNameXCI.Text = "Title ID - Game name";
+            this.rbRenamingTitleIDGameNameXCI.UseVisualStyleBackColor = true;
+            this.rbRenamingTitleIDGameNameXCI.CheckedChanged += new System.EventHandler(this.rbRenamingTitleIDGameNameXCI_CheckedChanged);
             // 
-            // rbRenamingGameName
+            // rbRenamingGameNameXCI
             // 
-            this.rbRenamingGameName.AutoSize = true;
-            this.rbRenamingGameName.Checked = true;
-            this.rbRenamingGameName.Location = new System.Drawing.Point(19, 29);
-            this.rbRenamingGameName.Name = "rbRenamingGameName";
-            this.rbRenamingGameName.Size = new System.Drawing.Size(82, 17);
-            this.rbRenamingGameName.TabIndex = 0;
-            this.rbRenamingGameName.TabStop = true;
-            this.rbRenamingGameName.Text = "Game name";
-            this.rbRenamingGameName.UseVisualStyleBackColor = true;
-            this.rbRenamingGameName.CheckedChanged += new System.EventHandler(this.rbRenamingGameName_CheckedChanged);
+            this.rbRenamingGameNameXCI.AutoSize = true;
+            this.rbRenamingGameNameXCI.Checked = true;
+            this.rbRenamingGameNameXCI.Location = new System.Drawing.Point(19, 29);
+            this.rbRenamingGameNameXCI.Name = "rbRenamingGameNameXCI";
+            this.rbRenamingGameNameXCI.Size = new System.Drawing.Size(82, 17);
+            this.rbRenamingGameNameXCI.TabIndex = 0;
+            this.rbRenamingGameNameXCI.TabStop = true;
+            this.rbRenamingGameNameXCI.Text = "Game name";
+            this.rbRenamingGameNameXCI.UseVisualStyleBackColor = true;
+            this.rbRenamingGameNameXCI.CheckedChanged += new System.EventHandler(this.rbRenamingGameNameXCI_CheckedChanged);
             // 
-            // cbUseTitleKeys
+            // tabPage5
             // 
-            this.cbUseTitleKeys.AutoSize = true;
-            this.cbUseTitleKeys.Location = new System.Drawing.Point(6, 281);
-            this.cbUseTitleKeys.Name = "cbUseTitleKeys";
-            this.cbUseTitleKeys.Size = new System.Drawing.Size(248, 17);
-            this.cbUseTitleKeys.TabIndex = 4;
-            this.cbUseTitleKeys.Text = "Use titlekeys.txt to get missing info on NSP files";
-            this.cbUseTitleKeys.UseVisualStyleBackColor = true;
+            this.tabPage5.Controls.Add(this.groupBox4);
+            this.tabPage5.Location = new System.Drawing.Point(4, 22);
+            this.tabPage5.Name = "tabPage5";
+            this.tabPage5.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage5.Size = new System.Drawing.Size(595, 368);
+            this.tabPage5.TabIndex = 1;
+            this.tabPage5.Text = "NSP files";
+            this.tabPage5.UseVisualStyleBackColor = true;
+            // 
+            // groupBox4
+            // 
+            this.groupBox4.Controls.Add(this.groupBox6);
+            this.groupBox4.Controls.Add(this.rbRenamingCDNSP);
+            this.groupBox4.Controls.Add(this.rbRenamingGameNameRegionFirmwareNSP);
+            this.groupBox4.Controls.Add(this.rbRenamingGameNameRegionNSP);
+            this.groupBox4.Controls.Add(this.lblExampleNSP);
+            this.groupBox4.Controls.Add(this.rbRenamingCustomNSP);
+            this.groupBox4.Controls.Add(this.rbRenamingTitleIDGameNameReleaseGroupNSP);
+            this.groupBox4.Controls.Add(this.gbCustomNSP);
+            this.groupBox4.Controls.Add(this.rbRenamingTitleIDGameNameNSP);
+            this.groupBox4.Controls.Add(this.rbRenamingGameNameNSP);
+            this.groupBox4.Location = new System.Drawing.Point(3, 2);
+            this.groupBox4.Name = "groupBox4";
+            this.groupBox4.Size = new System.Drawing.Size(588, 364);
+            this.groupBox4.TabIndex = 3;
+            this.groupBox4.TabStop = false;
+            this.groupBox4.Text = "Choose pattern";
+            // 
+            // groupBox6
+            // 
+            this.groupBox6.Controls.Add(this.textLimitFileNameSizeNSP);
+            this.groupBox6.Controls.Add(this.label2);
+            this.groupBox6.Location = new System.Drawing.Point(19, 191);
+            this.groupBox6.Name = "groupBox6";
+            this.groupBox6.Size = new System.Drawing.Size(132, 50);
+            this.groupBox6.TabIndex = 8;
+            this.groupBox6.TabStop = false;
+            this.groupBox6.Text = "Limit filename size";
+            // 
+            // textLimitFileNameSizeNSP
+            // 
+            this.textLimitFileNameSizeNSP.Location = new System.Drawing.Point(6, 22);
+            this.textLimitFileNameSizeNSP.Maximum = new decimal(new int[] {
+            255,
+            0,
+            0,
+            0});
+            this.textLimitFileNameSizeNSP.Name = "textLimitFileNameSizeNSP";
+            this.textLimitFileNameSizeNSP.Size = new System.Drawing.Size(55, 20);
+            this.textLimitFileNameSizeNSP.TabIndex = 2;
+            this.textLimitFileNameSizeNSP.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textLimitFileNameSizeNSP_KeyPress);
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(67, 24);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(57, 13);
+            this.label2.TabIndex = 1;
+            this.label2.Text = "0 = no limit";
+            // 
+            // rbRenamingCDNSP
+            // 
+            this.rbRenamingCDNSP.AutoSize = true;
+            this.rbRenamingCDNSP.Location = new System.Drawing.Point(19, 145);
+            this.rbRenamingCDNSP.Name = "rbRenamingCDNSP";
+            this.rbRenamingCDNSP.Size = new System.Drawing.Size(119, 17);
+            this.rbRenamingCDNSP.TabIndex = 7;
+            this.rbRenamingCDNSP.Text = "CDNSP GUI Format";
+            this.rbRenamingCDNSP.UseVisualStyleBackColor = true;
+            this.rbRenamingCDNSP.CheckedChanged += new System.EventHandler(this.rbRenamingCDNSP_CheckedChanged_1);
+            // 
+            // rbRenamingGameNameRegionFirmwareNSP
+            // 
+            this.rbRenamingGameNameRegionFirmwareNSP.AutoSize = true;
+            this.rbRenamingGameNameRegionFirmwareNSP.Location = new System.Drawing.Point(19, 75);
+            this.rbRenamingGameNameRegionFirmwareNSP.Name = "rbRenamingGameNameRegionFirmwareNSP";
+            this.rbRenamingGameNameRegionFirmwareNSP.Size = new System.Drawing.Size(176, 17);
+            this.rbRenamingGameNameRegionFirmwareNSP.TabIndex = 6;
+            this.rbRenamingGameNameRegionFirmwareNSP.Text = "Game name (Region) (Firmware)";
+            this.rbRenamingGameNameRegionFirmwareNSP.UseVisualStyleBackColor = true;
+            this.rbRenamingGameNameRegionFirmwareNSP.CheckedChanged += new System.EventHandler(this.rbRenamingGameNameRegionFirmwareNSP_CheckedChanged);
+            // 
+            // rbRenamingGameNameRegionNSP
+            // 
+            this.rbRenamingGameNameRegionNSP.AutoSize = true;
+            this.rbRenamingGameNameRegionNSP.Location = new System.Drawing.Point(19, 52);
+            this.rbRenamingGameNameRegionNSP.Name = "rbRenamingGameNameRegionNSP";
+            this.rbRenamingGameNameRegionNSP.Size = new System.Drawing.Size(125, 17);
+            this.rbRenamingGameNameRegionNSP.TabIndex = 5;
+            this.rbRenamingGameNameRegionNSP.Text = "Game name (Region)";
+            this.rbRenamingGameNameRegionNSP.UseVisualStyleBackColor = true;
+            this.rbRenamingGameNameRegionNSP.CheckedChanged += new System.EventHandler(this.rbRenamingGameNameRegionNSP_CheckedChanged);
+            // 
+            // lblExampleNSP
+            // 
+            this.lblExampleNSP.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblExampleNSP.Location = new System.Drawing.Point(11, 315);
+            this.lblExampleNSP.Name = "lblExampleNSP";
+            this.lblExampleNSP.Size = new System.Drawing.Size(566, 46);
+            this.lblExampleNSP.TabIndex = 1;
+            this.lblExampleNSP.Text = "Super Mario Odyssey.xci";
+            this.lblExampleNSP.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // rbRenamingCustomNSP
+            // 
+            this.rbRenamingCustomNSP.AutoSize = true;
+            this.rbRenamingCustomNSP.Location = new System.Drawing.Point(19, 168);
+            this.rbRenamingCustomNSP.Name = "rbRenamingCustomNSP";
+            this.rbRenamingCustomNSP.Size = new System.Drawing.Size(60, 17);
+            this.rbRenamingCustomNSP.TabIndex = 4;
+            this.rbRenamingCustomNSP.Text = "Custom";
+            this.rbRenamingCustomNSP.UseVisualStyleBackColor = true;
+            this.rbRenamingCustomNSP.CheckedChanged += new System.EventHandler(this.rbRenamingCustomNSP_CheckedChanged);
+            // 
+            // rbRenamingTitleIDGameNameReleaseGroupNSP
+            // 
+            this.rbRenamingTitleIDGameNameReleaseGroupNSP.AutoSize = true;
+            this.rbRenamingTitleIDGameNameReleaseGroupNSP.Location = new System.Drawing.Point(19, 122);
+            this.rbRenamingTitleIDGameNameReleaseGroupNSP.Name = "rbRenamingTitleIDGameNameReleaseGroupNSP";
+            this.rbRenamingTitleIDGameNameReleaseGroupNSP.Size = new System.Drawing.Size(203, 17);
+            this.rbRenamingTitleIDGameNameReleaseGroupNSP.TabIndex = 3;
+            this.rbRenamingTitleIDGameNameReleaseGroupNSP.Text = "Title ID - Game name - Release group";
+            this.rbRenamingTitleIDGameNameReleaseGroupNSP.UseVisualStyleBackColor = true;
+            this.rbRenamingTitleIDGameNameReleaseGroupNSP.CheckedChanged += new System.EventHandler(this.rbRenamingTitleIDGameNameReleaseGroupNSP_CheckedChanged);
+            // 
+            // gbCustomNSP
+            // 
+            this.gbCustomNSP.Controls.Add(this.btnAddNSP);
+            this.gbCustomNSP.Controls.Add(this.textBoxCustomPaternNSP);
+            this.gbCustomNSP.Controls.Add(this.cbxTagsNSP);
+            this.gbCustomNSP.Location = new System.Drawing.Point(19, 247);
+            this.gbCustomNSP.Name = "gbCustomNSP";
+            this.gbCustomNSP.Size = new System.Drawing.Size(563, 50);
+            this.gbCustomNSP.TabIndex = 2;
+            this.gbCustomNSP.TabStop = false;
+            this.gbCustomNSP.Text = "Custom pattern";
+            this.gbCustomNSP.Visible = false;
+            // 
+            // btnAddNSP
+            // 
+            this.btnAddNSP.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnAddNSP.Location = new System.Drawing.Point(85, 18);
+            this.btnAddNSP.Name = "btnAddNSP";
+            this.btnAddNSP.Size = new System.Drawing.Size(25, 23);
+            this.btnAddNSP.TabIndex = 2;
+            this.btnAddNSP.Text = "+";
+            this.btnAddNSP.UseVisualStyleBackColor = true;
+            this.btnAddNSP.Click += new System.EventHandler(this.btnAddNSP_Click);
+            // 
+            // textBoxCustomPaternNSP
+            // 
+            this.textBoxCustomPaternNSP.Location = new System.Drawing.Point(115, 19);
+            this.textBoxCustomPaternNSP.Name = "textBoxCustomPaternNSP";
+            this.textBoxCustomPaternNSP.Size = new System.Drawing.Size(442, 20);
+            this.textBoxCustomPaternNSP.TabIndex = 1;
+            this.textBoxCustomPaternNSP.TextChanged += new System.EventHandler(this.textBoxCustomPaternNSP_TextChanged);
+            // 
+            // cbxTagsNSP
+            // 
+            this.cbxTagsNSP.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbxTagsNSP.FormattingEnabled = true;
+            this.cbxTagsNSP.Items.AddRange(new object[] {
+            "Name",
+            "Title ID",
+            "Developer",
+            "Trimmed",
+            "Revision"});
+            this.cbxTagsNSP.Location = new System.Drawing.Point(6, 19);
+            this.cbxTagsNSP.Name = "cbxTagsNSP";
+            this.cbxTagsNSP.Size = new System.Drawing.Size(74, 21);
+            this.cbxTagsNSP.TabIndex = 0;
+            // 
+            // rbRenamingTitleIDGameNameNSP
+            // 
+            this.rbRenamingTitleIDGameNameNSP.AutoSize = true;
+            this.rbRenamingTitleIDGameNameNSP.Location = new System.Drawing.Point(19, 99);
+            this.rbRenamingTitleIDGameNameNSP.Name = "rbRenamingTitleIDGameNameNSP";
+            this.rbRenamingTitleIDGameNameNSP.Size = new System.Drawing.Size(125, 17);
+            this.rbRenamingTitleIDGameNameNSP.TabIndex = 1;
+            this.rbRenamingTitleIDGameNameNSP.Text = "Title ID - Game name";
+            this.rbRenamingTitleIDGameNameNSP.UseVisualStyleBackColor = true;
+            this.rbRenamingTitleIDGameNameNSP.CheckedChanged += new System.EventHandler(this.rbRenamingTitleIDGameNameNSP_CheckedChanged);
+            // 
+            // rbRenamingGameNameNSP
+            // 
+            this.rbRenamingGameNameNSP.AutoSize = true;
+            this.rbRenamingGameNameNSP.Checked = true;
+            this.rbRenamingGameNameNSP.Location = new System.Drawing.Point(19, 29);
+            this.rbRenamingGameNameNSP.Name = "rbRenamingGameNameNSP";
+            this.rbRenamingGameNameNSP.Size = new System.Drawing.Size(82, 17);
+            this.rbRenamingGameNameNSP.TabIndex = 0;
+            this.rbRenamingGameNameNSP.TabStop = true;
+            this.rbRenamingGameNameNSP.Text = "Game name";
+            this.rbRenamingGameNameNSP.UseVisualStyleBackColor = true;
+            this.rbRenamingGameNameNSP.CheckedChanged += new System.EventHandler(this.rbRenamingGameNameNSP_CheckedChanged);
+            // 
+            // cbShowCompletePaths
+            // 
+            this.cbShowCompletePaths.AutoSize = true;
+            this.cbShowCompletePaths.Location = new System.Drawing.Point(10, 135);
+            this.cbShowCompletePaths.Name = "cbShowCompletePaths";
+            this.cbShowCompletePaths.Size = new System.Drawing.Size(209, 17);
+            this.cbShowCompletePaths.TabIndex = 0;
+            this.cbShowCompletePaths.Text = "Show complete path of files on the lists";
+            this.cbShowCompletePaths.UseVisualStyleBackColor = true;
+            // 
+            // groupBox5
+            // 
+            this.groupBox5.Controls.Add(this.btnColorBoth);
+            this.groupBox5.Controls.Add(this.btnColorEshop);
+            this.groupBox5.Controls.Add(this.btnColorXCI);
+            this.groupBox5.Controls.Add(this.cbHighlightBothOnScene);
+            this.groupBox5.Controls.Add(this.cbHighlightNSPOnScene);
+            this.groupBox5.Controls.Add(this.cbHighlightXCIOnScene);
+            this.groupBox5.Location = new System.Drawing.Point(10, 18);
+            this.groupBox5.Name = "groupBox5";
+            this.groupBox5.Size = new System.Drawing.Size(285, 93);
+            this.groupBox5.TabIndex = 1;
+            this.groupBox5.TabStop = false;
+            this.groupBox5.Text = "Highlights on scene list";
+            // 
+            // cbHighlightXCIOnScene
+            // 
+            this.cbHighlightXCIOnScene.AutoSize = true;
+            this.cbHighlightXCIOnScene.Location = new System.Drawing.Point(7, 20);
+            this.cbHighlightXCIOnScene.Name = "cbHighlightXCIOnScene";
+            this.cbHighlightXCIOnScene.Size = new System.Drawing.Size(109, 17);
+            this.cbHighlightXCIOnScene.TabIndex = 0;
+            this.cbHighlightXCIOnScene.Text = "Games on XCI list";
+            this.cbHighlightXCIOnScene.UseVisualStyleBackColor = true;
+            // 
+            // cbHighlightNSPOnScene
+            // 
+            this.cbHighlightNSPOnScene.AutoSize = true;
+            this.cbHighlightNSPOnScene.Location = new System.Drawing.Point(7, 44);
+            this.cbHighlightNSPOnScene.Name = "cbHighlightNSPOnScene";
+            this.cbHighlightNSPOnScene.Size = new System.Drawing.Size(121, 17);
+            this.cbHighlightNSPOnScene.TabIndex = 1;
+            this.cbHighlightNSPOnScene.Text = "Games on eshop list";
+            this.cbHighlightNSPOnScene.UseVisualStyleBackColor = true;
+            // 
+            // cbHighlightBothOnScene
+            // 
+            this.cbHighlightBothOnScene.AutoSize = true;
+            this.cbHighlightBothOnScene.Location = new System.Drawing.Point(7, 67);
+            this.cbHighlightBothOnScene.Name = "cbHighlightBothOnScene";
+            this.cbHighlightBothOnScene.Size = new System.Drawing.Size(118, 17);
+            this.cbHighlightBothOnScene.TabIndex = 2;
+            this.cbHighlightBothOnScene.Text = "Games on both lists";
+            this.cbHighlightBothOnScene.UseVisualStyleBackColor = true;
+            // 
+            // btnColorXCI
+            // 
+            this.btnColorXCI.BackColor = System.Drawing.Color.Green;
+            this.btnColorXCI.Location = new System.Drawing.Point(148, 12);
+            this.btnColorXCI.Name = "btnColorXCI";
+            this.btnColorXCI.Size = new System.Drawing.Size(24, 24);
+            this.btnColorXCI.TabIndex = 3;
+            this.btnColorXCI.UseVisualStyleBackColor = false;
+            this.btnColorXCI.Click += new System.EventHandler(this.btnColorXCI_Click);
+            // 
+            // btnColorEshop
+            // 
+            this.btnColorEshop.BackColor = System.Drawing.Color.Orange;
+            this.btnColorEshop.Location = new System.Drawing.Point(148, 36);
+            this.btnColorEshop.Name = "btnColorEshop";
+            this.btnColorEshop.Size = new System.Drawing.Size(24, 24);
+            this.btnColorEshop.TabIndex = 4;
+            this.btnColorEshop.UseVisualStyleBackColor = false;
+            this.btnColorEshop.Click += new System.EventHandler(this.btnColorEshop_Click);
+            // 
+            // btnColorBoth
+            // 
+            this.btnColorBoth.BackColor = System.Drawing.Color.Yellow;
+            this.btnColorBoth.Location = new System.Drawing.Point(148, 60);
+            this.btnColorBoth.Name = "btnColorBoth";
+            this.btnColorBoth.Size = new System.Drawing.Size(24, 24);
+            this.btnColorBoth.TabIndex = 5;
+            this.btnColorBoth.UseVisualStyleBackColor = false;
+            this.btnColorBoth.Click += new System.EventHandler(this.btnColorBoth_Click);
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(10, 369);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(261, 13);
+            this.label1.TabIndex = 2;
+            this.label1.Text = "* Changes made here requires a restart of the program";
             // 
             // FormConfigs
             // 
@@ -436,11 +815,25 @@
             this.groupBox3.ResumeLayout(false);
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
+            this.tabPage2.ResumeLayout(false);
+            this.tabPage2.PerformLayout();
             this.tabPage3.ResumeLayout(false);
+            this.tabControl2.ResumeLayout(false);
+            this.tabPage4.ResumeLayout(false);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.gbCustom.ResumeLayout(false);
             this.gbCustom.PerformLayout();
+            this.tabPage5.ResumeLayout(false);
+            this.groupBox4.ResumeLayout(false);
+            this.groupBox4.PerformLayout();
+            this.groupBox6.ResumeLayout(false);
+            this.groupBox6.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.textLimitFileNameSizeNSP)).EndInit();
+            this.gbCustomNSP.ResumeLayout(false);
+            this.gbCustomNSP.PerformLayout();
+            this.groupBox5.ResumeLayout(false);
+            this.groupBox5.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -456,18 +849,6 @@
         private System.Windows.Forms.TabPage tabPage1;
         private System.Windows.Forms.TabPage tabPage2;
         private System.Windows.Forms.TabPage tabPage3;
-        private System.Windows.Forms.GroupBox groupBox1;
-        private System.Windows.Forms.Label lblExample;
-        private System.Windows.Forms.RadioButton rbRenamingCustom;
-        private System.Windows.Forms.RadioButton rbRenamingTitleIDGameNameReleaseGroup;
-        private System.Windows.Forms.GroupBox gbCustom;
-        private System.Windows.Forms.Button btnAdd;
-        private System.Windows.Forms.TextBox textBoxCustomPatern;
-        private System.Windows.Forms.ComboBox cbxTags;
-        private System.Windows.Forms.RadioButton rbRenamingTitleIDGameName;
-        private System.Windows.Forms.RadioButton rbRenamingGameName;
-        private System.Windows.Forms.RadioButton rbRenamingGameNameRegion;
-        private System.Windows.Forms.RadioButton rbRenamingGameNameRegionFirmware;
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.CheckBox cbScrapLayerFSOnSD;
         private System.Windows.Forms.CheckBox cbScrapNSPOnSD;
@@ -478,5 +859,47 @@
         private System.Windows.Forms.Button btnAddFolderAutoScan;
         private System.Windows.Forms.CheckedListBox checkedListBoxAutoScanFolders;
         private System.Windows.Forms.CheckBox cbUseTitleKeys;
+        private System.Windows.Forms.CheckBox cbScrapExtraInfoFromWeb;
+        private System.Windows.Forms.CheckBox cbAutoRemoveMissingFiles;
+        private System.Windows.Forms.TabControl tabControl2;
+        private System.Windows.Forms.TabPage tabPage4;
+        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.RadioButton rbRenamingGameNameRegionFirmwareXCI;
+        private System.Windows.Forms.RadioButton rbRenamingGameNameRegionXCI;
+        private System.Windows.Forms.Label lblExample;
+        private System.Windows.Forms.RadioButton rbRenamingCustomXCI;
+        private System.Windows.Forms.RadioButton rbRenamingTitleIDGameNameReleaseGroupXCI;
+        private System.Windows.Forms.GroupBox gbCustom;
+        private System.Windows.Forms.Button btnAddXCI;
+        private System.Windows.Forms.TextBox textBoxCustomPaternXCI;
+        private System.Windows.Forms.ComboBox cbxTagsXCI;
+        private System.Windows.Forms.RadioButton rbRenamingTitleIDGameNameXCI;
+        private System.Windows.Forms.RadioButton rbRenamingGameNameXCI;
+        private System.Windows.Forms.TabPage tabPage5;
+        private System.Windows.Forms.GroupBox groupBox4;
+        private System.Windows.Forms.RadioButton rbRenamingCDNSP;
+        private System.Windows.Forms.RadioButton rbRenamingGameNameRegionFirmwareNSP;
+        private System.Windows.Forms.RadioButton rbRenamingGameNameRegionNSP;
+        private System.Windows.Forms.Label lblExampleNSP;
+        private System.Windows.Forms.RadioButton rbRenamingCustomNSP;
+        private System.Windows.Forms.RadioButton rbRenamingTitleIDGameNameReleaseGroupNSP;
+        private System.Windows.Forms.GroupBox gbCustomNSP;
+        private System.Windows.Forms.Button btnAddNSP;
+        private System.Windows.Forms.TextBox textBoxCustomPaternNSP;
+        private System.Windows.Forms.ComboBox cbxTagsNSP;
+        private System.Windows.Forms.RadioButton rbRenamingTitleIDGameNameNSP;
+        private System.Windows.Forms.RadioButton rbRenamingGameNameNSP;
+        private System.Windows.Forms.GroupBox groupBox6;
+        private System.Windows.Forms.NumericUpDown textLimitFileNameSizeNSP;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.CheckBox cbShowCompletePaths;
+        private System.Windows.Forms.GroupBox groupBox5;
+        private System.Windows.Forms.Button btnColorBoth;
+        private System.Windows.Forms.Button btnColorEshop;
+        private System.Windows.Forms.Button btnColorXCI;
+        private System.Windows.Forms.CheckBox cbHighlightBothOnScene;
+        private System.Windows.Forms.CheckBox cbHighlightNSPOnScene;
+        private System.Windows.Forms.CheckBox cbHighlightXCIOnScene;
+        private System.Windows.Forms.Label label1;
     }
 }

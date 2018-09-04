@@ -1,13 +1,16 @@
 # Switch-Backup-Manager
 Complete Switch Backups management tool
 
+
+[![paypal](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=WR5ZZ7RH55NTG)
+
 ## Main Features
-* Manage your local and SD card Switch backups
-* See game info (just image for now, but more is comming)
+* Manage your local (XCI & NSP) and SD card Switch backups
+* See game info retrieved from web or edit them manually
 * Group and sort files list
 * Keep track of scene releases using nswdb.com database
 * Trim your files
-* Auto rename your files to match game name (other options in near future)
+* Auto rename your files using a user define pattern
 * Copy and move files between your local collection and SD card (either way)
 
 ## Requirements
@@ -16,21 +19,65 @@ Complete Switch Backups management tool
 
 ## Screenshots
 
-![main](https://i.imgur.com/SHlcuGp.png)
+![main](https://i.imgur.com/Nwbj0oj.png)
 
-![main](https://i.imgur.com/dH5t3Vi.png)
+![main](https://i.imgur.com/KZzojbS.png)
 
-![main](https://i.imgur.com/Ufhn64p.png)
+![main](https://i.imgur.com/1MDpIr9.png)
 
-![main](https://i.imgur.com/dHRvZ4J.png)
+![main](https://i.imgur.com/M4tmrN0.png)
 
-![main](https://i.imgur.com/3Qyat3W.png)
+![main](https://i.imgur.com/AtkY36y.png)
 
-![main](https://i.imgur.com/vENGuJn.png)
-
-![main](https://i.imgur.com/wABgTLS.png)
 
 ## Changelog
+
+* 1.1.6
+  - Fix: Unable to process 'Scene' NSP releases #45. Thanks to garoxas;
+  - Filename on the lists now shows only filename by default, user can however choose to show complete path in options;
+  - Highlights on the scene list the files you already have (NSP, XCI or both) with custom colors;
+  - Now you can donate using paypal - if you want to. Link is on github page :-)
+
+* 1.1.5
+  - Fix #50: New autorenaming pattern is not used at runtime;
+  - Fix #52: NSWDB site changed something that prevents the program of downloading their xml file. 
+
+* 1.1.4
+  - Fix #47: Some NSP update files were showing errors when adding to database (010065e003fd8800, 0100830004fb6800, 0100760002048800, 01005ee0036ec800, ..)
+  - fix XCI files skipped when version number is non standard, fix #42 #44
+
+* 1.1.3
+  - get correct XCI Game Revision, fix #37 by @garoxas / @Garou;
+  - Fixed filter for content type (dlc, base game, update) not working. Also, this filter is now saved on program preferences (will persist between sessions);
+  - Separate renaming paterns for XCI and NSP files;
+  - User can now limit filename size for NSP files.
+
+* 1.1.2
+  - Correct text format for game description by @garoxas / @Garou
+  - Fixed #38 (Issue witch manual scrape.)
+  - Autoremove missing files at startup is now optional (config)
+  - Fixed wrong sumary when using filters
+  - Add DLC, Update and Base game Filter on E-shop list
+  - Fix minor error on auto scan folder, where scan was stopped when a single file failed
+  - Fix for program check to the minimum DB version.
+
+* 1.1.1
+  - Now you can add NSP titles with the same TitleID. Thanks to @garoxas
+  - add support for multiple XCI revisions Thanks to @garoxas
+  - Game information like description, release date, nº o players, publisher and categories can now be scraped from web (optional, can be set on config screen)
+  - User can manually edit information of the games.
+  - Fixed #32 (Auto renaming problem)
+  - Add CDNSP Renaming pattern (Detects if its a base game, DLC our Update)
+
+* 1.1.0
+  - nstoolmod.exe is no more! Thanks @iriez!
+  - Lists position, sort order, size, Window Size and position, etc, are now saved when you exit the program.
+  - many bugs removed.
+
+* 1.0.9
+  - Now NSP files works fast! Using nstoolmod.exe (provided with this release). Thanks to StudentBlake!!
+  - Removed Fixed [DLC] [UPD] and [Version] from NSP Files (Issue #22). Added those options to renaming patterns in config screen. 
+  - Changed Scene ID format to NNNN. Change affects auto renaming feature (Issue #21).
 
 * 1.0.8
   - **Now you can configure folders to autoscan at startup** (FinnYoung's suggestion)
@@ -75,6 +122,6 @@ Complete Switch Backups management tool
 
 ## Source & Binaries
 * [GitHub](https://github.com/gibaBR/Switch-Backup-Manager/archive/master.zip)
-* [Release 1.0.8](https://github.com/gibaBR/Switch-Backup-Manager/releases/tag/v1.0.8)
+* [Release 1.1.5](https://github.com/gibaBR/Switch-Backup-Manager/releases/tag/v1.1.5)
 
 

@@ -14,16 +14,14 @@ namespace Switch_Backup_Manager
     public partial class FormConfigs : Form
     {
         private string autoRenamingPattern;
+        private string autoRenamingPatternNSP;
         private FileData gameExample;
+        private FileData gameExampleNSP;
 
         public FormConfigs()
         {
             InitializeComponent();
             this.AutoScaleMode = AutoScaleMode.Dpi;
-
-            //Hide tabs not ready
-            //tabControl1.TabPages.Remove(tabPage1);
-            tabControl1.TabPages.Remove(tabPage2);
 
             //This is Just an example, to put in the Label
             gameExample = new FileData();
@@ -36,15 +34,25 @@ namespace Switch_Backup_Manager
             gameExample.Group = "BigBlueBox";
             gameExample.Region = "WLD";
             gameExample.Firmware = "3.0.1";
+            gameExample.Languages = new List<string> { "American English", "British English", "Japanese", "French", "German",
+                "Latin American Spanish", "Spanish", "Italian", "Dutch", "Canadian French", "Russian" };
             gameExample.Languages_resumed = "en,fr,de,it,es,nl,ru,ja";
             gameExample.IdScene = 38;
-            gameExample.ContentType = "Application";
+            gameExample.ContentType = "Patch";
             gameExample.Version = "0";
 
-            cbxTags.Items.Clear();
+            gameExampleNSP = new FileData("C:\\Switch\\1-2-Switch [01000320000cc000][v0].nsp", "1-2-Switch [01000320000cc000][v0]", "1-2-Switch [01000320000cc000][v0].nsp", 
+                "1,38 GB", 1481339176, "1,38 GB", 1481339176, "01000320000CC000" , "01000320000CC000", "1-2-Switch", "Nintendo", "1.0.0", "No Prod. ID", "0.12.12.0", "e-shop", 
+                "0 (1.0.0-2.3.0)", new Dictionary<string, string> { { "American English", "cache\\icon_01000320000CC000_AmericanEnglish.bmp" }, { "Japanese", "cache\\icon_01000320000CC000_Japanese.bmp" } },
+                new List<string> { "American English", "Japanese" }, "en, ja", true, "", "", "0", "e-shop", "", false, "Download", 0, "Application", "0", true, "", "Nintendo", "Mar 03, 2017", 
+                "2 players simultaneous", new List<string> { "Party", "Multiplayer", "Action" }, 0);
+
+            cbxTagsXCI.Items.Clear();
             for (int i = 0; i < Util.AutoRenamingTags.Length; i++)
             {
-                cbxTags.Items.Add(Util.AutoRenamingTags[i]);
+                if (Util.AutoRenamingTags[i] != "{nspversion}")
+                    cbxTagsXCI.Items.Add(Util.AutoRenamingTags[i]);
+                cbxTagsNSP.Items.Add(Util.AutoRenamingTags[i]);
             }
 
             LoadConfig();
@@ -53,14 +61,43 @@ namespace Switch_Backup_Manager
         public void WriteConfig()
         {
             Util.autoRenamingPattern = this.autoRenamingPattern;
+            Util.autoRenamingPatternNSP = this.autoRenamingPatternNSP;
             Util.ini.IniWriteValue("AutoRenaming", "pattern", this.autoRenamingPattern);
+            Util.ini.IniWriteValue("AutoRenaming", "patternNSP", this.autoRenamingPatternNSP);
+            int maxFileNameSize = 0;
+            try
+            {
+                maxFileNameSize = Convert.ToInt16(textLimitFileNameSizeNSP.Value);                
+            }
+            catch { }
+            Util.MaxSizeFilenameNSP = maxFileNameSize;
+            Util.ini.IniWriteValue("AutoRenaming", "MaxSizeFilenameNSP", Convert.ToString(maxFileNameSize));
 
             Util.ScrapXCIOnSDCard = this.cbScrapXCIOnSD.Checked;
             Util.ScrapNSPOnSDCard = this.cbScrapNSPOnSD.Checked;
+            Util.ScrapExtraInfoFromWeb = this.cbScrapExtraInfoFromWeb.Checked;
             Util.ScrapInstalledEshopSDCard = this.cbScrapLayerFSOnSD.Checked;
+            Util.AutoRemoveMissingFiles = this.cbAutoRemoveMissingFiles.Checked;
             Util.ini.IniWriteValue("SD", "scrapXCI", cbScrapXCIOnSD.Checked ? "true" : "false");
             Util.ini.IniWriteValue("SD", "scrapNSP", cbScrapNSPOnSD.Checked ? "true" : "false");
             Util.ini.IniWriteValue("SD", "scrapInstalledNSP", cbScrapLayerFSOnSD.Checked ? "true" : "false");
+            Util.ini.IniWriteValue("Config", "scrapExtraInfoFromWeb", cbScrapExtraInfoFromWeb.Checked ? "true" : "false");
+            Util.ini.IniWriteValue("Config", "autoRemoveMissingFiles", cbAutoRemoveMissingFiles.Checked ? "true" : "false");
+            Util.ini.IniWriteValue("Visual", "showCompletePathFiles", cbShowCompletePaths.Checked ? "true" : "false");
+
+            Util.HighlightXCIOnScene = cbHighlightXCIOnScene.Checked;
+            Util.HighlightNSPOnScene = cbHighlightNSPOnScene.Checked;
+            Util.HighlightBothOnScene = cbHighlightBothOnScene.Checked;
+            Util.HighlightXCIOnScene_color = btnColorXCI.BackColor;
+            Util.HighlightNSPOnScene_color = btnColorEshop.BackColor;
+            Util.HighlightBothOnScene_color = btnColorBoth.BackColor;
+
+            Util.ini.IniWriteValue("Visual", "highlightXCIOnScene", Util.HighlightXCIOnScene ? "true" : "false");
+            Util.ini.IniWriteValue("Visual", "highlightNSPOnScene", Util.HighlightNSPOnScene ? "true" : "false");
+            Util.ini.IniWriteValue("Visual", "highlightBOTHOnScene", Util.HighlightBothOnScene ? "true" : "false");
+            Util.ini.IniWriteValue("Visual", "highlightXCIOnScene_color", System.Drawing.ColorTranslator.ToHtml(Util.HighlightXCIOnScene_color));
+            Util.ini.IniWriteValue("Visual", "highlightNSPOnScene_color", System.Drawing.ColorTranslator.ToHtml(Util.HighlightNSPOnScene_color));
+            Util.ini.IniWriteValue("Visual", "highlightBOTHOnScene_color", System.Drawing.ColorTranslator.ToHtml(Util.HighlightBothOnScene_color));
 
             Util.AutoUpdateNSDBOnStartup = this.cbAutoUpdateScene.Checked;
             Util.ini.IniWriteValue("Config", "autoUpdateNSWDB", cbAutoUpdateScene.Checked ? "true" : "false");
@@ -78,40 +115,81 @@ namespace Switch_Backup_Manager
                 Util.ini.IniWriteValue("AutoScan", "Folder_0" + Convert.ToString(i), item+"?" + (checkedListBoxAutoScanFolders.CheckedItems.IndexOf(item) == -1 ? "0" : "1"));
                 i++;
             }
-
         }
 
         public void LoadConfig()
         {
             this.autoRenamingPattern = Util.ini.IniReadValue("AutoRenaming", "pattern");
+            this.autoRenamingPatternNSP = Util.ini.IniReadValue("AutoRenaming", "patternNSP");
             switch (this.autoRenamingPattern)
             {
                 case "{gamename}":
-                    rbRenamingGameName.Checked = true;
+                    rbRenamingGameNameXCI.Checked = true;
                     break;
                 case "{titleid} - {gamename}":
-                    rbRenamingTitleIDGameName.Checked = true;
+                    rbRenamingTitleIDGameNameXCI.Checked = true;
                     break;
                 case "{titleid} - {gamename} - {releasegroup}":
-                    rbRenamingTitleIDGameNameReleaseGroup.Checked = true;
+                    rbRenamingTitleIDGameNameReleaseGroupXCI.Checked = true;
                     break;
                 case "{gamename} ({region})":
-                    rbRenamingGameNameRegion.Checked = true;
+                    rbRenamingGameNameRegionXCI.Checked = true;
                     break;
                 case "{gamename} ({region}) ({firmware})":
-                    rbRenamingGameNameRegionFirmware.Checked = true;
+                    rbRenamingGameNameRegionFirmwareXCI.Checked = true;
                     break;
+//                case "{CDNSP}":
+//                    rbRenamingCDNSP.Checked = true;
+//                    break;
                 default:
-                    textBoxCustomPatern.Text = autoRenamingPattern;
-                    rbRenamingCustom.Checked = true;
+                    textBoxCustomPaternXCI.Text = autoRenamingPattern;
+                    rbRenamingCustomXCI.Checked = true;
                     break;
             }
+
+            switch (this.autoRenamingPatternNSP)
+            {
+                case "{gamename}":
+                    rbRenamingGameNameNSP.Checked = true;
+                    break;
+                case "{titleid} - {gamename}":
+                    rbRenamingTitleIDGameNameNSP.Checked = true;
+                    break;
+                case "{titleid} - {gamename} - {releasegroup}":
+                    rbRenamingTitleIDGameNameReleaseGroupNSP.Checked = true;
+                    break;
+                case "{gamename} ({region})":
+                    rbRenamingGameNameRegionNSP.Checked = true;
+                    break;
+                case "{gamename} ({region}) ({firmware})":
+                    rbRenamingGameNameRegionFirmwareNSP.Checked = true;
+                    break;
+                case "{CDNSP}":
+                    rbRenamingCDNSP.Checked = true;
+                    break;
+                default:
+                    textBoxCustomPaternNSP.Text = autoRenamingPatternNSP;
+                    rbRenamingCustomNSP.Checked = true;
+                    break;
+            }
+
+            textLimitFileNameSizeNSP.Value = Util.MaxSizeFilenameNSP;
 
             this.cbAutoUpdateScene.Checked = Util.AutoUpdateNSDBOnStartup;
             this.cbUseTitleKeys.Checked = Util.UseTitleKeys;
             this.cbScrapLayerFSOnSD.Checked = Util.ScrapInstalledEshopSDCard;
             this.cbScrapNSPOnSD.Checked = Util.ScrapNSPOnSDCard;
             this.cbScrapXCIOnSD.Checked = Util.ScrapXCIOnSDCard;
+            this.cbScrapExtraInfoFromWeb.Checked = Util.ScrapExtraInfoFromWeb;
+            this.cbAutoRemoveMissingFiles.Checked = Util.AutoRemoveMissingFiles;
+            this.cbShowCompletePaths.Checked = Util.ShowCompletePathFiles;
+
+            cbHighlightXCIOnScene.Checked = Util.HighlightXCIOnScene;
+            cbHighlightNSPOnScene.Checked = Util.HighlightNSPOnScene;
+            cbHighlightBothOnScene.Checked = Util.HighlightBothOnScene;
+            this.btnColorXCI.BackColor = Util.HighlightXCIOnScene_color;
+            this.btnColorEshop.BackColor = Util.HighlightNSPOnScene_color;
+            this.btnColorBoth.BackColor = Util.HighlightBothOnScene_color;
 
             for (int i = 1; i <= 5; i++ )
             {
@@ -130,50 +208,6 @@ namespace Switch_Backup_Manager
             }
         }
 
-        private void rbRenamingGameName_CheckedChanged(object sender, EventArgs e)
-        {
-            gbCustom.Visible = false;
-            this.autoRenamingPattern = "{gamename}";
-            lblExample.Text = Util.GetRenamingString(gameExample, this.autoRenamingPattern);
-        }
-
-        private void rbRenamingTitleIDGameName_CheckedChanged(object sender, EventArgs e)
-        {
-            gbCustom.Visible = false;
-            this.autoRenamingPattern = "{titleid} - {gamename}";
-            lblExample.Text = Util.GetRenamingString(gameExample, this.autoRenamingPattern);
-        }
-
-        private void rbRenamingTitleIDGameNameReleaseGroup_CheckedChanged(object sender, EventArgs e)
-        {
-            gbCustom.Visible = false;
-            this.autoRenamingPattern = "{titleid} - {gamename} - {releasegroup}";
-            lblExample.Text = Util.GetRenamingString(gameExample, this.autoRenamingPattern);
-        }
-
-        private void rbRenamingGameNameRegion_CheckedChanged(object sender, EventArgs e)
-        {
-            gbCustom.Visible = false;
-            this.autoRenamingPattern = "{gamename} ({region})";
-            lblExample.Text = Util.GetRenamingString(gameExample, this.autoRenamingPattern);
-        }
-
-        private void rbRenamingGameNameRegionFirmware_CheckedChanged(object sender, EventArgs e)
-        {
-            gbCustom.Visible = false;
-            this.autoRenamingPattern = "{gamename} ({region}) ({firmware})";
-            lblExample.Text = Util.GetRenamingString(gameExample, this.autoRenamingPattern);
-        }
-
-        private void rbRenamingCustom_CheckedChanged(object sender, EventArgs e)
-        {
-            lblExample.Text = "";
-            gbCustom.Visible = true;
-            this.autoRenamingPattern = textBoxCustomPatern.Text;
-            lblExample.Text = Util.GetRenamingString(gameExample, this.autoRenamingPattern);
-            textBoxCustomPatern.Select();
-        }
-
         private void btnOK_Click(object sender, EventArgs e)
         {
             WriteConfig();
@@ -187,18 +221,18 @@ namespace Switch_Backup_Manager
 
         private void textBoxCustomPatern_TextChanged(object sender, EventArgs e)
         {
-            if (textBoxCustomPatern.Text.Trim() != "")
+            if (textBoxCustomPaternXCI.Text.Trim() != "")
             {
-                this.autoRenamingPattern = textBoxCustomPatern.Text;
+                this.autoRenamingPattern = textBoxCustomPaternXCI.Text;
                 lblExample.Text = Util.GetRenamingString(gameExample, this.autoRenamingPattern);
             }
         }
 
         private void btnAdd_Click(object sender, EventArgs e)
         {
-            if (cbxTags.SelectedIndex != -1)
+            if (cbxTagsXCI.SelectedIndex != -1)
             {
-                textBoxCustomPatern.Text = textBoxCustomPatern.Text.Insert(textBoxCustomPatern.SelectionStart, cbxTags.Text);
+                textBoxCustomPaternXCI.Text = textBoxCustomPaternXCI.Text.Insert(textBoxCustomPaternXCI.SelectionStart, cbxTagsXCI.Text);
             }
         }
 
@@ -234,6 +268,171 @@ namespace Switch_Backup_Manager
         private void btnApply_Click(object sender, EventArgs e)
         {
             WriteConfig();
+        }
+
+        private void btnAddNSP_Click(object sender, EventArgs e)
+        {
+            if (cbxTagsNSP.SelectedIndex != -1)
+            {
+                textBoxCustomPaternNSP.Text = textBoxCustomPaternNSP.Text.Insert(textBoxCustomPaternNSP.SelectionStart, cbxTagsNSP.Text);
+            }
+        }
+
+        private void textBoxCustomPaternNSP_TextChanged(object sender, EventArgs e)
+        {
+            if (textBoxCustomPaternNSP.Text.Trim() != "")
+            {
+                this.autoRenamingPatternNSP = textBoxCustomPaternNSP.Text;
+                lblExampleNSP.Text = Util.GetRenamingString(gameExampleNSP, this.autoRenamingPatternNSP);
+            }
+        }
+
+        private void textLimitFileNameSizeNSP_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar))
+            {
+                e.Handled = true;
+            }
+        }
+
+        private void rbRenamingGameNameXCI_CheckedChanged(object sender, EventArgs e)
+        {
+            gbCustom.Visible = false;
+            this.autoRenamingPattern = "{gamename}";
+            lblExample.Text = Util.GetRenamingString(gameExample, this.autoRenamingPattern);
+        }
+
+        private void rbRenamingGameNameRegionXCI_CheckedChanged(object sender, EventArgs e)
+        {
+            gbCustom.Visible = false;
+            this.autoRenamingPattern = "{gamename} ({region})";
+            lblExample.Text = Util.GetRenamingString(gameExample, this.autoRenamingPattern);
+        }
+
+        private void rbRenamingGameNameRegionFirmwareXCI_CheckedChanged(object sender, EventArgs e)
+        {
+            gbCustom.Visible = false;
+            this.autoRenamingPattern = "{gamename} ({region}) ({firmware})";
+            lblExample.Text = Util.GetRenamingString(gameExample, this.autoRenamingPattern);
+        }
+
+        private void rbRenamingTitleIDGameNameXCI_CheckedChanged(object sender, EventArgs e)
+        {
+            gbCustom.Visible = false;
+            this.autoRenamingPattern = "{titleid} - {gamename}";
+            lblExample.Text = Util.GetRenamingString(gameExample, this.autoRenamingPattern);
+        }
+
+        private void rbRenamingTitleIDGameNameReleaseGroupXCI_CheckedChanged(object sender, EventArgs e)
+        {
+            gbCustom.Visible = false;
+            this.autoRenamingPattern = "{titleid} - {gamename} - {releasegroup}";
+            lblExample.Text = Util.GetRenamingString(gameExample, this.autoRenamingPattern);
+        }
+
+        private void rbRenamingCustomXCI_CheckedChanged(object sender, EventArgs e)
+        {
+            lblExample.Text = "";
+            gbCustom.Visible = true;
+            this.autoRenamingPattern = textBoxCustomPaternXCI.Text;
+            lblExample.Text = Util.GetRenamingString(gameExample, this.autoRenamingPattern);
+            textBoxCustomPaternXCI.Select();
+        }
+
+        private void rbRenamingCustomNSP_CheckedChanged(object sender, EventArgs e)
+        {
+            lblExampleNSP.Text = "";
+            gbCustomNSP.Visible = true;
+            this.autoRenamingPatternNSP = textBoxCustomPaternNSP.Text;
+            lblExampleNSP.Text = Util.GetRenamingString(gameExampleNSP, this.autoRenamingPatternNSP);
+            textBoxCustomPaternNSP.Select();
+        }
+
+        private void rbRenamingGameNameNSP_CheckedChanged(object sender, EventArgs e)
+        {
+            gbCustomNSP.Visible = false;
+            this.autoRenamingPatternNSP = "{gamename}";
+            lblExampleNSP.Text = Util.GetRenamingString(gameExampleNSP, this.autoRenamingPatternNSP);
+        }
+
+        private void rbRenamingGameNameRegionNSP_CheckedChanged(object sender, EventArgs e)
+        {
+            gbCustomNSP.Visible = false;
+            this.autoRenamingPatternNSP = "{gamename} ({region})";
+            lblExampleNSP.Text = Util.GetRenamingString(gameExampleNSP, this.autoRenamingPatternNSP);
+        }
+
+        private void rbRenamingGameNameRegionFirmwareNSP_CheckedChanged(object sender, EventArgs e)
+        {
+            gbCustomNSP.Visible = false;
+            this.autoRenamingPatternNSP = "{gamename} ({region}) ({firmware})";
+            lblExampleNSP.Text = Util.GetRenamingString(gameExampleNSP, this.autoRenamingPatternNSP);
+        }
+
+        private void rbRenamingTitleIDGameNameNSP_CheckedChanged(object sender, EventArgs e)
+        {
+            gbCustomNSP.Visible = false;
+            this.autoRenamingPatternNSP = "{titleid} - {gamename}";
+            lblExampleNSP.Text = Util.GetRenamingString(gameExampleNSP, this.autoRenamingPatternNSP);
+        }
+
+        private void rbRenamingCDNSP_CheckedChanged_1(object sender, EventArgs e)
+        {
+            gbCustomNSP.Visible = false;
+            this.autoRenamingPatternNSP = "{CDNSP}";
+            lblExampleNSP.Text = Util.GetRenamingString(gameExampleNSP, this.autoRenamingPatternNSP);
+        }
+
+        private void rbRenamingTitleIDGameNameReleaseGroupNSP_CheckedChanged(object sender, EventArgs e)
+        {
+            gbCustomNSP.Visible = false;
+            this.autoRenamingPatternNSP = "{titleid} - {gamename} - {releasegroup}";
+            lblExampleNSP.Text = Util.GetRenamingString(gameExampleNSP, this.autoRenamingPatternNSP);
+        }
+
+        private void btnColorXCI_Click(object sender, EventArgs e)
+        {
+            ColorDialog MyDialog = new ColorDialog();
+            // Keeps the user from selecting a custom color.
+            MyDialog.AllowFullOpen = false;
+            // Allows the user to get help. (The default is false.)
+            MyDialog.ShowHelp = true;
+            // Sets the initial color select to the current text color.
+            MyDialog.Color = btnColorXCI.BackColor;
+
+            // Update the text box color if the user clicks OK 
+            if (MyDialog.ShowDialog() == DialogResult.OK)
+                btnColorXCI.BackColor = MyDialog.Color;
+        }
+
+        private void btnColorEshop_Click(object sender, EventArgs e)
+        {
+            ColorDialog MyDialog = new ColorDialog();
+            // Keeps the user from selecting a custom color.
+            MyDialog.AllowFullOpen = false;
+            // Allows the user to get help. (The default is false.)
+            MyDialog.ShowHelp = true;
+            // Sets the initial color select to the current text color.
+            MyDialog.Color = btnColorEshop.BackColor;
+
+            // Update the text box color if the user clicks OK 
+            if (MyDialog.ShowDialog() == DialogResult.OK)
+                btnColorEshop.BackColor = MyDialog.Color;
+        }
+
+        private void btnColorBoth_Click(object sender, EventArgs e)
+        {
+            ColorDialog MyDialog = new ColorDialog();
+            // Keeps the user from selecting a custom color.
+            MyDialog.AllowFullOpen = false;
+            // Allows the user to get help. (The default is false.)
+            MyDialog.ShowHelp = true;
+            // Sets the initial color select to the current text color.
+            MyDialog.Color = btnColorBoth.BackColor;
+
+            // Update the text box color if the user clicks OK 
+            if (MyDialog.ShowDialog() == DialogResult.OK)
+                btnColorBoth.BackColor = MyDialog.Color;
         }
     }
 }

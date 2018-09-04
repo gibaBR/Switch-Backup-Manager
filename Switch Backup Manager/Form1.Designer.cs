@@ -31,6 +31,18 @@
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmMain));
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.panelGameExtraInfo = new System.Windows.Forms.Panel();
+            this.lnkInfo = new System.Windows.Forms.LinkLabel();
+            this.lblPublisher = new System.Windows.Forms.Label();
+            this.label9 = new System.Windows.Forms.Label();
+            this.label8 = new System.Windows.Forms.Label();
+            this.label7 = new System.Windows.Forms.Label();
+            this.label6 = new System.Windows.Forms.Label();
+            this.pnlGameDescription = new System.Windows.Forms.Panel();
+            this.richTextBoxGameDescription = new System.Windows.Forms.RichTextBox();
+            this.lblCategory = new System.Windows.Forms.Label();
+            this.lblNumberOfPlayers = new System.Windows.Forms.Label();
+            this.lblReleaseDate = new System.Windows.Forms.Label();
             this.panel3 = new System.Windows.Forms.Panel();
             this.PB_GameIcon = new System.Windows.Forms.PictureBox();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
@@ -48,10 +60,14 @@
             this.olvColumnCardTypeLocal = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnFilePathLocal = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnDeveloperLocal = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.olvColumnPublisherLocal = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnGameRevisionLocal = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnMasterKeyLocal = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnFirmwareLocal = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnSDKVersionLocal = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.olvColumnReleaseDateLocal = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.olvColumnNumberOfPlayersLocal = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.olvColumnCategoriesLocal = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.contextMenuLocalList = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.showInExplorerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem20 = new System.Windows.Forms.ToolStripSeparator();
@@ -66,11 +82,14 @@
             this.folderToolStripMenuItem3 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem68 = new System.Windows.Forms.ToolStripSeparator();
             this.copyInfoToClipboardToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.updateGameInfoFromWebToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.panel9 = new System.Windows.Forms.Panel();
             this.btnClearFilterLocal = new System.Windows.Forms.Button();
             this.textBoxFilterLocal = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.cbxFilterLocal = new System.Windows.Forms.ComboBox();
+            this.panel8 = new System.Windows.Forms.Panel();
             this.menuLocalFiles = new System.Windows.Forms.MenuStrip();
             this.addToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.filesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -284,10 +303,7 @@
             this.toolStripMenuItem94 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem95 = new System.Windows.Forms.ToolStripMenuItem();
             this.tabPage4 = new System.Windows.Forms.TabPage();
-            this.btnClearFilterEShop = new System.Windows.Forms.Button();
-            this.textBoxFilterEShop = new System.Windows.Forms.TextBox();
-            this.label5 = new System.Windows.Forms.Label();
-            this.cbxFilterEshop = new System.Windows.Forms.ComboBox();
+            this.panel10 = new System.Windows.Forms.Panel();
             this.OLVEshop = new BrightIdeasSoftware.ObjectListView();
             this.olvColumnTitleIDEShop = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnGameNameEShop = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
@@ -295,12 +311,17 @@
             this.olvColumnLanguagesEShop = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnFilePathEShop = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnDeveloperEShop = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.olvColumnPublisherEshop = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnGameRevisionEShop = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnMasterKeyRevisionEShop = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnDistributionType = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnFirmwareEShop = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnSDKVersionEShop = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
-            this.contextMenuStripEShop = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.olvColumnReleaseDateEshop = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.olvColumnNumberOfPlayersEshop = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.olvColumnCategoriesEShop = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.olvColumnContentTypeEShop = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.contextMenuEShopList = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.toolStripMenuItemEShopShowInExplorer = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItemEShopUpdateInfo = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator9 = new System.Windows.Forms.ToolStripSeparator();
@@ -314,6 +335,17 @@
             this.folderToolStripMenuItem6 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem64 = new System.Windows.Forms.ToolStripSeparator();
             this.copyInfoToClipboardToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.updateGameInfoFromWebToolStripMenuItemEshop = new System.Windows.Forms.ToolStripMenuItem();
+            this.panel11 = new System.Windows.Forms.Panel();
+            this.panel13 = new System.Windows.Forms.Panel();
+            this.cbBaseGame = new System.Windows.Forms.CheckBox();
+            this.cbUpdates = new System.Windows.Forms.CheckBox();
+            this.cbDLC = new System.Windows.Forms.CheckBox();
+            this.btnClearFilterEShop = new System.Windows.Forms.Button();
+            this.textBoxFilterEShop = new System.Windows.Forms.TextBox();
+            this.label5 = new System.Windows.Forms.Label();
+            this.cbxFilterEshop = new System.Windows.Forms.ComboBox();
+            this.panel12 = new System.Windows.Forms.Panel();
             this.menuEShop = new System.Windows.Forms.MenuStrip();
             this.addToolStripMenuItemAddFolderEShop = new System.Windows.Forms.ToolStripMenuItem();
             this.filesToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
@@ -361,6 +393,9 @@
             this.toolStripStatusFilesOperation = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripProgressAddingFiles = new System.Windows.Forms.ToolStripProgressBar();
             this.toolStripStatusLabelGame = new System.Windows.Forms.ToolStripStatusLabel();
+            this.toolStripStatusLabel3 = new System.Windows.Forms.ToolStripStatusLabel();
+            this.toolStripStatusLabel4 = new System.Windows.Forms.ToolStripStatusLabel();
+            this.toolStripStatusLabel5 = new System.Windows.Forms.ToolStripStatusLabel();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.optionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -370,6 +405,34 @@
             this.updateLocalDatabaseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.updateEshopLocalDatabaseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.updateNswdbcomListToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.scrapExtendedInfoFromWebToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.viewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.bottonPanelToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.leftPanelToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.panelEditTitle = new System.Windows.Forms.Panel();
+            this.groupBox10 = new System.Windows.Forms.GroupBox();
+            this.textBoxReleaseDate = new System.Windows.Forms.TextBox();
+            this.groupBox9 = new System.Windows.Forms.GroupBox();
+            this.textBoxCategory = new System.Windows.Forms.TextBox();
+            this.groupBox8 = new System.Windows.Forms.GroupBox();
+            this.textBoxPublisher = new System.Windows.Forms.TextBox();
+            this.groupBox7 = new System.Windows.Forms.GroupBox();
+            this.textBoxDeveloper = new System.Windows.Forms.TextBox();
+            this.groupBox6 = new System.Windows.Forms.GroupBox();
+            this.textBoxPlayers = new System.Windows.Forms.TextBox();
+            this.groupBox5 = new System.Windows.Forms.GroupBox();
+            this.textBoxFirmware = new System.Windows.Forms.TextBox();
+            this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.textBoxCardType = new System.Windows.Forms.TextBox();
+            this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.textBoxLanguages = new System.Windows.Forms.TextBox();
+            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.richTextBoxDescription = new System.Windows.Forms.RichTextBox();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.textBoxGameTitle = new System.Windows.Forms.TextBox();
+            this.panel14 = new System.Windows.Forms.Panel();
+            this.panel15 = new System.Windows.Forms.Panel();
+            this.button1 = new System.Windows.Forms.Button();
             this.backgroundWorkerAddFilesFromDirectory = new System.ComponentModel.BackgroundWorker();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.backgroundWorkerAddFile = new System.ComponentModel.BackgroundWorker();
@@ -377,14 +440,18 @@
             this.backgroundWorkerLoadSDCardFiles = new System.ComponentModel.BackgroundWorker();
             this.backgroundWorkerScanNewFiles = new System.ComponentModel.BackgroundWorker();
             this.backgroundWorkerUpdateFiles = new System.ComponentModel.BackgroundWorker();
+            this.backgroundWorkerScrapExtraInfo = new System.ComponentModel.BackgroundWorker();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
+            this.panelGameExtraInfo.SuspendLayout();
+            this.pnlGameDescription.SuspendLayout();
             this.panel3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.PB_GameIcon)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).BeginInit();
             this.splitContainer2.Panel1.SuspendLayout();
+            this.splitContainer2.Panel2.SuspendLayout();
             this.splitContainer2.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -392,6 +459,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.OLVLocalFiles)).BeginInit();
             this.contextMenuLocalList.SuspendLayout();
             this.panel1.SuspendLayout();
+            this.panel9.SuspendLayout();
+            this.panel8.SuspendLayout();
             this.menuLocalFiles.SuspendLayout();
             this.tabPage2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.OLV_SDCard)).BeginInit();
@@ -404,14 +473,31 @@
             this.contextMenuStripScene.SuspendLayout();
             this.menuStrip3.SuspendLayout();
             this.tabPage4.SuspendLayout();
+            this.panel10.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.OLVEshop)).BeginInit();
-            this.contextMenuStripEShop.SuspendLayout();
+            this.contextMenuEShopList.SuspendLayout();
+            this.panel11.SuspendLayout();
+            this.panel13.SuspendLayout();
+            this.panel12.SuspendLayout();
             this.menuEShop.SuspendLayout();
             this.tabPage5.SuspendLayout();
             this.panel6.SuspendLayout();
             this.panel7.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
+            this.panelEditTitle.SuspendLayout();
+            this.groupBox10.SuspendLayout();
+            this.groupBox9.SuspendLayout();
+            this.groupBox8.SuspendLayout();
+            this.groupBox7.SuspendLayout();
+            this.groupBox6.SuspendLayout();
+            this.groupBox5.SuspendLayout();
+            this.groupBox4.SuspendLayout();
+            this.groupBox3.SuspendLayout();
+            this.groupBox2.SuspendLayout();
+            this.groupBox1.SuspendLayout();
+            this.panel14.SuspendLayout();
+            this.panel15.SuspendLayout();
             this.SuspendLayout();
             // 
             // splitContainer1
@@ -423,6 +509,7 @@
             // 
             // splitContainer1.Panel1
             // 
+            this.splitContainer1.Panel1.Controls.Add(this.panelGameExtraInfo);
             this.splitContainer1.Panel1.Controls.Add(this.panel3);
             this.splitContainer1.Panel1MinSize = 250;
             // 
@@ -431,9 +518,139 @@
             this.splitContainer1.Panel2.Controls.Add(this.splitContainer2);
             this.splitContainer1.Panel2MinSize = 800;
             this.splitContainer1.Size = new System.Drawing.Size(1880, 816);
-            this.splitContainer1.SplitterDistance = 293;
+            this.splitContainer1.SplitterDistance = 350;
             this.splitContainer1.SplitterWidth = 1;
             this.splitContainer1.TabIndex = 0;
+            // 
+            // panelGameExtraInfo
+            // 
+            this.panelGameExtraInfo.Controls.Add(this.lnkInfo);
+            this.panelGameExtraInfo.Controls.Add(this.lblPublisher);
+            this.panelGameExtraInfo.Controls.Add(this.label9);
+            this.panelGameExtraInfo.Controls.Add(this.label8);
+            this.panelGameExtraInfo.Controls.Add(this.label7);
+            this.panelGameExtraInfo.Controls.Add(this.label6);
+            this.panelGameExtraInfo.Controls.Add(this.pnlGameDescription);
+            this.panelGameExtraInfo.Controls.Add(this.lblCategory);
+            this.panelGameExtraInfo.Controls.Add(this.lblNumberOfPlayers);
+            this.panelGameExtraInfo.Controls.Add(this.lblReleaseDate);
+            this.panelGameExtraInfo.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panelGameExtraInfo.Location = new System.Drawing.Point(0, 369);
+            this.panelGameExtraInfo.Name = "panelGameExtraInfo";
+            this.panelGameExtraInfo.Size = new System.Drawing.Size(348, 445);
+            this.panelGameExtraInfo.TabIndex = 2;
+            this.panelGameExtraInfo.Visible = false;
+            // 
+            // lnkInfo
+            // 
+            this.lnkInfo.Location = new System.Drawing.Point(10, 218);
+            this.lnkInfo.Name = "lnkInfo";
+            this.lnkInfo.Size = new System.Drawing.Size(328, 13);
+            this.lnkInfo.TabIndex = 29;
+            this.lnkInfo.TabStop = true;
+            this.lnkInfo.Text = "E-shop homepage";
+            this.lnkInfo.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.lnkInfo.Visible = false;
+            this.lnkInfo.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lnkInfo_LinkClicked);
+            // 
+            // lblPublisher
+            // 
+            this.lblPublisher.AutoSize = true;
+            this.lblPublisher.Location = new System.Drawing.Point(104, 292);
+            this.lblPublisher.Name = "lblPublisher";
+            this.lblPublisher.Size = new System.Drawing.Size(41, 13);
+            this.lblPublisher.TabIndex = 14;
+            this.lblPublisher.Text = "label10";
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label9.Location = new System.Drawing.Point(10, 317);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(61, 13);
+            this.label9.TabIndex = 13;
+            this.label9.Text = "Category:";
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label8.Location = new System.Drawing.Point(10, 292);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(63, 13);
+            this.label8.TabIndex = 12;
+            this.label8.Text = "Publisher:";
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label7.Location = new System.Drawing.Point(10, 267);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(85, 13);
+            this.label7.TabIndex = 11;
+            this.label7.Text = "N° of Players:";
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label6.Location = new System.Drawing.Point(10, 242);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(88, 13);
+            this.label6.TabIndex = 10;
+            this.label6.Text = "Release Date:";
+            // 
+            // pnlGameDescription
+            // 
+            this.pnlGameDescription.Controls.Add(this.richTextBoxGameDescription);
+            this.pnlGameDescription.Dock = System.Windows.Forms.DockStyle.Top;
+            this.pnlGameDescription.Location = new System.Drawing.Point(0, 0);
+            this.pnlGameDescription.Name = "pnlGameDescription";
+            this.pnlGameDescription.Padding = new System.Windows.Forms.Padding(10);
+            this.pnlGameDescription.Size = new System.Drawing.Size(348, 208);
+            this.pnlGameDescription.TabIndex = 9;
+            // 
+            // richTextBoxGameDescription
+            // 
+            this.richTextBoxGameDescription.BackColor = System.Drawing.SystemColors.Control;
+            this.richTextBoxGameDescription.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.richTextBoxGameDescription.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.richTextBoxGameDescription.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.richTextBoxGameDescription.Location = new System.Drawing.Point(10, 10);
+            this.richTextBoxGameDescription.Name = "richTextBoxGameDescription";
+            this.richTextBoxGameDescription.ReadOnly = true;
+            this.richTextBoxGameDescription.Size = new System.Drawing.Size(328, 188);
+            this.richTextBoxGameDescription.TabIndex = 9;
+            this.richTextBoxGameDescription.Text = "";
+            // 
+            // lblCategory
+            // 
+            this.lblCategory.AutoSize = true;
+            this.lblCategory.Location = new System.Drawing.Point(104, 317);
+            this.lblCategory.Name = "lblCategory";
+            this.lblCategory.Size = new System.Drawing.Size(35, 13);
+            this.lblCategory.TabIndex = 7;
+            this.lblCategory.Text = "label6";
+            // 
+            // lblNumberOfPlayers
+            // 
+            this.lblNumberOfPlayers.AutoSize = true;
+            this.lblNumberOfPlayers.Location = new System.Drawing.Point(104, 267);
+            this.lblNumberOfPlayers.Name = "lblNumberOfPlayers";
+            this.lblNumberOfPlayers.Size = new System.Drawing.Size(35, 13);
+            this.lblNumberOfPlayers.TabIndex = 6;
+            this.lblNumberOfPlayers.Text = "label6";
+            // 
+            // lblReleaseDate
+            // 
+            this.lblReleaseDate.AutoSize = true;
+            this.lblReleaseDate.Location = new System.Drawing.Point(104, 242);
+            this.lblReleaseDate.Name = "lblReleaseDate";
+            this.lblReleaseDate.Size = new System.Drawing.Size(35, 13);
+            this.lblReleaseDate.TabIndex = 5;
+            this.lblReleaseDate.Text = "label6";
             // 
             // panel3
             // 
@@ -443,7 +660,7 @@
             this.panel3.Margin = new System.Windows.Forms.Padding(10);
             this.panel3.Name = "panel3";
             this.panel3.Padding = new System.Windows.Forms.Padding(10);
-            this.panel3.Size = new System.Drawing.Size(291, 369);
+            this.panel3.Size = new System.Drawing.Size(348, 369);
             this.panel3.TabIndex = 1;
             // 
             // PB_GameIcon
@@ -454,7 +671,7 @@
             this.PB_GameIcon.Margin = new System.Windows.Forms.Padding(20);
             this.PB_GameIcon.Name = "PB_GameIcon";
             this.PB_GameIcon.Padding = new System.Windows.Forms.Padding(10);
-            this.PB_GameIcon.Size = new System.Drawing.Size(271, 349);
+            this.PB_GameIcon.Size = new System.Drawing.Size(328, 349);
             this.PB_GameIcon.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.PB_GameIcon.TabIndex = 28;
             this.PB_GameIcon.TabStop = false;
@@ -472,8 +689,13 @@
             this.splitContainer2.Panel1.Controls.Add(this.tabControl1);
             this.splitContainer2.Panel1.Controls.Add(this.statusStrip1);
             this.splitContainer2.Panel1.Controls.Add(this.menuStrip1);
-            this.splitContainer2.Size = new System.Drawing.Size(1586, 816);
-            this.splitContainer2.SplitterDistance = 669;
+            // 
+            // splitContainer2.Panel2
+            // 
+            this.splitContainer2.Panel2.Controls.Add(this.panelEditTitle);
+            this.splitContainer2.Panel2MinSize = 220;
+            this.splitContainer2.Size = new System.Drawing.Size(1529, 816);
+            this.splitContainer2.SplitterDistance = 568;
             this.splitContainer2.SplitterWidth = 1;
             this.splitContainer2.TabIndex = 0;
             // 
@@ -488,7 +710,7 @@
             this.tabControl1.Location = new System.Drawing.Point(0, 24);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(1584, 619);
+            this.tabControl1.Size = new System.Drawing.Size(1527, 518);
             this.tabControl1.TabIndex = 1;
             this.tabControl1.SelectedIndexChanged += new System.EventHandler(this.tabControl1_SelectedIndexChanged);
             this.tabControl1.TabIndexChanged += new System.EventHandler(this.tabControl1_TabIndexChanged);
@@ -500,7 +722,7 @@
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(1576, 593);
+            this.tabPage1.Size = new System.Drawing.Size(1519, 492);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Local files";
             this.tabPage1.UseVisualStyleBackColor = true;
@@ -511,7 +733,7 @@
             this.panel2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel2.Location = new System.Drawing.Point(3, 31);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(1570, 559);
+            this.panel2.Size = new System.Drawing.Size(1513, 458);
             this.panel2.TabIndex = 1;
             // 
             // OLVLocalFiles
@@ -526,10 +748,14 @@
             this.OLVLocalFiles.AllColumns.Add(this.olvColumnCardTypeLocal);
             this.OLVLocalFiles.AllColumns.Add(this.olvColumnFilePathLocal);
             this.OLVLocalFiles.AllColumns.Add(this.olvColumnDeveloperLocal);
+            this.OLVLocalFiles.AllColumns.Add(this.olvColumnPublisherLocal);
             this.OLVLocalFiles.AllColumns.Add(this.olvColumnGameRevisionLocal);
             this.OLVLocalFiles.AllColumns.Add(this.olvColumnMasterKeyLocal);
             this.OLVLocalFiles.AllColumns.Add(this.olvColumnFirmwareLocal);
             this.OLVLocalFiles.AllColumns.Add(this.olvColumnSDKVersionLocal);
+            this.OLVLocalFiles.AllColumns.Add(this.olvColumnReleaseDateLocal);
+            this.OLVLocalFiles.AllColumns.Add(this.olvColumnNumberOfPlayersLocal);
+            this.OLVLocalFiles.AllColumns.Add(this.olvColumnCategoriesLocal);
             this.OLVLocalFiles.CellEditUseWholeCell = false;
             this.OLVLocalFiles.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.olvColumnTitleIDLocal,
@@ -542,10 +768,14 @@
             this.olvColumnCardTypeLocal,
             this.olvColumnFilePathLocal,
             this.olvColumnDeveloperLocal,
+            this.olvColumnPublisherLocal,
             this.olvColumnGameRevisionLocal,
             this.olvColumnMasterKeyLocal,
             this.olvColumnFirmwareLocal,
-            this.olvColumnSDKVersionLocal});
+            this.olvColumnSDKVersionLocal,
+            this.olvColumnReleaseDateLocal,
+            this.olvColumnNumberOfPlayersLocal,
+            this.olvColumnCategoriesLocal});
             this.OLVLocalFiles.ContextMenuStrip = this.contextMenuLocalList;
             this.OLVLocalFiles.Cursor = System.Windows.Forms.Cursors.Default;
             this.OLVLocalFiles.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -554,7 +784,7 @@
             this.OLVLocalFiles.Location = new System.Drawing.Point(0, 0);
             this.OLVLocalFiles.Name = "OLVLocalFiles";
             this.OLVLocalFiles.ShowGroups = false;
-            this.OLVLocalFiles.Size = new System.Drawing.Size(1570, 559);
+            this.OLVLocalFiles.Size = new System.Drawing.Size(1513, 458);
             this.OLVLocalFiles.TabIndex = 1;
             this.OLVLocalFiles.UseCellFormatEvents = true;
             this.OLVLocalFiles.UseCompatibleStateImageBehavior = false;
@@ -633,6 +863,12 @@
             this.olvColumnDeveloperLocal.Text = "Developer";
             this.olvColumnDeveloperLocal.Width = 84;
             // 
+            // olvColumnPublisherLocal
+            // 
+            this.olvColumnPublisherLocal.AspectName = "Publisher";
+            this.olvColumnPublisherLocal.Text = "Publisher";
+            this.olvColumnPublisherLocal.Width = 84;
+            // 
             // olvColumnGameRevisionLocal
             // 
             this.olvColumnGameRevisionLocal.AspectName = "GameRevision";
@@ -650,6 +886,7 @@
             // 
             this.olvColumnFirmwareLocal.AspectName = "Firmware";
             this.olvColumnFirmwareLocal.Text = "Firmware";
+            this.olvColumnFirmwareLocal.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.olvColumnFirmwareLocal.Width = 100;
             // 
             // olvColumnSDKVersionLocal
@@ -657,6 +894,22 @@
             this.olvColumnSDKVersionLocal.AspectName = "SDKVersion";
             this.olvColumnSDKVersionLocal.Text = "SDK Version";
             this.olvColumnSDKVersionLocal.Width = 100;
+            // 
+            // olvColumnReleaseDateLocal
+            // 
+            this.olvColumnReleaseDateLocal.AspectName = "ReleaseDate";
+            this.olvColumnReleaseDateLocal.Text = "Release date";
+            this.olvColumnReleaseDateLocal.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
+            // olvColumnNumberOfPlayersLocal
+            // 
+            this.olvColumnNumberOfPlayersLocal.AspectName = "NumberOfPlayers";
+            this.olvColumnNumberOfPlayersLocal.Text = "Nº of players";
+            // 
+            // olvColumnCategoriesLocal
+            // 
+            this.olvColumnCategoriesLocal.AspectName = "Categories";
+            this.olvColumnCategoriesLocal.Text = "Category";
             // 
             // contextMenuLocalList
             // 
@@ -669,41 +922,42 @@
             this.copyFilesToolStripMenuItem2,
             this.moveFilesToToolStripMenuItem,
             this.toolStripMenuItem68,
-            this.copyInfoToClipboardToolStripMenuItem1});
+            this.copyInfoToClipboardToolStripMenuItem1,
+            this.updateGameInfoFromWebToolStripMenuItem});
             this.contextMenuLocalList.Name = "contextMenuLocalList";
-            this.contextMenuLocalList.Size = new System.Drawing.Size(194, 154);
+            this.contextMenuLocalList.Size = new System.Drawing.Size(226, 176);
             this.contextMenuLocalList.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuLocalList_Opening);
             // 
             // showInExplorerToolStripMenuItem
             // 
             this.showInExplorerToolStripMenuItem.Name = "showInExplorerToolStripMenuItem";
-            this.showInExplorerToolStripMenuItem.Size = new System.Drawing.Size(193, 22);
+            this.showInExplorerToolStripMenuItem.Size = new System.Drawing.Size(225, 22);
             this.showInExplorerToolStripMenuItem.Text = "Show in explorer";
             this.showInExplorerToolStripMenuItem.Click += new System.EventHandler(this.showInExplorerToolStripMenuItem_Click);
             // 
             // toolStripMenuItem20
             // 
             this.toolStripMenuItem20.Name = "toolStripMenuItem20";
-            this.toolStripMenuItem20.Size = new System.Drawing.Size(190, 6);
+            this.toolStripMenuItem20.Size = new System.Drawing.Size(222, 6);
             // 
             // trimFilesToolStripMenuItem
             // 
             this.trimFilesToolStripMenuItem.Name = "trimFilesToolStripMenuItem";
-            this.trimFilesToolStripMenuItem.Size = new System.Drawing.Size(193, 22);
+            this.trimFilesToolStripMenuItem.Size = new System.Drawing.Size(225, 22);
             this.trimFilesToolStripMenuItem.Text = "Trim files";
             this.trimFilesToolStripMenuItem.Click += new System.EventHandler(this.trimFilesToolStripMenuItem_Click);
             // 
             // autoRenameFilesToolStripMenuItem
             // 
             this.autoRenameFilesToolStripMenuItem.Name = "autoRenameFilesToolStripMenuItem";
-            this.autoRenameFilesToolStripMenuItem.Size = new System.Drawing.Size(193, 22);
+            this.autoRenameFilesToolStripMenuItem.Size = new System.Drawing.Size(225, 22);
             this.autoRenameFilesToolStripMenuItem.Text = "Auto rename files";
             this.autoRenameFilesToolStripMenuItem.Click += new System.EventHandler(this.autoRenameFilesToolStripMenuItem_Click);
             // 
             // toolStripMenuItem96
             // 
             this.toolStripMenuItem96.Name = "toolStripMenuItem96";
-            this.toolStripMenuItem96.Size = new System.Drawing.Size(190, 6);
+            this.toolStripMenuItem96.Size = new System.Drawing.Size(222, 6);
             // 
             // copyFilesToolStripMenuItem2
             // 
@@ -711,7 +965,7 @@
             this.sDCardToolStripMenuItem2,
             this.folderToolStripMenuItem2});
             this.copyFilesToolStripMenuItem2.Name = "copyFilesToolStripMenuItem2";
-            this.copyFilesToolStripMenuItem2.Size = new System.Drawing.Size(193, 22);
+            this.copyFilesToolStripMenuItem2.Size = new System.Drawing.Size(225, 22);
             this.copyFilesToolStripMenuItem2.Text = "Copy files to";
             // 
             // sDCardToolStripMenuItem2
@@ -734,7 +988,7 @@
             this.sDCardToolStripMenuItem3,
             this.folderToolStripMenuItem3});
             this.moveFilesToToolStripMenuItem.Name = "moveFilesToToolStripMenuItem";
-            this.moveFilesToToolStripMenuItem.Size = new System.Drawing.Size(193, 22);
+            this.moveFilesToToolStripMenuItem.Size = new System.Drawing.Size(225, 22);
             this.moveFilesToToolStripMenuItem.Text = "Move files to";
             // 
             // sDCardToolStripMenuItem3
@@ -754,64 +1008,90 @@
             // toolStripMenuItem68
             // 
             this.toolStripMenuItem68.Name = "toolStripMenuItem68";
-            this.toolStripMenuItem68.Size = new System.Drawing.Size(190, 6);
+            this.toolStripMenuItem68.Size = new System.Drawing.Size(222, 6);
             // 
             // copyInfoToClipboardToolStripMenuItem1
             // 
             this.copyInfoToClipboardToolStripMenuItem1.Name = "copyInfoToClipboardToolStripMenuItem1";
-            this.copyInfoToClipboardToolStripMenuItem1.Size = new System.Drawing.Size(193, 22);
+            this.copyInfoToClipboardToolStripMenuItem1.Size = new System.Drawing.Size(225, 22);
             this.copyInfoToClipboardToolStripMenuItem1.Text = "Copy info to clipboard";
             this.copyInfoToClipboardToolStripMenuItem1.Click += new System.EventHandler(this.copyInfoToClipboardToolStripMenuItem1_Click);
             // 
+            // updateGameInfoFromWebToolStripMenuItem
+            // 
+            this.updateGameInfoFromWebToolStripMenuItem.Name = "updateGameInfoFromWebToolStripMenuItem";
+            this.updateGameInfoFromWebToolStripMenuItem.Size = new System.Drawing.Size(225, 22);
+            this.updateGameInfoFromWebToolStripMenuItem.Text = "Update game info from Web";
+            this.updateGameInfoFromWebToolStripMenuItem.Click += new System.EventHandler(this.updateGameInfoFromWebToolStripMenuItem_Click);
+            // 
             // panel1
             // 
-            this.panel1.Controls.Add(this.btnClearFilterLocal);
-            this.panel1.Controls.Add(this.textBoxFilterLocal);
-            this.panel1.Controls.Add(this.label2);
-            this.panel1.Controls.Add(this.cbxFilterLocal);
-            this.panel1.Controls.Add(this.menuLocalFiles);
+            this.panel1.Controls.Add(this.panel9);
+            this.panel1.Controls.Add(this.panel8);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel1.Location = new System.Drawing.Point(3, 3);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(1570, 28);
+            this.panel1.Size = new System.Drawing.Size(1513, 28);
             this.panel1.TabIndex = 0;
+            // 
+            // panel9
+            // 
+            this.panel9.Controls.Add(this.btnClearFilterLocal);
+            this.panel9.Controls.Add(this.textBoxFilterLocal);
+            this.panel9.Controls.Add(this.label2);
+            this.panel9.Controls.Add(this.cbxFilterLocal);
+            this.panel9.Dock = System.Windows.Forms.DockStyle.Right;
+            this.panel9.Location = new System.Drawing.Point(755, 0);
+            this.panel9.Name = "panel9";
+            this.panel9.Size = new System.Drawing.Size(758, 28);
+            this.panel9.TabIndex = 6;
             // 
             // btnClearFilterLocal
             // 
-            this.btnClearFilterLocal.Location = new System.Drawing.Point(1495, 1);
+            this.btnClearFilterLocal.Location = new System.Drawing.Point(679, 2);
             this.btnClearFilterLocal.Name = "btnClearFilterLocal";
             this.btnClearFilterLocal.Size = new System.Drawing.Size(75, 23);
-            this.btnClearFilterLocal.TabIndex = 4;
+            this.btnClearFilterLocal.TabIndex = 8;
             this.btnClearFilterLocal.Text = "Clear";
             this.btnClearFilterLocal.UseVisualStyleBackColor = true;
-            this.btnClearFilterLocal.Click += new System.EventHandler(this.btnClearFilter_Click);
+            this.btnClearFilterLocal.Click += new System.EventHandler(this.btnClearFilterLocal_Click);
             // 
             // textBoxFilterLocal
             // 
-            this.textBoxFilterLocal.Location = new System.Drawing.Point(1220, 3);
+            this.textBoxFilterLocal.Location = new System.Drawing.Point(404, 4);
             this.textBoxFilterLocal.Name = "textBoxFilterLocal";
             this.textBoxFilterLocal.Size = new System.Drawing.Size(268, 20);
-            this.textBoxFilterLocal.TabIndex = 3;
+            this.textBoxFilterLocal.TabIndex = 7;
             this.textBoxFilterLocal.TextChanged += new System.EventHandler(this.textBoxFilterLocal_TextChanged);
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(1076, 6);
+            this.label2.BackColor = System.Drawing.SystemColors.Window;
+            this.label2.Location = new System.Drawing.Point(260, 7);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(32, 13);
-            this.label2.TabIndex = 2;
+            this.label2.TabIndex = 6;
             this.label2.Text = "Filter:";
             // 
             // cbxFilterLocal
             // 
             this.cbxFilterLocal.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbxFilterLocal.FormattingEnabled = true;
-            this.cbxFilterLocal.Location = new System.Drawing.Point(1111, 2);
+            this.cbxFilterLocal.Location = new System.Drawing.Point(295, 3);
             this.cbxFilterLocal.Name = "cbxFilterLocal";
             this.cbxFilterLocal.Size = new System.Drawing.Size(102, 21);
-            this.cbxFilterLocal.TabIndex = 1;
+            this.cbxFilterLocal.TabIndex = 5;
             this.cbxFilterLocal.SelectedIndexChanged += new System.EventHandler(this.cbxFilterLocal_SelectedIndexChanged);
+            // 
+            // panel8
+            // 
+            this.panel8.Controls.Add(this.menuLocalFiles);
+            this.panel8.Dock = System.Windows.Forms.DockStyle.Left;
+            this.panel8.Location = new System.Drawing.Point(0, 0);
+            this.panel8.Name = "panel8";
+            this.panel8.Size = new System.Drawing.Size(752, 28);
+            this.panel8.TabIndex = 5;
             // 
             // menuLocalFiles
             // 
@@ -825,8 +1105,8 @@
             this.toolsToolStripMenuItem});
             this.menuLocalFiles.Location = new System.Drawing.Point(0, 0);
             this.menuLocalFiles.Name = "menuLocalFiles";
-            this.menuLocalFiles.Size = new System.Drawing.Size(1570, 24);
-            this.menuLocalFiles.TabIndex = 0;
+            this.menuLocalFiles.Size = new System.Drawing.Size(752, 24);
+            this.menuLocalFiles.TabIndex = 1;
             this.menuLocalFiles.Text = "menuStrip1";
             // 
             // addToolStripMenuItem
@@ -1138,14 +1418,12 @@
             this.updateToolStripMenuItem.Name = "updateToolStripMenuItem";
             this.updateToolStripMenuItem.Size = new System.Drawing.Size(195, 22);
             this.updateToolStripMenuItem.Text = "Update local database";
-            this.updateToolStripMenuItem.Click += new System.EventHandler(this.updateToolStripMenuItem_Click);
             // 
             // updateNswdbcomListToolStripMenuItem
             // 
             this.updateNswdbcomListToolStripMenuItem.Name = "updateNswdbcomListToolStripMenuItem";
             this.updateNswdbcomListToolStripMenuItem.Size = new System.Drawing.Size(195, 22);
             this.updateNswdbcomListToolStripMenuItem.Text = "Update nswdb.com list";
-            this.updateNswdbcomListToolStripMenuItem.Click += new System.EventHandler(this.updateNswdbcomListToolStripMenuItem_Click);
             // 
             // toolsToolStripMenuItem
             // 
@@ -1210,7 +1488,7 @@
             this.exportListToolStripMenuItem.Name = "exportListToolStripMenuItem";
             this.exportListToolStripMenuItem.Size = new System.Drawing.Size(158, 22);
             this.exportListToolStripMenuItem.Text = "Extract file...";
-            this.exportListToolStripMenuItem.Click += new System.EventHandler(this.exportListToolStripMenuItem_Click);
+            this.exportListToolStripMenuItem.Visible = false;
             // 
             // toolStripMenuItem3
             // 
@@ -1225,20 +1503,19 @@
             this.exportGameListToolStripMenuItem.Name = "exportGameListToolStripMenuItem";
             this.exportGameListToolStripMenuItem.Size = new System.Drawing.Size(158, 22);
             this.exportGameListToolStripMenuItem.Text = "Export game list";
+            this.exportGameListToolStripMenuItem.Visible = false;
             // 
             // htmlToolStripMenuItem
             // 
             this.htmlToolStripMenuItem.Name = "htmlToolStripMenuItem";
             this.htmlToolStripMenuItem.Size = new System.Drawing.Size(107, 22);
             this.htmlToolStripMenuItem.Text = "HTML";
-            this.htmlToolStripMenuItem.Click += new System.EventHandler(this.htmlToolStripMenuItem_Click);
             // 
             // cSVToolStripMenuItem
             // 
             this.cSVToolStripMenuItem.Name = "cSVToolStripMenuItem";
             this.cSVToolStripMenuItem.Size = new System.Drawing.Size(107, 22);
             this.cSVToolStripMenuItem.Text = "CSV";
-            this.cSVToolStripMenuItem.Click += new System.EventHandler(this.cSVToolStripMenuItem_Click);
             // 
             // tabPage2
             // 
@@ -1252,14 +1529,14 @@
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(1574, 591);
+            this.tabPage2.Size = new System.Drawing.Size(1517, 490);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "SD card";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
             // btnClearFilterSD
             // 
-            this.btnClearFilterSD.Location = new System.Drawing.Point(1498, 3);
+            this.btnClearFilterSD.Location = new System.Drawing.Point(1441, 3);
             this.btnClearFilterSD.Name = "btnClearFilterSD";
             this.btnClearFilterSD.Size = new System.Drawing.Size(75, 23);
             this.btnClearFilterSD.TabIndex = 10;
@@ -1269,7 +1546,7 @@
             // 
             // textBoxFilterSD
             // 
-            this.textBoxFilterSD.Location = new System.Drawing.Point(1223, 5);
+            this.textBoxFilterSD.Location = new System.Drawing.Point(1166, 5);
             this.textBoxFilterSD.Name = "textBoxFilterSD";
             this.textBoxFilterSD.Size = new System.Drawing.Size(268, 20);
             this.textBoxFilterSD.TabIndex = 9;
@@ -1278,7 +1555,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(1079, 8);
+            this.label3.Location = new System.Drawing.Point(1022, 8);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(32, 13);
             this.label3.TabIndex = 8;
@@ -1288,7 +1565,7 @@
             // 
             this.cbxFilterSD.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbxFilterSD.FormattingEnabled = true;
-            this.cbxFilterSD.Location = new System.Drawing.Point(1114, 4);
+            this.cbxFilterSD.Location = new System.Drawing.Point(1057, 4);
             this.cbxFilterSD.Name = "cbxFilterSD";
             this.cbxFilterSD.Size = new System.Drawing.Size(102, 21);
             this.cbxFilterSD.TabIndex = 7;
@@ -1334,7 +1611,7 @@
             this.OLV_SDCard.Location = new System.Drawing.Point(3, 55);
             this.OLV_SDCard.Name = "OLV_SDCard";
             this.OLV_SDCard.ShowGroups = false;
-            this.OLV_SDCard.Size = new System.Drawing.Size(1568, 533);
+            this.OLV_SDCard.Size = new System.Drawing.Size(1511, 432);
             this.OLV_SDCard.TabIndex = 6;
             this.OLV_SDCard.UseCellFormatEvents = true;
             this.OLV_SDCard.UseCompatibleStateImageBehavior = false;
@@ -1517,7 +1794,7 @@
             this.panel5.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel5.Location = new System.Drawing.Point(3, 27);
             this.panel5.Name = "panel5";
-            this.panel5.Size = new System.Drawing.Size(1568, 28);
+            this.panel5.Size = new System.Drawing.Size(1511, 28);
             this.panel5.TabIndex = 5;
             // 
             // lblSpaceAvailabeOnSD
@@ -1563,7 +1840,7 @@
             this.toolStripMenuItem39});
             this.menuSDFiles.Location = new System.Drawing.Point(3, 3);
             this.menuSDFiles.Name = "menuSDFiles";
-            this.menuSDFiles.Size = new System.Drawing.Size(1568, 24);
+            this.menuSDFiles.Size = new System.Drawing.Size(1511, 24);
             this.menuSDFiles.TabIndex = 4;
             // 
             // toolStripMenuItem4
@@ -1961,7 +2238,7 @@
             this.tabPage3.Location = new System.Drawing.Point(4, 22);
             this.tabPage3.Name = "tabPage3";
             this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage3.Size = new System.Drawing.Size(1574, 591);
+            this.tabPage3.Size = new System.Drawing.Size(1517, 490);
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Text = "Scene releases";
             this.tabPage3.UseVisualStyleBackColor = true;
@@ -1977,12 +2254,12 @@
             this.panel4.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel4.Location = new System.Drawing.Point(3, 3);
             this.panel4.Name = "panel4";
-            this.panel4.Size = new System.Drawing.Size(1568, 585);
+            this.panel4.Size = new System.Drawing.Size(1511, 484);
             this.panel4.TabIndex = 0;
             // 
             // btnClearFilterScene
             // 
-            this.btnClearFilterScene.Location = new System.Drawing.Point(1495, -1);
+            this.btnClearFilterScene.Location = new System.Drawing.Point(1434, -1);
             this.btnClearFilterScene.Name = "btnClearFilterScene";
             this.btnClearFilterScene.Size = new System.Drawing.Size(75, 23);
             this.btnClearFilterScene.TabIndex = 14;
@@ -1992,7 +2269,7 @@
             // 
             // textBoxFilterScene
             // 
-            this.textBoxFilterScene.Location = new System.Drawing.Point(1220, 1);
+            this.textBoxFilterScene.Location = new System.Drawing.Point(1159, 1);
             this.textBoxFilterScene.Name = "textBoxFilterScene";
             this.textBoxFilterScene.Size = new System.Drawing.Size(268, 20);
             this.textBoxFilterScene.TabIndex = 13;
@@ -2001,7 +2278,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(1076, 4);
+            this.label4.Location = new System.Drawing.Point(1015, 4);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(32, 13);
             this.label4.TabIndex = 12;
@@ -2011,7 +2288,7 @@
             // 
             this.cbxFilterScene.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbxFilterScene.FormattingEnabled = true;
-            this.cbxFilterScene.Location = new System.Drawing.Point(1111, 0);
+            this.cbxFilterScene.Location = new System.Drawing.Point(1050, 0);
             this.cbxFilterScene.Name = "cbxFilterScene";
             this.cbxFilterScene.Size = new System.Drawing.Size(102, 21);
             this.cbxFilterScene.TabIndex = 11;
@@ -2053,7 +2330,7 @@
             this.OLVSceneList.Location = new System.Drawing.Point(0, 24);
             this.OLVSceneList.Name = "OLVSceneList";
             this.OLVSceneList.ShowGroups = false;
-            this.OLVSceneList.Size = new System.Drawing.Size(1568, 561);
+            this.OLVSceneList.Size = new System.Drawing.Size(1511, 460);
             this.OLVSceneList.TabIndex = 6;
             this.OLVSceneList.UseCellFormatEvents = true;
             this.OLVSceneList.UseCompatibleStateImageBehavior = false;
@@ -2178,7 +2455,7 @@
             this.toolStripMenuItem85});
             this.menuStrip3.Location = new System.Drawing.Point(0, 0);
             this.menuStrip3.Name = "menuStrip3";
-            this.menuStrip3.Size = new System.Drawing.Size(1568, 24);
+            this.menuStrip3.Size = new System.Drawing.Size(1511, 24);
             this.menuStrip3.TabIndex = 5;
             this.menuStrip3.Text = "menuStrip3";
             // 
@@ -2556,56 +2833,24 @@
             // 
             // tabPage4
             // 
-            this.tabPage4.Controls.Add(this.btnClearFilterEShop);
-            this.tabPage4.Controls.Add(this.textBoxFilterEShop);
-            this.tabPage4.Controls.Add(this.label5);
-            this.tabPage4.Controls.Add(this.cbxFilterEshop);
-            this.tabPage4.Controls.Add(this.OLVEshop);
-            this.tabPage4.Controls.Add(this.menuEShop);
+            this.tabPage4.Controls.Add(this.panel10);
+            this.tabPage4.Controls.Add(this.panel11);
             this.tabPage4.Location = new System.Drawing.Point(4, 22);
             this.tabPage4.Name = "tabPage4";
             this.tabPage4.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage4.Size = new System.Drawing.Size(1574, 591);
+            this.tabPage4.Size = new System.Drawing.Size(1517, 490);
             this.tabPage4.TabIndex = 3;
             this.tabPage4.Text = "E-shop files";
             this.tabPage4.UseVisualStyleBackColor = true;
             // 
-            // btnClearFilterEShop
+            // panel10
             // 
-            this.btnClearFilterEShop.Location = new System.Drawing.Point(1498, 2);
-            this.btnClearFilterEShop.Name = "btnClearFilterEShop";
-            this.btnClearFilterEShop.Size = new System.Drawing.Size(75, 23);
-            this.btnClearFilterEShop.TabIndex = 8;
-            this.btnClearFilterEShop.Text = "Clear";
-            this.btnClearFilterEShop.UseVisualStyleBackColor = true;
-            this.btnClearFilterEShop.Click += new System.EventHandler(this.btnClearFilterEShop_Click);
-            // 
-            // textBoxFilterEShop
-            // 
-            this.textBoxFilterEShop.Location = new System.Drawing.Point(1223, 4);
-            this.textBoxFilterEShop.Name = "textBoxFilterEShop";
-            this.textBoxFilterEShop.Size = new System.Drawing.Size(268, 20);
-            this.textBoxFilterEShop.TabIndex = 7;
-            this.textBoxFilterEShop.TextChanged += new System.EventHandler(this.textBoxFilterEShop_TextChanged);
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(1079, 7);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(32, 13);
-            this.label5.TabIndex = 6;
-            this.label5.Text = "Filter:";
-            // 
-            // cbxFilterEshop
-            // 
-            this.cbxFilterEshop.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cbxFilterEshop.FormattingEnabled = true;
-            this.cbxFilterEshop.Location = new System.Drawing.Point(1114, 3);
-            this.cbxFilterEshop.Name = "cbxFilterEshop";
-            this.cbxFilterEshop.Size = new System.Drawing.Size(102, 21);
-            this.cbxFilterEshop.TabIndex = 5;
-            this.cbxFilterEshop.SelectedIndexChanged += new System.EventHandler(this.cbxFilterEshop_SelectedIndexChanged);
+            this.panel10.Controls.Add(this.OLVEshop);
+            this.panel10.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel10.Location = new System.Drawing.Point(3, 31);
+            this.panel10.Name = "panel10";
+            this.panel10.Size = new System.Drawing.Size(1511, 456);
+            this.panel10.TabIndex = 11;
             // 
             // OLVEshop
             // 
@@ -2615,11 +2860,16 @@
             this.OLVEshop.AllColumns.Add(this.olvColumnLanguagesEShop);
             this.OLVEshop.AllColumns.Add(this.olvColumnFilePathEShop);
             this.OLVEshop.AllColumns.Add(this.olvColumnDeveloperEShop);
+            this.OLVEshop.AllColumns.Add(this.olvColumnPublisherEshop);
             this.OLVEshop.AllColumns.Add(this.olvColumnGameRevisionEShop);
             this.OLVEshop.AllColumns.Add(this.olvColumnMasterKeyRevisionEShop);
             this.OLVEshop.AllColumns.Add(this.olvColumnDistributionType);
             this.OLVEshop.AllColumns.Add(this.olvColumnFirmwareEShop);
             this.OLVEshop.AllColumns.Add(this.olvColumnSDKVersionEShop);
+            this.OLVEshop.AllColumns.Add(this.olvColumnReleaseDateEshop);
+            this.OLVEshop.AllColumns.Add(this.olvColumnNumberOfPlayersEshop);
+            this.OLVEshop.AllColumns.Add(this.olvColumnCategoriesEShop);
+            this.OLVEshop.AllColumns.Add(this.olvColumnContentTypeEShop);
             this.OLVEshop.CellEditUseWholeCell = false;
             this.OLVEshop.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.olvColumnTitleIDEShop,
@@ -2628,21 +2878,26 @@
             this.olvColumnLanguagesEShop,
             this.olvColumnFilePathEShop,
             this.olvColumnDeveloperEShop,
+            this.olvColumnPublisherEshop,
             this.olvColumnGameRevisionEShop,
             this.olvColumnMasterKeyRevisionEShop,
             this.olvColumnDistributionType,
             this.olvColumnFirmwareEShop,
-            this.olvColumnSDKVersionEShop});
-            this.OLVEshop.ContextMenuStrip = this.contextMenuStripEShop;
+            this.olvColumnSDKVersionEShop,
+            this.olvColumnReleaseDateEshop,
+            this.olvColumnNumberOfPlayersEshop,
+            this.olvColumnCategoriesEShop,
+            this.olvColumnContentTypeEShop});
+            this.OLVEshop.ContextMenuStrip = this.contextMenuEShopList;
             this.OLVEshop.Cursor = System.Windows.Forms.Cursors.Default;
             this.OLVEshop.Dock = System.Windows.Forms.DockStyle.Fill;
             this.OLVEshop.FullRowSelect = true;
             this.OLVEshop.GridLines = true;
-            this.OLVEshop.Location = new System.Drawing.Point(3, 27);
+            this.OLVEshop.Location = new System.Drawing.Point(0, 0);
             this.OLVEshop.Name = "OLVEshop";
             this.OLVEshop.ShowGroups = false;
-            this.OLVEshop.Size = new System.Drawing.Size(1568, 561);
-            this.OLVEshop.TabIndex = 2;
+            this.OLVEshop.Size = new System.Drawing.Size(1511, 456);
+            this.OLVEshop.TabIndex = 3;
             this.OLVEshop.UseCellFormatEvents = true;
             this.OLVEshop.UseCompatibleStateImageBehavior = false;
             this.OLVEshop.UseExplorerTheme = true;
@@ -2692,6 +2947,11 @@
             this.olvColumnDeveloperEShop.Text = "Developer";
             this.olvColumnDeveloperEShop.Width = 204;
             // 
+            // olvColumnPublisherEshop
+            // 
+            this.olvColumnPublisherEshop.AspectName = "Publisher ";
+            this.olvColumnPublisherEshop.Text = "Publisher";
+            // 
             // olvColumnGameRevisionEShop
             // 
             this.olvColumnGameRevisionEShop.AspectName = "GameRevision";
@@ -2723,9 +2983,31 @@
             this.olvColumnSDKVersionEShop.Text = "SDK Version";
             this.olvColumnSDKVersionEShop.Width = 100;
             // 
-            // contextMenuStripEShop
+            // olvColumnReleaseDateEshop
             // 
-            this.contextMenuStripEShop.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.olvColumnReleaseDateEshop.AspectName = "ReleaseDate ";
+            this.olvColumnReleaseDateEshop.Text = "Release date";
+            this.olvColumnReleaseDateEshop.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
+            // olvColumnNumberOfPlayersEshop
+            // 
+            this.olvColumnNumberOfPlayersEshop.AspectName = "NumberOfPlayers ";
+            this.olvColumnNumberOfPlayersEshop.Text = "Nº of players";
+            this.olvColumnNumberOfPlayersEshop.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
+            // olvColumnCategoriesEShop
+            // 
+            this.olvColumnCategoriesEShop.AspectName = "Categories ";
+            this.olvColumnCategoriesEShop.Text = "Category";
+            // 
+            // olvColumnContentTypeEShop
+            // 
+            this.olvColumnContentTypeEShop.AspectName = "ContentType";
+            this.olvColumnContentTypeEShop.Text = "Content Type";
+            // 
+            // contextMenuEShopList
+            // 
+            this.contextMenuEShopList.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripMenuItemEShopShowInExplorer,
             this.toolStripMenuItemEShopUpdateInfo,
             this.toolStripSeparator9,
@@ -2734,22 +3016,23 @@
             this.toolStripMenuItemEShopCopyToFolder,
             this.toolStripMenuItemEShopMoveToFolder,
             this.toolStripMenuItem64,
-            this.copyInfoToClipboardToolStripMenuItem});
-            this.contextMenuStripEShop.Name = "contextMenuStripSDCard";
-            this.contextMenuStripEShop.Size = new System.Drawing.Size(194, 154);
-            this.contextMenuStripEShop.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStripEShop_Opening);
+            this.copyInfoToClipboardToolStripMenuItem,
+            this.updateGameInfoFromWebToolStripMenuItemEshop});
+            this.contextMenuEShopList.Name = "contextMenuStripSDCard";
+            this.contextMenuEShopList.Size = new System.Drawing.Size(226, 176);
+            this.contextMenuEShopList.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStripEShop_Opening);
             // 
             // toolStripMenuItemEShopShowInExplorer
             // 
             this.toolStripMenuItemEShopShowInExplorer.Name = "toolStripMenuItemEShopShowInExplorer";
-            this.toolStripMenuItemEShopShowInExplorer.Size = new System.Drawing.Size(193, 22);
+            this.toolStripMenuItemEShopShowInExplorer.Size = new System.Drawing.Size(225, 22);
             this.toolStripMenuItemEShopShowInExplorer.Text = "Show in explorer";
             this.toolStripMenuItemEShopShowInExplorer.Click += new System.EventHandler(this.toolStripMenuItemEShopShowInExplorer_Click);
             // 
             // toolStripMenuItemEShopUpdateInfo
             // 
             this.toolStripMenuItemEShopUpdateInfo.Name = "toolStripMenuItemEShopUpdateInfo";
-            this.toolStripMenuItemEShopUpdateInfo.Size = new System.Drawing.Size(193, 22);
+            this.toolStripMenuItemEShopUpdateInfo.Size = new System.Drawing.Size(225, 22);
             this.toolStripMenuItemEShopUpdateInfo.Text = "Update info";
             this.toolStripMenuItemEShopUpdateInfo.Visible = false;
             this.toolStripMenuItemEShopUpdateInfo.Click += new System.EventHandler(this.toolStripMenuItemEShopUpdateInfo_Click);
@@ -2757,19 +3040,19 @@
             // toolStripSeparator9
             // 
             this.toolStripSeparator9.Name = "toolStripSeparator9";
-            this.toolStripSeparator9.Size = new System.Drawing.Size(190, 6);
+            this.toolStripSeparator9.Size = new System.Drawing.Size(222, 6);
             // 
             // toolStripMenuItemEShopAutoRename
             // 
             this.toolStripMenuItemEShopAutoRename.Name = "toolStripMenuItemEShopAutoRename";
-            this.toolStripMenuItemEShopAutoRename.Size = new System.Drawing.Size(193, 22);
+            this.toolStripMenuItemEShopAutoRename.Size = new System.Drawing.Size(225, 22);
             this.toolStripMenuItemEShopAutoRename.Text = "Auto rename files";
             this.toolStripMenuItemEShopAutoRename.Click += new System.EventHandler(this.toolStripMenuItemEShopAutoRename_Click);
             // 
             // toolStripSeparator10
             // 
             this.toolStripSeparator10.Name = "toolStripSeparator10";
-            this.toolStripSeparator10.Size = new System.Drawing.Size(190, 6);
+            this.toolStripSeparator10.Size = new System.Drawing.Size(222, 6);
             // 
             // toolStripMenuItemEShopCopyToFolder
             // 
@@ -2777,7 +3060,7 @@
             this.sDCardToolStripMenuItem4,
             this.folderToolStripMenuItem5});
             this.toolStripMenuItemEShopCopyToFolder.Name = "toolStripMenuItemEShopCopyToFolder";
-            this.toolStripMenuItemEShopCopyToFolder.Size = new System.Drawing.Size(193, 22);
+            this.toolStripMenuItemEShopCopyToFolder.Size = new System.Drawing.Size(225, 22);
             this.toolStripMenuItemEShopCopyToFolder.Text = "Copy files to";
             // 
             // sDCardToolStripMenuItem4
@@ -2800,7 +3083,7 @@
             this.sDCardToolStripMenuItem5,
             this.folderToolStripMenuItem6});
             this.toolStripMenuItemEShopMoveToFolder.Name = "toolStripMenuItemEShopMoveToFolder";
-            this.toolStripMenuItemEShopMoveToFolder.Size = new System.Drawing.Size(193, 22);
+            this.toolStripMenuItemEShopMoveToFolder.Size = new System.Drawing.Size(225, 22);
             this.toolStripMenuItemEShopMoveToFolder.Text = "Move files to";
             // 
             // sDCardToolStripMenuItem5
@@ -2820,14 +3103,130 @@
             // toolStripMenuItem64
             // 
             this.toolStripMenuItem64.Name = "toolStripMenuItem64";
-            this.toolStripMenuItem64.Size = new System.Drawing.Size(190, 6);
+            this.toolStripMenuItem64.Size = new System.Drawing.Size(222, 6);
             // 
             // copyInfoToClipboardToolStripMenuItem
             // 
             this.copyInfoToClipboardToolStripMenuItem.Name = "copyInfoToClipboardToolStripMenuItem";
-            this.copyInfoToClipboardToolStripMenuItem.Size = new System.Drawing.Size(193, 22);
+            this.copyInfoToClipboardToolStripMenuItem.Size = new System.Drawing.Size(225, 22);
             this.copyInfoToClipboardToolStripMenuItem.Text = "Copy info to clipboard";
             this.copyInfoToClipboardToolStripMenuItem.Click += new System.EventHandler(this.copyInfoToClipboardToolStripMenuItem_Click);
+            // 
+            // updateGameInfoFromWebToolStripMenuItemEshop
+            // 
+            this.updateGameInfoFromWebToolStripMenuItemEshop.Name = "updateGameInfoFromWebToolStripMenuItemEshop";
+            this.updateGameInfoFromWebToolStripMenuItemEshop.Size = new System.Drawing.Size(225, 22);
+            this.updateGameInfoFromWebToolStripMenuItemEshop.Text = "Update game info from Web";
+            this.updateGameInfoFromWebToolStripMenuItemEshop.Click += new System.EventHandler(this.updateGameInfoFromWebToolStripMenuItemEshop_Click);
+            // 
+            // panel11
+            // 
+            this.panel11.Controls.Add(this.panel13);
+            this.panel11.Controls.Add(this.panel12);
+            this.panel11.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panel11.Location = new System.Drawing.Point(3, 3);
+            this.panel11.Name = "panel11";
+            this.panel11.Size = new System.Drawing.Size(1511, 28);
+            this.panel11.TabIndex = 10;
+            // 
+            // panel13
+            // 
+            this.panel13.Controls.Add(this.cbBaseGame);
+            this.panel13.Controls.Add(this.cbUpdates);
+            this.panel13.Controls.Add(this.cbDLC);
+            this.panel13.Controls.Add(this.btnClearFilterEShop);
+            this.panel13.Controls.Add(this.textBoxFilterEShop);
+            this.panel13.Controls.Add(this.label5);
+            this.panel13.Controls.Add(this.cbxFilterEshop);
+            this.panel13.Dock = System.Windows.Forms.DockStyle.Right;
+            this.panel13.Location = new System.Drawing.Point(798, 0);
+            this.panel13.Name = "panel13";
+            this.panel13.Size = new System.Drawing.Size(713, 28);
+            this.panel13.TabIndex = 1;
+            // 
+            // cbBaseGame
+            // 
+            this.cbBaseGame.AutoSize = true;
+            this.cbBaseGame.Checked = true;
+            this.cbBaseGame.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.cbBaseGame.Location = new System.Drawing.Point(126, 5);
+            this.cbBaseGame.Name = "cbBaseGame";
+            this.cbBaseGame.Size = new System.Drawing.Size(79, 17);
+            this.cbBaseGame.TabIndex = 20;
+            this.cbBaseGame.Text = "Base game";
+            this.cbBaseGame.UseVisualStyleBackColor = true;
+            this.cbBaseGame.CheckedChanged += new System.EventHandler(this.cbBaseGame_CheckedChanged);
+            // 
+            // cbUpdates
+            // 
+            this.cbUpdates.AutoSize = true;
+            this.cbUpdates.Checked = true;
+            this.cbUpdates.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.cbUpdates.Location = new System.Drawing.Point(58, 5);
+            this.cbUpdates.Name = "cbUpdates";
+            this.cbUpdates.Size = new System.Drawing.Size(61, 17);
+            this.cbUpdates.TabIndex = 19;
+            this.cbUpdates.Text = "Update";
+            this.cbUpdates.UseVisualStyleBackColor = true;
+            this.cbUpdates.CheckedChanged += new System.EventHandler(this.cbUpdates_CheckedChanged);
+            // 
+            // cbDLC
+            // 
+            this.cbDLC.AutoSize = true;
+            this.cbDLC.Location = new System.Drawing.Point(4, 5);
+            this.cbDLC.Name = "cbDLC";
+            this.cbDLC.Size = new System.Drawing.Size(47, 17);
+            this.cbDLC.TabIndex = 18;
+            this.cbDLC.Text = "DLC";
+            this.cbDLC.UseVisualStyleBackColor = true;
+            this.cbDLC.CheckedChanged += new System.EventHandler(this.cbDLC_CheckedChanged);
+            // 
+            // btnClearFilterEShop
+            // 
+            this.btnClearFilterEShop.Location = new System.Drawing.Point(634, 2);
+            this.btnClearFilterEShop.Name = "btnClearFilterEShop";
+            this.btnClearFilterEShop.Size = new System.Drawing.Size(75, 23);
+            this.btnClearFilterEShop.TabIndex = 17;
+            this.btnClearFilterEShop.Text = "Clear";
+            this.btnClearFilterEShop.UseVisualStyleBackColor = true;
+            this.btnClearFilterEShop.Click += new System.EventHandler(this.btnClearFilterEShop_Click);
+            // 
+            // textBoxFilterEShop
+            // 
+            this.textBoxFilterEShop.Location = new System.Drawing.Point(359, 4);
+            this.textBoxFilterEShop.Name = "textBoxFilterEShop";
+            this.textBoxFilterEShop.Size = new System.Drawing.Size(268, 20);
+            this.textBoxFilterEShop.TabIndex = 16;
+            this.textBoxFilterEShop.TextChanged += new System.EventHandler(this.textBoxFilterEShop_TextChanged);
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.BackColor = System.Drawing.SystemColors.Window;
+            this.label5.Location = new System.Drawing.Point(215, 7);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(32, 13);
+            this.label5.TabIndex = 15;
+            this.label5.Text = "Filter:";
+            // 
+            // cbxFilterEshop
+            // 
+            this.cbxFilterEshop.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbxFilterEshop.FormattingEnabled = true;
+            this.cbxFilterEshop.Location = new System.Drawing.Point(250, 3);
+            this.cbxFilterEshop.Name = "cbxFilterEshop";
+            this.cbxFilterEshop.Size = new System.Drawing.Size(102, 21);
+            this.cbxFilterEshop.TabIndex = 14;
+            this.cbxFilterEshop.SelectedIndexChanged += new System.EventHandler(this.cbxFilterEshop_SelectedIndexChanged);
+            // 
+            // panel12
+            // 
+            this.panel12.Controls.Add(this.menuEShop);
+            this.panel12.Dock = System.Windows.Forms.DockStyle.Left;
+            this.panel12.Location = new System.Drawing.Point(0, 0);
+            this.panel12.Name = "panel12";
+            this.panel12.Size = new System.Drawing.Size(777, 28);
+            this.panel12.TabIndex = 0;
             // 
             // menuEShop
             // 
@@ -2837,10 +3236,10 @@
             this.toolStripMenuItem22,
             this.toolStripMenuItem23,
             this.toolStripMenuItem24});
-            this.menuEShop.Location = new System.Drawing.Point(3, 3);
+            this.menuEShop.Location = new System.Drawing.Point(0, 0);
             this.menuEShop.Name = "menuEShop";
-            this.menuEShop.Size = new System.Drawing.Size(1568, 24);
-            this.menuEShop.TabIndex = 0;
+            this.menuEShop.Size = new System.Drawing.Size(777, 24);
+            this.menuEShop.TabIndex = 9;
             this.menuEShop.Text = "menuStrip2";
             // 
             // addToolStripMenuItemAddFolderEShop
@@ -3119,7 +3518,7 @@
             this.tabPage5.Location = new System.Drawing.Point(4, 22);
             this.tabPage5.Name = "tabPage5";
             this.tabPage5.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage5.Size = new System.Drawing.Size(1574, 591);
+            this.tabPage5.Size = new System.Drawing.Size(1517, 490);
             this.tabPage5.TabIndex = 4;
             this.tabPage5.Text = "Log";
             this.tabPage5.UseVisualStyleBackColor = true;
@@ -3130,7 +3529,7 @@
             this.panel6.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel6.Location = new System.Drawing.Point(3, 3);
             this.panel6.Name = "panel6";
-            this.panel6.Size = new System.Drawing.Size(1568, 559);
+            this.panel6.Size = new System.Drawing.Size(1511, 458);
             this.panel6.TabIndex = 2;
             // 
             // richTextBoxLog
@@ -3140,7 +3539,7 @@
             this.richTextBoxLog.Location = new System.Drawing.Point(0, 0);
             this.richTextBoxLog.Name = "richTextBoxLog";
             this.richTextBoxLog.ReadOnly = true;
-            this.richTextBoxLog.Size = new System.Drawing.Size(1568, 559);
+            this.richTextBoxLog.Size = new System.Drawing.Size(1511, 458);
             this.richTextBoxLog.TabIndex = 3;
             this.richTextBoxLog.Text = "";
             this.richTextBoxLog.TextChanged += new System.EventHandler(this.richTextBoxLog_TextChanged);
@@ -3149,14 +3548,14 @@
             // 
             this.panel7.Controls.Add(this.btnClearLogFile);
             this.panel7.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel7.Location = new System.Drawing.Point(3, 562);
+            this.panel7.Location = new System.Drawing.Point(3, 461);
             this.panel7.Name = "panel7";
-            this.panel7.Size = new System.Drawing.Size(1568, 26);
+            this.panel7.Size = new System.Drawing.Size(1511, 26);
             this.panel7.TabIndex = 1;
             // 
             // btnClearLogFile
             // 
-            this.btnClearLogFile.Location = new System.Drawing.Point(1494, 2);
+            this.btnClearLogFile.Location = new System.Drawing.Point(1433, 2);
             this.btnClearLogFile.Name = "btnClearLogFile";
             this.btnClearLogFile.Size = new System.Drawing.Size(75, 23);
             this.btnClearLogFile.TabIndex = 0;
@@ -3171,10 +3570,13 @@
             this.toolStripStatusLabel2,
             this.toolStripStatusFilesOperation,
             this.toolStripProgressAddingFiles,
-            this.toolStripStatusLabelGame});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 643);
+            this.toolStripStatusLabelGame,
+            this.toolStripStatusLabel3,
+            this.toolStripStatusLabel4,
+            this.toolStripStatusLabel5});
+            this.statusStrip1.Location = new System.Drawing.Point(0, 542);
             this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(1584, 24);
+            this.statusStrip1.Size = new System.Drawing.Size(1527, 24);
             this.statusStrip1.TabIndex = 0;
             this.statusStrip1.Text = "statusStrip1";
             // 
@@ -3219,14 +3621,36 @@
             this.toolStripStatusLabelGame.Text = "game aaa";
             this.toolStripStatusLabelGame.Visible = false;
             // 
+            // toolStripStatusLabel3
+            // 
+            this.toolStripStatusLabel3.Name = "toolStripStatusLabel3";
+            this.toolStripStatusLabel3.Size = new System.Drawing.Size(86, 19);
+            this.toolStripStatusLabel3.Text = "Files on XCI list";
+            this.toolStripStatusLabel3.Visible = false;
+            // 
+            // toolStripStatusLabel4
+            // 
+            this.toolStripStatusLabel4.Name = "toolStripStatusLabel4";
+            this.toolStripStatusLabel4.Size = new System.Drawing.Size(105, 19);
+            this.toolStripStatusLabel4.Text = "Files on E-shop list";
+            this.toolStripStatusLabel4.Visible = false;
+            // 
+            // toolStripStatusLabel5
+            // 
+            this.toolStripStatusLabel5.Name = "toolStripStatusLabel5";
+            this.toolStripStatusLabel5.Size = new System.Drawing.Size(180, 19);
+            this.toolStripStatusLabel5.Text = "Files on Both lists (XCI && E-shop)";
+            this.toolStripStatusLabel5.Visible = false;
+            // 
             // menuStrip1
             // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fileToolStripMenuItem,
-            this.toolsToolStripMenuItem1});
+            this.toolsToolStripMenuItem1,
+            this.viewToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(1584, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(1527, 24);
             this.menuStrip1.TabIndex = 2;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -3264,7 +3688,8 @@
             this.toolsToolStripMenuItem1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.updateLocalDatabaseToolStripMenuItem,
             this.updateEshopLocalDatabaseToolStripMenuItem,
-            this.updateNswdbcomListToolStripMenuItem1});
+            this.updateNswdbcomListToolStripMenuItem1,
+            this.scrapExtendedInfoFromWebToolStripMenuItem});
             this.toolsToolStripMenuItem1.Name = "toolsToolStripMenuItem1";
             this.toolsToolStripMenuItem1.Size = new System.Drawing.Size(47, 20);
             this.toolsToolStripMenuItem1.Text = "&Tools";
@@ -3272,14 +3697,14 @@
             // updateLocalDatabaseToolStripMenuItem
             // 
             this.updateLocalDatabaseToolStripMenuItem.Name = "updateLocalDatabaseToolStripMenuItem";
-            this.updateLocalDatabaseToolStripMenuItem.Size = new System.Drawing.Size(230, 22);
+            this.updateLocalDatabaseToolStripMenuItem.Size = new System.Drawing.Size(232, 22);
             this.updateLocalDatabaseToolStripMenuItem.Text = "&Update local database";
             this.updateLocalDatabaseToolStripMenuItem.Click += new System.EventHandler(this.updateLocalDatabaseToolStripMenuItem_Click);
             // 
             // updateEshopLocalDatabaseToolStripMenuItem
             // 
             this.updateEshopLocalDatabaseToolStripMenuItem.Name = "updateEshopLocalDatabaseToolStripMenuItem";
-            this.updateEshopLocalDatabaseToolStripMenuItem.Size = new System.Drawing.Size(230, 22);
+            this.updateEshopLocalDatabaseToolStripMenuItem.Size = new System.Drawing.Size(232, 22);
             this.updateEshopLocalDatabaseToolStripMenuItem.Text = "Update e-shop local database";
             this.updateEshopLocalDatabaseToolStripMenuItem.Visible = false;
             this.updateEshopLocalDatabaseToolStripMenuItem.Click += new System.EventHandler(this.updateEshopLocalDatabaseToolStripMenuItem_Click);
@@ -3287,9 +3712,258 @@
             // updateNswdbcomListToolStripMenuItem1
             // 
             this.updateNswdbcomListToolStripMenuItem1.Name = "updateNswdbcomListToolStripMenuItem1";
-            this.updateNswdbcomListToolStripMenuItem1.Size = new System.Drawing.Size(230, 22);
+            this.updateNswdbcomListToolStripMenuItem1.Size = new System.Drawing.Size(232, 22);
             this.updateNswdbcomListToolStripMenuItem1.Text = "Update nswdb.com list";
             this.updateNswdbcomListToolStripMenuItem1.Click += new System.EventHandler(this.updateNswdbcomListToolStripMenuItem1_Click);
+            // 
+            // scrapExtendedInfoFromWebToolStripMenuItem
+            // 
+            this.scrapExtendedInfoFromWebToolStripMenuItem.Name = "scrapExtendedInfoFromWebToolStripMenuItem";
+            this.scrapExtendedInfoFromWebToolStripMenuItem.Size = new System.Drawing.Size(232, 22);
+            this.scrapExtendedInfoFromWebToolStripMenuItem.Text = "Scrap extended info from web";
+            this.scrapExtendedInfoFromWebToolStripMenuItem.Click += new System.EventHandler(this.scrapExtendedInfoFromWebToolStripMenuItem_Click);
+            // 
+            // viewToolStripMenuItem
+            // 
+            this.viewToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.bottonPanelToolStripMenuItem,
+            this.leftPanelToolStripMenuItem});
+            this.viewToolStripMenuItem.Name = "viewToolStripMenuItem";
+            this.viewToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
+            this.viewToolStripMenuItem.Text = "&View";
+            // 
+            // bottonPanelToolStripMenuItem
+            // 
+            this.bottonPanelToolStripMenuItem.Name = "bottonPanelToolStripMenuItem";
+            this.bottonPanelToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
+            this.bottonPanelToolStripMenuItem.Text = "&Bottom panel";
+            this.bottonPanelToolStripMenuItem.Click += new System.EventHandler(this.bottonPanelToolStripMenuItem_Click);
+            // 
+            // leftPanelToolStripMenuItem
+            // 
+            this.leftPanelToolStripMenuItem.Name = "leftPanelToolStripMenuItem";
+            this.leftPanelToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
+            this.leftPanelToolStripMenuItem.Text = "&Left panel";
+            this.leftPanelToolStripMenuItem.Click += new System.EventHandler(this.leftPanelToolStripMenuItem_Click);
+            // 
+            // panelEditTitle
+            // 
+            this.panelEditTitle.Controls.Add(this.groupBox10);
+            this.panelEditTitle.Controls.Add(this.groupBox9);
+            this.panelEditTitle.Controls.Add(this.groupBox8);
+            this.panelEditTitle.Controls.Add(this.groupBox7);
+            this.panelEditTitle.Controls.Add(this.groupBox6);
+            this.panelEditTitle.Controls.Add(this.groupBox5);
+            this.panelEditTitle.Controls.Add(this.groupBox4);
+            this.panelEditTitle.Controls.Add(this.groupBox3);
+            this.panelEditTitle.Controls.Add(this.groupBox2);
+            this.panelEditTitle.Controls.Add(this.groupBox1);
+            this.panelEditTitle.Controls.Add(this.panel14);
+            this.panelEditTitle.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panelEditTitle.Location = new System.Drawing.Point(0, 0);
+            this.panelEditTitle.Name = "panelEditTitle";
+            this.panelEditTitle.Size = new System.Drawing.Size(1527, 245);
+            this.panelEditTitle.TabIndex = 0;
+            // 
+            // groupBox10
+            // 
+            this.groupBox10.Controls.Add(this.textBoxReleaseDate);
+            this.groupBox10.Location = new System.Drawing.Point(227, 121);
+            this.groupBox10.Name = "groupBox10";
+            this.groupBox10.Size = new System.Drawing.Size(121, 50);
+            this.groupBox10.TabIndex = 7;
+            this.groupBox10.TabStop = false;
+            this.groupBox10.Text = "Release Date";
+            // 
+            // textBoxReleaseDate
+            // 
+            this.textBoxReleaseDate.Location = new System.Drawing.Point(7, 20);
+            this.textBoxReleaseDate.Name = "textBoxReleaseDate";
+            this.textBoxReleaseDate.Size = new System.Drawing.Size(108, 20);
+            this.textBoxReleaseDate.TabIndex = 0;
+            // 
+            // groupBox9
+            // 
+            this.groupBox9.Controls.Add(this.textBoxCategory);
+            this.groupBox9.Location = new System.Drawing.Point(683, 123);
+            this.groupBox9.Name = "groupBox9";
+            this.groupBox9.Size = new System.Drawing.Size(346, 50);
+            this.groupBox9.TabIndex = 10;
+            this.groupBox9.TabStop = false;
+            this.groupBox9.Text = "Category";
+            // 
+            // textBoxCategory
+            // 
+            this.textBoxCategory.Location = new System.Drawing.Point(7, 20);
+            this.textBoxCategory.Name = "textBoxCategory";
+            this.textBoxCategory.Size = new System.Drawing.Size(333, 20);
+            this.textBoxCategory.TabIndex = 0;
+            // 
+            // groupBox8
+            // 
+            this.groupBox8.Controls.Add(this.textBoxPublisher);
+            this.groupBox8.Location = new System.Drawing.Point(683, 66);
+            this.groupBox8.Name = "groupBox8";
+            this.groupBox8.Size = new System.Drawing.Size(452, 50);
+            this.groupBox8.TabIndex = 9;
+            this.groupBox8.TabStop = false;
+            this.groupBox8.Text = "Publisher";
+            // 
+            // textBoxPublisher
+            // 
+            this.textBoxPublisher.Location = new System.Drawing.Point(7, 20);
+            this.textBoxPublisher.Name = "textBoxPublisher";
+            this.textBoxPublisher.Size = new System.Drawing.Size(437, 20);
+            this.textBoxPublisher.TabIndex = 0;
+            // 
+            // groupBox7
+            // 
+            this.groupBox7.Controls.Add(this.textBoxDeveloper);
+            this.groupBox7.Location = new System.Drawing.Point(683, 9);
+            this.groupBox7.Name = "groupBox7";
+            this.groupBox7.Size = new System.Drawing.Size(452, 50);
+            this.groupBox7.TabIndex = 8;
+            this.groupBox7.TabStop = false;
+            this.groupBox7.Text = "Developer";
+            // 
+            // textBoxDeveloper
+            // 
+            this.textBoxDeveloper.Location = new System.Drawing.Point(7, 20);
+            this.textBoxDeveloper.Name = "textBoxDeveloper";
+            this.textBoxDeveloper.Size = new System.Drawing.Size(437, 20);
+            this.textBoxDeveloper.TabIndex = 0;
+            // 
+            // groupBox6
+            // 
+            this.groupBox6.Controls.Add(this.textBoxPlayers);
+            this.groupBox6.Location = new System.Drawing.Point(1035, 123);
+            this.groupBox6.Name = "groupBox6";
+            this.groupBox6.Size = new System.Drawing.Size(100, 50);
+            this.groupBox6.TabIndex = 7;
+            this.groupBox6.TabStop = false;
+            this.groupBox6.Text = "Players";
+            // 
+            // textBoxPlayers
+            // 
+            this.textBoxPlayers.Location = new System.Drawing.Point(7, 20);
+            this.textBoxPlayers.Name = "textBoxPlayers";
+            this.textBoxPlayers.Size = new System.Drawing.Size(85, 20);
+            this.textBoxPlayers.TabIndex = 0;
+            // 
+            // groupBox5
+            // 
+            this.groupBox5.Controls.Add(this.textBoxFirmware);
+            this.groupBox5.Location = new System.Drawing.Point(100, 121);
+            this.groupBox5.Name = "groupBox5";
+            this.groupBox5.Size = new System.Drawing.Size(121, 50);
+            this.groupBox5.TabIndex = 6;
+            this.groupBox5.TabStop = false;
+            this.groupBox5.Text = "Firmware";
+            // 
+            // textBoxFirmware
+            // 
+            this.textBoxFirmware.Location = new System.Drawing.Point(7, 20);
+            this.textBoxFirmware.Name = "textBoxFirmware";
+            this.textBoxFirmware.Size = new System.Drawing.Size(108, 20);
+            this.textBoxFirmware.TabIndex = 0;
+            // 
+            // groupBox4
+            // 
+            this.groupBox4.Controls.Add(this.textBoxCardType);
+            this.groupBox4.Location = new System.Drawing.Point(7, 121);
+            this.groupBox4.Name = "groupBox4";
+            this.groupBox4.Size = new System.Drawing.Size(87, 50);
+            this.groupBox4.TabIndex = 5;
+            this.groupBox4.TabStop = false;
+            this.groupBox4.Text = "Card type";
+            // 
+            // textBoxCardType
+            // 
+            this.textBoxCardType.Location = new System.Drawing.Point(7, 20);
+            this.textBoxCardType.Name = "textBoxCardType";
+            this.textBoxCardType.Size = new System.Drawing.Size(74, 20);
+            this.textBoxCardType.TabIndex = 0;
+            // 
+            // groupBox3
+            // 
+            this.groupBox3.Controls.Add(this.textBoxLanguages);
+            this.groupBox3.Location = new System.Drawing.Point(7, 65);
+            this.groupBox3.Name = "groupBox3";
+            this.groupBox3.Size = new System.Drawing.Size(341, 50);
+            this.groupBox3.TabIndex = 4;
+            this.groupBox3.TabStop = false;
+            this.groupBox3.Text = "Languages";
+            // 
+            // textBoxLanguages
+            // 
+            this.textBoxLanguages.Location = new System.Drawing.Point(7, 20);
+            this.textBoxLanguages.Name = "textBoxLanguages";
+            this.textBoxLanguages.Size = new System.Drawing.Size(328, 20);
+            this.textBoxLanguages.TabIndex = 0;
+            // 
+            // groupBox2
+            // 
+            this.groupBox2.Controls.Add(this.richTextBoxDescription);
+            this.groupBox2.Location = new System.Drawing.Point(354, 9);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Size = new System.Drawing.Size(323, 162);
+            this.groupBox2.TabIndex = 3;
+            this.groupBox2.TabStop = false;
+            this.groupBox2.Text = "Description";
+            // 
+            // richTextBoxDescription
+            // 
+            this.richTextBoxDescription.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.richTextBoxDescription.Location = new System.Drawing.Point(3, 16);
+            this.richTextBoxDescription.Name = "richTextBoxDescription";
+            this.richTextBoxDescription.Size = new System.Drawing.Size(317, 143);
+            this.richTextBoxDescription.TabIndex = 0;
+            this.richTextBoxDescription.Text = "";
+            // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.textBoxGameTitle);
+            this.groupBox1.Location = new System.Drawing.Point(7, 9);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(341, 50);
+            this.groupBox1.TabIndex = 2;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "Game title";
+            // 
+            // textBoxGameTitle
+            // 
+            this.textBoxGameTitle.Location = new System.Drawing.Point(7, 20);
+            this.textBoxGameTitle.Name = "textBoxGameTitle";
+            this.textBoxGameTitle.Size = new System.Drawing.Size(328, 20);
+            this.textBoxGameTitle.TabIndex = 0;
+            // 
+            // panel14
+            // 
+            this.panel14.Controls.Add(this.panel15);
+            this.panel14.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.panel14.Location = new System.Drawing.Point(0, 211);
+            this.panel14.Name = "panel14";
+            this.panel14.Size = new System.Drawing.Size(1527, 34);
+            this.panel14.TabIndex = 1;
+            // 
+            // panel15
+            // 
+            this.panel15.Controls.Add(this.button1);
+            this.panel15.Dock = System.Windows.Forms.DockStyle.Left;
+            this.panel15.Location = new System.Drawing.Point(0, 0);
+            this.panel15.Name = "panel15";
+            this.panel15.Size = new System.Drawing.Size(86, 34);
+            this.panel15.TabIndex = 0;
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(6, 6);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(75, 23);
+            this.button1.TabIndex = 1;
+            this.button1.Text = "Save";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // backgroundWorkerAddFilesFromDirectory
             // 
@@ -3324,6 +3998,11 @@
             // 
             this.backgroundWorkerUpdateFiles.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorkerUpdateFiles_DoWork);
             // 
+            // backgroundWorkerScrapExtraInfo
+            // 
+            this.backgroundWorkerScrapExtraInfo.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorkerScrapExtraInfo_DoWork);
+            this.backgroundWorkerScrapExtraInfo.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backgroundWorkerScrapExtraInfo_RunWorkerCompleted);
+            // 
             // FrmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -3341,10 +4020,14 @@
             this.splitContainer1.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
             this.splitContainer1.ResumeLayout(false);
+            this.panelGameExtraInfo.ResumeLayout(false);
+            this.panelGameExtraInfo.PerformLayout();
+            this.pnlGameDescription.ResumeLayout(false);
             this.panel3.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.PB_GameIcon)).EndInit();
             this.splitContainer2.Panel1.ResumeLayout(false);
             this.splitContainer2.Panel1.PerformLayout();
+            this.splitContainer2.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).EndInit();
             this.splitContainer2.ResumeLayout(false);
             this.tabControl1.ResumeLayout(false);
@@ -3353,7 +4036,10 @@
             ((System.ComponentModel.ISupportInitialize)(this.OLVLocalFiles)).EndInit();
             this.contextMenuLocalList.ResumeLayout(false);
             this.panel1.ResumeLayout(false);
-            this.panel1.PerformLayout();
+            this.panel9.ResumeLayout(false);
+            this.panel9.PerformLayout();
+            this.panel8.ResumeLayout(false);
+            this.panel8.PerformLayout();
             this.menuLocalFiles.ResumeLayout(false);
             this.menuLocalFiles.PerformLayout();
             this.tabPage2.ResumeLayout(false);
@@ -3372,9 +4058,14 @@
             this.menuStrip3.ResumeLayout(false);
             this.menuStrip3.PerformLayout();
             this.tabPage4.ResumeLayout(false);
-            this.tabPage4.PerformLayout();
+            this.panel10.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.OLVEshop)).EndInit();
-            this.contextMenuStripEShop.ResumeLayout(false);
+            this.contextMenuEShopList.ResumeLayout(false);
+            this.panel11.ResumeLayout(false);
+            this.panel13.ResumeLayout(false);
+            this.panel13.PerformLayout();
+            this.panel12.ResumeLayout(false);
+            this.panel12.PerformLayout();
             this.menuEShop.ResumeLayout(false);
             this.menuEShop.PerformLayout();
             this.tabPage5.ResumeLayout(false);
@@ -3384,6 +4075,28 @@
             this.statusStrip1.PerformLayout();
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
+            this.panelEditTitle.ResumeLayout(false);
+            this.groupBox10.ResumeLayout(false);
+            this.groupBox10.PerformLayout();
+            this.groupBox9.ResumeLayout(false);
+            this.groupBox9.PerformLayout();
+            this.groupBox8.ResumeLayout(false);
+            this.groupBox8.PerformLayout();
+            this.groupBox7.ResumeLayout(false);
+            this.groupBox7.PerformLayout();
+            this.groupBox6.ResumeLayout(false);
+            this.groupBox6.PerformLayout();
+            this.groupBox5.ResumeLayout(false);
+            this.groupBox5.PerformLayout();
+            this.groupBox4.ResumeLayout(false);
+            this.groupBox4.PerformLayout();
+            this.groupBox3.ResumeLayout(false);
+            this.groupBox3.PerformLayout();
+            this.groupBox2.ResumeLayout(false);
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
+            this.panel14.ResumeLayout(false);
+            this.panel15.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -3400,48 +4113,6 @@
         private System.Windows.Forms.TabPage tabPage2;
         private System.Windows.Forms.TabPage tabPage3;
         private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.MenuStrip menuLocalFiles;
-        private System.Windows.Forms.ToolStripMenuItem addToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem filesToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem folderToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem selectToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem allToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem noneToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem invertSelectionToolStripMenuItem;
-        private System.Windows.Forms.ToolStripSeparator toolStripMenuItem1;
-        private System.Windows.Forms.ToolStripMenuItem itensToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem itemsOnSDCardToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem itemsNotOnSDCardToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem sceneReleasesToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem itemsOnSceneReleasesToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem itemsNotOnSceneReleasesToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem removeToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem selectedToolStripMenuItem;
-        private System.Windows.Forms.ToolStripSeparator toolStripMenuItem2;
-        private System.Windows.Forms.ToolStripMenuItem sDCardToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem itemsOnSDCardToolStripMenuItem1;
-        private System.Windows.Forms.ToolStripMenuItem itemsNotOnSDCardToolStripMenuItem1;
-        private System.Windows.Forms.ToolStripMenuItem sceneReleasesToolStripMenuItem1;
-        private System.Windows.Forms.ToolStripMenuItem itemsOnSceneReleasesToolStripMenuItem1;
-        private System.Windows.Forms.ToolStripMenuItem itemsNotOnSceneReleasesToolStripMenuItem1;
-        private System.Windows.Forms.ToolStripMenuItem transferToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem sDCardToolStripMenuItem1;
-        private System.Windows.Forms.ToolStripMenuItem folderToolStripMenuItem1;
-        private System.Windows.Forms.ToolStripMenuItem infosToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem updateToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem updateNswdbcomListToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem toolsToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem trimToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem selectedFilesToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem allFilesToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem renameToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem allFilesToolStripMenuItem1;
-        private System.Windows.Forms.ToolStripMenuItem selectedFilesToolStripMenuItem1;
-        private System.Windows.Forms.ToolStripMenuItem exportListToolStripMenuItem;
-        private System.Windows.Forms.ToolStripSeparator toolStripMenuItem3;
-        private System.Windows.Forms.ToolStripMenuItem exportGameListToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem htmlToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem cSVToolStripMenuItem;
         private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.Panel panel3;
         private System.Windows.Forms.PictureBox PB_GameIcon;
@@ -3463,14 +4134,6 @@
         private System.ComponentModel.BackgroundWorker backgroundWorkerAddFilesFromDirectory;
         private System.Windows.Forms.Timer timer1;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabelGame;
-        private System.Windows.Forms.ToolStripMenuItem listToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem noneToolStripMenuItem1;
-        private System.Windows.Forms.ToolStripMenuItem gameTitleToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem trimmedToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem cartSizeToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem typeToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem developerToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem masterkeyRevisionToolStripMenuItem;
         private BrightIdeasSoftware.ObjectListView OLV_SDCard;
         private BrightIdeasSoftware.OLVColumn olvColumnTitleIDSD;
         private BrightIdeasSoftware.OLVColumn olvColumnGameNameSD;
@@ -3599,10 +4262,6 @@
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem94;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem95;
         private System.ComponentModel.BackgroundWorker backgroundWorkerAddFile;
-        private System.Windows.Forms.ToolStripMenuItem copyFilesToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem moveFilesToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem copyFilesToolStripMenuItem1;
-        private System.Windows.Forms.ToolStripMenuItem moveFilesToolStripMenuItem1;
         private System.ComponentModel.BackgroundWorker backgroundWorkerCopyFiles;
         private System.ComponentModel.BackgroundWorker backgroundWorkerLoadSDCardFiles;
         private System.Windows.Forms.MenuStrip menuStrip1;
@@ -3638,10 +4297,6 @@
         private System.Windows.Forms.ToolStripSeparator toolStripMenuItem20;
         private System.Windows.Forms.ToolStripMenuItem showInExplorerToolStripMenuItem1;
         private System.Windows.Forms.ToolStripSeparator toolStripMenuItem21;
-        private System.Windows.Forms.ComboBox cbxFilterLocal;
-        private System.Windows.Forms.TextBox textBoxFilterLocal;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Button btnClearFilterLocal;
         private System.Windows.Forms.Button btnClearFilterSD;
         private System.Windows.Forms.TextBox textBoxFilterSD;
         private System.Windows.Forms.Label label3;
@@ -3651,9 +4306,122 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.ComboBox cbxFilterScene;
         private System.Windows.Forms.TabPage tabPage4;
-        private System.Windows.Forms.MenuStrip menuEShop;
-        private System.Windows.Forms.ToolStripMenuItem addToolStripMenuItemAddFolderEShop;
-        private System.Windows.Forms.ToolStripMenuItem filesToolStripMenuItem1;
+        private System.Windows.Forms.ContextMenuStrip contextMenuEShopList;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemEShopShowInExplorer;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator9;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemEShopAutoRename;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator10;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemEShopCopyToFolder;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemEShopMoveToFolder;
+        private System.Windows.Forms.ToolStripMenuItem updateEshopLocalDatabaseToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem sDCardToolStripMenuItem4;
+        private System.Windows.Forms.ToolStripMenuItem folderToolStripMenuItem5;
+        private System.Windows.Forms.ToolStripMenuItem sDCardToolStripMenuItem5;
+        private System.Windows.Forms.ToolStripMenuItem folderToolStripMenuItem6;
+        private System.Windows.Forms.ToolStripSeparator toolStripMenuItem64;
+        private System.Windows.Forms.ToolStripMenuItem copyInfoToClipboardToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripMenuItem68;
+        private System.Windows.Forms.ToolStripMenuItem copyInfoToClipboardToolStripMenuItem1;
+        private System.Windows.Forms.ToolStripSeparator toolStripMenuItem70;
+        private System.Windows.Forms.ToolStripMenuItem copyInfoToClipboardToolStripMenuItem2;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStripScene;
+        private System.Windows.Forms.ToolStripMenuItem copyInfoToClipboardToolStripMenuItem3;
+        //private BrightIdeasSoftware.OLVColumn olvColumnTitleIDLocal;
+        private System.ComponentModel.BackgroundWorker backgroundWorkerScanNewFiles;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemEShopUpdateInfo;
+        private System.ComponentModel.BackgroundWorker backgroundWorkerUpdateFiles;
+        private BrightIdeasSoftware.OLVColumn olvColumnTitleIDLocal;
+        private System.Windows.Forms.TabPage tabPage5;
+        private System.Windows.Forms.Panel panel7;
+        private System.Windows.Forms.Button btnClearLogFile;
+        private System.Windows.Forms.Panel panel6;
+        private System.Windows.Forms.RichTextBox richTextBoxLog;
+        private BrightIdeasSoftware.OLVColumn olvColumnSDKVersionLocal;
+        private BrightIdeasSoftware.OLVColumn olvColumnSDKVersionSD;
+        private BrightIdeasSoftware.OLVColumn olvColumnFirmwareLocal;
+        private BrightIdeasSoftware.OLVColumn olvColumnFirmwareSD;
+        private BrightIdeasSoftware.OLVColumn olvColumnSceneID;
+        private System.Windows.Forms.LinkLabel lnkInfo;
+        private System.Windows.Forms.ToolStripMenuItem scrapExtendedInfoFromWebToolStripMenuItem;
+        private System.ComponentModel.BackgroundWorker backgroundWorkerScrapExtraInfo;
+        private System.Windows.Forms.Panel panelGameExtraInfo;
+        private System.Windows.Forms.Label lblCategory;
+        private System.Windows.Forms.Label lblNumberOfPlayers;
+        private System.Windows.Forms.Label lblReleaseDate;
+        private System.Windows.Forms.Panel pnlGameDescription;
+        private System.Windows.Forms.RichTextBox richTextBoxGameDescription;
+        private System.Windows.Forms.Label lblPublisher;
+        private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.Label label6;
+        private BrightIdeasSoftware.OLVColumn olvColumnReleaseDateLocal;
+        private BrightIdeasSoftware.OLVColumn olvColumnNumberOfPlayersLocal;
+        private BrightIdeasSoftware.OLVColumn olvColumnPublisherLocal;
+        private BrightIdeasSoftware.OLVColumn olvColumnCategoriesLocal;
+        private System.Windows.Forms.Panel panel9;
+        private System.Windows.Forms.Button btnClearFilterLocal;
+        private System.Windows.Forms.TextBox textBoxFilterLocal;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.ComboBox cbxFilterLocal;
+        private System.Windows.Forms.Panel panel8;
+        private System.Windows.Forms.MenuStrip menuLocalFiles;
+        private System.Windows.Forms.ToolStripMenuItem addToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem filesToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem folderToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem selectToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem allToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem noneToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem invertSelectionToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem itensToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem itemsOnSDCardToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem itemsNotOnSDCardToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem sceneReleasesToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem itemsOnSceneReleasesToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem itemsNotOnSceneReleasesToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem listToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem noneToolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem gameTitleToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem trimmedToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem cartSizeToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem typeToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem developerToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem masterkeyRevisionToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem removeToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem selectedToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripMenuItem2;
+        private System.Windows.Forms.ToolStripMenuItem sDCardToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem itemsOnSDCardToolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem itemsNotOnSDCardToolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem sceneReleasesToolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem itemsOnSceneReleasesToolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem itemsNotOnSceneReleasesToolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem transferToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem sDCardToolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem copyFilesToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem moveFilesToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem folderToolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem copyFilesToolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem moveFilesToolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem infosToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem updateToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem updateNswdbcomListToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem toolsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem trimToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem selectedFilesToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem allFilesToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem renameToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem selectedFilesToolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem allFilesToolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem exportListToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripMenuItem3;
+        private System.Windows.Forms.ToolStripMenuItem exportGameListToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem htmlToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem cSVToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem updateGameInfoFromWebToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem updateGameInfoFromWebToolStripMenuItemEshop;
+        private System.Windows.Forms.Panel panel10;
         private BrightIdeasSoftware.ObjectListView OLVEshop;
         private BrightIdeasSoftware.OLVColumn olvColumnTitleIDEShop;
         private BrightIdeasSoftware.OLVColumn olvColumnGameNameEShop;
@@ -3661,9 +4429,25 @@
         private BrightIdeasSoftware.OLVColumn olvColumnLanguagesEShop;
         private BrightIdeasSoftware.OLVColumn olvColumnFilePathEShop;
         private BrightIdeasSoftware.OLVColumn olvColumnDeveloperEShop;
+        private BrightIdeasSoftware.OLVColumn olvColumnPublisherEshop;
         private BrightIdeasSoftware.OLVColumn olvColumnGameRevisionEShop;
         private BrightIdeasSoftware.OLVColumn olvColumnMasterKeyRevisionEShop;
         private BrightIdeasSoftware.OLVColumn olvColumnDistributionType;
+        private BrightIdeasSoftware.OLVColumn olvColumnFirmwareEShop;
+        private BrightIdeasSoftware.OLVColumn olvColumnSDKVersionEShop;
+        private BrightIdeasSoftware.OLVColumn olvColumnReleaseDateEshop;
+        private BrightIdeasSoftware.OLVColumn olvColumnNumberOfPlayersEshop;
+        private BrightIdeasSoftware.OLVColumn olvColumnCategoriesEShop;
+        private System.Windows.Forms.Panel panel11;
+        private System.Windows.Forms.Panel panel13;
+        private System.Windows.Forms.Button btnClearFilterEShop;
+        private System.Windows.Forms.TextBox textBoxFilterEShop;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.ComboBox cbxFilterEshop;
+        private System.Windows.Forms.Panel panel12;
+        private System.Windows.Forms.MenuStrip menuEShop;
+        private System.Windows.Forms.ToolStripMenuItem addToolStripMenuItemAddFolderEShop;
+        private System.Windows.Forms.ToolStripMenuItem filesToolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem folderToolStripMenuItem4;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemSelectEshop;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemSelectAllEshop;
@@ -3697,47 +4481,40 @@
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem69;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemCopyFilesToFolderEShop;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemMoveFilesToFolderEShop;
-        private System.Windows.Forms.ContextMenuStrip contextMenuStripEShop;
-        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemEShopShowInExplorer;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator9;
-        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemEShopAutoRename;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator10;
-        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemEShopCopyToFolder;
-        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemEShopMoveToFolder;
-        private System.Windows.Forms.ToolStripMenuItem updateEshopLocalDatabaseToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem sDCardToolStripMenuItem4;
-        private System.Windows.Forms.ToolStripMenuItem folderToolStripMenuItem5;
-        private System.Windows.Forms.ToolStripMenuItem sDCardToolStripMenuItem5;
-        private System.Windows.Forms.ToolStripMenuItem folderToolStripMenuItem6;
-        private System.Windows.Forms.ToolStripSeparator toolStripMenuItem64;
-        private System.Windows.Forms.ToolStripMenuItem copyInfoToClipboardToolStripMenuItem;
-        private System.Windows.Forms.ToolStripSeparator toolStripMenuItem68;
-        private System.Windows.Forms.ToolStripMenuItem copyInfoToClipboardToolStripMenuItem1;
-        private System.Windows.Forms.ToolStripSeparator toolStripMenuItem70;
-        private System.Windows.Forms.ToolStripMenuItem copyInfoToClipboardToolStripMenuItem2;
-        private System.Windows.Forms.ContextMenuStrip contextMenuStripScene;
-        private System.Windows.Forms.ToolStripMenuItem copyInfoToClipboardToolStripMenuItem3;
-        private System.Windows.Forms.Button btnClearFilterEShop;
-        private System.Windows.Forms.TextBox textBoxFilterEShop;
-        private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.ComboBox cbxFilterEshop;
-        //private BrightIdeasSoftware.OLVColumn olvColumnTitleIDLocal;
-        private System.ComponentModel.BackgroundWorker backgroundWorkerScanNewFiles;
-        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemEShopUpdateInfo;
-        private System.ComponentModel.BackgroundWorker backgroundWorkerUpdateFiles;
-        private BrightIdeasSoftware.OLVColumn olvColumnTitleIDLocal;
-        private System.Windows.Forms.TabPage tabPage5;
-        private System.Windows.Forms.Panel panel7;
-        private System.Windows.Forms.Button btnClearLogFile;
-        private System.Windows.Forms.Panel panel6;
-        private System.Windows.Forms.RichTextBox richTextBoxLog;
-        private BrightIdeasSoftware.OLVColumn olvColumnSDKVersionLocal;
-        private BrightIdeasSoftware.OLVColumn olvColumnSDKVersionSD;
-        private BrightIdeasSoftware.OLVColumn olvColumnSDKVersionEShop;
-        private BrightIdeasSoftware.OLVColumn olvColumnFirmwareLocal;
-        private BrightIdeasSoftware.OLVColumn olvColumnFirmwareSD;
-        private BrightIdeasSoftware.OLVColumn olvColumnFirmwareEShop;
-        private BrightIdeasSoftware.OLVColumn olvColumnSceneID;
+        private System.Windows.Forms.Panel panelEditTitle;
+        private System.Windows.Forms.Panel panel14;
+        private System.Windows.Forms.Panel panel15;
+        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.TextBox textBoxGameTitle;
+        private System.Windows.Forms.GroupBox groupBox2;
+        private System.Windows.Forms.RichTextBox richTextBoxDescription;
+        private System.Windows.Forms.GroupBox groupBox9;
+        private System.Windows.Forms.TextBox textBoxCategory;
+        private System.Windows.Forms.GroupBox groupBox8;
+        private System.Windows.Forms.TextBox textBoxPublisher;
+        private System.Windows.Forms.GroupBox groupBox7;
+        private System.Windows.Forms.TextBox textBoxDeveloper;
+        private System.Windows.Forms.GroupBox groupBox6;
+        private System.Windows.Forms.TextBox textBoxPlayers;
+        private System.Windows.Forms.GroupBox groupBox5;
+        private System.Windows.Forms.TextBox textBoxFirmware;
+        private System.Windows.Forms.GroupBox groupBox4;
+        private System.Windows.Forms.TextBox textBoxCardType;
+        private System.Windows.Forms.GroupBox groupBox3;
+        private System.Windows.Forms.TextBox textBoxLanguages;
+        private System.Windows.Forms.GroupBox groupBox10;
+        private System.Windows.Forms.TextBox textBoxReleaseDate;
+        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.ToolStripMenuItem viewToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem bottonPanelToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem leftPanelToolStripMenuItem;
+        private System.Windows.Forms.CheckBox cbBaseGame;
+        private System.Windows.Forms.CheckBox cbUpdates;
+        private System.Windows.Forms.CheckBox cbDLC;
+        private BrightIdeasSoftware.OLVColumn olvColumnContentTypeEShop;
+        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel3;
+        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel4;
+        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel5;
     }
 }
 

@@ -259,3 +259,14 @@ paket-files/
 # Python Tools for Visual Studio (PTVS)
 __pycache__/
 *.pyc
+cache
+allgames.html
+index.html
+missing.html
+SBM_Local.html
+SBM_NSP_Local.html
+allgames.xml
+missinggames.xml
+nswdb.xml
+SBM_Local.xml
+SBM_NSP_Local.xml

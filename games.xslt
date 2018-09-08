@@ -32,6 +32,10 @@
   padding: 12px;
 }
 
+#myTable th {
+  cursor: pointer;
+}
+
 #myTable tr {
   border-bottom: 1px solid #ddd;
 }
@@ -60,18 +64,21 @@ function myFunction() {
   table = document.getElementById("myTable");
   tr = table.getElementsByTagName("tr");
   for (i = 0; i < tr.length; i++) {
-    tds = tr[i].getElementsByTagName("td");
-    display = "none"
-    for (j = 0; j < tds.length; j++) {
-      td = tds[j]
-      if (td && (td.getAttribute("id") == "GameName" || td.getAttribute("id") == "Developer")) {
-        if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
-          display = "";
-          break;
-        }
-      }       
+    id = tr[i].getAttribute("id");
+    if (id != "header") {
+      tds = tr[i].getElementsByTagName("td");
+      display = "none"
+      for (j = 0; j < tds.length; j++) {
+        td = tds[j]
+        if (td && (td.getAttribute("id") == "GameName" || td.getAttribute("id") == "Developer")) {
+          if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
+            display = "";
+            break;
+            }
+        }       
+      }
+      tr[i].style.display = display;
     }
-    tr[i].style.display = display;
   }
 }
 
@@ -82,25 +89,38 @@ function myFunction2() {
   table = document.getElementById("myTable");
   tr = table.getElementsByTagName("tr");
   for (i = 0; i < tr.length; i++) {
-    title = tr[i].getAttribute("title");
-    if (!filter || (title && title.toUpperCase().indexOf(filter) > -1)) {
-        tr[i].style.display = "";
-    } else {
-      tr[i].style.display = "none";
+    id = tr[i].getAttribute("id");
+    if (id != "header") {
+      title = tr[i].getAttribute("title");
+      if (!filter || (title && title.toUpperCase().indexOf(filter) > -1)) {
+          tr[i].style.display = "";
+      } else {
+        tr[i].style.display = "none";
+      }
     }
   }
 }
 ]]>
 </script>
   <table id="myTable" >
-    <tr bgcolor="#9acd32">
-        <xsl:choose>
-          <xsl:when test="/Games/Game/Region_Icon">
-            <xsl:element name="th">Cover</xsl:element>
-          </xsl:when>
-        </xsl:choose>
+    <tr bgcolor="#9acd32" id="header">
+      <xsl:choose>
+        <xsl:when test="/Games/Game/Region_Icon">
+          <th>Cover</th>
+        </xsl:when>
+      </xsl:choose>
+      <xsl:choose>
+        <xsl:when test="/Games/Game/@type">
+          <th>Type</th>
+        </xsl:when>
+      </xsl:choose>
       <th>Title</th>
       <th>Developer</th>
+      <xsl:choose>
+        <xsl:when test="/Games/Game/ImportedDate">
+          <th>Imported Date</th>
+        </xsl:when>
+      </xsl:choose>
     </tr>
     <xsl:for-each select="Game">
       <xsl:sort select="GameName"/>
@@ -125,12 +145,35 @@ function myFunction2() {
             </td>
           </xsl:when>
         </xsl:choose>
+        <xsl:choose>
+          <xsl:when test="/Games/Game/@type">
+            <td><xsl:value-of select="@type"/></td>
+          </xsl:when>
+        </xsl:choose>
         <td id="GameName"><xsl:value-of select="GameName"/></td>
         <td id="Developer"><xsl:value-of select="Developer"/></td>
+      <td id="ImportedDate"><xsl:value-of select="ImportedDate"/></td>
       </xsl:element>
     </xsl:for-each>
   </table>
 </body>
+  <script>
+  <![CDATA[
+const getCellValue = (tr, idx) => tr.children[idx].innerText || tr.children[idx].textContent;
+
+const comparer = (idx, asc) => (a, b) => ((v1, v2) => 
+    v1 !== '' && v2 !== '' && !isNaN(v1) && !isNaN(v2) ? v1 - v2 : v1.toString().localeCompare(v2)
+    )(getCellValue(asc ? a : b, idx), getCellValue(asc ? b : a, idx));
+
+// do the work...
+document.querySelectorAll('th').forEach(th => th.addEventListener('click', (() => {
+    const table = th.closest('table');
+    Array.from(table.querySelectorAll('tr:nth-child(n+2)'))
+        .sort(comparer(Array.from(th.parentNode.children).indexOf(th), this.asc = !this.asc))
+        .forEach(tr => table.appendChild(tr) );
+})));
+]]>
+</script>
 </html>
 </xsl:template>
 </xsl:stylesheet>

@@ -2909,6 +2909,9 @@ namespace Switch_Backup_Manager
                 case "Category":
                     filterText.Columns = new[] { olvColumnCategoriesLocal };
                     break;
+                case "Imported Date":
+                    filterText.Columns = new[] { olvColumnImportedDateLocal };
+                    break;
                 default:
                     filterText = null;
                     break;
@@ -3516,6 +3519,9 @@ namespace Switch_Backup_Manager
                     break;
                 case "Category":
                     filterText.Columns = new[] { olvColumnCategoriesEShop };
+                    break;
+                case "Imported Date":
+                    filterText.Columns = new[] { olvColumnImportedDateEShop};
                     break;
                 default:
                     filterText = null;

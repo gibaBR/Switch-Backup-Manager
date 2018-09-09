@@ -68,6 +68,7 @@
             this.olvColumnReleaseDateLocal = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnNumberOfPlayersLocal = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnCategoriesLocal = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.olvColumnImportedDateLocal = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.contextMenuLocalList = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.showInExplorerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem20 = new System.Windows.Forms.ToolStripSeparator();
@@ -321,6 +322,7 @@
             this.olvColumnNumberOfPlayersEshop = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnCategoriesEShop = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnContentTypeEShop = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.olvColumnImportedDateEShop = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.contextMenuEShopList = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.toolStripMenuItemEShopShowInExplorer = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItemEShopUpdateInfo = new System.Windows.Forms.ToolStripMenuItem();
@@ -756,6 +758,7 @@
             this.OLVLocalFiles.AllColumns.Add(this.olvColumnReleaseDateLocal);
             this.OLVLocalFiles.AllColumns.Add(this.olvColumnNumberOfPlayersLocal);
             this.OLVLocalFiles.AllColumns.Add(this.olvColumnCategoriesLocal);
+            this.OLVLocalFiles.AllColumns.Add(this.olvColumnImportedDateLocal);
             this.OLVLocalFiles.CellEditUseWholeCell = false;
             this.OLVLocalFiles.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.olvColumnTitleIDLocal,
@@ -775,7 +778,8 @@
             this.olvColumnSDKVersionLocal,
             this.olvColumnReleaseDateLocal,
             this.olvColumnNumberOfPlayersLocal,
-            this.olvColumnCategoriesLocal});
+            this.olvColumnCategoriesLocal,
+            this.olvColumnImportedDateLocal});
             this.OLVLocalFiles.ContextMenuStrip = this.contextMenuLocalList;
             this.OLVLocalFiles.Cursor = System.Windows.Forms.Cursors.Default;
             this.OLVLocalFiles.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -910,6 +914,13 @@
             // 
             this.olvColumnCategoriesLocal.AspectName = "Categories";
             this.olvColumnCategoriesLocal.Text = "Category";
+            // 
+            // olvColumnImportedDateLocal
+            // 
+            this.olvColumnImportedDateLocal.AspectName = "ImportedDate";
+            this.olvColumnImportedDateLocal.IsEditable = false;
+            this.olvColumnImportedDateLocal.Text = "Imported Date";
+            this.olvColumnImportedDateLocal.Width = 200;
             // 
             // contextMenuLocalList
             // 
@@ -2838,7 +2849,7 @@
             this.tabPage4.Location = new System.Drawing.Point(4, 22);
             this.tabPage4.Name = "tabPage4";
             this.tabPage4.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage4.Size = new System.Drawing.Size(1517, 490);
+            this.tabPage4.Size = new System.Drawing.Size(1519, 492);
             this.tabPage4.TabIndex = 3;
             this.tabPage4.Text = "E-shop files";
             this.tabPage4.UseVisualStyleBackColor = true;
@@ -2849,7 +2860,7 @@
             this.panel10.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel10.Location = new System.Drawing.Point(3, 31);
             this.panel10.Name = "panel10";
-            this.panel10.Size = new System.Drawing.Size(1511, 456);
+            this.panel10.Size = new System.Drawing.Size(1513, 458);
             this.panel10.TabIndex = 11;
             // 
             // OLVEshop
@@ -2870,6 +2881,7 @@
             this.OLVEshop.AllColumns.Add(this.olvColumnNumberOfPlayersEshop);
             this.OLVEshop.AllColumns.Add(this.olvColumnCategoriesEShop);
             this.OLVEshop.AllColumns.Add(this.olvColumnContentTypeEShop);
+            this.OLVEshop.AllColumns.Add(this.olvColumnImportedDateEShop);
             this.OLVEshop.CellEditUseWholeCell = false;
             this.OLVEshop.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.olvColumnTitleIDEShop,
@@ -2887,7 +2899,8 @@
             this.olvColumnReleaseDateEshop,
             this.olvColumnNumberOfPlayersEshop,
             this.olvColumnCategoriesEShop,
-            this.olvColumnContentTypeEShop});
+            this.olvColumnContentTypeEShop,
+            this.olvColumnImportedDateEShop});
             this.OLVEshop.ContextMenuStrip = this.contextMenuEShopList;
             this.OLVEshop.Cursor = System.Windows.Forms.Cursors.Default;
             this.OLVEshop.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -2896,7 +2909,7 @@
             this.OLVEshop.Location = new System.Drawing.Point(0, 0);
             this.OLVEshop.Name = "OLVEshop";
             this.OLVEshop.ShowGroups = false;
-            this.OLVEshop.Size = new System.Drawing.Size(1511, 456);
+            this.OLVEshop.Size = new System.Drawing.Size(1513, 458);
             this.OLVEshop.TabIndex = 3;
             this.OLVEshop.UseCellFormatEvents = true;
             this.OLVEshop.UseCompatibleStateImageBehavior = false;
@@ -2911,7 +2924,7 @@
             // 
             this.olvColumnTitleIDEShop.AspectName = "TitleID";
             this.olvColumnTitleIDEShop.Text = "Title ID";
-            this.olvColumnTitleIDEShop.Width = 118;
+            this.olvColumnTitleIDEShop.Width = 200;
             // 
             // olvColumnGameNameEShop
             // 
@@ -3004,6 +3017,12 @@
             // 
             this.olvColumnContentTypeEShop.AspectName = "ContentType";
             this.olvColumnContentTypeEShop.Text = "Content Type";
+            // 
+            // olvColumnImportedDateEShop
+            // 
+            this.olvColumnImportedDateEShop.AspectName = "ImportedDate";
+            this.olvColumnImportedDateEShop.IsEditable = false;
+            this.olvColumnImportedDateEShop.Text = "Imported Date";
             // 
             // contextMenuEShopList
             // 
@@ -3126,7 +3145,7 @@
             this.panel11.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel11.Location = new System.Drawing.Point(3, 3);
             this.panel11.Name = "panel11";
-            this.panel11.Size = new System.Drawing.Size(1511, 28);
+            this.panel11.Size = new System.Drawing.Size(1513, 28);
             this.panel11.TabIndex = 10;
             // 
             // panel13
@@ -3139,7 +3158,7 @@
             this.panel13.Controls.Add(this.label5);
             this.panel13.Controls.Add(this.cbxFilterEshop);
             this.panel13.Dock = System.Windows.Forms.DockStyle.Right;
-            this.panel13.Location = new System.Drawing.Point(798, 0);
+            this.panel13.Location = new System.Drawing.Point(800, 0);
             this.panel13.Name = "panel13";
             this.panel13.Size = new System.Drawing.Size(713, 28);
             this.panel13.TabIndex = 1;
@@ -4515,6 +4534,8 @@
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel3;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel4;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel5;
+        private BrightIdeasSoftware.OLVColumn olvColumnImportedDateLocal;
+        private BrightIdeasSoftware.OLVColumn olvColumnImportedDateEShop;
     }
 }
 

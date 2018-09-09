@@ -45,6 +45,7 @@ namespace Switch_Backup_Manager
             this.Description = "";
             this.Publisher = "";
             this.ReleaseDate = "";
+            this.ImportedDate = "";
             this.NumberOfPlayers = "";
             this.Categories = new List<string>();
             this.ESRB = 0;
@@ -58,6 +59,7 @@ namespace Switch_Backup_Manager
             string DistributionType, int IdScene, string ContentType, string Version, bool HasExtendedInfo, string Description, 
             string Publisher, string ReleaseDate, string NumberOfPlayers, List<string> Categories, int ESRB)
         {
+            this.ImportedDate = "";
             this.FilePath = FilePath;
             this.FileName = FileName;
             this.FileNameWithExt = FileNameWithExt;
@@ -97,6 +99,7 @@ namespace Switch_Backup_Manager
             this.ESRB = ESRB;
         }
 
+        public string ImportedDate { get; set; }
         public string FilePath { get; set; }
         public string FileName { get; set; }
         public string FileNameWithExt { get; set; }

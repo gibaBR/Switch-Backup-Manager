@@ -1054,6 +1054,7 @@ namespace Switch_Backup_Manager
                                    new XElement("ReleaseDate", data.ReleaseDate),
                                    new XElement("NumberOfPlayers", data.NumberOfPlayers),
                                    new XElement("ESRB", data.ESRB),
+                                   new XElement("ImportedDate", data.ImportedDate),
                                    new XElement("Categories", categories)
                            );
                         if (xml == LOCAL_FILES_DB)
@@ -1832,7 +1833,7 @@ namespace Switch_Backup_Manager
         public static FileData GetFileDataNSP(string file)
         {
             FileData data = new FileData();
-
+            data.ImportedDate = DateTime.UtcNow.ToString("yyyyMMddHHmmss");
             data.FilePath = file;
             data.FileName = Path.GetFileNameWithoutExtension(file);
             data.FileNameWithExt = Path.GetFileName(file);
@@ -2301,6 +2302,7 @@ namespace Switch_Backup_Manager
         public static FileData GetFileData(string filepath)
         {
             FileData result = new FileData();
+            result.ImportedDate = DateTime.UtcNow.ToString("yyyyMMddHHmmss");
             //Basic Info
             result.FilePath = filepath;
             result.FileName = Path.GetFileNameWithoutExtension(filepath);
@@ -2756,6 +2758,10 @@ namespace Switch_Backup_Manager
             try
             {
                 result.TitleID = xe.Attribute("TitleID").Value;
+                if (xe.Element("ImportedDate") != null)
+                {
+                    result.ImportedDate = xe.Element("ImportedDate").Value;
+                }
                 if (xe.Element("TitleIDBaseGame") != null)
                 {
                     result.TitleIDBaseGame = xe.Element("TitleIDBaseGame").Value;

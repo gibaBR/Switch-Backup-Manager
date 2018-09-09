@@ -111,6 +111,9 @@ namespace Switch_Backup_Manager
             bool tryNextCountry = false;
             string country = "/US";
             string country2 = "/GB";
+
+            string language = "American English";
+
             string url = "https://ec.nintendo.com/apps/" + data.TitleIDBaseGame + country;
             //https://switchbrew.org/index.php?title=Title_list/Games
             try
@@ -188,6 +191,8 @@ namespace Switch_Backup_Manager
                 if (tryNextCountry) //Lets try the GB Site
                 {
                     url = "https://ec.nintendo.com/apps/" + data.TitleIDBaseGame + country2;
+                    language = "British English";
+
                     doc = web.Load(url);
 
                     try
@@ -282,6 +287,39 @@ namespace Switch_Backup_Manager
                     }
                     catch { }
                 }
+				
+				//Logo
+                try
+                {
+                    if (data.Region_Icon.Count == 0)
+                    {
+                        var imgTag = GetFirstNode(doc.DocumentNode.SelectNodes("//img[@itemprop=\"logo\"]"));
+                        if (imgTag == null)
+                        {
+                            imgTag = GetFirstNode(doc.DocumentNode.SelectNodes("//img[@class=\"img-responsive center-block\"]"));
+                        }
+
+                        if (imgTag != null)
+                        {
+                            var imgSrc = imgTag.Attributes["src"].Value;
+                            var sourceUrlScheme = new Uri(url).Scheme;
+                            var uriBuilder = new UriBuilder(new Uri(imgSrc).AbsoluteUri);
+                            uriBuilder.Scheme = sourceUrlScheme;
+                            var imageUrl = uriBuilder.Uri.AbsoluteUri;
+
+                            data.Region_Icon[language] = DownloadImage(imageUrl, data.TitleID, language);
+                            result = true;
+                        }
+                        else
+                        {
+                            throw new Exception("Cannot find image");
+                        }
+                    }
+                }
+                catch (Exception)
+                {
+                    Util.logger.Warning(string.Format("Could not retrieve image from the web for this title ({0} - {1}).", data.GameName, data.TitleID));
+                }
 
                 try
                 {
@@ -324,6 +362,30 @@ namespace Switch_Backup_Manager
                 Util.logger.Warning("Could not retrieve or parse info from the web for this title ("+data.TitleID+").");
             }
             return result;
+        }
+
+        private static HtmlNode GetFirstNode(HtmlNodeCollection htmlNodeCollection)
+        {
+            if (htmlNodeCollection == null)
+            {
+                return null;
+            }
+
+            return htmlNodeCollection.FirstOrDefault();
+        }
+
+        private static string DownloadImage(string imageUrl, string titleIDBase, string language)
+        {
+            using (WebClient client = new WebClient())
+            {
+                var extension = Path.GetExtension(imageUrl);
+                var fileName = string.Format("icon_{0}_{1}.{2}", titleIDBase, language, extension);
+                var filePath = Path.Combine(Util.CACHE_FOLDER, fileName);
+
+                client.DownloadFile(new Uri(imageUrl), filePath);
+
+                return filePath;
+            }
         }
 
         public static void GetExtendedInfo(Dictionary<Tuple<string, string>, FileData> files, string source)

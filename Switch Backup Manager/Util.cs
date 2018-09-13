@@ -21,7 +21,7 @@ namespace Switch_Backup_Manager
 {
     internal static class Util
     {
-        public const string VERSION = "1.1.6";   //Actual application version
+        public const string VERSION = "1.1.7";   //Actual application version
         public const string MIN_DB_Version = "1.1.1"; //This is the minimum version of the DB that can work
 
         public const string INI_FILE = "sbm.ini";
@@ -1833,7 +1833,7 @@ namespace Switch_Backup_Manager
         public static FileData GetFileDataNSP(string file)
         {
             FileData data = new FileData();
-            data.ImportedDate = DateTime.UtcNow.ToString("yyyyMMddHHmmss");
+            data.ImportedDate = DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss");
             data.FilePath = file;
             data.FileName = Path.GetFileNameWithoutExtension(file);
             data.FileNameWithExt = Path.GetFileName(file);
@@ -2302,7 +2302,7 @@ namespace Switch_Backup_Manager
         public static FileData GetFileData(string filepath)
         {
             FileData result = new FileData();
-            result.ImportedDate = DateTime.UtcNow.ToString("yyyyMMddHHmmss");
+            result.ImportedDate = DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss");
             //Basic Info
             result.FilePath = filepath;
             result.FileName = Path.GetFileNameWithoutExtension(filepath);

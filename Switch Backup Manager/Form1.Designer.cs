@@ -84,6 +84,8 @@
             this.toolStripMenuItem68 = new System.Windows.Forms.ToolStripSeparator();
             this.copyInfoToClipboardToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.updateGameInfoFromWebToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem97LocalFiles = new System.Windows.Forms.ToolStripSeparator();
+            this.deleteSelectedFileserasesFromDiskToolStripMenuItemLocalFiles = new System.Windows.Forms.ToolStripMenuItem();
             this.panel1 = new System.Windows.Forms.Panel();
             this.panel9 = new System.Windows.Forms.Panel();
             this.btnClearFilterLocal = new System.Windows.Forms.Button();
@@ -175,6 +177,8 @@
             this.moveToFolderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem70 = new System.Windows.Forms.ToolStripSeparator();
             this.copyInfoToClipboardToolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem97SDCard = new System.Windows.Forms.ToolStripSeparator();
+            this.deleteSelectedFileserasesFromDiskToolStripMenuItemSDCard = new System.Windows.Forms.ToolStripMenuItem();
             this.panel5 = new System.Windows.Forms.Panel();
             this.lblSpaceAvailabeOnSD = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
@@ -338,6 +342,8 @@
             this.toolStripMenuItem64 = new System.Windows.Forms.ToolStripSeparator();
             this.copyInfoToClipboardToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.updateGameInfoFromWebToolStripMenuItemEshop = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem97Eshop = new System.Windows.Forms.ToolStripSeparator();
+            this.deleteSelectedFilesToolStripMenuItemEshop = new System.Windows.Forms.ToolStripMenuItem();
             this.panel11 = new System.Windows.Forms.Panel();
             this.panel13 = new System.Windows.Forms.Panel();
             this.cbBaseGame = new System.Windows.Forms.CheckBox();
@@ -934,41 +940,43 @@
             this.moveFilesToToolStripMenuItem,
             this.toolStripMenuItem68,
             this.copyInfoToClipboardToolStripMenuItem1,
-            this.updateGameInfoFromWebToolStripMenuItem});
+            this.updateGameInfoFromWebToolStripMenuItem,
+            this.toolStripMenuItem97LocalFiles,
+            this.deleteSelectedFileserasesFromDiskToolStripMenuItemLocalFiles});
             this.contextMenuLocalList.Name = "contextMenuLocalList";
-            this.contextMenuLocalList.Size = new System.Drawing.Size(226, 176);
+            this.contextMenuLocalList.Size = new System.Drawing.Size(277, 204);
             this.contextMenuLocalList.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuLocalList_Opening);
             // 
             // showInExplorerToolStripMenuItem
             // 
             this.showInExplorerToolStripMenuItem.Name = "showInExplorerToolStripMenuItem";
-            this.showInExplorerToolStripMenuItem.Size = new System.Drawing.Size(225, 22);
+            this.showInExplorerToolStripMenuItem.Size = new System.Drawing.Size(276, 22);
             this.showInExplorerToolStripMenuItem.Text = "Show in explorer";
             this.showInExplorerToolStripMenuItem.Click += new System.EventHandler(this.showInExplorerToolStripMenuItem_Click);
             // 
             // toolStripMenuItem20
             // 
             this.toolStripMenuItem20.Name = "toolStripMenuItem20";
-            this.toolStripMenuItem20.Size = new System.Drawing.Size(222, 6);
+            this.toolStripMenuItem20.Size = new System.Drawing.Size(273, 6);
             // 
             // trimFilesToolStripMenuItem
             // 
             this.trimFilesToolStripMenuItem.Name = "trimFilesToolStripMenuItem";
-            this.trimFilesToolStripMenuItem.Size = new System.Drawing.Size(225, 22);
+            this.trimFilesToolStripMenuItem.Size = new System.Drawing.Size(276, 22);
             this.trimFilesToolStripMenuItem.Text = "Trim files";
             this.trimFilesToolStripMenuItem.Click += new System.EventHandler(this.trimFilesToolStripMenuItem_Click);
             // 
             // autoRenameFilesToolStripMenuItem
             // 
             this.autoRenameFilesToolStripMenuItem.Name = "autoRenameFilesToolStripMenuItem";
-            this.autoRenameFilesToolStripMenuItem.Size = new System.Drawing.Size(225, 22);
+            this.autoRenameFilesToolStripMenuItem.Size = new System.Drawing.Size(276, 22);
             this.autoRenameFilesToolStripMenuItem.Text = "Auto rename files";
             this.autoRenameFilesToolStripMenuItem.Click += new System.EventHandler(this.autoRenameFilesToolStripMenuItem_Click);
             // 
             // toolStripMenuItem96
             // 
             this.toolStripMenuItem96.Name = "toolStripMenuItem96";
-            this.toolStripMenuItem96.Size = new System.Drawing.Size(222, 6);
+            this.toolStripMenuItem96.Size = new System.Drawing.Size(273, 6);
             // 
             // copyFilesToolStripMenuItem2
             // 
@@ -976,7 +984,7 @@
             this.sDCardToolStripMenuItem2,
             this.folderToolStripMenuItem2});
             this.copyFilesToolStripMenuItem2.Name = "copyFilesToolStripMenuItem2";
-            this.copyFilesToolStripMenuItem2.Size = new System.Drawing.Size(225, 22);
+            this.copyFilesToolStripMenuItem2.Size = new System.Drawing.Size(276, 22);
             this.copyFilesToolStripMenuItem2.Text = "Copy files to";
             // 
             // sDCardToolStripMenuItem2
@@ -999,7 +1007,7 @@
             this.sDCardToolStripMenuItem3,
             this.folderToolStripMenuItem3});
             this.moveFilesToToolStripMenuItem.Name = "moveFilesToToolStripMenuItem";
-            this.moveFilesToToolStripMenuItem.Size = new System.Drawing.Size(225, 22);
+            this.moveFilesToToolStripMenuItem.Size = new System.Drawing.Size(276, 22);
             this.moveFilesToToolStripMenuItem.Text = "Move files to";
             // 
             // sDCardToolStripMenuItem3
@@ -1019,21 +1027,33 @@
             // toolStripMenuItem68
             // 
             this.toolStripMenuItem68.Name = "toolStripMenuItem68";
-            this.toolStripMenuItem68.Size = new System.Drawing.Size(222, 6);
+            this.toolStripMenuItem68.Size = new System.Drawing.Size(273, 6);
             // 
             // copyInfoToClipboardToolStripMenuItem1
             // 
             this.copyInfoToClipboardToolStripMenuItem1.Name = "copyInfoToClipboardToolStripMenuItem1";
-            this.copyInfoToClipboardToolStripMenuItem1.Size = new System.Drawing.Size(225, 22);
+            this.copyInfoToClipboardToolStripMenuItem1.Size = new System.Drawing.Size(276, 22);
             this.copyInfoToClipboardToolStripMenuItem1.Text = "Copy info to clipboard";
             this.copyInfoToClipboardToolStripMenuItem1.Click += new System.EventHandler(this.copyInfoToClipboardToolStripMenuItem1_Click);
             // 
             // updateGameInfoFromWebToolStripMenuItem
             // 
             this.updateGameInfoFromWebToolStripMenuItem.Name = "updateGameInfoFromWebToolStripMenuItem";
-            this.updateGameInfoFromWebToolStripMenuItem.Size = new System.Drawing.Size(225, 22);
+            this.updateGameInfoFromWebToolStripMenuItem.Size = new System.Drawing.Size(276, 22);
             this.updateGameInfoFromWebToolStripMenuItem.Text = "Update game info from Web";
             this.updateGameInfoFromWebToolStripMenuItem.Click += new System.EventHandler(this.updateGameInfoFromWebToolStripMenuItem_Click);
+            // 
+            // toolStripMenuItem97LocalFiles
+            // 
+            this.toolStripMenuItem97LocalFiles.Name = "toolStripMenuItem97LocalFiles";
+            this.toolStripMenuItem97LocalFiles.Size = new System.Drawing.Size(273, 6);
+            // 
+            // deleteSelectedFileserasesFromDiskToolStripMenuItemLocalFiles
+            // 
+            this.deleteSelectedFileserasesFromDiskToolStripMenuItemLocalFiles.Name = "deleteSelectedFileserasesFromDiskToolStripMenuItemLocalFiles";
+            this.deleteSelectedFileserasesFromDiskToolStripMenuItemLocalFiles.Size = new System.Drawing.Size(276, 22);
+            this.deleteSelectedFileserasesFromDiskToolStripMenuItemLocalFiles.Text = "Delete selected files (erases from disk!)";
+            this.deleteSelectedFileserasesFromDiskToolStripMenuItemLocalFiles.Click += new System.EventHandler(this.deleteSelectedFileserasesFromDiskToolStripMenuItemLocalFiles_Click);
             // 
             // panel1
             // 
@@ -1735,67 +1755,81 @@
             this.copyToFolderToolStripMenuItem,
             this.moveToFolderToolStripMenuItem,
             this.toolStripMenuItem70,
-            this.copyInfoToClipboardToolStripMenuItem2});
+            this.copyInfoToClipboardToolStripMenuItem2,
+            this.toolStripMenuItem97SDCard,
+            this.deleteSelectedFileserasesFromDiskToolStripMenuItemSDCard});
             this.contextMenuStripSDCard.Name = "contextMenuStripSDCard";
-            this.contextMenuStripSDCard.Size = new System.Drawing.Size(194, 154);
+            this.contextMenuStripSDCard.Size = new System.Drawing.Size(277, 182);
             this.contextMenuStripSDCard.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStripSDCard_Opening);
             // 
             // showInExplorerToolStripMenuItem1
             // 
             this.showInExplorerToolStripMenuItem1.Name = "showInExplorerToolStripMenuItem1";
-            this.showInExplorerToolStripMenuItem1.Size = new System.Drawing.Size(193, 22);
+            this.showInExplorerToolStripMenuItem1.Size = new System.Drawing.Size(276, 22);
             this.showInExplorerToolStripMenuItem1.Text = "Show in explorer";
             this.showInExplorerToolStripMenuItem1.Click += new System.EventHandler(this.showInExplorerToolStripMenuItem1_Click);
             // 
             // toolStripMenuItem21
             // 
             this.toolStripMenuItem21.Name = "toolStripMenuItem21";
-            this.toolStripMenuItem21.Size = new System.Drawing.Size(190, 6);
+            this.toolStripMenuItem21.Size = new System.Drawing.Size(273, 6);
             // 
             // trimFilesToolStripMenuItemTrimSD
             // 
             this.trimFilesToolStripMenuItemTrimSD.Name = "trimFilesToolStripMenuItemTrimSD";
-            this.trimFilesToolStripMenuItemTrimSD.Size = new System.Drawing.Size(193, 22);
+            this.trimFilesToolStripMenuItemTrimSD.Size = new System.Drawing.Size(276, 22);
             this.trimFilesToolStripMenuItemTrimSD.Text = "Trim files";
             this.trimFilesToolStripMenuItemTrimSD.Click += new System.EventHandler(this.trimFilesToolStripMenuItem1_Click);
             // 
             // autoRenameFilesToolStripMenuItemRenameSD
             // 
             this.autoRenameFilesToolStripMenuItemRenameSD.Name = "autoRenameFilesToolStripMenuItemRenameSD";
-            this.autoRenameFilesToolStripMenuItemRenameSD.Size = new System.Drawing.Size(193, 22);
+            this.autoRenameFilesToolStripMenuItemRenameSD.Size = new System.Drawing.Size(276, 22);
             this.autoRenameFilesToolStripMenuItemRenameSD.Text = "Auto rename files";
             this.autoRenameFilesToolStripMenuItemRenameSD.Click += new System.EventHandler(this.autoRenameFilesToolStripMenuItemRenameSD_Click);
             // 
             // toolStripMenuItem18
             // 
             this.toolStripMenuItem18.Name = "toolStripMenuItem18";
-            this.toolStripMenuItem18.Size = new System.Drawing.Size(190, 6);
+            this.toolStripMenuItem18.Size = new System.Drawing.Size(273, 6);
             // 
             // copyToFolderToolStripMenuItem
             // 
             this.copyToFolderToolStripMenuItem.Name = "copyToFolderToolStripMenuItem";
-            this.copyToFolderToolStripMenuItem.Size = new System.Drawing.Size(193, 22);
+            this.copyToFolderToolStripMenuItem.Size = new System.Drawing.Size(276, 22);
             this.copyToFolderToolStripMenuItem.Text = "Copy to folder...";
             this.copyToFolderToolStripMenuItem.Click += new System.EventHandler(this.copyToFolderToolStripMenuItem_Click);
             // 
             // moveToFolderToolStripMenuItem
             // 
             this.moveToFolderToolStripMenuItem.Name = "moveToFolderToolStripMenuItem";
-            this.moveToFolderToolStripMenuItem.Size = new System.Drawing.Size(193, 22);
+            this.moveToFolderToolStripMenuItem.Size = new System.Drawing.Size(276, 22);
             this.moveToFolderToolStripMenuItem.Text = "Move to folder...";
             this.moveToFolderToolStripMenuItem.Click += new System.EventHandler(this.moveToFolderToolStripMenuItem_Click);
             // 
             // toolStripMenuItem70
             // 
             this.toolStripMenuItem70.Name = "toolStripMenuItem70";
-            this.toolStripMenuItem70.Size = new System.Drawing.Size(190, 6);
+            this.toolStripMenuItem70.Size = new System.Drawing.Size(273, 6);
             // 
             // copyInfoToClipboardToolStripMenuItem2
             // 
             this.copyInfoToClipboardToolStripMenuItem2.Name = "copyInfoToClipboardToolStripMenuItem2";
-            this.copyInfoToClipboardToolStripMenuItem2.Size = new System.Drawing.Size(193, 22);
+            this.copyInfoToClipboardToolStripMenuItem2.Size = new System.Drawing.Size(276, 22);
             this.copyInfoToClipboardToolStripMenuItem2.Text = "Copy info to clipboard";
             this.copyInfoToClipboardToolStripMenuItem2.Click += new System.EventHandler(this.copyInfoToClipboardToolStripMenuItem2_Click);
+            // 
+            // toolStripMenuItem97SDCard
+            // 
+            this.toolStripMenuItem97SDCard.Name = "toolStripMenuItem97SDCard";
+            this.toolStripMenuItem97SDCard.Size = new System.Drawing.Size(273, 6);
+            // 
+            // deleteSelectedFileserasesFromDiskToolStripMenuItemSDCard
+            // 
+            this.deleteSelectedFileserasesFromDiskToolStripMenuItemSDCard.Name = "deleteSelectedFileserasesFromDiskToolStripMenuItemSDCard";
+            this.deleteSelectedFileserasesFromDiskToolStripMenuItemSDCard.Size = new System.Drawing.Size(276, 22);
+            this.deleteSelectedFileserasesFromDiskToolStripMenuItemSDCard.Text = "Delete selected files (erases from disk!)";
+            this.deleteSelectedFileserasesFromDiskToolStripMenuItemSDCard.Click += new System.EventHandler(this.deleteSelectedFileserasesFromDiskToolStripMenuItemSDCard_Click);
             // 
             // panel5
             // 
@@ -2849,7 +2883,7 @@
             this.tabPage4.Location = new System.Drawing.Point(4, 22);
             this.tabPage4.Name = "tabPage4";
             this.tabPage4.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage4.Size = new System.Drawing.Size(1519, 492);
+            this.tabPage4.Size = new System.Drawing.Size(1517, 490);
             this.tabPage4.TabIndex = 3;
             this.tabPage4.Text = "E-shop files";
             this.tabPage4.UseVisualStyleBackColor = true;
@@ -2860,7 +2894,7 @@
             this.panel10.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel10.Location = new System.Drawing.Point(3, 31);
             this.panel10.Name = "panel10";
-            this.panel10.Size = new System.Drawing.Size(1513, 458);
+            this.panel10.Size = new System.Drawing.Size(1511, 456);
             this.panel10.TabIndex = 11;
             // 
             // OLVEshop
@@ -2909,7 +2943,7 @@
             this.OLVEshop.Location = new System.Drawing.Point(0, 0);
             this.OLVEshop.Name = "OLVEshop";
             this.OLVEshop.ShowGroups = false;
-            this.OLVEshop.Size = new System.Drawing.Size(1513, 458);
+            this.OLVEshop.Size = new System.Drawing.Size(1511, 456);
             this.OLVEshop.TabIndex = 3;
             this.OLVEshop.UseCellFormatEvents = true;
             this.OLVEshop.UseCompatibleStateImageBehavior = false;
@@ -3036,22 +3070,24 @@
             this.toolStripMenuItemEShopMoveToFolder,
             this.toolStripMenuItem64,
             this.copyInfoToClipboardToolStripMenuItem,
-            this.updateGameInfoFromWebToolStripMenuItemEshop});
+            this.updateGameInfoFromWebToolStripMenuItemEshop,
+            this.toolStripMenuItem97Eshop,
+            this.deleteSelectedFilesToolStripMenuItemEshop});
             this.contextMenuEShopList.Name = "contextMenuStripSDCard";
-            this.contextMenuEShopList.Size = new System.Drawing.Size(226, 176);
+            this.contextMenuEShopList.Size = new System.Drawing.Size(277, 226);
             this.contextMenuEShopList.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStripEShop_Opening);
             // 
             // toolStripMenuItemEShopShowInExplorer
             // 
             this.toolStripMenuItemEShopShowInExplorer.Name = "toolStripMenuItemEShopShowInExplorer";
-            this.toolStripMenuItemEShopShowInExplorer.Size = new System.Drawing.Size(225, 22);
+            this.toolStripMenuItemEShopShowInExplorer.Size = new System.Drawing.Size(276, 22);
             this.toolStripMenuItemEShopShowInExplorer.Text = "Show in explorer";
             this.toolStripMenuItemEShopShowInExplorer.Click += new System.EventHandler(this.toolStripMenuItemEShopShowInExplorer_Click);
             // 
             // toolStripMenuItemEShopUpdateInfo
             // 
             this.toolStripMenuItemEShopUpdateInfo.Name = "toolStripMenuItemEShopUpdateInfo";
-            this.toolStripMenuItemEShopUpdateInfo.Size = new System.Drawing.Size(225, 22);
+            this.toolStripMenuItemEShopUpdateInfo.Size = new System.Drawing.Size(276, 22);
             this.toolStripMenuItemEShopUpdateInfo.Text = "Update info";
             this.toolStripMenuItemEShopUpdateInfo.Visible = false;
             this.toolStripMenuItemEShopUpdateInfo.Click += new System.EventHandler(this.toolStripMenuItemEShopUpdateInfo_Click);
@@ -3059,19 +3095,19 @@
             // toolStripSeparator9
             // 
             this.toolStripSeparator9.Name = "toolStripSeparator9";
-            this.toolStripSeparator9.Size = new System.Drawing.Size(222, 6);
+            this.toolStripSeparator9.Size = new System.Drawing.Size(273, 6);
             // 
             // toolStripMenuItemEShopAutoRename
             // 
             this.toolStripMenuItemEShopAutoRename.Name = "toolStripMenuItemEShopAutoRename";
-            this.toolStripMenuItemEShopAutoRename.Size = new System.Drawing.Size(225, 22);
+            this.toolStripMenuItemEShopAutoRename.Size = new System.Drawing.Size(276, 22);
             this.toolStripMenuItemEShopAutoRename.Text = "Auto rename files";
             this.toolStripMenuItemEShopAutoRename.Click += new System.EventHandler(this.toolStripMenuItemEShopAutoRename_Click);
             // 
             // toolStripSeparator10
             // 
             this.toolStripSeparator10.Name = "toolStripSeparator10";
-            this.toolStripSeparator10.Size = new System.Drawing.Size(222, 6);
+            this.toolStripSeparator10.Size = new System.Drawing.Size(273, 6);
             // 
             // toolStripMenuItemEShopCopyToFolder
             // 
@@ -3079,7 +3115,7 @@
             this.sDCardToolStripMenuItem4,
             this.folderToolStripMenuItem5});
             this.toolStripMenuItemEShopCopyToFolder.Name = "toolStripMenuItemEShopCopyToFolder";
-            this.toolStripMenuItemEShopCopyToFolder.Size = new System.Drawing.Size(225, 22);
+            this.toolStripMenuItemEShopCopyToFolder.Size = new System.Drawing.Size(276, 22);
             this.toolStripMenuItemEShopCopyToFolder.Text = "Copy files to";
             // 
             // sDCardToolStripMenuItem4
@@ -3102,7 +3138,7 @@
             this.sDCardToolStripMenuItem5,
             this.folderToolStripMenuItem6});
             this.toolStripMenuItemEShopMoveToFolder.Name = "toolStripMenuItemEShopMoveToFolder";
-            this.toolStripMenuItemEShopMoveToFolder.Size = new System.Drawing.Size(225, 22);
+            this.toolStripMenuItemEShopMoveToFolder.Size = new System.Drawing.Size(276, 22);
             this.toolStripMenuItemEShopMoveToFolder.Text = "Move files to";
             // 
             // sDCardToolStripMenuItem5
@@ -3122,21 +3158,33 @@
             // toolStripMenuItem64
             // 
             this.toolStripMenuItem64.Name = "toolStripMenuItem64";
-            this.toolStripMenuItem64.Size = new System.Drawing.Size(222, 6);
+            this.toolStripMenuItem64.Size = new System.Drawing.Size(273, 6);
             // 
             // copyInfoToClipboardToolStripMenuItem
             // 
             this.copyInfoToClipboardToolStripMenuItem.Name = "copyInfoToClipboardToolStripMenuItem";
-            this.copyInfoToClipboardToolStripMenuItem.Size = new System.Drawing.Size(225, 22);
+            this.copyInfoToClipboardToolStripMenuItem.Size = new System.Drawing.Size(276, 22);
             this.copyInfoToClipboardToolStripMenuItem.Text = "Copy info to clipboard";
             this.copyInfoToClipboardToolStripMenuItem.Click += new System.EventHandler(this.copyInfoToClipboardToolStripMenuItem_Click);
             // 
             // updateGameInfoFromWebToolStripMenuItemEshop
             // 
             this.updateGameInfoFromWebToolStripMenuItemEshop.Name = "updateGameInfoFromWebToolStripMenuItemEshop";
-            this.updateGameInfoFromWebToolStripMenuItemEshop.Size = new System.Drawing.Size(225, 22);
+            this.updateGameInfoFromWebToolStripMenuItemEshop.Size = new System.Drawing.Size(276, 22);
             this.updateGameInfoFromWebToolStripMenuItemEshop.Text = "Update game info from Web";
             this.updateGameInfoFromWebToolStripMenuItemEshop.Click += new System.EventHandler(this.updateGameInfoFromWebToolStripMenuItemEshop_Click);
+            // 
+            // toolStripMenuItem97Eshop
+            // 
+            this.toolStripMenuItem97Eshop.Name = "toolStripMenuItem97Eshop";
+            this.toolStripMenuItem97Eshop.Size = new System.Drawing.Size(273, 6);
+            // 
+            // deleteSelectedFilesToolStripMenuItemEshop
+            // 
+            this.deleteSelectedFilesToolStripMenuItemEshop.Name = "deleteSelectedFilesToolStripMenuItemEshop";
+            this.deleteSelectedFilesToolStripMenuItemEshop.Size = new System.Drawing.Size(276, 22);
+            this.deleteSelectedFilesToolStripMenuItemEshop.Text = "Delete selected files (erases from disk!)";
+            this.deleteSelectedFilesToolStripMenuItemEshop.Click += new System.EventHandler(this.deleteSelectedFilesToolStripMenuItemEshop_Click);
             // 
             // panel11
             // 
@@ -3145,7 +3193,7 @@
             this.panel11.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel11.Location = new System.Drawing.Point(3, 3);
             this.panel11.Name = "panel11";
-            this.panel11.Size = new System.Drawing.Size(1513, 28);
+            this.panel11.Size = new System.Drawing.Size(1511, 28);
             this.panel11.TabIndex = 10;
             // 
             // panel13
@@ -3158,7 +3206,7 @@
             this.panel13.Controls.Add(this.label5);
             this.panel13.Controls.Add(this.cbxFilterEshop);
             this.panel13.Dock = System.Windows.Forms.DockStyle.Right;
-            this.panel13.Location = new System.Drawing.Point(800, 0);
+            this.panel13.Location = new System.Drawing.Point(798, 0);
             this.panel13.Name = "panel13";
             this.panel13.Size = new System.Drawing.Size(713, 28);
             this.panel13.TabIndex = 1;
@@ -4536,6 +4584,12 @@
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel5;
         private BrightIdeasSoftware.OLVColumn olvColumnImportedDateLocal;
         private BrightIdeasSoftware.OLVColumn olvColumnImportedDateEShop;
+        private System.Windows.Forms.ToolStripSeparator toolStripMenuItem97Eshop;
+        private System.Windows.Forms.ToolStripMenuItem deleteSelectedFilesToolStripMenuItemEshop;
+        private System.Windows.Forms.ToolStripSeparator toolStripMenuItem97SDCard;
+        private System.Windows.Forms.ToolStripMenuItem deleteSelectedFileserasesFromDiskToolStripMenuItemSDCard;
+        private System.Windows.Forms.ToolStripSeparator toolStripMenuItem97LocalFiles;
+        private System.Windows.Forms.ToolStripMenuItem deleteSelectedFileserasesFromDiskToolStripMenuItemLocalFiles;
     }
 }
 

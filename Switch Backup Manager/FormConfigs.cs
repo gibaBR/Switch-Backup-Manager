@@ -60,6 +60,8 @@ namespace Switch_Backup_Manager
 
         public void WriteConfig()
         {
+            Util.UserCanDeleteFiles = this.cbUserCanDeleteFiles.Checked;
+            Util.SendDeletedFilesToRecycleBin = this.cbSendDeletedFileToRecycleBin.Checked;
             Util.autoRenamingPattern = this.autoRenamingPattern;
             Util.autoRenamingPatternNSP = this.autoRenamingPatternNSP;
             Util.ini.IniWriteValue("AutoRenaming", "pattern", this.autoRenamingPattern);
@@ -84,7 +86,8 @@ namespace Switch_Backup_Manager
             Util.ini.IniWriteValue("Config", "scrapExtraInfoFromWeb", cbScrapExtraInfoFromWeb.Checked ? "true" : "false");
             Util.ini.IniWriteValue("Config", "autoRemoveMissingFiles", cbAutoRemoveMissingFiles.Checked ? "true" : "false");
             Util.ini.IniWriteValue("Visual", "showCompletePathFiles", cbShowCompletePaths.Checked ? "true" : "false");
-
+            Util.ini.IniWriteValue("Config", "userCanDeleteFiles", cbUserCanDeleteFiles.Checked ? "true" : "false");
+            Util.ini.IniWriteValue("Config", "sendDeletedFilesToRecycleBin", cbSendDeletedFileToRecycleBin.Checked ? "true" : "false");
             Util.HighlightXCIOnScene = cbHighlightXCIOnScene.Checked;
             Util.HighlightNSPOnScene = cbHighlightNSPOnScene.Checked;
             Util.HighlightBothOnScene = cbHighlightBothOnScene.Checked;
@@ -183,6 +186,9 @@ namespace Switch_Backup_Manager
             this.cbScrapExtraInfoFromWeb.Checked = Util.ScrapExtraInfoFromWeb;
             this.cbAutoRemoveMissingFiles.Checked = Util.AutoRemoveMissingFiles;
             this.cbShowCompletePaths.Checked = Util.ShowCompletePathFiles;
+            this.cbUserCanDeleteFiles.Checked = Util.UserCanDeleteFiles;
+            this.cbSendDeletedFileToRecycleBin.Checked = Util.SendDeletedFilesToRecycleBin;
+            cbUserCanDeleteFiles_CheckedChanged(this, new EventArgs());
 
             cbHighlightXCIOnScene.Checked = Util.HighlightXCIOnScene;
             cbHighlightNSPOnScene.Checked = Util.HighlightNSPOnScene;
@@ -433,6 +439,11 @@ namespace Switch_Backup_Manager
             // Update the text box color if the user clicks OK 
             if (MyDialog.ShowDialog() == DialogResult.OK)
                 btnColorBoth.BackColor = MyDialog.Color;
+        }
+
+        private void cbUserCanDeleteFiles_CheckedChanged(object sender, EventArgs e)
+        {
+            cbSendDeletedFileToRecycleBin.Visible = cbUserCanDeleteFiles.Checked;
         }
     }
 }

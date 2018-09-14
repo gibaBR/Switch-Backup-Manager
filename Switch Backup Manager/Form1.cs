@@ -2031,6 +2031,17 @@ namespace Switch_Backup_Manager
             if (LocalFilesListSelectedItems.Count == 0)
             {
                 e.Cancel = true;
+            } else {
+                if (Util.UserCanDeleteFiles)
+                {
+                    toolStripMenuItem97LocalFiles.Visible = true;
+                    deleteSelectedFileserasesFromDiskToolStripMenuItemLocalFiles.Visible = true;
+                }
+                else
+                {
+                    toolStripMenuItem97LocalFiles.Visible = false;
+                    deleteSelectedFileserasesFromDiskToolStripMenuItemLocalFiles.Visible = false;
+                }
             }
         }
 
@@ -2587,6 +2598,58 @@ namespace Switch_Backup_Manager
             OperationRenameSelectedLocalFiles();
         }
 
+        private void OperationDeleteSelectedEshopFiles()
+        {
+            if (LocalNSPFilesListSelectedItems.Count > 0)
+            {
+                DeleteSelectedFiles(LocalNSPFilesListSelectedItems, "eshop");
+            } else
+            {
+                MessageBox.Show("No files selected");
+                return;
+            }
+        }
+
+        private void OperationDeleteSelectedLocalFiles()
+        {
+            if (LocalFilesListSelectedItems.Count > 0)
+            {
+                DeleteSelectedFiles(LocalFilesListSelectedItems, "local");
+            } else
+            {
+                MessageBox.Show("No files selected");
+                return;
+            }
+        }
+
+        private void OperationDeleteSelectedSDCardFiles()
+        {
+            if (SDCardListSelectedItems.Count > 0)
+            {
+                DeleteSelectedFiles(SDCardListSelectedItems, "sdcard");
+            } else
+            {
+                MessageBox.Show("No files selected");
+                return;
+            }
+        }
+
+        private void DeleteSelectedFiles(Dictionary<Tuple<string, string>, FileData> selectedItems, string source) //source possible values: "local", "sdcard", "eshop"
+        {
+            Util.DeleteSelectedFiles(selectedItems, source);
+        }
+
+        private void deleteSelectedFilesToolStripMenuItemEshop_Click(object sender, EventArgs e)
+        {
+            DialogResult dialogResult = MessageBox.Show("Are you sure you wnat to delete the selected files from disk?", "Switch Backup Manager", MessageBoxButtons.YesNo);
+            if (dialogResult == DialogResult.Yes)
+            {
+                OperationDeleteSelectedEshopFiles();
+                UpdateLocalNSPGamesList();
+                toolStripStatusLabel1.Text = "0 Selected (0MB)";
+            }
+        }
+
         private void allFilesToolStripMenuItem1_Click(object sender, EventArgs e)
         {
             OLVLocalFiles.Select();
@@ -2683,6 +2746,17 @@ namespace Switch_Backup_Manager
             if (SDCardListSelectedItems == null || SDCardListSelectedItems.Count == 0)
             {
                 e.Cancel = true;
+            } else {
+                if (Util.UserCanDeleteFiles)
+                {
+                    toolStripMenuItem97SDCard.Visible = true;
+                    deleteSelectedFileserasesFromDiskToolStripMenuItemSDCard.Visible = true;
+                }
+                else
+                {
+                    toolStripMenuItem97SDCard.Visible = false;
+                    deleteSelectedFileserasesFromDiskToolStripMenuItemSDCard.Visible = false;
+                }
             }
         }
 
@@ -3464,6 +3538,17 @@ namespace Switch_Backup_Manager
             if (LocalNSPFilesListSelectedItems == null || LocalNSPFilesListSelectedItems.Count == 0)
             {
                 e.Cancel = true;
+            } else
+            {
+                if (Util.UserCanDeleteFiles)
+                {
+                    toolStripMenuItem97Eshop.Visible = true;
+                    deleteSelectedFilesToolStripMenuItemEshop.Visible = true;                
+                } else
+                {
+                    toolStripMenuItem97Eshop.Visible = false;
+                    deleteSelectedFilesToolStripMenuItemEshop.Visible = false;
+                }
             }
         }
 
@@ -3893,6 +3978,28 @@ namespace Switch_Backup_Manager
         private void cbDLC_CheckedChanged(object sender, EventArgs e)
         {
             FilterEshopByContentType();
+        }
+
+        private void deleteSelectedFileserasesFromDiskToolStripMenuItemLocalFiles_Click(object sender, EventArgs e)
+        {
+            DialogResult dialogResult = MessageBox.Show("Are you sure you wnat to delete the selected files from disk?", "Switch Backup Manager", MessageBoxButtons.YesNo);
+            if (dialogResult == DialogResult.Yes)
+            {
+                OperationDeleteSelectedLocalFiles();
+                UpdateLocalGamesList();
+                toolStripStatusLabel1.Text = "0 Selected (0MB)";
+            }
+        }
+
+        private void deleteSelectedFileserasesFromDiskToolStripMenuItemSDCard_Click(object sender, EventArgs e)
+        {
+            DialogResult dialogResult = MessageBox.Show("Are you sure you wnat to delete the selected files from disk?", "Switch Backup Manager", MessageBoxButtons.YesNo);
+            if (dialogResult == DialogResult.Yes)
+            {
+                OperationDeleteSelectedSDCardFiles();
+                UpdateSDCardList();
+                toolStripStatusLabel1.Text = "0 Selected (0MB)";
+            }
         }
     }
 }

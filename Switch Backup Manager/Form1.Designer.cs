@@ -369,6 +369,8 @@
             this.toolStripMenuItemSelectSceneEShop = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItemSelectSceneOnEShop = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItemSelectSceneNotOnEShop = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem97 = new System.Windows.Forms.ToolStripSeparator();
+            this.outdatedToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem22 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItemGroupingNoneEShop = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItemGroupingGameTitleEShop = new System.Windows.Forms.ToolStripMenuItem();
@@ -3074,7 +3076,7 @@
             this.toolStripMenuItem97Eshop,
             this.deleteSelectedFilesToolStripMenuItemEshop});
             this.contextMenuEShopList.Name = "contextMenuStripSDCard";
-            this.contextMenuEShopList.Size = new System.Drawing.Size(277, 226);
+            this.contextMenuEShopList.Size = new System.Drawing.Size(277, 204);
             this.contextMenuEShopList.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStripEShop_Opening);
             // 
             // toolStripMenuItemEShopShowInExplorer
@@ -3340,7 +3342,9 @@
             this.toolStripMenuItemSelectInvertEShop,
             this.toolStripSeparator7,
             this.toolStripMenuItemSelectSDCardEShop,
-            this.toolStripMenuItemSelectSceneEShop});
+            this.toolStripMenuItemSelectSceneEShop,
+            this.toolStripMenuItem97,
+            this.outdatedToolStripMenuItem});
             this.toolStripMenuItemSelectEshop.Name = "toolStripMenuItemSelectEshop";
             this.toolStripMenuItemSelectEshop.Size = new System.Drawing.Size(50, 20);
             this.toolStripMenuItemSelectEshop.Text = "&Select";
@@ -3348,28 +3352,28 @@
             // toolStripMenuItemSelectAllEshop
             // 
             this.toolStripMenuItemSelectAllEshop.Name = "toolStripMenuItemSelectAllEshop";
-            this.toolStripMenuItemSelectAllEshop.Size = new System.Drawing.Size(154, 22);
+            this.toolStripMenuItemSelectAllEshop.Size = new System.Drawing.Size(180, 22);
             this.toolStripMenuItemSelectAllEshop.Text = "All";
             this.toolStripMenuItemSelectAllEshop.Click += new System.EventHandler(this.toolStripMenuItemSelectAllEshop_Click);
             // 
             // toolStripMenuItemSelectNoneEShop
             // 
             this.toolStripMenuItemSelectNoneEShop.Name = "toolStripMenuItemSelectNoneEShop";
-            this.toolStripMenuItemSelectNoneEShop.Size = new System.Drawing.Size(154, 22);
+            this.toolStripMenuItemSelectNoneEShop.Size = new System.Drawing.Size(180, 22);
             this.toolStripMenuItemSelectNoneEShop.Text = "None";
             this.toolStripMenuItemSelectNoneEShop.Click += new System.EventHandler(this.toolStripMenuItemSelectNoneEShop_Click);
             // 
             // toolStripMenuItemSelectInvertEShop
             // 
             this.toolStripMenuItemSelectInvertEShop.Name = "toolStripMenuItemSelectInvertEShop";
-            this.toolStripMenuItemSelectInvertEShop.Size = new System.Drawing.Size(154, 22);
+            this.toolStripMenuItemSelectInvertEShop.Size = new System.Drawing.Size(180, 22);
             this.toolStripMenuItemSelectInvertEShop.Text = "Invert selection";
             this.toolStripMenuItemSelectInvertEShop.Click += new System.EventHandler(this.toolStripMenuItemSelectInvertEShop_Click);
             // 
             // toolStripSeparator7
             // 
             this.toolStripSeparator7.Name = "toolStripSeparator7";
-            this.toolStripSeparator7.Size = new System.Drawing.Size(151, 6);
+            this.toolStripSeparator7.Size = new System.Drawing.Size(177, 6);
             // 
             // toolStripMenuItemSelectSDCardEShop
             // 
@@ -3377,7 +3381,7 @@
             this.toolStripMenuItemSelectSDCardItemsOnSDEShop,
             this.toolStripMenuItemSelectSDCardItemsNotOnSDCardEShop});
             this.toolStripMenuItemSelectSDCardEShop.Name = "toolStripMenuItemSelectSDCardEShop";
-            this.toolStripMenuItemSelectSDCardEShop.Size = new System.Drawing.Size(154, 22);
+            this.toolStripMenuItemSelectSDCardEShop.Size = new System.Drawing.Size(180, 22);
             this.toolStripMenuItemSelectSDCardEShop.Text = "SD card";
             // 
             // toolStripMenuItemSelectSDCardItemsOnSDEShop
@@ -3400,7 +3404,7 @@
             this.toolStripMenuItemSelectSceneOnEShop,
             this.toolStripMenuItemSelectSceneNotOnEShop});
             this.toolStripMenuItemSelectSceneEShop.Name = "toolStripMenuItemSelectSceneEShop";
-            this.toolStripMenuItemSelectSceneEShop.Size = new System.Drawing.Size(154, 22);
+            this.toolStripMenuItemSelectSceneEShop.Size = new System.Drawing.Size(180, 22);
             this.toolStripMenuItemSelectSceneEShop.Text = "Scene releases";
             this.toolStripMenuItemSelectSceneEShop.Visible = false;
             // 
@@ -3409,12 +3413,25 @@
             this.toolStripMenuItemSelectSceneOnEShop.Name = "toolStripMenuItemSelectSceneOnEShop";
             this.toolStripMenuItemSelectSceneOnEShop.Size = new System.Drawing.Size(219, 22);
             this.toolStripMenuItemSelectSceneOnEShop.Text = "Items on Scene releases";
+            this.toolStripMenuItemSelectSceneOnEShop.Click += new System.EventHandler(this.toolStripMenuItemSelectSceneOnEShop_Click);
             // 
             // toolStripMenuItemSelectSceneNotOnEShop
             // 
             this.toolStripMenuItemSelectSceneNotOnEShop.Name = "toolStripMenuItemSelectSceneNotOnEShop";
             this.toolStripMenuItemSelectSceneNotOnEShop.Size = new System.Drawing.Size(219, 22);
             this.toolStripMenuItemSelectSceneNotOnEShop.Text = "Items not on Scene releases";
+            // 
+            // toolStripMenuItem97
+            // 
+            this.toolStripMenuItem97.Name = "toolStripMenuItem97";
+            this.toolStripMenuItem97.Size = new System.Drawing.Size(177, 6);
+            // 
+            // outdatedToolStripMenuItem
+            // 
+            this.outdatedToolStripMenuItem.Name = "outdatedToolStripMenuItem";
+            this.outdatedToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.outdatedToolStripMenuItem.Text = "Outdated updates";
+            this.outdatedToolStripMenuItem.Click += new System.EventHandler(this.outdatedToolStripMenuItem_Click);
             // 
             // toolStripMenuItem22
             // 
@@ -4590,6 +4607,8 @@
         private System.Windows.Forms.ToolStripMenuItem deleteSelectedFileserasesFromDiskToolStripMenuItemSDCard;
         private System.Windows.Forms.ToolStripSeparator toolStripMenuItem97LocalFiles;
         private System.Windows.Forms.ToolStripMenuItem deleteSelectedFileserasesFromDiskToolStripMenuItemLocalFiles;
+        private System.Windows.Forms.ToolStripSeparator toolStripMenuItem97;
+        private System.Windows.Forms.ToolStripMenuItem outdatedToolStripMenuItem;
     }
 }
 

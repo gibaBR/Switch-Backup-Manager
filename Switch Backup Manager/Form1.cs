@@ -2648,6 +2648,7 @@ namespace Switch_Backup_Manager
                 UpdateLocalNSPGamesList();
                 toolStripStatusLabel1.Text = "0 Selected (0MB)";
             }
+
         }
 
         private void allFilesToolStripMenuItem1_Click(object sender, EventArgs e)
@@ -3999,7 +4000,81 @@ namespace Switch_Backup_Manager
                 OperationDeleteSelectedSDCardFiles();
                 UpdateSDCardList();
                 toolStripStatusLabel1.Text = "0 Selected (0MB)";
+                MessageBox.Show("Done");
             }
+        }
+
+        private void outdatedToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            SortedDictionary<Tuple<String, int>, FileData> updates = new SortedDictionary<Tuple<string, int>, FileData>();
+            Dictionary<Tuple<String, int>, String> updates_to_delete = new Dictionary<Tuple<String, int>, string>();
+
+            //This gives us a SortedDictionary containing only updates
+            foreach (FileData file in LocalNSPFilesList.Values)
+            {
+                if (file.ContentType == "Patch")
+                {
+                    try
+                    {
+                        updates.Add(new Tuple<string, int>(file.TitleID, Convert.ToInt32(file.Version)), file);
+                    } catch (Exception ex)
+                    {
+                        Util.logger.Error("Error on " + file.TitleID + ", " + file.Version);
+                    }                    
+                }               
+            }
+
+            int index = 0;
+            string titleID = updates.ElementAt(0).Value.TitleID;
+            int version = -1;
+            try
+            {
+                 version = Convert.ToInt32(updates.ElementAt(0).Value.Version);
+            } catch
+            {
+                Util.logger.Error("Error on " + titleID + ", " + updates.ElementAt(0).Value.Version);
+            }
+            
+            foreach (FileData file in updates.Values)
+            {
+                if (index <= updates.Count - 2)
+                {
+                    updates_to_delete.Add(new Tuple<string, int>(file.TitleID, Convert.ToInt32(file.Version)), "");
+                }
+
+                if (file.TitleID != titleID)
+                {
+                    updates_to_delete.Remove(new Tuple<string, int>(titleID, Convert.ToInt32(version)));
+                }
+
+                titleID = updates.ElementAt(index).Value.TitleID;
+                version = Convert.ToInt32(updates.ElementAt(index).Value.Version);
+                index++;
+            }
+
+            OLVEshop.Select();
+            OLVEshop.HideSelection = false;
+            OLVEshop.SelectedItems.Clear();
+            foreach (ListViewItem item in OLVEshop.Items)
+            {
+                string dummy;
+                try
+                {
+                    if (updates_to_delete.TryGetValue(new Tuple<string, int>(item.Text, Convert.ToInt32(Convert.ToString(((FileData)((OLVListItem)item).RowObject).Version))), out dummy))
+                    {
+                        item.Selected = true;
+                    }
+                } catch
+                {
+                    //Util.logger.Error("Error on " + item.Text + ", " + Convert.ToString(((FileData)((OLVListItem)item).RowObject).Version));
+                }
+            }
+//            OLVEshop.RefreshSelectedObjects();
+        }
+
+        private void toolStripMenuItemSelectSceneOnEShop_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

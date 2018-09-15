@@ -32,6 +32,13 @@ Complete Switch Backups management tool
 
 ## Changelog
 
+* 1.1.7
+  - Support for downloading images from web when missing #56 (by Termit1975)
+  - Imported Date column #58 (by davidp57)
+  - Prevent window shrink when running on display with high DPI #59 (by Garoxas)
+  - User can delete selected files (need to enable this option on config screen)
+  - User can now select older updates of NSP files (Select menu) so they can be deleted from disk
+
 * 1.1.6
   - Fix: Unable to process 'Scene' NSP releases #45. Thanks to garoxas;
   - Filename on the lists now shows only filename by default, user can however choose to show complete path in options;

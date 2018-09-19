@@ -2070,6 +2070,10 @@ namespace Switch_Backup_Manager
                         {
                             data.Firmware = "5.1.0";
                         }
+                        else if (Firmware <= 402653544)
+                        {
+                            data.Firmware = "6.0.0";
+                        }
                         else
                         {
                             data.Firmware = Convert.ToString(Firmware);

@@ -2370,7 +2370,7 @@ namespace Switch_Backup_Manager
                             int keyblob;
                             if (int.TryParse(new string(MasterKey.TakeWhile(Char.IsDigit).ToArray()), out keyblob))
                             {
-                                MasterKey = GetMkey((byte) (keyblob + 1));
+                                MasterKey = GetMkey((byte)(keyblob + 1)).Replace("MasterKey", "");
                             }
                         }
                         data.MasterKeyRevision = MasterKey;
@@ -2613,7 +2613,7 @@ namespace Switch_Backup_Manager
                 result.TitleID = "0" + NCA.NCA_Headers[0].TitleID.ToString("X");
                 result.TitleIDBaseGame = result.TitleID;
                 result.SDKVersion = $"{NCA.NCA_Headers[0].SDKVersion4}.{NCA.NCA_Headers[0].SDKVersion3}.{NCA.NCA_Headers[0].SDKVersion2}.{NCA.NCA_Headers[0].SDKVersion1}";
-                result.MasterKeyRevision = Util.GetMkey(NCA.NCA_Headers[0].MasterKeyRev);
+                result.MasterKeyRevision = Util.GetMkey(NCA.NCA_Headers[0].MasterKeyRev).Replace("MasterKey", "");
 
                 //Extra Info Is Got Here
                 if (getMKey())

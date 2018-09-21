@@ -1545,9 +1545,9 @@ namespace Switch_Backup_Manager
                 case 4:
                     return "MasterKey3 (4.0.0-4.1.0)";
                 case 5:
-                    return "MasterKey4 (5.0.0+)";
+                    return "MasterKey4 (5.0.0-5.1.0)";
                 case 6:
-                    return "MasterKey5 (?)";
+                    return "MasterKey5 (6.0.0)";
                 case 7:
                     return "MasterKey6 (?)";
                 case 8:
@@ -2364,7 +2364,16 @@ namespace Switch_Backup_Manager
                     }
                     else if (strArray[0] == "Master Key Revision")
                     {
-                        data.MasterKeyRevision = strArray[1].Trim();
+                        string MasterKey = strArray[1].Trim();
+                        if (MasterKey.Contains("Unknown"))
+                        {
+                            int keyblob;
+                            if (int.TryParse(new string(MasterKey.TakeWhile(Char.IsDigit).ToArray()), out keyblob))
+                            {
+                                MasterKey = GetMkey((byte) (keyblob + 1));
+                            }
+                        }
+                        data.MasterKeyRevision = MasterKey;
                         break;
                     }
                 }

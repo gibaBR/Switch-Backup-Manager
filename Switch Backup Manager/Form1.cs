@@ -927,6 +927,43 @@ namespace Switch_Backup_Manager
             return result;
         }
 
+        private Dictionary<Tuple<string, string>, FileData> ContainsListsIgnoreVersion(Dictionary<Tuple<string, string>, FileData> list1, Dictionary<Tuple<string, string>, FileData> list2)
+        {
+            Dictionary<Tuple<string, string>, FileData> result = new Dictionary<Tuple<string, string>, FileData>();
+            Dictionary<Tuple<string, string>, FileData> list1_ = new Dictionary<Tuple<string, string>, FileData>();
+            Dictionary<Tuple<string, string>, FileData> list2_ = new Dictionary<Tuple<string, string>, FileData>();
+
+            //Clear version field
+            foreach (KeyValuePair<Tuple<string, string>, FileData> entry in list1)
+            {
+                try
+                {
+                    list1_.Add(new Tuple<string, string>(entry.Key.Item1, ""), entry.Value);
+                } catch { }                
+            }
+            foreach (KeyValuePair<Tuple<string, string>, FileData> entry in list2)
+            {
+                try
+                {
+                    list2_.Add(new Tuple<string, string>(entry.Key.Item1, ""), entry.Value);
+                } catch { }                
+            }
+
+            foreach (FileData data in list1_.Values)
+            {
+                FileData dummy;
+                if (list2_.TryGetValue(new Tuple<string, string>(data.TitleID, ""), out dummy))
+                {
+                    try
+                    {
+                        result.Add(new Tuple<string, string>(data.TitleID, ""), data);
+                    } catch { }                    
+                }
+            }
+
+            return result;
+        }
+
         private void folderToolStripMenuItem_Click(object sender, EventArgs e)
         {
             CommonOpenFileDialog dialog = new CommonOpenFileDialog();
@@ -4074,6 +4111,25 @@ namespace Switch_Backup_Manager
 
         private void toolStripMenuItemSelectSceneOnEShop_Click(object sender, EventArgs e)
         {
+
+        }
+
+        private void itemsOnEshjToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Dictionary<Tuple<string, string>, FileData> list = ContainsListsIgnoreVersion(LocalNSPFilesList, LocalFilesList);
+//            Dictionary<Tuple<string, string>, FileData> list = ContainsListsIgnoreVersion(LocalFilesList, LocalNSPFilesList);
+            FileData dummy;
+            OLVLocalFiles.Select();
+            OLVLocalFiles.HideSelection = false;
+            OLVLocalFiles.SelectedItems.Clear();
+            foreach (ListViewItem item in OLVLocalFiles.Items)
+            {
+
+                if (list.TryGetValue(new Tuple<string, string>(item.Text, ""), out dummy))
+                {
+                    item.Selected = true;
+                }
+            }
 
         }
     }

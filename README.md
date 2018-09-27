@@ -32,6 +32,11 @@ Complete Switch Backups management tool
 
 ## Changelog
 
+* 1.1.8
+  - Support for firmware 6.0.0 (by Garoxas)
+  - User can now select local files that are on both, local and e-shop (nsp) files list
+  - User can now select older NSP updates (and then delete them)
+
 * 1.1.7
   - Support for downloading images from web when missing #56 (by Termit1975)
   - Imported Date column #58 (by davidp57)

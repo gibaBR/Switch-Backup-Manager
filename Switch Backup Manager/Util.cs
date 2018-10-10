@@ -2003,7 +2003,7 @@ namespace Switch_Backup_Manager
                         data.ContentType = xml.Element("ContentMeta").Element("Type").Value;
                         data.Version = xml.Element("ContentMeta").Element("Version").Value;
 
-                        //0100000000000816,ALL,v65796 v131162 v196628 v262164 v201327002 v201392178 v201457684 v268435656 v268501002 v269484082 v335544750 v335609886 v335675432 v336592976,2.0.0 2.1.0 2.2.0 2.3.0 3.0.0 3.0.1 3.0.2 4.0.0 4.0.1 4.1.0 5.0.0 5.0.1 5.0.2 5.1.0
+                        //0100000000000816,ALL,v65796 v131162 v196628 v262164 v201327002 v201392178 v201457684 v268435656 v268501002 v269484082 v335544750 v335609886 v335675432 v336592976 v402653544 v402718730,2.0.0 2.1.0 2.2.0 2.3.0 3.0.0 3.0.1 3.0.2 4.0.0 4.0.1 4.1.0 5.0.0 5.0.1 5.0.2 5.1.0 6.0.0 6.0.1
                         data.Firmware = "";
                         long Firmware = Convert.ToInt64(xml.Element("ContentMeta").Element("RequiredSystemVersion").Value) % 0x100000000;
                         if (Firmware == 0)
@@ -2074,9 +2074,13 @@ namespace Switch_Backup_Manager
                         {
                             data.Firmware = "6.0.0";
                         }
+                        else if (Firmware <= 402718730)
+                        {
+                            data.Firmware = "6.0.1";
+                        }
                         else
                         {
-                            data.Firmware = Convert.ToString(Firmware);
+                            data.Firmware = ((Firmware >> 26) & 0x3F) + "." + ((Firmware >> 20) & 0x3F) + "." + ((Firmware >> 16) & 0x0F);
                         }
 
                         string titleIDBaseGame = data.TitleID;
@@ -2530,11 +2534,11 @@ namespace Switch_Backup_Manager
                         List<string> UpdateFiles = array6.Select(x => x.Name).ToList();
                         UpdateFiles.Sort();
 
-                        foreach (KeyValuePair<string, List<string>> kv in Consts.UPDATE_FILES)
+                        foreach (KeyValuePair<string, string> kv in Consts.UPDATE_FILES)
                         {
-                            if (UpdateFiles.Count == Consts.UPDATE_NUMBER_OF_FILES[kv.Key] && UpdateFiles.SequenceEqual(kv.Value))
+                            if (UpdateFiles.Count == Consts.UPDATE_NUMBER_OF_FILES[kv.Key] && UpdateFiles.Contains(kv.Value))
                             {
-                                result.Version = kv.Key;
+                                result.Firmware = result.Version = kv.Key;
                                 break;
                             }
                         }
@@ -2546,7 +2550,7 @@ namespace Switch_Backup_Manager
                             {
                                 if (UpdateFiles.Count == kv.Value)
                                 {
-                                    result.Version = kv.Key;
+                                    result.Firmware = result.Version = kv.Key;
                                     break;
                                 }
                             }
@@ -2597,7 +2601,6 @@ namespace Switch_Backup_Manager
                     {
                         break;
                     }
-
                 }
 
                 NCA.NCA_Headers[0] = new NCA.NCA_Header(DecryptNCAHeader(filepath, gameNcaOffset));
@@ -2830,7 +2833,10 @@ namespace Switch_Backup_Manager
                     result.Cardtype = result_tmp.Cardtype;
                     result.Group = result_tmp.Group;
                     result.Serial = result_tmp.Serial;
-                    result.Firmware = result_tmp.Firmware;
+                    if (String.IsNullOrEmpty(result.Firmware))
+                    {
+                        result.Firmware = result_tmp.Firmware;
+                    }
                     result.Region = result_tmp.Region;
                     result.Languages_resumed = result_tmp.Languages_resumed;
                     result.IdScene = result_tmp.IdScene;

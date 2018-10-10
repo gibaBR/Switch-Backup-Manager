@@ -1547,7 +1547,7 @@ namespace Switch_Backup_Manager
                 case 5:
                     return "MasterKey4 (5.0.0-5.1.0)";
                 case 6:
-                    return "MasterKey5 (6.0.0)";
+                    return "MasterKey5 (6.0.0-6.0.1)";
                 case 7:
                     return "MasterKey6 (?)";
                 case 8:

@@ -10,6 +10,7 @@ namespace Switch_Backup_Manager
             //hactool.exe -t nca --listromfs update\file.cnmt.nca
             //hactool.exe -t nca --section0dir=updates update\file.cnmt.nca
             //updates\SystemUpdate_0100000000000816.cnmt
+            //https://gist.github.com/garoxas/b6f2db2542250b2b34aeecc3f6fe273e
             { "1.0.0", "73af776d8a1abb72507aa0c51a53adec.cnmt.nca" },
             { "2.0.0", "2d4c96214d911cd1a2ed7a1875827a86.cnmt.nca" },
             { "2.1.0", "129eb530699c67b6dbb3346d9e826221.cnmt.nca" },

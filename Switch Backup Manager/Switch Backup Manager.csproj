@@ -167,7 +167,6 @@
     <None Include="img\EUR.jpg" />
     <None Include="img\CHN.jpg" />
     <None Include="img\SwitchIcon.ico" />
-    <Content Include="FodyWeavers.xml" />
     <Content Include="SwitchIcon.ico" />
   </ItemGroup>
   <ItemGroup>

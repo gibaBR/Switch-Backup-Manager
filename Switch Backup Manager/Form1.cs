@@ -1,13 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
 using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Net;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml.Linq;
 using BrightIdeasSoftware;
@@ -559,10 +555,12 @@ namespace Switch_Backup_Manager
             if (Util.ScrapXCIOnSDCard & Util.ScrapNSPOnSDCard)
             {
                 SDCardList = Util.GetFileDataCollectionAll(SDCardSelected);
-            } else if (Util.ScrapNSPOnSDCard)
+            }
+            else if (Util.ScrapNSPOnSDCard)
             {
                 SDCardList = Util.GetFileDataCollectionNSP(SDCardSelected);
-            } else if (Util.ScrapXCIOnSDCard)
+            }
+            else if (Util.ScrapXCIOnSDCard)
             {
                 SDCardList = Util.GetFileDataCollection(SDCardSelected);
             }
@@ -902,9 +900,9 @@ namespace Switch_Backup_Manager
             foreach (FileData data in list1.Values)
             {
                 FileData dummy;
-                if (!list2.TryGetValue(new Tuple<string, string>(data.TitleID, data.Version), out dummy))
+                if (!list2.TryGetValue(new Tuple<string, string>(data.TitleID, data.DistributionType == "Cartridge" ? data.Firmware : data.Version), out dummy))
                 {
-                    result.Add(new Tuple<string, string>(data.TitleID, data.Version), data);
+                    result.Add(new Tuple<string, string>(data.TitleID, data.DistributionType == "Cartridge" ? data.Firmware : data.Version), data);
                 }
             }
 
@@ -918,9 +916,9 @@ namespace Switch_Backup_Manager
             foreach (FileData data in list1.Values)
             {
                 FileData dummy;
-                if (list2.TryGetValue(new Tuple<string, string>(data.TitleID, data.Version), out dummy))
+                if (list2.TryGetValue(new Tuple<string, string>(data.TitleID, data.DistributionType == "Cartridge" ? data.Firmware : data.Version), out dummy))
                 {
-                    result.Add(new Tuple<string, string>(data.TitleID, data.Version), data);
+                    result.Add(new Tuple<string, string>(data.TitleID, data.DistributionType == "Cartridge" ? data.Firmware : data.Version), data);
                 }
             }
 
@@ -1015,16 +1013,16 @@ namespace Switch_Backup_Manager
                     LocalFilesListSelectedItems.Clear();
                     string titleID = selectedItems[0].Text;
                     string titleIDBase = titleID;
-                    string version = Convert.ToString(((FileData)((OLVListItem)selectedItems[0]).RowObject).Version);
+                    string rev = Convert.ToString(((FileData)((OLVListItem)selectedItems[0]).RowObject).Firmware);
 
                     long size = 0;
 
                     foreach (ListViewItem item in selectedItems)
                     {
                         titleID = item.Text;                      
-                        version = Convert.ToString(((FileData)((OLVListItem)item).RowObject).Version);
-                        data = Util.GetFileData(titleID, version, LocalFilesList);
-                        LocalFilesListSelectedItems.Add(new Tuple<string, string>(titleID, version), data);
+                        rev = Convert.ToString(((FileData)((OLVListItem)item).RowObject).Firmware);
+                        data = Util.GetFileData(titleID, rev, LocalFilesList);
+                        LocalFilesListSelectedItems.Add(new Tuple<string, string>(titleID, rev), data);
                         titleIDBase = data.TitleIDBaseGame;
                         count++;
                         size += Convert.ToInt64(data.UsedSpaceBytes);
@@ -1032,7 +1030,7 @@ namespace Switch_Backup_Manager
 
                     toolStripStatusLabel1.Text = Convert.ToString(count) + " Selected (" + Util.BytesToGB(size) + ")";
                     //Display information of the last selected item
-                    DisplayGameInformation(titleID, titleIDBase, version, LocalFilesList, "local");
+                    DisplayGameInformation(titleID, titleIDBase, rev, LocalFilesList, "local");
                 }
                 else
                 {
@@ -1042,9 +1040,9 @@ namespace Switch_Backup_Manager
                     foreach (ListViewItem item in selectedItems)
                     {
                         string titleID = item.Text;
-                        string version = Convert.ToString(((FileData)((OLVListItem)item).RowObject).Version);
-                        data = Util.GetFileData(titleID, version, LocalFilesList);
-                        LocalFilesListSelectedItems.Add(new Tuple<string, string>(titleID, version), data);
+                        string rev = Convert.ToString(((FileData)((OLVListItem)item).RowObject).Firmware);
+                        data = Util.GetFileData(titleID, rev, LocalFilesList);
+                        LocalFilesListSelectedItems.Add(new Tuple<string, string>(titleID, rev), data);
                         count++;
                         size += Convert.ToInt64(data.UsedSpaceBytes);
                     }
@@ -1180,16 +1178,18 @@ namespace Switch_Backup_Manager
                     SceneReleasesSelectedItems.Clear();
                     string titleID = selectedItems[0].Text;
                     string titleIDBase = titleID;
-                    string version = Convert.ToString(((FileData)((OLVListItem)selectedItems[0]).RowObject).Version);
+                    string distributionType = Convert.ToString(((FileData)((OLVListItem)selectedItems[0]).RowObject).DistributionType);
+                    string rev = Convert.ToString(distributionType == "Cartridge" ? ((FileData)((OLVListItem)selectedItems[0]).RowObject).Firmware : ((FileData)((OLVListItem)selectedItems[0]).RowObject).Version);
 
                     int count = 0;
                     long size = 0;
                     foreach (ListViewItem item in selectedItems)
                     {
                         titleID = item.Text;
-                        version = Convert.ToString(((FileData)((OLVListItem)item).RowObject).Version);
-                        FileData data = Util.GetFileData(titleID, version, SceneReleasesList);
-                        SceneReleasesSelectedItems.Add(new Tuple<string, string>(titleID, version), data);
+                        distributionType = Convert.ToString(((FileData)((OLVListItem)item).RowObject).DistributionType);
+                        rev = Convert.ToString(distributionType == "Cartridge" ? ((FileData)((OLVListItem)item).RowObject).Firmware : ((FileData)((OLVListItem)item).RowObject).Version);
+                        FileData data = Util.GetFileData(titleID, rev, SceneReleasesList);
+                        SceneReleasesSelectedItems.Add(new Tuple<string, string>(titleID, rev), data);
                         titleIDBase = data.TitleIDBaseGame;
                         count++;
                         size += Convert.ToInt64(data.ROMSizeBytes);
@@ -1197,7 +1197,7 @@ namespace Switch_Backup_Manager
 
                     toolStripStatusLabel1.Text = Convert.ToString(count) + " Selected (" + Util.BytesToGB(size) + ")";
                     //Display information of the first selected item
-                    DisplayGameInformation(titleID, titleIDBase, version, LocalFilesList, "scene"); //Has to be Locallist as we dont store scene info other than its xml file...
+                    DisplayGameInformation(titleID, titleIDBase, rev, LocalFilesList, "scene"); //Has to be Locallist as we dont store scene info other than its xml file...
                 }
                 else
                 {
@@ -1208,9 +1208,10 @@ namespace Switch_Backup_Manager
                     foreach (ListViewItem item in selectedItems)
                     {
                         string titleID = item.Text;
-                        string version = Convert.ToString(((FileData)((OLVListItem)item).RowObject).Version);
-                        FileData data = Util.GetFileData(titleID, version, SceneReleasesList);
-                        SceneReleasesSelectedItems.Add(new Tuple<string, string>(titleID, version), data);
+                        string distributionType = Convert.ToString(((FileData)((OLVListItem)item).RowObject).DistributionType);
+                        string rev = Convert.ToString(distributionType == "Cartridge" ? ((FileData)((OLVListItem)item).RowObject).Firmware : ((FileData)((OLVListItem)item).RowObject).Version);
+                        FileData data = Util.GetFileData(titleID, rev, SceneReleasesList);
+                        SceneReleasesSelectedItems.Add(new Tuple<string, string>(titleID, rev), data);
                         count++;
                         size += Convert.ToInt64(data.ROMSizeBytes);
                     }
@@ -1438,18 +1439,20 @@ namespace Switch_Backup_Manager
                     SDCardListSelectedItems.Clear();
                     string titleID = selectedItems[0].Text;
                     string titleIDBase = titleID;
-                    string version = Convert.ToString(((FileData)((OLVListItem)selectedItems[0]).RowObject).Version);
+                    string distributionType = Convert.ToString(((FileData)((OLVListItem)selectedItems[0]).RowObject).DistributionType);
+                    string rev = Convert.ToString(distributionType == "Cartridge" ? ((FileData)((OLVListItem)selectedItems[0]).RowObject).Firmware : ((FileData)((OLVListItem)selectedItems[0]).RowObject).Version);
 
                     int count = 0;
                     long size = 0;
                     foreach (ListViewItem item in selectedItems)
                     {
                         titleID = item.Text;
-                        version = Convert.ToString(((FileData)((OLVListItem)item).RowObject).Version);
-                        FileData data = Util.GetFileData(titleID, version, SDCardList);
+                        distributionType = Convert.ToString(((FileData)((OLVListItem)item).RowObject).DistributionType);
+                        rev = Convert.ToString(distributionType == "Cartridge" ? ((FileData)((OLVListItem)item).RowObject).Firmware : ((FileData)((OLVListItem)item).RowObject).Version);
+                        FileData data = Util.GetFileData(titleID, rev, SDCardList);
                         //string icon_titleID_filename = data.Region_Icon.First().Value;
 
-                        SDCardListSelectedItems.Add(new Tuple<string, string>(titleID, version), data);
+                        SDCardListSelectedItems.Add(new Tuple<string, string>(titleID, rev), data);
                         titleIDBase = data.TitleIDBaseGame;
                         count++;
                         size += Convert.ToInt64(data.UsedSpaceBytes);
@@ -1457,7 +1460,7 @@ namespace Switch_Backup_Manager
 
                     toolStripStatusLabel1.Text = Convert.ToString(count) + " Selected (" + Util.BytesToGB(size) + ")";
                     //Display information of the first selected item
-                    DisplayGameInformation(titleID, titleIDBase, version, SDCardList, "sdcard");
+                    DisplayGameInformation(titleID, titleIDBase, rev, SDCardList, "sdcard");
                 }
                 else
                 {
@@ -1468,9 +1471,10 @@ namespace Switch_Backup_Manager
                     foreach (ListViewItem item in selectedItems)
                     {
                         string titleID = item.Text;
-                        string version = Convert.ToString(((FileData)((OLVListItem)item).RowObject).Version);
-                        FileData data = Util.GetFileData(titleID, version, SDCardList);
-                        SDCardListSelectedItems.Add(new Tuple<string, string>(titleID, version), data);
+                        string distributionType = Convert.ToString(((FileData)((OLVListItem)item).RowObject).DistributionType);
+                        string rev = Convert.ToString(distributionType == "Cartridge" ? ((FileData)((OLVListItem)item).RowObject).Firmware : ((FileData)((OLVListItem)item).RowObject).Version);
+                        FileData data = Util.GetFileData(titleID, rev, SDCardList);
+                        SDCardListSelectedItems.Add(new Tuple<string, string>(titleID, rev), data);
                         count++;
                         size += Convert.ToInt64(data.UsedSpaceBytes);
                     }
@@ -1489,7 +1493,7 @@ namespace Switch_Backup_Manager
             OLVLocalFiles.SelectedItems.Clear();
             foreach (ListViewItem item in OLVLocalFiles.Items)
             {
-                if (list.TryGetValue(new Tuple<string, string>(item.Text, Convert.ToString(((FileData)((OLVListItem)item).RowObject).Version)), out dummy))
+                if (list.TryGetValue(new Tuple<string, string>(item.Text, Convert.ToString(((FileData)((OLVListItem)item).RowObject).Firmware)), out dummy))
                 {
                     item.Selected = true;
                 }
@@ -1505,7 +1509,7 @@ namespace Switch_Backup_Manager
             OLVLocalFiles.SelectedItems.Clear();
             foreach (ListViewItem item in OLVLocalFiles.Items)
             {
-                if (list.TryGetValue(new Tuple<string, string>(item.Text, Convert.ToString(((FileData)((OLVListItem)item).RowObject).Version)), out dummy))
+                if (list.TryGetValue(new Tuple<string, string>(item.Text, Convert.ToString(((FileData)((OLVListItem)item).RowObject).Firmware)), out dummy))
                 {
                     item.Selected = true;
                 }
@@ -1523,7 +1527,7 @@ namespace Switch_Backup_Manager
                 OLVLocalFiles.SelectedItems.Clear();
                 foreach (ListViewItem item in OLVLocalFiles.Items)
                 {
-                    if (list.TryGetValue(new Tuple<string, string>(item.Text, Convert.ToString(((FileData)((OLVListItem)item).RowObject).Version)), out dummy))
+                    if (list.TryGetValue(new Tuple<string, string>(item.Text, Convert.ToString(((FileData)((OLVListItem)item).RowObject).Firmware)), out dummy))
                     {
                         item.Selected = true;
                     }
@@ -1546,7 +1550,7 @@ namespace Switch_Backup_Manager
                 OLVLocalFiles.SelectedItems.Clear();
                 foreach (ListViewItem item in OLVLocalFiles.Items)
                 {
-                    if (list.TryGetValue(new Tuple<string, string>(item.Text, Convert.ToString(((FileData)((OLVListItem)item).RowObject).Version)), out dummy))
+                    if (list.TryGetValue(new Tuple<string, string>(item.Text, Convert.ToString(((FileData)((OLVListItem)item).RowObject).Firmware)), out dummy))
                     {
                         item.Selected = true;
                     }
@@ -1569,7 +1573,7 @@ namespace Switch_Backup_Manager
                 OLV_SDCard.SelectedItems.Clear();
                 foreach (ListViewItem item in OLV_SDCard.Items)
                 {
-                    if (list.TryGetValue(new Tuple<string, string>(item.Text, Convert.ToString(((FileData)((OLVListItem)item).RowObject).Version)), out dummy))
+                    if (list.TryGetValue(new Tuple<string, string>(item.Text, Convert.ToString(((FileData)((OLVListItem)item).RowObject).Firmware)), out dummy))
                     {
                         item.Selected = true;
                     }
@@ -1592,7 +1596,7 @@ namespace Switch_Backup_Manager
                 OLV_SDCard.SelectedItems.Clear();
                 foreach (ListViewItem item in OLV_SDCard.Items)
                 {
-                    if (list.TryGetValue(new Tuple<string, string>(item.Text, Convert.ToString(((FileData)((OLVListItem)item).RowObject).Version)), out dummy))
+                    if (list.TryGetValue(new Tuple<string, string>(item.Text, Convert.ToString(((FileData)((OLVListItem)item).RowObject).Firmware)), out dummy))
                     {
                         item.Selected = true;
                     }
@@ -1631,7 +1635,8 @@ namespace Switch_Backup_Manager
                 OLV_SDCard.SelectedItems.Clear();
                 foreach (ListViewItem item in OLV_SDCard.Items)
                 {
-                    if (list.TryGetValue(new Tuple<string, string>(item.Text, Convert.ToString(((FileData)((OLVListItem)item).RowObject).Version)), out dummy))
+                    string distributionType = Convert.ToString(((FileData)((OLVListItem)item).RowObject).DistributionType);
+                    if (list.TryGetValue(new Tuple<string, string>(item.Text, Convert.ToString(distributionType == "Cartridge" ? ((FileData)((OLVListItem)item).RowObject).Firmware : ((FileData)((OLVListItem)item).RowObject).Version)), out dummy))
                     {
                         item.Selected = true;
                     }
@@ -1654,7 +1659,8 @@ namespace Switch_Backup_Manager
                 OLV_SDCard.SelectedItems.Clear();
                 foreach (ListViewItem item in OLV_SDCard.Items)
                 {
-                    if (list.TryGetValue(new Tuple<string, string>(item.Text, Convert.ToString(((FileData)((OLVListItem)item).RowObject).Version)), out dummy))
+                    string distributionType = Convert.ToString(((FileData)((OLVListItem)item).RowObject).DistributionType);
+                    if (list.TryGetValue(new Tuple<string, string>(item.Text, Convert.ToString(distributionType == "Cartridge" ? ((FileData)((OLVListItem)item).RowObject).Firmware : ((FileData)((OLVListItem)item).RowObject).Version)), out dummy))
                     {
                         item.Selected = true;
                     }
@@ -1675,7 +1681,8 @@ namespace Switch_Backup_Manager
             OLVSceneList.SelectedItems.Clear();
             foreach (ListViewItem item in OLVSceneList.Items)
             {
-                if (list.TryGetValue(new Tuple<string, string>(item.Text, Convert.ToString(((FileData)((OLVListItem)item).RowObject).Version)), out dummy))
+                string distributionType = Convert.ToString(((FileData)((OLVListItem)item).RowObject).DistributionType);
+                if (list.TryGetValue(new Tuple<string, string>(item.Text, Convert.ToString(distributionType == "Cartridge" ? ((FileData)((OLVListItem)item).RowObject).Firmware : ((FileData)((OLVListItem)item).RowObject).Version)), out dummy))
                 {
                     item.Selected = true;
                 }
@@ -1691,7 +1698,7 @@ namespace Switch_Backup_Manager
             OLVSceneList.SelectedItems.Clear();
             foreach (ListViewItem item in OLVSceneList.Items)
             {
-                if (list.TryGetValue(new Tuple<string, string>(item.Text, Convert.ToString(((FileData)((OLVListItem)item).RowObject).Version)), out dummy))
+                if (list.TryGetValue(new Tuple<string, string>(item.Text, Convert.ToString(((FileData)((OLVListItem)item).RowObject).Firmware)), out dummy))
                 {
                     item.Selected = true;
                 }
@@ -1709,7 +1716,8 @@ namespace Switch_Backup_Manager
                 OLVSceneList.SelectedItems.Clear();
                 foreach (ListViewItem item in OLVSceneList.Items)
                 {
-                    if (list.TryGetValue(new Tuple<string, string>(item.Text, Convert.ToString(((FileData)((OLVListItem)item).RowObject).Version)), out dummy))
+                    string distributionType = Convert.ToString(((FileData)((OLVListItem)item).RowObject).DistributionType);
+                    if (list.TryGetValue(new Tuple<string, string>(item.Text, Convert.ToString(distributionType == "Cartridge" ? ((FileData)((OLVListItem)item).RowObject).Firmware : ((FileData)((OLVListItem)item).RowObject).Version)), out dummy))
                     {
                         item.Selected = true;
                     }
@@ -1731,7 +1739,8 @@ namespace Switch_Backup_Manager
                 OLVSceneList.SelectedItems.Clear();
                 foreach (ListViewItem item in OLVSceneList.Items)
                 {
-                    if (list.TryGetValue(new Tuple<string, string>(item.Text, Convert.ToString(((FileData)((OLVListItem)item).RowObject).Version)), out dummy))
+                    string distributionType = Convert.ToString(((FileData)((OLVListItem)item).RowObject).DistributionType);
+                    if (list.TryGetValue(new Tuple<string, string>(item.Text, Convert.ToString(distributionType == "Cartridge" ? ((FileData)((OLVListItem)item).RowObject).Firmware : ((FileData)((OLVListItem)item).RowObject).Version)), out dummy))
                     {
                         item.Selected = true;
                     }
@@ -1750,6 +1759,12 @@ namespace Switch_Backup_Manager
             {
                 FileData data = (FileData)e.Model;
                 if (!data.IsTrimmed)
+                    e.SubItem.BackColor = Color.IndianRed;
+            }
+            else if (e.ColumnIndex == this.olvColumnSourceLocal.Index)
+            {
+                FileData data = (FileData)e.Model;
+                if ((data.Source.Contains("NSP") && data.Source != "CDNSP") || data.Source.Contains("NCA"))
                     e.SubItem.BackColor = Color.IndianRed;
             }
         }
@@ -2848,6 +2863,12 @@ namespace Switch_Backup_Manager
                 if (data.ContentType == "Patch") //DLC
                     e.SubItem.ForeColor = Color.OrangeRed;
             }
+            else if (e.ColumnIndex == this.olvColumnSourceSD.Index)
+            {
+                FileData data = (FileData)e.Model;
+                if (data.Source.Contains("XCI") || (data.Source.Contains("NSP") && data.Source != "CDNSP") || data.Source.Contains("NCA"))
+                    e.SubItem.BackColor = Color.IndianRed;
+            }
         }
 
         private void toolStripMenuItemRenameAllFilesOnSDCard_Click(object sender, EventArgs e)
@@ -3003,8 +3024,17 @@ namespace Switch_Backup_Manager
                 case "Game revision":
                     filterText.Columns = new[] { olvColumnGameRevisionLocal };
                     break;
+                case "Version":
+                    filterText.Columns = new[] { olvColumnVersionLocal };
+                    break;
+                case "Latest":
+                    filterText.Columns = new[] { olvColumnLatestLocal };
+                    break;
                 case "Masterkey revision":
                     filterText.Columns = new[] { olvColumnMasterKeyLocal };
+                    break;
+                case "Firmware":
+                    filterText.Columns = new[] { olvColumnFirmwareLocal };
                     break;
                 case "Trimmed":
                     filterText.Columns = new[] { olvColumnIsTrimmedLocal };
@@ -3023,6 +3053,9 @@ namespace Switch_Backup_Manager
                     break;
                 case "Imported Date":
                     filterText.Columns = new[] { olvColumnImportedDateLocal };
+                    break;
+                case "Source":
+                    filterText.Columns = new[] { olvColumnSourceLocal };
                     break;
                 default:
                     filterText = null;
@@ -3087,8 +3120,17 @@ namespace Switch_Backup_Manager
                 case "Game revision":
                     filterText.Columns = new[] { olvColumnGameRevisionSD };
                     break;
+                case "Version":
+                    filterText.Columns = new[] { olvColumnVersionSD };
+                    break;
+                case "Latest":
+                    filterText.Columns = new[] { olvColumnLatestSD };
+                    break;
                 case "Masterkey revision":
                     filterText.Columns = new[] { olvColumnMasterKeySD };
+                    break;
+                case "Source":
+                    filterText.Columns = new[] { olvColumnSourceSD };
                     break;
                 default:
                     filterText = null;
@@ -3220,7 +3262,7 @@ namespace Switch_Backup_Manager
 
                     LocalNSPFilesListSelectedItems.Clear();
                     string titleID = selectedItems[0].Text;
-                    string version = Convert.ToString(((FileData)((OLVListItem)selectedItems[0]).RowObject).Version);
+                    string rev = Convert.ToString(((FileData)((OLVListItem)selectedItems[0]).RowObject).Version);
                     string titleIDBaseGame = "";
 
                     count = 0;
@@ -3228,10 +3270,10 @@ namespace Switch_Backup_Manager
                     foreach (ListViewItem item in selectedItems)
                     {
                         titleID = item.Text;
-                        version = Convert.ToString(((FileData)((OLVListItem)item).RowObject).Version);
-                        data = Util.GetFileData(titleID, version, LocalNSPFilesList);
+                        rev = Convert.ToString(((FileData)((OLVListItem)item).RowObject).Version);
+                        data = Util.GetFileData(titleID, rev, LocalNSPFilesList);
                         titleIDBaseGame = data.TitleIDBaseGame;
-                        LocalNSPFilesListSelectedItems.Add(new Tuple<string, string>(titleID, version), data);
+                        LocalNSPFilesListSelectedItems.Add(new Tuple<string, string>(titleID, rev), data);
                         count++;
                         size += Convert.ToInt64(data.UsedSpaceBytes);
                     }
@@ -3244,7 +3286,7 @@ namespace Switch_Backup_Manager
                         titleID = titleIDBaseGame;
                     }
                     */
-                    DisplayGameInformation(titleID, titleIDBaseGame, version, LocalNSPFilesList, "eshop");
+                    DisplayGameInformation(titleID, titleIDBaseGame, rev, LocalNSPFilesList, "eshop");
                 }
                 else
                 {
@@ -3255,9 +3297,9 @@ namespace Switch_Backup_Manager
                     foreach (ListViewItem item in selectedItems)
                     {
                         string titleID = item.Text;
-                        string version = Convert.ToString(((FileData)((OLVListItem)item).RowObject).Version);
-                        data = Util.GetFileData(titleID, version, LocalNSPFilesList);
-                        LocalNSPFilesListSelectedItems.Add(new Tuple<string, string>(titleID, version), data);
+                        string rev = Convert.ToString(((FileData)((OLVListItem)item).RowObject).Version);
+                        data = Util.GetFileData(titleID, rev, LocalNSPFilesList);
+                        LocalNSPFilesListSelectedItems.Add(new Tuple<string, string>(titleID, rev), data);
                         count++;
                         size += Convert.ToInt64(data.UsedSpaceBytes);
                     }
@@ -3625,8 +3667,17 @@ namespace Switch_Backup_Manager
                 case "Game revision":
                     filterText.Columns = new[] { olvColumnGameRevisionEShop };
                     break;
+                case "Version":
+                    filterText.Columns = new[] { olvColumnVersionEShop };
+                    break;
+                case "Latest":
+                    filterText.Columns = new[] { olvColumnLatestEShop };
+                    break;
                 case "Masterkey revision":
                     filterText.Columns = new[] { olvColumnMasterKeyRevisionEShop };
+                    break;
+                case "Firmware":
+                    filterText.Columns = new[] { olvColumnFirmwareEShop };
                     break;
                 case "Distribution":
                     filterText.Columns = new[] { olvColumnDistributionType };
@@ -3645,6 +3696,9 @@ namespace Switch_Backup_Manager
                     break;
                 case "Imported Date":
                     filterText.Columns = new[] { olvColumnImportedDateEShop};
+                    break;
+                case "Source":
+                    filterText.Columns = new[] { olvColumnSourceEShop };
                     break;
                 default:
                     filterText = null;
@@ -3737,6 +3791,12 @@ namespace Switch_Backup_Manager
                     e.SubItem.ForeColor = Color.ForestGreen;
                 if (data.ContentType == "Patch") //DLC
                     e.SubItem.ForeColor = Color.OrangeRed;
+            }
+            else if (e.ColumnIndex == this.olvColumnSourceEShop.Index)
+            {
+                FileData data = (FileData)e.Model;
+                if (data.Source.Contains("XCI") || data.Source.Contains("NCA"))
+                    e.SubItem.BackColor = Color.IndianRed;
             }
         }
 

@@ -1,12 +1,6 @@
 ﻿using Microsoft.WindowsAPICodePack.Dialogs;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Switch_Backup_Manager
@@ -54,6 +48,8 @@ namespace Switch_Backup_Manager
                     cbxTagsXCI.Items.Add(Util.AutoRenamingTags[i]);
                 cbxTagsNSP.Items.Add(Util.AutoRenamingTags[i]);
             }
+
+            labelLastVersionListUpdate.Text = string.Format("Last version list update: {0}", FrmMain.TitleVersionUpdate <= 0 ? "Never" : new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc).AddSeconds(FrmMain.TitleVersionUpdate).ToLongDateString());
 
             LoadConfig();
         }

@@ -25,6 +25,8 @@ namespace Switch_Backup_Manager
         private Dictionary<Tuple<string, string>, FileData> SDCardListSelectedItems;
         private FileData TitleToEdit;
         private TextMatchFilter filterContentTypeEShop;
+        internal static Dictionary<string, int> TitleVersionList;
+        public static int TitleVersionUpdate;
 
         private bool updateCbxRemoveableFiles;
         private bool updateFileListAfterMove;
@@ -122,6 +124,7 @@ namespace Switch_Backup_Manager
             UpdateLocalGamesList();
             UpdateLocalNSPGamesList();
             FilterEshopByContentType();
+            UpdateTitleVersionList();
 
             try
             {
@@ -4184,13 +4187,59 @@ namespace Switch_Backup_Manager
             OLVLocalFiles.SelectedItems.Clear();
             foreach (ListViewItem item in OLVLocalFiles.Items)
             {
-
                 if (list.TryGetValue(new Tuple<string, string>(item.Text, ""), out dummy))
                 {
                     item.Selected = true;
                 }
             }
+        }
 
+        public void UpdateTitleVersionList()
+        {
+            TitleVersionList = Util.LoadVersionListToDictionary();
+
+            foreach (FileData data in LocalFilesList.Values)
+            {
+                int latest = -1;
+                TitleVersionList.TryGetValue(data.TitleIDBaseGame.Substring(0, 13).ToUpper() + "000", out latest);
+                if (latest != -1)
+                {
+                    data.Latest = latest.ToString();
+                }
+            }
+
+            foreach (FileData data in LocalNSPFilesList.Values)
+            {
+                if (data.ContentType != "AddOnContent")
+                {
+                    int latest = -1;
+                    TitleVersionList.TryGetValue(data.TitleIDBaseGame.Substring(0, 13).ToUpper() + "000", out latest);
+                    if (latest != -1)
+                    {
+                        data.Latest = latest.ToString();
+                    }
+                }
+            }
+
+            foreach (FileData data in SDCardList.Values)
+            {
+                if (data.ContentType != "AddOnContent")
+                {
+                    int latest = -1;
+                    TitleVersionList.TryGetValue(data.TitleIDBaseGame.Substring(0, 13).ToUpper() + "000", out latest);
+                    if (latest != -1)
+                    {
+                        data.Latest = latest.ToString();
+                    }
+                }
+            }
+        }
+
+        private void updateVersionListToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Util.UpdateVersionList();
+            UpdateTitleVersionList();
+            MessageBox.Show("Done.");
         }
     }
 }

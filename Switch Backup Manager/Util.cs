@@ -13,13 +13,16 @@ using System.Xml.Linq;
 using Microsoft.VisualBasic.FileIO;
 using System.Text.RegularExpressions;
 using HtmlAgilityPack;
+using Newtonsoft.Json;
+using System.Net.Http;
+using System.Security.Cryptography.X509Certificates;
 
 namespace Switch_Backup_Manager
 {
     internal static class Util
     {
-        public const string VERSION = "1.1.8";   //Actual application version
-        public const string MIN_DB_Version = "1.1.1"; //This is the minimum version of the DB that can work
+        public const string VERSION = "1.1.9";   //Actual application version
+        public const string MIN_DB_Version = "1.1.9"; //This is the minimum version of the DB that can work
 
         public const string INI_FILE = "sbm.ini";
         public static string TITLE_KEYS = "titlekeys.txt";
@@ -31,6 +34,11 @@ namespace Switch_Backup_Manager
         public const string NSWDB_DOWNLOAD_SITE = "http://nswdb.com/xml.php";
         public const string LOCAL_FILES_DB = "SBM_Local.xml";
         public const string LOCAL_NSP_FILES_DB = "SBM_NSP_Local.xml";
+        public const string HEADER_DOWNLOAD_SITE = "https://pastebin.com/raw/1K6nMT5y";
+        public const string TAGAYA_DOWNLOAD_SITE = "https://tagaya.hac.lp1.eshop.nintendo.net/tagaya/hac_versionlist";
+        public const string VERSION_LIST_DOWNLOAD_SITE = "https://pastebin.com/raw/9N26Bx10";
+        public const string VERSION_LIST_FILE = "versionlist.json";
+        public const string CLIENT_CERT_FILE = "nx_tls_client_cert.pfx";    //openssl pkcs12 -export -inkey nx_tls_client_cert.key -in nx_tls_client_cert.pem -name switch -out nx_tls_client_cert.pfx
         public const string CACHE_FOLDER = "cache";
         public const string LOG_FILE = "sbm.log";
 
@@ -455,7 +463,10 @@ namespace Switch_Backup_Manager
                 if (!found) //File is not on XML. Add it.
                 {
                     FileData data = GetFileDataNSP(file);
-                    WriteFileDataToXML(data, LOCAL_NSP_FILES_DB);
+                    if (!String.IsNullOrEmpty(data.TitleID))
+                    {
+                        WriteFileDataToXML(data, LOCAL_NSP_FILES_DB);
+                    }
                 }
             }
         }
@@ -490,10 +501,13 @@ namespace Switch_Backup_Manager
                 if (!found) //File is not on XML. Add it.
                 {
                     FileData data = GetFileData(file);
-                    if (WriteFileDataToXML(data, LOCAL_FILES_DB))
+                    if (!String.IsNullOrEmpty(data.TitleID))
                     {
-                        added_files++;
-                    }                    
+                        if (WriteFileDataToXML(data, LOCAL_FILES_DB))
+                        {
+                            added_files++;
+                        }
+                    }
                 }
                 FrmMain.progressPercent = (int)(i * 100) / filesCount;
             }
@@ -516,14 +530,18 @@ namespace Switch_Backup_Manager
                 if (!found) //File is not on XML. Add it.
                 {
                     FileData data = GetFileDataNSP(file);
-                    if (data.GameName.Trim() == "")
+                    if (!String.IsNullOrEmpty(data.TitleID))
                     {
-                        filesWithNoName.Add(file);
-                    } else
-                    {
-                        if (WriteFileDataToXML(data, LOCAL_NSP_FILES_DB))
+                        if (data.GameName.Trim() == "")
                         {
-                            added_files++;
+                            filesWithNoName.Add(file);
+                        }
+                        else
+                        {
+                            if (WriteFileDataToXML(data, LOCAL_NSP_FILES_DB))
+                            {
+                                added_files++;
+                            }
                         }
                     }
                 }
@@ -745,7 +763,7 @@ namespace Switch_Backup_Manager
 
                 if (File.Exists(newFileName))
                 {
-                    Microsoft.VisualBasic.FileIO.FileSystem.MoveFile(originalFile, tmp_name, true);
+                    FileSystem.MoveFile(originalFile, tmp_name, true);
                     originalFile = tmp_name;
                 }
 
@@ -755,7 +773,7 @@ namespace Switch_Backup_Manager
                         logger.Info("Old name: " + file.FileNameWithExt + ". New name: " + illegalInFileName.Replace(GetRenamingString(file, autoRenamingPattern), ""));
                         try
                         {
-                            Microsoft.VisualBasic.FileIO.FileSystem.MoveFile(originalFile, newFileName, false);
+                            FileSystem.MoveFile(originalFile, newFileName, false);
                             //System.IO.File.Move(file.FilePath, newFileName);
                         }
                         catch (Exception e)
@@ -768,7 +786,7 @@ namespace Switch_Backup_Manager
                         logger.Info("Old name: " + file.FileNameWithExt + ". New name: " + illegalInFileName.Replace(GetRenamingString(file, autoRenamingPattern), ""));
                         try
                         {
-                            Microsoft.VisualBasic.FileIO.FileSystem.MoveFile(originalFile, newFileName, false);
+                            FileSystem.MoveFile(originalFile, newFileName, false);
                             //System.IO.File.Move(file.FilePath, newFileName);
                         }
                         catch (Exception e)
@@ -788,7 +806,7 @@ namespace Switch_Backup_Manager
                             newFileName = Path.GetDirectoryName(file.FilePath) + "\\" + illegalInFileName.Replace(GetRenamingString(file, autoRenamingPattern), "").Replace(extension, "") + extension_;
                             try
                             {
-                                Microsoft.VisualBasic.FileIO.FileSystem.MoveFile(splited_file, newFileName, false);
+                                FileSystem.MoveFile(splited_file, newFileName, false);
                                 //System.IO.File.Move(splited_file, newFileName);
                             }
                             catch (Exception e)
@@ -856,13 +874,13 @@ namespace Switch_Backup_Manager
                 {
                     if (extension != ".xc0")
                     {
-                        Microsoft.VisualBasic.FileIO.FileSystem.DeleteFile(file.FilePath, UIOption.OnlyErrorDialogs, SendDeletedFilesToRecycleBin ? RecycleOption.SendToRecycleBin : RecycleOption.DeletePermanently);
+                        FileSystem.DeleteFile(file.FilePath, UIOption.OnlyErrorDialogs, SendDeletedFilesToRecycleBin ? RecycleOption.SendToRecycleBin : RecycleOption.DeletePermanently);
                     } else
                     {
                         List<string> list = GetSplitedXCIsFiles(file.FilePath);
                         foreach (string splited_file in list)
                         {
-                            Microsoft.VisualBasic.FileIO.FileSystem.DeleteFile(splited_file, UIOption.OnlyErrorDialogs, SendDeletedFilesToRecycleBin ? RecycleOption.SendToRecycleBin : RecycleOption.DeletePermanently);
+                            FileSystem.DeleteFile(splited_file, UIOption.OnlyErrorDialogs, SendDeletedFilesToRecycleBin ? RecycleOption.SendToRecycleBin : RecycleOption.DeletePermanently);
                         }
                     }                    
                     result = true;
@@ -1519,6 +1537,123 @@ namespace Switch_Backup_Manager
             }
         }
 
+        public static Dictionary<string, int> LoadVersionListToDictionary()
+        {
+            Dictionary<string, int> result = new Dictionary<string, int>();
+
+            if (File.Exists(VERSION_LIST_FILE))
+            {
+                string versionlist = File.ReadAllText(VERSION_LIST_FILE);
+
+                if (!String.IsNullOrEmpty(versionlist))
+                {
+                    dynamic titles = JsonConvert.DeserializeObject(versionlist);
+
+                    foreach (var title in titles.titles)
+                    {
+                        result.Add(Convert.ToString(title.id).Substring(0, 13).ToUpper() + "000", Convert.ToInt32(title.version));
+                    }
+
+                    FrmMain.TitleVersionUpdate = Convert.ToInt32(titles.last_modified);
+                }
+            }
+
+            return result;
+        }
+
+        public class HttpsWebClient : WebClient
+        {
+            protected override WebRequest GetWebRequest(Uri address)
+            {
+                HttpWebRequest request = (HttpWebRequest) base.GetWebRequest(address);
+
+                X509Certificate2 certificate = new X509Certificate2(CLIENT_CERT_FILE, "switch");
+                request.ClientCertificates.Add(certificate);
+
+                request.KeepAlive = true;
+
+                return request;
+            }
+        }
+
+        public static void UpdateVersionList()
+        {
+            using (var client = new WebClient())
+            {
+                if (File.Exists(CLIENT_CERT_FILE))
+                {
+                    string header = "";
+
+                    try
+                    {
+                        header = client.DownloadString(HEADER_DOWNLOAD_SITE);
+                    }
+                    catch { }
+
+                    if (!String.IsNullOrEmpty(header))
+                    {
+                        dynamic config = JsonConvert.DeserializeObject(header);
+
+                        using (var httpsClient = new HttpsWebClient())
+                        {
+                            ServicePointManager.ServerCertificateValidationCallback = delegate { return true; };
+
+                            httpsClient.Headers.Add("User-Agent", string.Format("NintendoSDK Firmware/{0} (platform:{1}; did:{2}; eid:{3})",
+                                config.header.firmware, config.header.platform, config.header.did, config.header.eid));
+                            httpsClient.Headers.Add("Accept-Encoding", "gzip, deflate");
+                            httpsClient.Headers.Add("Accept", "*/*");
+
+                            try
+                            {
+                                string versionlist = httpsClient.DownloadString(TAGAYA_DOWNLOAD_SITE);
+
+                                if (!String.IsNullOrEmpty(versionlist))
+                                {
+                                    dynamic titles = JsonConvert.DeserializeObject(versionlist);
+
+                                    if (Convert.ToInt32(titles.last_modified) > FrmMain.TitleVersionUpdate)
+                                    {
+                                        File.WriteAllText(VERSION_LIST_FILE, versionlist);
+
+                                        FrmMain.TitleVersionUpdate = Convert.ToInt32(titles.last_modified);
+                                    }
+                                }
+                            }
+                            catch (Exception ex)
+                            {
+                                logger.Error("Could not download version list. " + ex.StackTrace);
+                                MessageBox.Show("Could not download version list! \n Please check your internet connection.");
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    try
+                    {
+                        string versionlist = client.DownloadString(VERSION_LIST_DOWNLOAD_SITE);
+
+                        if (!String.IsNullOrEmpty(versionlist))
+                        {
+                            dynamic titles = JsonConvert.DeserializeObject(versionlist);
+
+                            if (Convert.ToInt32(titles.last_modified) > FrmMain.TitleVersionUpdate)
+                            {
+                                File.WriteAllText(VERSION_LIST_FILE, versionlist);
+
+                                FrmMain.TitleVersionUpdate = Convert.ToInt32(titles.last_modified);
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        logger.Error("Could not download cached version list. " + ex.StackTrace);
+                        MessageBox.Show("Could not download cached version list! \n Please check your internet connection.");
+                    }
+                }
+            }
+        }
+
         public static void GetKeys()
         {
             string text = (from x in File.ReadAllLines(KEYS_FILE)
@@ -1686,17 +1821,20 @@ namespace Switch_Backup_Manager
                             data = Util.GetFileDataNSP(file);
                         }
 
-                        logger.Info("Scraping file " + data.FilePath + ", TitleID: " + data.TitleID);
-                        FrmMain.progressCurrentfile = data.FilePath;
-                        try
+                        if (!String.IsNullOrEmpty(data.TitleID))
                         {
-                            dictionary.Add(new Tuple<string, string>(data.TitleID, fileType == "xci" ? data.Firmware : data.Version), data);
+                            logger.Info("Scraping file " + data.FilePath + ", TitleID: " + data.TitleID);
+                            FrmMain.progressCurrentfile = data.FilePath;
+                            try
+                            {
+                                dictionary.Add(new Tuple<string, string>(data.TitleID, fileType == "xci" ? data.Firmware : data.Version), data);
+                            }
+                            catch (ArgumentException ex)
+                            {
+                                logger.Error("TitleID " + data.TitleID + " is already on database");
+                            }
                         }
-                        catch (ArgumentException ex)
-                        {
-                            logger.Error("TitleID " + data.TitleID + " is already on database");
-                        }
-                            
+
                         i++;
                         FrmMain.progressPercent = (int)(i * 100) / filesCount;
                     }
@@ -1744,15 +1882,18 @@ namespace Switch_Backup_Manager
                     {
                         data = Util.GetFileDataNSP(file);
                     }
-                    
-                    FrmMain.progressCurrentfile = data.FilePath;
-                    try
+
+                    if (!String.IsNullOrEmpty(data.TitleID))
                     {
-                        dictionary.Add(new Tuple<string, string>(data.TitleID, fileType == "xci" ? data.Firmware : data.Version), data);
-                    }
-                    catch (ArgumentException ex)
-                    {
-                        logger.Error("TitleID " + data.TitleID + " is already on database.");
+                        FrmMain.progressCurrentfile = data.FilePath;
+                        try
+                        {
+                            dictionary.Add(new Tuple<string, string>(data.TitleID, fileType == "xci" ? data.Firmware : data.Version), data);
+                        }
+                        catch (ArgumentException ex)
+                        {
+                            logger.Error("TitleID " + data.TitleID + " is already on database.");
+                        }
                     }
 
                     i++;
@@ -2389,6 +2530,13 @@ namespace Switch_Backup_Manager
                     {
                         data.GameName = data.GameName;
                     }
+
+                    int latest = -1;
+                    FrmMain.TitleVersionList.TryGetValue(data.TitleIDBaseGame, out latest);
+                    if (latest != -1)
+                    {
+                        data.Latest = latest.ToString();
+                    }
                 }
 
                 //Lets get SDK Version, Distribution Type and Masterkey revision
@@ -2896,6 +3044,13 @@ namespace Switch_Backup_Manager
                 }
                 //GetExtraInfoFromScene(result);
 
+                int latest = -1;
+                FrmMain.TitleVersionList.TryGetValue(result.TitleIDBaseGame, out latest);
+                if (latest != -1)
+                {
+                    result.Latest = latest.ToString();
+                }
+
                 if (ScrapExtraInfoFromWeb)
                 {
                     GetExtendedInfo(result);
@@ -3218,7 +3373,10 @@ namespace Switch_Backup_Manager
                 FileData data = GetFileDataNSP(file);
                 try
                 {
-                    result.Add(new Tuple<string, string>(data.TitleID, data.Version), data);
+                    if (!String.IsNullOrEmpty(data.TitleID))
+                    {
+                        result.Add(new Tuple<string, string>(data.TitleID, data.Version), data);
+                    }
                 }
                 catch
                 {
@@ -3247,8 +3405,12 @@ namespace Switch_Backup_Manager
                 FileData data = GetFileData(file);
                 try
                 {
-                    result.Add(new Tuple<string, string>(data.TitleID, data.Firmware), data);
-                } catch
+                    if (!String.IsNullOrEmpty(data.TitleID))
+                    {
+                        result.Add(new Tuple<string, string>(data.TitleID, data.Firmware), data);
+                    }
+                }
+                catch
                 {
                     logger.Error("Found duplicate file (same TitleID = " + data.TitleID + " on " + Path.GetDirectoryName(data.FilePath) + ".");
                 }
@@ -3285,7 +3447,10 @@ namespace Switch_Backup_Manager
                 
                 try
                 {
-                    result.Add(new Tuple<string, string>(data.TitleID, Path.GetExtension(file) == ".xci" ? data.Firmware : data.Version), data);
+                    if (!String.IsNullOrEmpty(data.TitleID))
+                    {
+                        result.Add(new Tuple<string, string>(data.TitleID, Path.GetExtension(file) == ".xci" ? data.Firmware : data.Version), data);
+                    }
                 }
                 catch
                 {

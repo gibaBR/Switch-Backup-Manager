@@ -2378,7 +2378,7 @@ namespace Switch_Backup_Manager
                                                 select x.Split('|') into x
                                                 where x.Length > 1
                                                 select x).ToDictionary((string[] x) => x[0].Trim().Substring(0, 16), (string[] x) => x[2])[data.TitleID.ToLower()];
-                                    data.GameName = gameName;
+                                    data.GameName = gameName.Replace("[DLC] ", "");
                                     found = true;
                                 }
                                 catch (Exception e)
@@ -2400,7 +2400,7 @@ namespace Switch_Backup_Manager
                                         logger.Warning("Could not find game name! Don't worry, will try again later\n" + e.StackTrace);
                                     }
 
-                                    data.GameName = gameName;
+                                    data.GameName = gameName.Replace("[DLC] ", "");
                                 }
                             }
                         }
@@ -2614,7 +2614,7 @@ namespace Switch_Backup_Manager
                                                             select x.Split('|') into x
                                                             where x.Length > 1
                                                             select x).ToDictionary((string[] x) => x[0].Trim().Substring(0, 16), (string[] x) => x[2])[data.TitleID.ToLower()];
-                                                data.GameName = gameName;
+                                                data.GameName = gameName.Replace("[DLC] ", "");
                                                 found = true;
                                             }
                                             catch (Exception e)
@@ -2636,7 +2636,7 @@ namespace Switch_Backup_Manager
                                                     logger.Warning("Could not find game name! Don't worry, will try again later\n" + e.StackTrace);
                                                 }
 
-                                                data.GameName = gameName;
+                                                data.GameName = gameName.Replace("[DLC] ", "");
                                             }
                                         }
                                     }

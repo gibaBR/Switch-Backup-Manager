@@ -4205,8 +4205,11 @@ namespace Switch_Backup_Manager
                 if (latest != -1)
                 {
                     data.Latest = latest.ToString();
+                    Util.UpdateXMLFromFileData(data, "local");
                 }
             }
+
+            Util.XML_Local.Save(@Util.LOCAL_FILES_DB);
 
             foreach (FileData data in LocalNSPFilesList.Values)
             {
@@ -4217,9 +4220,12 @@ namespace Switch_Backup_Manager
                     if (latest != -1)
                     {
                         data.Latest = latest.ToString();
+                        Util.UpdateXMLFromFileData(data, "eshop");
                     }
                 }
             }
+
+            Util.XML_NSP_Local.Save(@Util.LOCAL_NSP_FILES_DB);
 
             foreach (FileData data in SDCardList.Values)
             {

@@ -2279,7 +2279,7 @@ namespace Switch_Backup_Manager
                             {
                                 data.Region_Icon = data_tmp.Region_Icon;
                                 data.Languages = data_tmp.Languages;
-                                data.GameRevision = data_tmp.GameRevision;
+                                //data.GameRevision = data_tmp.GameRevision;
                                 data.ProductCode = data_tmp.ProductCode;
                                 data.GameName = data_tmp.GameName;// + " [DLC]";
                                 data.Developer = data_tmp.Developer;
@@ -2301,7 +2301,7 @@ namespace Switch_Backup_Manager
                                 {
                                     data.Region_Icon = data_tmp.Region_Icon;
                                     data.Languages = data_tmp.Languages;
-                                    data.GameRevision = data_tmp.GameRevision;
+                                    //data.GameRevision = data_tmp.GameRevision;
                                     data.ProductCode = data_tmp.ProductCode;
                                     data.GameName = data_tmp.GameName;// + " [DLC]";
                                     data.Developer = data_tmp.Developer;
@@ -2324,7 +2324,7 @@ namespace Switch_Backup_Manager
                                 {
                                     data.Region_Icon = data_tmp.Region_Icon;
                                     data.Languages = data_tmp.Languages;
-                                    data.GameRevision = data_tmp.GameRevision;
+                                    //data.GameRevision = data_tmp.GameRevision;
                                     data.ProductCode = data_tmp.ProductCode;
                                     data.GameName = data_tmp.GameName;// + " [DLC]";
                                     data.Developer = data_tmp.Developer;
@@ -2333,22 +2333,36 @@ namespace Switch_Backup_Manager
                                 }
                             }
 
-                            //Last resource, look at titlekeys
-                            if (!found)
+                            //Always look at titlekeys for proper DLC name
+                            if (UseTitleKeys && File.Exists(TITLE_KEYS))
                             {
-                                if (UseTitleKeys && File.Exists(TITLE_KEYS))
+                                string gameName = "";
+                                try
                                 {
-                                    string gameName = "";
+                                    gameName = (from x in File.ReadAllLines(TITLE_KEYS)
+                                                select x.Split('|') into x
+                                                where x.Length > 1
+                                                select x).ToDictionary((string[] x) => x[0].Trim().Substring(0, 16), (string[] x) => x[2])[data.TitleID.ToLower()];
+                                    data.GameName = gameName;
+                                    found = true;
+                                }
+                                catch (Exception e)
+                                {
+                                    logger.Warning("Could not find game name! Don't worry, will try again later\n" + e.StackTrace);
+                                }
+
+                                if (!found)
+                                {
                                     try
                                     {
                                         gameName = (from x in File.ReadAllLines(TITLE_KEYS)
                                                     select x.Split('|') into x
                                                     where x.Length > 1
-                                                    select x).ToDictionary((string[] x) => x[0].Trim(), (string[] x) => x[2])[data.TitleIDBaseGame].ToLower();
+                                                    select x).ToDictionary((string[] x) => x[0].Trim().Substring(0, 16), (string[] x) => x[2])[data.TitleIDBaseGame.ToLower()];
                                     }
                                     catch (Exception e)
                                     {
-                                        logger.Warning("Could not find game name! Don't worry, will try again later\n"+e.StackTrace);
+                                        logger.Warning("Could not find game name! Don't worry, will try again later\n" + e.StackTrace);
                                     }
 
                                     data.GameName = gameName;

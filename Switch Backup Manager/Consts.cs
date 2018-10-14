@@ -59,6 +59,8 @@ namespace Switch_Backup_Manager
             LEGALINFO_XML = 1 << 3,
             NACP_XML = 1 << 4,
             PROGRAMINFO_XML = 1 << 5,
+            CARDSPEC_XML = 1 << 6,
+            AUTHORINGTOOLINFO_XML = 1 << 7,
         }
     }
 }

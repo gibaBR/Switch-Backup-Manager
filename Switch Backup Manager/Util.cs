@@ -2178,7 +2178,8 @@ namespace Switch_Backup_Manager
                         fileStream.Position = 16 + 24 * PFS0.PFS0_Headers[0].FileCount + PFS0.PFS0_Headers[0].StringTableSize + array3[n].Offset;
                         fileStream.Read(array4, 0, (int)array3[n].Size);
 
-                        XDocument xml = XDocument.Parse(Encoding.UTF8.GetString(array4));
+                        byte[] byteOrderMarkUtf8 = Encoding.UTF8.GetPreamble();
+                        XDocument xml = XDocument.Parse(Encoding.UTF8.GetString(array4.Take(byteOrderMarkUtf8.Length).SequenceEqual(byteOrderMarkUtf8) ? array4.Skip(byteOrderMarkUtf8.Length).ToArray() : array4));
                         data.TitleID = xml.Element("ContentMeta").Element("Id").Value.Remove(1, 2).ToUpper();
                         data.ContentType = xml.Element("ContentMeta").Element("Type").Value;
                         data.Version = xml.Element("ContentMeta").Element("Version").Value;
@@ -2426,7 +2427,8 @@ namespace Switch_Backup_Manager
                         fileStream.Position = 16 + 24 * PFS0.PFS0_Headers[0].FileCount + PFS0.PFS0_Headers[0].StringTableSize + array3[n].Offset;
                         fileStream.Read(array4, 0, (int)array3[n].Size);
 
-                        XDocument xml = XDocument.Parse(Encoding.UTF8.GetString(array4));
+                        byte[] byteOrderMarkUtf8 = Encoding.UTF8.GetPreamble();
+                        XDocument xml = XDocument.Parse(Encoding.UTF8.GetString(array4.Take(byteOrderMarkUtf8.Length).SequenceEqual(byteOrderMarkUtf8) ? array4.Skip(byteOrderMarkUtf8.Length).ToArray() : array4));
                         try
                         {
                             data.GameName = xml.Element("Application").Element("Title").Element("Name").Value;
@@ -2437,6 +2439,14 @@ namespace Switch_Backup_Manager
                     else if (array3[n].Name.EndsWith(".programinfo.xml"))
                     {
                         nspSource |= (int)Consts.NSPSource.PROGRAMINFO_XML;
+                    }
+                    else if (array3[n].Name == "cardspec.xml")
+                    {
+                        nspSource |= (int)Consts.NSPSource.CARDSPEC_XML;
+                    }
+                    else if (array3[n].Name == "authoringtoolinfo.xml")
+                    {
+                        nspSource |= (int)Consts.NSPSource.AUTHORINGTOOLINFO_XML;
                     }
 
                     if (n == 149) //Dump of TitleID 01009AA000FAA000 reports more than 10000000 files here, so it breaks the program. We need to put some reasonable number here.

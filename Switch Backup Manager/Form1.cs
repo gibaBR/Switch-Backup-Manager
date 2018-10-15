@@ -124,7 +124,6 @@ namespace Switch_Backup_Manager
             UpdateLocalGamesList();
             UpdateLocalNSPGamesList();
             FilterEshopByContentType();
-            UpdateTitleVersionList();
 
             try
             {
@@ -3740,6 +3739,7 @@ namespace Switch_Backup_Manager
 
             UpdateLocalGamesList();
             UpdateLocalNSPGamesList();
+            UpdateTitleVersionList();
             tabControl1_SelectedIndexChanged(this, new EventArgs());
         }
 
@@ -4197,7 +4197,21 @@ namespace Switch_Backup_Manager
         public void UpdateTitleVersionList()
         {
             TitleVersionList = Util.LoadVersionListToDictionary();
+            if (!backgroundWorkerUpdateVersionList.IsBusy)
+            {
+                backgroundWorkerUpdateVersionList.RunWorkerAsync();
+            }
+        }
 
+        private void updateVersionListToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Util.UpdateVersionList();
+            UpdateTitleVersionList();
+            MessageBox.Show("Done.");
+        }
+
+        private void backgroundWorkerUpdateVersionList_DoWork(object sender, DoWorkEventArgs e)
+        {
             foreach (FileData data in LocalFilesList.Values)
             {
                 int latest = -1;
@@ -4208,8 +4222,6 @@ namespace Switch_Backup_Manager
                     Util.UpdateXMLFromFileData(data, "local");
                 }
             }
-
-            Util.XML_Local.Save(@Util.LOCAL_FILES_DB);
 
             foreach (FileData data in LocalNSPFilesList.Values)
             {
@@ -4225,8 +4237,6 @@ namespace Switch_Backup_Manager
                 }
             }
 
-            Util.XML_NSP_Local.Save(@Util.LOCAL_NSP_FILES_DB);
-
             foreach (FileData data in SDCardList.Values)
             {
                 if (data.ContentType != "AddOnContent")
@@ -4241,11 +4251,10 @@ namespace Switch_Backup_Manager
             }
         }
 
-        private void updateVersionListToolStripMenuItem_Click(object sender, EventArgs e)
+        private void backgroundWorkerUpdateVersionList_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            Util.UpdateVersionList();
-            UpdateTitleVersionList();
-            MessageBox.Show("Done.");
+            Util.XML_Local.Save(@Util.LOCAL_FILES_DB);
+            Util.XML_NSP_Local.Save(@Util.LOCAL_NSP_FILES_DB);
         }
     }
 }

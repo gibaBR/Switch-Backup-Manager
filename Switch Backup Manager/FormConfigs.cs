@@ -1,12 +1,6 @@
 ﻿using Microsoft.WindowsAPICodePack.Dialogs;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Switch_Backup_Manager
@@ -44,8 +38,8 @@ namespace Switch_Backup_Manager
             gameExampleNSP = new FileData("C:\\Switch\\1-2-Switch [01000320000cc000][v0].nsp", "1-2-Switch [01000320000cc000][v0]", "1-2-Switch [01000320000cc000][v0].nsp", 
                 "1,38 GB", 1481339176, "1,38 GB", 1481339176, "01000320000CC000" , "01000320000CC000", "1-2-Switch", "Nintendo", "1.0.0", "No Prod. ID", "0.12.12.0", "e-shop", 
                 "0 (1.0.0-2.3.0)", new Dictionary<string, string> { { "American English", "cache\\icon_01000320000CC000_AmericanEnglish.bmp" }, { "Japanese", "cache\\icon_01000320000CC000_Japanese.bmp" } },
-                new List<string> { "American English", "Japanese" }, "en, ja", true, "", "", "0", "e-shop", "", false, "Download", 0, "Application", "0", true, "", "Nintendo", "Mar 03, 2017", 
-                "2 players simultaneous", new List<string> { "Party", "Multiplayer", "Action" }, 0);
+                new List<string> { "American English", "Japanese" }, "en, ja", true, "", "", "0", "e-shop", "", false, "Download", 0, "Application", "0", "0", true, "", "Nintendo", "Mar 03, 2017", 
+                "2 players simultaneous", new List<string> { "Party", "Multiplayer", "Action" }, 0, "");
 
             cbxTagsXCI.Items.Clear();
             for (int i = 0; i < Util.AutoRenamingTags.Length; i++)
@@ -55,11 +49,15 @@ namespace Switch_Backup_Manager
                 cbxTagsNSP.Items.Add(Util.AutoRenamingTags[i]);
             }
 
+            labelLastVersionListUpdate.Text = string.Format("Last version list update: {0}", FrmMain.TitleVersionUpdate <= 0 ? "Never" : new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc).AddSeconds(FrmMain.TitleVersionUpdate).ToLongDateString());
+
             LoadConfig();
         }
 
         public void WriteConfig()
         {
+            Util.UserCanDeleteFiles = this.cbUserCanDeleteFiles.Checked;
+            Util.SendDeletedFilesToRecycleBin = this.cbSendDeletedFileToRecycleBin.Checked;
             Util.autoRenamingPattern = this.autoRenamingPattern;
             Util.autoRenamingPatternNSP = this.autoRenamingPatternNSP;
             Util.ini.IniWriteValue("AutoRenaming", "pattern", this.autoRenamingPattern);
@@ -84,7 +82,8 @@ namespace Switch_Backup_Manager
             Util.ini.IniWriteValue("Config", "scrapExtraInfoFromWeb", cbScrapExtraInfoFromWeb.Checked ? "true" : "false");
             Util.ini.IniWriteValue("Config", "autoRemoveMissingFiles", cbAutoRemoveMissingFiles.Checked ? "true" : "false");
             Util.ini.IniWriteValue("Visual", "showCompletePathFiles", cbShowCompletePaths.Checked ? "true" : "false");
-
+            Util.ini.IniWriteValue("Config", "userCanDeleteFiles", cbUserCanDeleteFiles.Checked ? "true" : "false");
+            Util.ini.IniWriteValue("Config", "sendDeletedFilesToRecycleBin", cbSendDeletedFileToRecycleBin.Checked ? "true" : "false");
             Util.HighlightXCIOnScene = cbHighlightXCIOnScene.Checked;
             Util.HighlightNSPOnScene = cbHighlightNSPOnScene.Checked;
             Util.HighlightBothOnScene = cbHighlightBothOnScene.Checked;
@@ -183,6 +182,9 @@ namespace Switch_Backup_Manager
             this.cbScrapExtraInfoFromWeb.Checked = Util.ScrapExtraInfoFromWeb;
             this.cbAutoRemoveMissingFiles.Checked = Util.AutoRemoveMissingFiles;
             this.cbShowCompletePaths.Checked = Util.ShowCompletePathFiles;
+            this.cbUserCanDeleteFiles.Checked = Util.UserCanDeleteFiles;
+            this.cbSendDeletedFileToRecycleBin.Checked = Util.SendDeletedFilesToRecycleBin;
+            cbUserCanDeleteFiles_CheckedChanged(this, new EventArgs());
 
             cbHighlightXCIOnScene.Checked = Util.HighlightXCIOnScene;
             cbHighlightNSPOnScene.Checked = Util.HighlightNSPOnScene;
@@ -433,6 +435,11 @@ namespace Switch_Backup_Manager
             // Update the text box color if the user clicks OK 
             if (MyDialog.ShowDialog() == DialogResult.OK)
                 btnColorBoth.BackColor = MyDialog.Color;
+        }
+
+        private void cbUserCanDeleteFiles_CheckedChanged(object sender, EventArgs e)
+        {
+            cbSendDeletedFileToRecycleBin.Visible = cbUserCanDeleteFiles.Checked;
         }
     }
 }

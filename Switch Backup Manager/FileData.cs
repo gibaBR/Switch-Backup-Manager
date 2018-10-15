@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace Switch_Backup_Manager
 {
@@ -41,13 +36,16 @@ namespace Switch_Backup_Manager
             this.IdScene = 0;
             this.ContentType = "";
             this.Version = "";
+            this.Latest = "";
             this.HasExtendedInfo = false;
             this.Description = "";
             this.Publisher = "";
             this.ReleaseDate = "";
+            this.ImportedDate = "";
             this.NumberOfPlayers = "";
             this.Categories = new List<string>();
             this.ESRB = 0;
+            this.Source = "";
         }
 
         public FileData(string FilePath, string FileName, string FileNameWithExt, string ROMSize, long ROMSizeBytes, 
@@ -55,9 +53,10 @@ namespace Switch_Backup_Manager
             string Developer, string GameRevision, string ProductCode, string SDKVersion, string CartSize, 
             string MasterKeyRevision, Dictionary<string, string> Region_Icon, List<string> Languages, string Languages_resumed, 
             bool IsTrimmed, string Group, string Serial, string Firmware, string Cardtype, string Region, bool IsSplit, 
-            string DistributionType, int IdScene, string ContentType, string Version, bool HasExtendedInfo, string Description, 
-            string Publisher, string ReleaseDate, string NumberOfPlayers, List<string> Categories, int ESRB)
+            string DistributionType, int IdScene, string ContentType, string Version, string Latest, bool HasExtendedInfo, string Description, 
+            string Publisher, string ReleaseDate, string NumberOfPlayers, List<string> Categories, int ESRB, string Source)
         {
+            this.ImportedDate = "";
             this.FilePath = FilePath;
             this.FileName = FileName;
             this.FileNameWithExt = FileNameWithExt;
@@ -88,6 +87,7 @@ namespace Switch_Backup_Manager
             this.IdScene = IdScene;
             this.ContentType = ContentType;
             this.Version = Version;
+            this.Latest = Latest;
             this.HasExtendedInfo = HasExtendedInfo;
             this.Description = Description;
             this.Publisher = Publisher;
@@ -95,8 +95,10 @@ namespace Switch_Backup_Manager
             this.NumberOfPlayers = NumberOfPlayers;
             this.Categories = Categories;
             this.ESRB = ESRB;
+            this.Source = Source;
         }
 
+        public string ImportedDate { get; set; }
         public string FilePath { get; set; }
         public string FileName { get; set; }
         public string FileNameWithExt { get; set; }
@@ -127,6 +129,7 @@ namespace Switch_Backup_Manager
         public int IdScene { get; set; }
         public string ContentType { get; set; } //Patch, AddOnContent, Application
         public string Version { get; set; } //Used by NSP Only
+        public string Latest { get; set; }
 
         //Info from web
         public bool HasExtendedInfo { get; set; }
@@ -135,7 +138,9 @@ namespace Switch_Backup_Manager
         public string ReleaseDate { get; set; }
         public string NumberOfPlayers { get; set; }
         public List<string> Categories { get; set; }
-        public int ESRB { get; set; }        
+        public int ESRB { get; set; }
+        
+        public string Source { get; set; }
 
         //Available at runtime only
         public string sceneFound { get; set; }

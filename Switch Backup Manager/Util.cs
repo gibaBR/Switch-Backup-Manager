@@ -1183,7 +1183,7 @@ namespace Switch_Backup_Manager
                                    new XElement("ID_Scene", data.IdScene),
                                    new XElement("Content_Type", data.ContentType),
                                    new XElement("Version", data.Version),
-                                   //new XElement("Latest", data.Latest),
+                                   new XElement("Latest", data.Latest),
                                    new XElement("HasExtendedInfo", data.HasExtendedInfo),
                                    new XElement("Description", data.Description),
                                    new XElement("Publisher", data.Publisher),
@@ -3360,6 +3360,10 @@ namespace Switch_Backup_Manager
                 {
                     result.Version = xe.Element("Version").Value;
                 }
+                //if (xe.Element("Latest") != null)
+                //{
+                //    result.Latest = xe.Element("Latest").Value;
+                //}
                 if (xe.Element("CartSize") != null)
                 {
                     result.CartSize = xe.Element("CartSize").Value;
@@ -3519,13 +3523,23 @@ namespace Switch_Backup_Manager
                 {
                     result.ESRB = Convert.ToInt32(xe.Element("ESRB").Value);
                 }
-                if (xe.Element("Latest") != null)
-                {
-                    result.Latest = (result.ContentType != "AddOnContent" ? "0" : ""); //xe.Element("Latest").Value;
-                }
                 if (xe.Element("Source") != null)
                 {
                     result.Source = xe.Element("Source").Value;
+                }
+
+                if (result.ContentType != "AddOnContent")
+                {
+                    int latest = -1;
+                    FrmMain.TitleVersionList.TryGetValue(result.TitleID.Substring(0, 13).ToUpper() + "000", out latest);
+                    if (latest != -1)
+                    {
+                        result.Latest = latest.ToString();
+                    }
+                    else
+                    {
+                        result.Latest = "0";
+                    }
                 }
             }
             catch (Exception ex)

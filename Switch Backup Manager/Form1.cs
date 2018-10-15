@@ -120,6 +120,7 @@ namespace Switch_Backup_Manager
 
             SetupOLVs();
 
+            UpdateTitleVersionList();
             UpdateSceneReleasesList();
             UpdateLocalGamesList();
             UpdateLocalNSPGamesList();
@@ -3739,7 +3740,6 @@ namespace Switch_Backup_Manager
 
             UpdateLocalGamesList();
             UpdateLocalNSPGamesList();
-            UpdateTitleVersionList();
             tabControl1_SelectedIndexChanged(this, new EventArgs());
         }
 
@@ -4197,10 +4197,6 @@ namespace Switch_Backup_Manager
         public void UpdateTitleVersionList()
         {
             TitleVersionList = Util.LoadVersionListToDictionary();
-            if (!backgroundWorkerUpdateVersionList.IsBusy)
-            {
-                backgroundWorkerUpdateVersionList.RunWorkerAsync();
-            }
         }
 
         private void updateVersionListToolStripMenuItem_Click(object sender, EventArgs e)
@@ -4208,16 +4204,15 @@ namespace Switch_Backup_Manager
             Util.UpdateVersionList();
             UpdateTitleVersionList();
             MessageBox.Show("Done.");
+
+            if (!backgroundWorkerUpdateVersionList.IsBusy)
+            {
+                backgroundWorkerUpdateVersionList.RunWorkerAsync();
+            }
         }
 
         private void backgroundWorkerUpdateVersionList_DoWork(object sender, DoWorkEventArgs e)
         {
-            if (TitleVersionList.Count == 0)
-            {
-                Util.UpdateVersionList();
-                TitleVersionList = Util.LoadVersionListToDictionary();
-            }
-
             foreach (FileData data in LocalFilesList.Values)
             {
                 int latest = -1;

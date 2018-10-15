@@ -1183,7 +1183,7 @@ namespace Switch_Backup_Manager
                                    new XElement("ID_Scene", data.IdScene),
                                    new XElement("Content_Type", data.ContentType),
                                    new XElement("Version", data.Version),
-                                   new XElement("Latest", data.Latest),
+                                   //new XElement("Latest", data.Latest),
                                    new XElement("HasExtendedInfo", data.HasExtendedInfo),
                                    new XElement("Description", data.Description),
                                    new XElement("Publisher", data.Publisher),
@@ -1613,7 +1613,7 @@ namespace Switch_Backup_Manager
         {
             using (var client = new WebClient())
             {
-                if (File.Exists(CLIENT_CERT_FILE))
+                if (false /*File.Exists(CLIENT_CERT_FILE)*/) //Temporary disabled for now
                 {
                     string header = "";
 
@@ -3360,10 +3360,6 @@ namespace Switch_Backup_Manager
                 {
                     result.Version = xe.Element("Version").Value;
                 }
-                if (xe.Element("Latest") != null)
-                {
-                    result.Latest = xe.Element("Latest").Value;
-                }
                 if (xe.Element("CartSize") != null)
                 {
                     result.CartSize = xe.Element("CartSize").Value;
@@ -3522,6 +3518,10 @@ namespace Switch_Backup_Manager
                 if (xe.Element("ESRB") != null)
                 {
                     result.ESRB = Convert.ToInt32(xe.Element("ESRB").Value);
+                }
+                if (xe.Element("Latest") != null)
+                {
+                    result.Latest = (result.ContentType != "AddOnContent" ? "0" : ""); //xe.Element("Latest").Value;
                 }
                 if (xe.Element("Source") != null)
                 {

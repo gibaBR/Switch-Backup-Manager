@@ -4212,6 +4212,12 @@ namespace Switch_Backup_Manager
 
         private void backgroundWorkerUpdateVersionList_DoWork(object sender, DoWorkEventArgs e)
         {
+            if (TitleVersionList.Count == 0)
+            {
+                Util.UpdateVersionList();
+                TitleVersionList = Util.LoadVersionListToDictionary();
+            }
+
             foreach (FileData data in LocalFilesList.Values)
             {
                 int latest = -1;
@@ -4219,7 +4225,7 @@ namespace Switch_Backup_Manager
                 if (latest != -1)
                 {
                     data.Latest = latest.ToString();
-                    Util.UpdateXMLFromFileData(data, "local");
+                    //Util.UpdateXMLFromFileData(data, "local");
                 }
             }
 
@@ -4232,7 +4238,7 @@ namespace Switch_Backup_Manager
                     if (latest != -1)
                     {
                         data.Latest = latest.ToString();
-                        Util.UpdateXMLFromFileData(data, "eshop");
+                        //Util.UpdateXMLFromFileData(data, "eshop");
                     }
                 }
             }
@@ -4253,8 +4259,8 @@ namespace Switch_Backup_Manager
 
         private void backgroundWorkerUpdateVersionList_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            Util.XML_Local.Save(@Util.LOCAL_FILES_DB);
-            Util.XML_NSP_Local.Save(@Util.LOCAL_NSP_FILES_DB);
+            //Util.XML_Local.Save(@Util.LOCAL_FILES_DB);
+            //Util.XML_NSP_Local.Save(@Util.LOCAL_NSP_FILES_DB);
         }
     }
 }

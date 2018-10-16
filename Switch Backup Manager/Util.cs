@@ -1615,6 +1615,8 @@ namespace Switch_Backup_Manager
             {
                 if (File.Exists(CLIENT_CERT_FILE))
                 {
+                    logger.Info("Certificate " + CLIENT_CERT_FILE + " found. Starting download version list from nintendo");
+
                     string header = "";
 
                     try
@@ -1633,7 +1635,7 @@ namespace Switch_Backup_Manager
 
                             httpsClient.Headers.Add("User-Agent", string.Format("NintendoSDK Firmware/{0} (platform:{1}; did:{2}; eid:{3})",
                                 config.header.firmware, config.header.platform, config.header.did, config.header.eid));
-                            httpsClient.Headers.Add("Accept-Encoding", "gzip, deflate");
+                            //httpsClient.Headers.Add("Accept-Encoding", "gzip, deflate");
                             httpsClient.Headers.Add("Accept", "*/*");
 
                             try
@@ -1649,7 +1651,14 @@ namespace Switch_Backup_Manager
                                         File.WriteAllText(VERSION_LIST_FILE, versionlist);
 
                                         FrmMain.TitleVersionUpdate = Convert.ToInt32(titles.last_modified);
+                                        logger.Info("Version list last updated at " + String.Format("{0:F}", new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc).AddSeconds(FrmMain.TitleVersionUpdate)));
                                     }
+                                    else
+                                    {
+                                        logger.Info("No updates available.");
+                                    }
+
+                                    return;
                                 }
                             }
                             catch (Exception ex)
@@ -1659,31 +1668,45 @@ namespace Switch_Backup_Manager
                             }
                         }
                     }
+
+                    logger.Error("Could not download version list from nintendo. Starting download cached version list from pastebin");
                 }
-                else
+
+                if (!File.Exists(CLIENT_CERT_FILE))
                 {
-                    try
-                    {
-                        string versionlist = client.DownloadString(VERSION_LIST_DOWNLOAD_SITE);
+                    logger.Info("No certificates " + CLIENT_CERT_FILE + " found. Starting download cached version list from pastebin");
+                }
 
-                        if (!String.IsNullOrEmpty(versionlist))
+                try
+                {
+                    string versionlist = client.DownloadString(VERSION_LIST_DOWNLOAD_SITE);
+
+                    if (!String.IsNullOrEmpty(versionlist))
+                    {
+                        dynamic titles = JsonConvert.DeserializeObject(versionlist);
+
+                        if (Convert.ToInt32(titles.last_modified) > FrmMain.TitleVersionUpdate)
                         {
-                            dynamic titles = JsonConvert.DeserializeObject(versionlist);
+                            File.WriteAllText(VERSION_LIST_FILE, versionlist);
 
-                            if (Convert.ToInt32(titles.last_modified) > FrmMain.TitleVersionUpdate)
-                            {
-                                File.WriteAllText(VERSION_LIST_FILE, versionlist);
-
-                                FrmMain.TitleVersionUpdate = Convert.ToInt32(titles.last_modified);
-                            }
+                            FrmMain.TitleVersionUpdate = Convert.ToInt32(titles.last_modified);
+                            logger.Info("Version list last updated at " + String.Format("{0:F}", new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc).AddSeconds(FrmMain.TitleVersionUpdate)));
                         }
-                    }
-                    catch (Exception ex)
-                    {
-                        logger.Error("Could not download cached version list. " + ex.StackTrace);
-                        MessageBox.Show("Could not download cached version list! \n Please check your internet connection.");
+                        else
+                        {
+                            logger.Info("No updates available.");
+                        }
+
+                        return;
                     }
                 }
+                catch (Exception ex)
+                {
+                    logger.Error("Could not download cached version list. " + ex.StackTrace);
+                    MessageBox.Show("Could not download cached version list! \n Please check your internet connection.");
+                }
+
+                logger.Error("Could not download cached version list from pastebin. Please check your internet connection.");
             }
         }
 
@@ -1695,7 +1718,6 @@ namespace Switch_Backup_Manager
                            select x).ToDictionary((string[] x) => x[0].Trim(), (string[] x) => x[1])["header_key"].Replace(" ", "");
             NcaHeaderEncryptionKey1_Prod = StringToByteArray(text.Remove(32, 32));
             NcaHeaderEncryptionKey2_Prod = StringToByteArray(text.Remove(0, 32));
-
         }
 
         public static string GetMkey(byte id)
@@ -3360,10 +3382,10 @@ namespace Switch_Backup_Manager
                 {
                     result.Version = xe.Element("Version").Value;
                 }
-                if (xe.Element("Latest") != null)
-                {
-                    result.Latest = xe.Element("Latest").Value;
-                }
+                //if (xe.Element("Latest") != null)
+                //{
+                //    result.Latest = xe.Element("Latest").Value;
+                //}
                 if (xe.Element("CartSize") != null)
                 {
                     result.CartSize = xe.Element("CartSize").Value;
@@ -3526,6 +3548,20 @@ namespace Switch_Backup_Manager
                 if (xe.Element("Source") != null)
                 {
                     result.Source = xe.Element("Source").Value;
+                }
+
+                if (result.ContentType != "AddOnContent")
+                {
+                    int latest = -1;
+                    FrmMain.TitleVersionList.TryGetValue(result.TitleID.Substring(0, 13).ToUpper() + "000", out latest);
+                    if (latest != -1)
+                    {
+                        result.Latest = latest.ToString();
+                    }
+                    else
+                    {
+                        result.Latest = "0";
+                    }
                 }
             }
             catch (Exception ex)

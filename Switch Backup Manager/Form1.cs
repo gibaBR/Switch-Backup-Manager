@@ -120,6 +120,7 @@ namespace Switch_Backup_Manager
 
             SetupOLVs();
 
+            UpdateTitleVersionList();
             UpdateSceneReleasesList();
             UpdateLocalGamesList();
             UpdateLocalNSPGamesList();
@@ -3739,7 +3740,6 @@ namespace Switch_Backup_Manager
 
             UpdateLocalGamesList();
             UpdateLocalNSPGamesList();
-            UpdateTitleVersionList();
             tabControl1_SelectedIndexChanged(this, new EventArgs());
         }
 
@@ -4197,10 +4197,6 @@ namespace Switch_Backup_Manager
         public void UpdateTitleVersionList()
         {
             TitleVersionList = Util.LoadVersionListToDictionary();
-            if (!backgroundWorkerUpdateVersionList.IsBusy)
-            {
-                backgroundWorkerUpdateVersionList.RunWorkerAsync();
-            }
         }
 
         private void updateVersionListToolStripMenuItem_Click(object sender, EventArgs e)
@@ -4208,6 +4204,11 @@ namespace Switch_Backup_Manager
             Util.UpdateVersionList();
             UpdateTitleVersionList();
             MessageBox.Show("Done.");
+
+            if (!backgroundWorkerUpdateVersionList.IsBusy)
+            {
+                backgroundWorkerUpdateVersionList.RunWorkerAsync();
+            }
         }
 
         private void backgroundWorkerUpdateVersionList_DoWork(object sender, DoWorkEventArgs e)
@@ -4219,7 +4220,7 @@ namespace Switch_Backup_Manager
                 if (latest != -1)
                 {
                     data.Latest = latest.ToString();
-                    Util.UpdateXMLFromFileData(data, "local");
+                    //Util.UpdateXMLFromFileData(data, "local");
                 }
             }
 
@@ -4232,7 +4233,7 @@ namespace Switch_Backup_Manager
                     if (latest != -1)
                     {
                         data.Latest = latest.ToString();
-                        Util.UpdateXMLFromFileData(data, "eshop");
+                        //Util.UpdateXMLFromFileData(data, "eshop");
                     }
                 }
             }
@@ -4253,8 +4254,8 @@ namespace Switch_Backup_Manager
 
         private void backgroundWorkerUpdateVersionList_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            Util.XML_Local.Save(@Util.LOCAL_FILES_DB);
-            Util.XML_NSP_Local.Save(@Util.LOCAL_NSP_FILES_DB);
+            //Util.XML_Local.Save(@Util.LOCAL_FILES_DB);
+            //Util.XML_NSP_Local.Save(@Util.LOCAL_NSP_FILES_DB);
         }
     }
 }

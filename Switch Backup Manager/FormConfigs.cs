@@ -49,7 +49,7 @@ namespace Switch_Backup_Manager
                 cbxTagsNSP.Items.Add(Util.AutoRenamingTags[i]);
             }
 
-            labelLastVersionListUpdate.Text = string.Format("Last version list update: {0}", FrmMain.TitleVersionUpdate <= 0 ? "Never" : new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc).AddSeconds(FrmMain.TitleVersionUpdate).ToLongDateString());
+            labelLastVersionListUpdate.Text = string.Format("Last version list update: {0}", FrmMain.TitleVersionUpdate <= 0 ? "Never" : String.Format("{0:F}", new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc).AddSeconds(FrmMain.TitleVersionUpdate)));
 
             LoadConfig();
         }

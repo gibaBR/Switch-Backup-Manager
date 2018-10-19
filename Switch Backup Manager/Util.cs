@@ -2399,7 +2399,7 @@ namespace Switch_Backup_Manager
                                     gameName = (from x in File.ReadAllLines(TITLE_KEYS)
                                                 select x.Split('|') into x
                                                 where x.Length > 1
-                                                select x).ToDictionary((string[] x) => x[0].Trim().Substring(0, 16), (string[] x) => x[2])[data.TitleID.ToLower()];
+                                                select x).GroupBy(x => x[0].Trim().Substring(0, 16)).ToDictionary(x => x.Key, x => x.ToList()[0][2])[data.TitleID.ToLower()];
                                     data.GameName = gameName.Replace("[DLC] ", "");
                                     found = true;
                                 }
@@ -2415,7 +2415,7 @@ namespace Switch_Backup_Manager
                                         gameName = (from x in File.ReadAllLines(TITLE_KEYS)
                                                     select x.Split('|') into x
                                                     where x.Length > 1
-                                                    select x).ToDictionary((string[] x) => x[0].Trim().Substring(0, 16), (string[] x) => x[2])[data.TitleIDBaseGame.ToLower()];
+                                                    select x).GroupBy(x => x[0].Trim().Substring(0, 16)).ToDictionary(x => x.Key, x => x.ToList()[0][2])[data.TitleIDBaseGame.ToLower()];
                                     }
                                     catch (Exception e)
                                     {
@@ -2635,7 +2635,7 @@ namespace Switch_Backup_Manager
                                                 gameName = (from x in File.ReadAllLines(TITLE_KEYS)
                                                             select x.Split('|') into x
                                                             where x.Length > 1
-                                                            select x).ToDictionary((string[] x) => x[0].Trim().Substring(0, 16), (string[] x) => x[2])[data.TitleID.ToLower()];
+                                                            select x).GroupBy(x => x[0].Trim().Substring(0, 16)).ToDictionary(x => x.Key, x => x.ToList()[0][2])[data.TitleID.ToLower()];
                                                 data.GameName = gameName.Replace("[DLC] ", "");
                                                 found = true;
                                             }
@@ -2651,7 +2651,7 @@ namespace Switch_Backup_Manager
                                                     gameName = (from x in File.ReadAllLines(TITLE_KEYS)
                                                                 select x.Split('|') into x
                                                                 where x.Length > 1
-                                                                select x).ToDictionary((string[] x) => x[0].Trim().Substring(0, 16), (string[] x) => x[2])[data.TitleIDBaseGame.ToLower()];
+                                                                select x).GroupBy(x => x[0].Trim().Substring(0, 16)).ToDictionary(x => x.Key, x => x.ToList()[0][2])[data.TitleIDBaseGame.ToLower()];
                                                 }
                                                 catch (Exception e)
                                                 {

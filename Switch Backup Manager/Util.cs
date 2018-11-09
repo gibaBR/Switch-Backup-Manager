@@ -2454,13 +2454,13 @@ namespace Switch_Backup_Manager
                         fileStream.Read(array4, 0, (int)array3[n].Size);
 
                         byte[] byteOrderMarkUtf8 = Encoding.UTF8.GetPreamble();
-                        XDocument xml = XDocument.Parse(Encoding.UTF8.GetString(array4.Take(byteOrderMarkUtf8.Length).SequenceEqual(byteOrderMarkUtf8) ? array4.Skip(byteOrderMarkUtf8.Length).ToArray() : array4));
                         try
                         {
+                            XDocument xml = XDocument.Parse(Encoding.UTF8.GetString(array4.Take(byteOrderMarkUtf8.Length).SequenceEqual(byteOrderMarkUtf8) ? array4.Skip(byteOrderMarkUtf8.Length).ToArray() : array4).Replace("&", "&amp;"));
                             data.GameName = xml.Element("Application").Element("Title").Element("Name").Value;
+                            data.GameRevision = xml.Element("Application").Element("DisplayVersion").Value;
                         }
                         catch { }
-                        data.GameRevision = xml.Element("Application").Element("DisplayVersion").Value;
                     }
                     else if (array3[n].Name.EndsWith(".programinfo.xml"))
                     {
@@ -2639,7 +2639,7 @@ namespace Switch_Backup_Manager
                                                 gameName = (from x in File.ReadAllLines(TITLE_KEYS)
                                                             select x.Split('|') into x
                                                             where x.Length > 1
-                                                            select x).GroupBy(x => x[0].Trim().Substring(0, 16)).ToDictionary(x => x.Key, x => x.ToList()[0][2])[data.TitleID.ToLower()];
+                                                            select x).GroupBy(x => x[0].Trim().Substring(0, 16)).ToDictionary(x => x.Key, x => x.ToList()[0][2], StringComparer.OrdinalIgnoreCase)[data.TitleID];
                                                 data.GameName = gameName.Replace("[DLC] ", "");
                                                 found = true;
                                             }
@@ -2655,7 +2655,7 @@ namespace Switch_Backup_Manager
                                                     gameName = (from x in File.ReadAllLines(TITLE_KEYS)
                                                                 select x.Split('|') into x
                                                                 where x.Length > 1
-                                                                select x).GroupBy(x => x[0].Trim().Substring(0, 16)).ToDictionary(x => x.Key, x => x.ToList()[0][2])[data.TitleIDBaseGame.ToLower()];
+                                                                select x).GroupBy(x => x[0].Trim().Substring(0, 16)).ToDictionary(x => x.Key, x => x.ToList()[0][2], StringComparer.OrdinalIgnoreCase)[data.TitleIDBaseGame];
                                                 }
                                                 catch (Exception e)
                                                 {
@@ -2725,7 +2725,7 @@ namespace Switch_Backup_Manager
                 }
                 else if (nspSource == (1 << 3) - 1)
                 {
-                    data.Source = "CDNSP";
+                    data.Source = "CDN";
                 }
                 else if (nspSource == (1 << 1) - 1)
                 {

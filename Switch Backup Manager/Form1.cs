@@ -1767,7 +1767,7 @@ namespace Switch_Backup_Manager
             else if (e.ColumnIndex == this.olvColumnSourceLocal.Index)
             {
                 FileData data = (FileData)e.Model;
-                if ((data.Source.Contains("NSP") && data.Source != "CDNSP") || data.Source.Contains("NCA"))
+                if (data.Source.Contains("NSP") || data.Source.Contains("NCA"))
                     e.SubItem.BackColor = Color.IndianRed;
             }
         }
@@ -2869,7 +2869,7 @@ namespace Switch_Backup_Manager
             else if (e.ColumnIndex == this.olvColumnSourceSD.Index)
             {
                 FileData data = (FileData)e.Model;
-                if (data.Source.Contains("XCI") || (data.Source.Contains("NSP") && data.Source != "CDNSP") || data.Source.Contains("NCA"))
+                if (data.Source.Contains("XCI") || data.Source.Contains("NSP") || data.Source.Contains("NCA"))
                     e.SubItem.BackColor = Color.IndianRed;
             }
         }

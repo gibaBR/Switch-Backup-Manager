@@ -29,7 +29,7 @@ namespace Switch_Backup_Manager
         public static string KEYS_FILE = "keys.txt";
         public const string KEYS_DOWNLOAD_SITE = "https://pastebin.com/raw/ekSH9R8t";
         public const string HACTOOL_FILE = "hactool.exe";
-        public const string HACTOOL_DOWNLOAD_SITE = "https://github.com/SciresM/hactool/releases/download/1.1.0/hactool-1.1.0.win.zip";
+        public const string HACTOOL_DOWNLOAD_SITE = "https://github.com/SciresM/hactool/releases/download/1.2.1/hactool-1.2.1-win.zip";
         public const string NSWDB_FILE = "nswdb.xml";
         public const string NSWDB_DOWNLOAD_SITE = "http://nswdb.com/xml.php";
         public const string LOCAL_FILES_DB = "SBM_Local.xml";

@@ -6,10 +6,6 @@ namespace Switch_Backup_Manager
     {
         public static Dictionary<string, string> UPDATE_FILES = new Dictionary<string, string>
         {
-            //hactool.exe -t xci --updatedir=update file.xci
-            //hactool.exe -t nca --listromfs update\file.cnmt.nca
-            //hactool.exe -t nca --section0dir=updates update\file.cnmt.nca
-            //updates\SystemUpdate_0100000000000816.cnmt
             //https://gist.github.com/garoxas/b6f2db2542250b2b34aeecc3f6fe273e
             { "1.0.0", "73af776d8a1abb72507aa0c51a53adec.cnmt.nca" },
             { "2.0.0", "2d4c96214d911cd1a2ed7a1875827a86.cnmt.nca" },
@@ -27,6 +23,7 @@ namespace Switch_Backup_Manager
             { "5.x.x", "e9f9f9bb6087e68e6dd9ce0e56eb70df.cnmt.nca" }, //5.0.2
             { "6.0.0", "9965b2a2ea6b66723c4a7c25cdd888c9.cnmt.nca" },
             { "6.0.1", "7a242c9c6feb5686c8d0a19fec5c8ab9.cnmt.nca" },
+            { "6.1.0", "a28317f1b2e0a35149dea5f7a85685ef.cnmt.nca" },
         };
 
         public static Dictionary<string, int> UPDATE_NUMBER_OF_FILES = new Dictionary<string, int>
@@ -49,6 +46,7 @@ namespace Switch_Backup_Manager
             { "5.x.x", 207 }, //5.0.2
             { "6.0.0", 211 },
             { "6.0.1", 211 },
+            { "6.1.0", 211 },
         };
 
         public enum NSPSource

@@ -120,11 +120,11 @@ namespace Switch_Backup_Manager
 
             SetupOLVs();
 
+            UpdateTitleVersionList();
             UpdateSceneReleasesList();
             UpdateLocalGamesList();
             UpdateLocalNSPGamesList();
             FilterEshopByContentType();
-            UpdateTitleVersionList();
 
             try
             {
@@ -1767,7 +1767,7 @@ namespace Switch_Backup_Manager
             else if (e.ColumnIndex == this.olvColumnSourceLocal.Index)
             {
                 FileData data = (FileData)e.Model;
-                if ((data.Source.Contains("NSP") && data.Source != "CDNSP") || data.Source.Contains("NCA"))
+                if (data.Source.Contains("NSP") || data.Source.Contains("NCA"))
                     e.SubItem.BackColor = Color.IndianRed;
             }
         }
@@ -2869,7 +2869,7 @@ namespace Switch_Backup_Manager
             else if (e.ColumnIndex == this.olvColumnSourceSD.Index)
             {
                 FileData data = (FileData)e.Model;
-                if (data.Source.Contains("XCI") || (data.Source.Contains("NSP") && data.Source != "CDNSP") || data.Source.Contains("NCA"))
+                if (data.Source.Contains("XCI") || data.Source.Contains("NSP") || data.Source.Contains("NCA"))
                     e.SubItem.BackColor = Color.IndianRed;
             }
         }
@@ -4197,7 +4197,22 @@ namespace Switch_Backup_Manager
         public void UpdateTitleVersionList()
         {
             TitleVersionList = Util.LoadVersionListToDictionary();
+        }
 
+        private void updateVersionListToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Util.UpdateVersionList();
+            UpdateTitleVersionList();
+            MessageBox.Show("Done.");
+
+            if (!backgroundWorkerUpdateVersionList.IsBusy)
+            {
+                backgroundWorkerUpdateVersionList.RunWorkerAsync();
+            }
+        }
+
+        private void backgroundWorkerUpdateVersionList_DoWork(object sender, DoWorkEventArgs e)
+        {
             foreach (FileData data in LocalFilesList.Values)
             {
                 int latest = -1;
@@ -4205,11 +4220,8 @@ namespace Switch_Backup_Manager
                 if (latest != -1)
                 {
                     data.Latest = latest.ToString();
-                    Util.UpdateXMLFromFileData(data, "local");
                 }
             }
-
-            Util.XML_Local.Save(@Util.LOCAL_FILES_DB);
 
             foreach (FileData data in LocalNSPFilesList.Values)
             {
@@ -4220,12 +4232,9 @@ namespace Switch_Backup_Manager
                     if (latest != -1)
                     {
                         data.Latest = latest.ToString();
-                        Util.UpdateXMLFromFileData(data, "eshop");
                     }
                 }
             }
-
-            Util.XML_NSP_Local.Save(@Util.LOCAL_NSP_FILES_DB);
 
             foreach (FileData data in SDCardList.Values)
             {
@@ -4241,11 +4250,8 @@ namespace Switch_Backup_Manager
             }
         }
 
-        private void updateVersionListToolStripMenuItem_Click(object sender, EventArgs e)
+        private void backgroundWorkerUpdateVersionList_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            Util.UpdateVersionList();
-            UpdateTitleVersionList();
-            MessageBox.Show("Done.");
         }
     }
 }

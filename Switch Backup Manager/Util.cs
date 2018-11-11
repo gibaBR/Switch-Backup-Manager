@@ -1615,6 +1615,8 @@ namespace Switch_Backup_Manager
             {
                 if (File.Exists(CLIENT_CERT_FILE))
                 {
+                    logger.Info("Certificate " + CLIENT_CERT_FILE + " found. Starting download version list from nintendo");
+
                     string header = "";
 
                     try
@@ -1633,7 +1635,7 @@ namespace Switch_Backup_Manager
 
                             httpsClient.Headers.Add("User-Agent", string.Format("NintendoSDK Firmware/{0} (platform:{1}; did:{2}; eid:{3})",
                                 config.header.firmware, config.header.platform, config.header.did, config.header.eid));
-                            httpsClient.Headers.Add("Accept-Encoding", "gzip, deflate");
+                            //httpsClient.Headers.Add("Accept-Encoding", "gzip, deflate");
                             httpsClient.Headers.Add("Accept", "*/*");
 
                             try
@@ -1649,7 +1651,14 @@ namespace Switch_Backup_Manager
                                         File.WriteAllText(VERSION_LIST_FILE, versionlist);
 
                                         FrmMain.TitleVersionUpdate = Convert.ToInt32(titles.last_modified);
+                                        logger.Info("Version list last updated at " + String.Format("{0:F}", new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc).AddSeconds(FrmMain.TitleVersionUpdate)));
                                     }
+                                    else
+                                    {
+                                        logger.Info("No updates available.");
+                                    }
+
+                                    return;
                                 }
                             }
                             catch (Exception ex)
@@ -1659,31 +1668,45 @@ namespace Switch_Backup_Manager
                             }
                         }
                     }
+
+                    logger.Error("Could not download version list from nintendo. Starting download cached version list from pastebin");
                 }
-                else
+
+                if (!File.Exists(CLIENT_CERT_FILE))
                 {
-                    try
-                    {
-                        string versionlist = client.DownloadString(VERSION_LIST_DOWNLOAD_SITE);
+                    logger.Info("No certificates " + CLIENT_CERT_FILE + " found. Starting download cached version list from pastebin");
+                }
 
-                        if (!String.IsNullOrEmpty(versionlist))
+                try
+                {
+                    string versionlist = client.DownloadString(VERSION_LIST_DOWNLOAD_SITE);
+
+                    if (!String.IsNullOrEmpty(versionlist))
+                    {
+                        dynamic titles = JsonConvert.DeserializeObject(versionlist);
+
+                        if (Convert.ToInt32(titles.last_modified) > FrmMain.TitleVersionUpdate)
                         {
-                            dynamic titles = JsonConvert.DeserializeObject(versionlist);
+                            File.WriteAllText(VERSION_LIST_FILE, versionlist);
 
-                            if (Convert.ToInt32(titles.last_modified) > FrmMain.TitleVersionUpdate)
-                            {
-                                File.WriteAllText(VERSION_LIST_FILE, versionlist);
-
-                                FrmMain.TitleVersionUpdate = Convert.ToInt32(titles.last_modified);
-                            }
+                            FrmMain.TitleVersionUpdate = Convert.ToInt32(titles.last_modified);
+                            logger.Info("Version list last updated at " + String.Format("{0:F}", new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc).AddSeconds(FrmMain.TitleVersionUpdate)));
                         }
-                    }
-                    catch (Exception ex)
-                    {
-                        logger.Error("Could not download cached version list. " + ex.StackTrace);
-                        MessageBox.Show("Could not download cached version list! \n Please check your internet connection.");
+                        else
+                        {
+                            logger.Info("No updates available.");
+                        }
+
+                        return;
                     }
                 }
+                catch (Exception ex)
+                {
+                    logger.Error("Could not download cached version list. " + ex.StackTrace);
+                    MessageBox.Show("Could not download cached version list! \n Please check your internet connection.");
+                }
+
+                logger.Error("Could not download cached version list from pastebin. Please check your internet connection.");
             }
         }
 
@@ -1695,7 +1718,6 @@ namespace Switch_Backup_Manager
                            select x).ToDictionary((string[] x) => x[0].Trim(), (string[] x) => x[1])["header_key"].Replace(" ", "");
             NcaHeaderEncryptionKey1_Prod = StringToByteArray(text.Remove(32, 32));
             NcaHeaderEncryptionKey2_Prod = StringToByteArray(text.Remove(0, 32));
-
         }
 
         public static string GetMkey(byte id)
@@ -1714,7 +1736,7 @@ namespace Switch_Backup_Manager
                 case 5:
                     return "MasterKey4 (5.0.0-5.1.0)";
                 case 6:
-                    return "MasterKey5 (6.0.0-6.0.1)";
+                    return "MasterKey5 (6.0.0-6.1.0)";
                 case 7:
                     return "MasterKey6 (?)";
                 case 8:
@@ -2184,7 +2206,7 @@ namespace Switch_Backup_Manager
                         data.ContentType = xml.Element("ContentMeta").Element("Type").Value;
                         data.Version = xml.Element("ContentMeta").Element("Version").Value;
 
-                        //0100000000000816,ALL,v65796 v131162 v196628 v262164 v201327002 v201392178 v201457684 v268435656 v268501002 v269484082 v335544750 v335609886 v335675432 v336592976 v402653544 v402718730,2.0.0 2.1.0 2.2.0 2.3.0 3.0.0 3.0.1 3.0.2 4.0.0 4.0.1 4.1.0 5.0.0 5.0.1 5.0.2 5.1.0 6.0.0 6.0.1
+                        //0100000000000816,ALL,v65796 v131162 v196628 v262164 v201327002 v201392178 v201457684 v268435656 v268501002 v269484082 v335544750 v335609886 v335675432 v336592976 v402653544 v402718730 v403701850,2.0.0 2.1.0 2.2.0 2.3.0 3.0.0 3.0.1 3.0.2 4.0.0 4.0.1 4.1.0 5.0.0 5.0.1 5.0.2 5.1.0 6.0.0 6.0.1 6.1.0
                         data.Firmware = "";
                         long Firmware = Convert.ToInt64(xml.Element("ContentMeta").Element("RequiredSystemVersion").Value) % 0x100000000;
                         if (Firmware == 0)
@@ -2258,6 +2280,10 @@ namespace Switch_Backup_Manager
                         else if (Firmware <= 402718730)
                         {
                             data.Firmware = "6.0.1";
+                        }
+                        else if (Firmware <= 403701850)
+                        {
+                            data.Firmware = "6.1.0";
                         }
                         else
                         {
@@ -2377,7 +2403,7 @@ namespace Switch_Backup_Manager
                                     gameName = (from x in File.ReadAllLines(TITLE_KEYS)
                                                 select x.Split('|') into x
                                                 where x.Length > 1
-                                                select x).ToDictionary((string[] x) => x[0].Trim().Substring(0, 16), (string[] x) => x[2])[data.TitleID.ToLower()];
+                                                select x).GroupBy(x => x[0].Trim().Substring(0, 16)).ToDictionary(x => x.Key, x => x.ToList()[0][2])[data.TitleID.ToLower()];
                                     data.GameName = gameName.Replace("[DLC] ", "");
                                     found = true;
                                 }
@@ -2393,7 +2419,7 @@ namespace Switch_Backup_Manager
                                         gameName = (from x in File.ReadAllLines(TITLE_KEYS)
                                                     select x.Split('|') into x
                                                     where x.Length > 1
-                                                    select x).ToDictionary((string[] x) => x[0].Trim().Substring(0, 16), (string[] x) => x[2])[data.TitleIDBaseGame.ToLower()];
+                                                    select x).GroupBy(x => x[0].Trim().Substring(0, 16)).ToDictionary(x => x.Key, x => x.ToList()[0][2])[data.TitleIDBaseGame.ToLower()];
                                     }
                                     catch (Exception e)
                                     {
@@ -2428,13 +2454,13 @@ namespace Switch_Backup_Manager
                         fileStream.Read(array4, 0, (int)array3[n].Size);
 
                         byte[] byteOrderMarkUtf8 = Encoding.UTF8.GetPreamble();
-                        XDocument xml = XDocument.Parse(Encoding.UTF8.GetString(array4.Take(byteOrderMarkUtf8.Length).SequenceEqual(byteOrderMarkUtf8) ? array4.Skip(byteOrderMarkUtf8.Length).ToArray() : array4));
                         try
                         {
+                            XDocument xml = XDocument.Parse(Encoding.UTF8.GetString(array4.Take(byteOrderMarkUtf8.Length).SequenceEqual(byteOrderMarkUtf8) ? array4.Skip(byteOrderMarkUtf8.Length).ToArray() : array4).Replace("&", "&amp;"));
                             data.GameName = xml.Element("Application").Element("Title").Element("Name").Value;
+                            data.GameRevision = xml.Element("Application").Element("DisplayVersion").Value;
                         }
                         catch { }
-                        data.GameRevision = xml.Element("Application").Element("DisplayVersion").Value;
                     }
                     else if (array3[n].Name.EndsWith(".programinfo.xml"))
                     {
@@ -2613,7 +2639,7 @@ namespace Switch_Backup_Manager
                                                 gameName = (from x in File.ReadAllLines(TITLE_KEYS)
                                                             select x.Split('|') into x
                                                             where x.Length > 1
-                                                            select x).ToDictionary((string[] x) => x[0].Trim().Substring(0, 16), (string[] x) => x[2])[data.TitleID.ToLower()];
+                                                            select x).GroupBy(x => x[0].Trim().Substring(0, 16)).ToDictionary(x => x.Key, x => x.ToList()[0][2], StringComparer.OrdinalIgnoreCase)[data.TitleID];
                                                 data.GameName = gameName.Replace("[DLC] ", "");
                                                 found = true;
                                             }
@@ -2629,7 +2655,7 @@ namespace Switch_Backup_Manager
                                                     gameName = (from x in File.ReadAllLines(TITLE_KEYS)
                                                                 select x.Split('|') into x
                                                                 where x.Length > 1
-                                                                select x).ToDictionary((string[] x) => x[0].Trim().Substring(0, 16), (string[] x) => x[2])[data.TitleIDBaseGame.ToLower()];
+                                                                select x).GroupBy(x => x[0].Trim().Substring(0, 16)).ToDictionary(x => x.Key, x => x.ToList()[0][2], StringComparer.OrdinalIgnoreCase)[data.TitleIDBaseGame];
                                                 }
                                                 catch (Exception e)
                                                 {
@@ -2699,7 +2725,7 @@ namespace Switch_Backup_Manager
                 }
                 else if (nspSource == (1 << 3) - 1)
                 {
-                    data.Source = "CDNSP";
+                    data.Source = "CDN";
                 }
                 else if (nspSource == (1 << 1) - 1)
                 {
@@ -3360,10 +3386,10 @@ namespace Switch_Backup_Manager
                 {
                     result.Version = xe.Element("Version").Value;
                 }
-                if (xe.Element("Latest") != null)
-                {
-                    result.Latest = xe.Element("Latest").Value;
-                }
+                //if (xe.Element("Latest") != null)
+                //{
+                //    result.Latest = xe.Element("Latest").Value;
+                //}
                 if (xe.Element("CartSize") != null)
                 {
                     result.CartSize = xe.Element("CartSize").Value;
@@ -3526,6 +3552,20 @@ namespace Switch_Backup_Manager
                 if (xe.Element("Source") != null)
                 {
                     result.Source = xe.Element("Source").Value;
+                }
+
+                if (result.ContentType != "AddOnContent")
+                {
+                    int latest = -1;
+                    FrmMain.TitleVersionList.TryGetValue(result.TitleID.Substring(0, 13).ToUpper() + "000", out latest);
+                    if (latest != -1)
+                    {
+                        result.Latest = latest.ToString();
+                    }
+                    else
+                    {
+                        result.Latest = "0";
+                    }
                 }
             }
             catch (Exception ex)

@@ -426,6 +426,7 @@
             this.updateLocalDatabaseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.updateEshopLocalDatabaseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.updateNswdbcomListToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.updateVersionListToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.scrapExtendedInfoFromWebToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.viewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.bottonPanelToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -462,7 +463,7 @@
             this.backgroundWorkerScanNewFiles = new System.ComponentModel.BackgroundWorker();
             this.backgroundWorkerUpdateFiles = new System.ComponentModel.BackgroundWorker();
             this.backgroundWorkerScrapExtraInfo = new System.ComponentModel.BackgroundWorker();
-            this.updateVersionListToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.backgroundWorkerUpdateVersionList = new System.ComponentModel.BackgroundWorker();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -3977,6 +3978,13 @@
             this.updateNswdbcomListToolStripMenuItem1.Text = "Update nswdb.com list";
             this.updateNswdbcomListToolStripMenuItem1.Click += new System.EventHandler(this.updateNswdbcomListToolStripMenuItem1_Click);
             // 
+            // updateVersionListToolStripMenuItem
+            // 
+            this.updateVersionListToolStripMenuItem.Name = "updateVersionListToolStripMenuItem";
+            this.updateVersionListToolStripMenuItem.Size = new System.Drawing.Size(336, 30);
+            this.updateVersionListToolStripMenuItem.Text = "Update version list";
+            this.updateVersionListToolStripMenuItem.Click += new System.EventHandler(this.updateVersionListToolStripMenuItem_Click);
+            // 
             // scrapExtendedInfoFromWebToolStripMenuItem
             // 
             this.scrapExtendedInfoFromWebToolStripMenuItem.Name = "scrapExtendedInfoFromWebToolStripMenuItem";
@@ -4298,12 +4306,10 @@
             this.backgroundWorkerScrapExtraInfo.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorkerScrapExtraInfo_DoWork);
             this.backgroundWorkerScrapExtraInfo.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backgroundWorkerScrapExtraInfo_RunWorkerCompleted);
             // 
-            // updateVersionListToolStripMenuItem
+            // backgroundWorkerUpdateVersionList
             // 
-            this.updateVersionListToolStripMenuItem.Name = "updateVersionListToolStripMenuItem";
-            this.updateVersionListToolStripMenuItem.Size = new System.Drawing.Size(336, 30);
-            this.updateVersionListToolStripMenuItem.Text = "Update version list";
-            this.updateVersionListToolStripMenuItem.Click += new System.EventHandler(this.updateVersionListToolStripMenuItem_Click);
+            this.backgroundWorkerUpdateVersionList.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorkerUpdateVersionList_DoWork);
+            this.backgroundWorkerUpdateVersionList.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backgroundWorkerUpdateVersionList_RunWorkerCompleted);
             // 
             // FrmMain
             // 
@@ -4840,6 +4846,7 @@
         private BrightIdeasSoftware.OLVColumn olvColumnLatestSD;
         private BrightIdeasSoftware.OLVColumn olvColumnSourceSD;
         private System.Windows.Forms.ToolStripMenuItem updateVersionListToolStripMenuItem;
+        private System.ComponentModel.BackgroundWorker backgroundWorkerUpdateVersionList;
     }
 }
 

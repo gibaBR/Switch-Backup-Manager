@@ -21,7 +21,7 @@ namespace Switch_Backup_Manager
 {
     internal static class Util
     {
-        public const string VERSION = "1.1.9";   //Actual application version
+        public const string VERSION = "1.2.0";   //Actual application version
         public const string MIN_DB_Version = "1.1.9"; //This is the minimum version of the DB that can work
 
         public const string INI_FILE = "sbm.ini";
@@ -89,7 +89,7 @@ namespace Switch_Backup_Manager
             "???"
         };
 
-        public static string[] AutoRenamingTags = new string[11]
+        public static string[] AutoRenamingTags = new string[12]
         {
             "{gamename}",
             "{titleid}",
@@ -101,7 +101,8 @@ namespace Switch_Backup_Manager
             "{firmware}",
             "{languages}",
             "{sceneid}",
-            "{nspversion}"
+            "{nspversion}",
+            "{content_type}"
         };
 
         private static Image[] Icons = new Image[16];
@@ -639,6 +640,23 @@ namespace Switch_Backup_Manager
                 }
                 else
                 {
+                    string content_type = ""; //Patch, AddOnContent, Application
+                    if (data.ContentType != "")
+                    {
+                        switch (data.ContentType)
+                        {
+                            case "Patch":
+                                content_type = "Update";
+                                break;
+                            case "AddOnContent":
+                                content_type = "DLC";
+                                break;
+                            case "Application":
+                                content_type = "Base Game";
+                                break;
+                        }
+                    }
+
                     result = result.Replace(AutoRenamingTags[0], data.GameName);
                     result = result.Replace(AutoRenamingTags[1], data.TitleID);
                     result = result.Replace(AutoRenamingTags[2], data.Developer);
@@ -650,6 +668,7 @@ namespace Switch_Backup_Manager
                     result = result.Replace(AutoRenamingTags[8], ListToComaSeparatedString(data.Languages));
                     result = result.Replace(AutoRenamingTags[9], string.Format("{0:D4}", data.IdScene));
                     result = result.Replace(AutoRenamingTags[10], data.Version);
+                    result = result.Replace(AutoRenamingTags[11], content_type);
                 }
                 if (MaxSizeFilenameNSP != 0)
                 {

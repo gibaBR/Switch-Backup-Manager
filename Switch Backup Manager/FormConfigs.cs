@@ -42,9 +42,10 @@ namespace Switch_Backup_Manager
                 "2 players simultaneous", new List<string> { "Party", "Multiplayer", "Action" }, 0, "");
 
             cbxTagsXCI.Items.Clear();
+            cbxTagsNSP.Items.Clear();
             for (int i = 0; i < Util.AutoRenamingTags.Length; i++)
             {
-                if (Util.AutoRenamingTags[i] != "{nspversion}")
+                if (Util.AutoRenamingTags[i] != "{nspversion}" && Util.AutoRenamingTags[i] != "{content_type}")
                     cbxTagsXCI.Items.Add(Util.AutoRenamingTags[i]);
                 cbxTagsNSP.Items.Add(Util.AutoRenamingTags[i]);
             }

@@ -686,6 +686,76 @@ namespace Switch_Backup_Manager
             return result;
         }
 
+        internal static Stream getOutputFile(ref int cOutFileNo, string outFileFormat, string outDirectory)
+        {
+            string filename = string.Format(outFileFormat, cOutFileNo);
+            cOutFileNo++;
+
+            return File.Open(@outDirectory +"\\"+ filename, FileMode.CreateNew, FileAccess.Write, FileShare.None);
+        }
+
+        public static void SplitXCIFiles(Dictionary<Tuple<string, string>, FileData> files_, string outputDirectory, string source) {
+            Dictionary<Tuple<string, string>, FileData> files = CloneDictionary(files_);
+            
+            int filesCount = files.Count();
+            int i = 0;
+            FrmMain.progressPercent = 0;
+
+            logger.Info("Starting splitting files.");
+
+            if (source == "local")
+            {
+                foreach (KeyValuePair<Tuple<string, string>, FileData> entry in files)
+                {
+                    FrmMain.progressCurrentfile = entry.Value.FilePath;
+                    SplitXCIFile(entry.Value, outputDirectory);
+
+                    i++;
+                    FrmMain.progressPercent = (int)(i * 100) / filesCount;
+                }
+            }
+            logger.Info("Finished splitting files.");
+        }
+
+        public static bool SplitXCIFile(FileData file, string outDirectory)
+        {
+            bool result = false;
+            long maxChunkSize = 4294934528;
+            string outputFilePathFormat = string.Format("{0}.xc{{0:0}}", file.FileName);
+
+            using (Stream fsInput = File.Open(file.FilePath, FileMode.Open, FileAccess.Read, FileShare.Read))
+            {
+                byte[] buffer = new byte[32 * 1024];
+                int cOutFileNo = 0;
+                logger.Info("Creating file " + string.Format(outputFilePathFormat, cOutFileNo));
+                Stream destination = getOutputFile(ref cOutFileNo, outputFilePathFormat, outDirectory);
+                try
+                {
+                    int read;
+                    while ((read = fsInput.Read(buffer, 0, buffer.Length)) != 0)
+                    {
+                        if (destination.Length + read > maxChunkSize)
+                        {
+                            destination.Dispose();
+                            logger.Info("Creating file " + string.Format(outputFilePathFormat, cOutFileNo));
+                            destination = getOutputFile(ref cOutFileNo, outputFilePathFormat, outDirectory);
+                        }
+
+                        destination.Write(buffer, 0, read);
+                    }
+                    result = true;
+                } catch (Exception e)
+                {
+                    logger.Error(e.Message);
+                }
+                finally
+                {
+                    destination.Dispose();
+                }
+            }
+            return result;
+        }
+
         public static bool TrimXCIFile(FileData file)
         {
             bool result = false;

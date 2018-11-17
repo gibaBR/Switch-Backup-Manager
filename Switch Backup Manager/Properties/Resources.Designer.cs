@@ -107,6 +107,15 @@ namespace Switch_Backup_Manager.Properties {
         }
         
         /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Splitting files....
+        /// </summary>
+        internal static string EN_FileOperationSplit {
+            get {
+                return ResourceManager.GetString("EN_FileOperationSplit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Consulta uma cadeia de caracteres localizada semelhante a Scraping extra info from web.
         /// </summary>
         internal static string EN_FileOperationsScrapFromWeb {

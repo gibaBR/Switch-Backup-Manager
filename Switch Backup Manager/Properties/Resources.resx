@@ -175,4 +175,7 @@
   <data name="EN_Not_Available" xml:space="preserve">
     <value>Not Available</value>
   </data>
+  <data name="EN_FileOperationSplit" xml:space="preserve">
+    <value>Splitting files...</value>
+  </data>
 </root>

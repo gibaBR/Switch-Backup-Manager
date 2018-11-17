@@ -2049,6 +2049,39 @@ namespace Switch_Backup_Manager
             Util.TrimXCIFiles(dictionary, source);
         }
 
+        private void SplitSelectedFiles(Dictionary<Tuple<string, string>, FileData> dictionary, string source)
+        {
+            CommonOpenFileDialog dialog = new CommonOpenFileDialog();
+            dialog.IsFolderPicker = true;
+            dialog.RestoreDirectory = true;
+
+            if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
+            {
+                string selectedPath = dialog.FileName;
+
+                //FileData file = new FileData();
+                //file.FilePath = "c:\\temp\\BIG.xci";
+                //file.FileName = "saida";
+                //Util.SplitXCIFiles(dictionary, selectedPath, source);
+
+                if (!backgroundWorkerSplitFiles.IsBusy)
+                {
+                    menuLocalFiles.Enabled = false;
+                    //OLVLocalFiles.Enabled = false;
+                    toolStripStatusFilesOperation.Text = Properties.Resources.EN_FileOperationSplit;
+                    toolStripStatusFilesOperation.Visible = true;
+                    toolStripProgressAddingFiles.Visible = true;
+                    toolStripStatusLabelGame.Text = "";
+                    toolStripStatusLabelGame.Visible = true;
+                    toolStripProgressAddingFiles.Value = 0;
+                    timer1.Enabled = true;
+                    object[] parameters = { LocalFilesListSelectedItems, selectedPath, "local" }; //0: FilesList (Dictionary), 1: DestinyPath (string), 2: source ("local") 
+                    backgroundWorkerSplitFiles.RunWorkerAsync(parameters);
+                }
+
+            }
+        }
+
         private void selectedFilesToolStripMenuItem_Click(object sender, EventArgs e)
         {
             OperationTrimSelectedLocalFiles();
@@ -2560,6 +2593,19 @@ namespace Switch_Backup_Manager
                         backgroundWorkerCopyFiles.RunWorkerAsync(parameters);
                     }
                 }
+            }
+            else
+            {
+                MessageBox.Show("No files selected");
+                return;
+            }
+        }
+
+        private void OperationSplitSelectedLocalFiles()
+        {
+            if (LocalFilesListSelectedItems.Count > 0)
+            {
+                SplitSelectedFiles(LocalFilesListSelectedItems, "local");
             }
             else
             {
@@ -4252,6 +4298,36 @@ namespace Switch_Backup_Manager
 
         private void backgroundWorkerUpdateVersionList_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
+        }
+
+        private void toolStripMenuItemXCISplitFiles_Click(object sender, EventArgs e)
+        {
+            OperationSplitSelectedLocalFiles();
+        }
+
+        private void backgroundWorkerSplitFiles_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            //updateFileListAfterMove = false;
+            timer1.Enabled = false;
+            toolStripStatusFilesOperation.Visible = false;
+            toolStripProgressAddingFiles.Visible = false;
+            toolStripStatusLabelGame.Text = "";
+            toolStripStatusLabelGame.Visible = false;
+
+            MessageBox.Show("Done");
+        }
+
+        private void backgroundWorkerSplitFiles_DoWork(object sender, DoWorkEventArgs e)
+        {
+            BackgroundWorker worker = sender as BackgroundWorker;
+
+            object[] parameters = e.Argument as object[];
+
+            Dictionary<Tuple<string, string>, FileData> filesList = (Dictionary<Tuple<string, string>, FileData>)parameters[0];
+            string destinyPath = (string)parameters[1];
+            string source = (string)parameters[2];
+
+            Util.SplitXCIFiles(filesList, destinyPath, source);
         }
     }
 }

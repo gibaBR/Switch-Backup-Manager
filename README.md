@@ -32,6 +32,17 @@ Complete Switch Backups management tool
 
 ## Changelog
 
+* 1.2.0
+  - Missing Content Type in Custom pattern of NSP
+  - Include option to split XCI files (right click on files -> split files) #88
+
+* 1.1.9
+  - fallback if MasterKey revision not supported by hactool (by Garoxas)
+  - Add Version, Latest Update and Source (by Garoxas)
+  - move update version to background worker (by Garoxas)
+  - handle titlekeys with duplicate TitleID (by Garoxas)
+  - 6.1.0 support (by Garoxas)
+
 * 1.1.8
   - Support for firmware 6.0.0 (by Garoxas)
   - User can now select local files that are on both, local and e-shop (nsp) files list
@@ -134,6 +145,6 @@ Complete Switch Backups management tool
 
 ## Source & Binaries
 * [GitHub](https://github.com/gibaBR/Switch-Backup-Manager/archive/master.zip)
-* [Release 1.1.5](https://github.com/gibaBR/Switch-Backup-Manager/releases/tag/v1.1.5)
+* [Release 1.2.0](https://github.com/gibaBR/Switch-Backup-Manager/releases/tag/v1.2.0)
 
 

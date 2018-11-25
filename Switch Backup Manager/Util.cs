@@ -1827,7 +1827,7 @@ namespace Switch_Backup_Manager
                 case 6:
                     return "MasterKey5 (6.0.0-6.1.0)";
                 case 7:
-                    return "MasterKey6 (?)";
+                    return "MasterKey6 (6.2.0)";
                 case 8:
                     return "MasterKey7 (?)";
                 case 9:
@@ -2295,7 +2295,7 @@ namespace Switch_Backup_Manager
                         data.ContentType = xml.Element("ContentMeta").Element("Type").Value;
                         data.Version = xml.Element("ContentMeta").Element("Version").Value;
 
-                        //0100000000000816,ALL,v65796 v131162 v196628 v262164 v201327002 v201392178 v201457684 v268435656 v268501002 v269484082 v335544750 v335609886 v335675432 v336592976 v402653544 v402718730 v403701850,2.0.0 2.1.0 2.2.0 2.3.0 3.0.0 3.0.1 3.0.2 4.0.0 4.0.1 4.1.0 5.0.0 5.0.1 5.0.2 5.1.0 6.0.0 6.0.1 6.1.0
+                        //0100000000000816,ALL,v65796 v131162 v196628 v262164 v201327002 v201392178 v201457684 v268435656 v268501002 v269484082 v335544750 v335609886 v335675432 v336592976 v402653544 v402718730 v403701850 v404750376,2.0.0 2.1.0 2.2.0 2.3.0 3.0.0 3.0.1 3.0.2 4.0.0 4.0.1 4.1.0 5.0.0 5.0.1 5.0.2 5.1.0 6.0.0 6.0.1 6.1.0 6.2.0
                         data.Firmware = "";
                         long Firmware = Convert.ToInt64(xml.Element("ContentMeta").Element("RequiredSystemVersion").Value) % 0x100000000;
                         if (Firmware == 0)
@@ -2373,6 +2373,10 @@ namespace Switch_Backup_Manager
                         else if (Firmware <= 403701850)
                         {
                             data.Firmware = "6.1.0";
+                        }
+                        else if (Firmware <= 404750376)
+                        {
+                            data.Firmware = "6.2.0";
                         }
                         else
                         {
@@ -3155,9 +3159,17 @@ namespace Switch_Backup_Manager
                 {
                     if (SecureSize[k] > num3)
                     {
-                        gameNcaSize = SecureSize[k];
-                        gameNcaOffset = SecureOffset[k];
-                        num3 = SecureSize[k];
+                        byte[] array9 = new byte[16];
+                        fileStream.Position = SecureOffset[k] + 32768;
+                        fileStream.Read(array9, 0, 16);
+
+                        PFS0.PFS0_Header array10 = new PFS0.PFS0_Header(array9);
+                        if (array10.Magic == "PFS0" || array9.All(b => b == 0))
+                        {
+                            gameNcaSize = SecureSize[k];
+                            gameNcaOffset = SecureOffset[k];
+                            num3 = SecureSize[k];
+                        }
                     }
                 }
                 PFS0Offset = gameNcaOffset + 32768;

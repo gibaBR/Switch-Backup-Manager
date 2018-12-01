@@ -24,7 +24,7 @@ namespace Switch_Backup_Manager
             { "6.0.0", "9965b2a2ea6b66723c4a7c25cdd888c9.cnmt.nca" },
             { "6.0.1", "7a242c9c6feb5686c8d0a19fec5c8ab9.cnmt.nca" },
             { "6.1.0", "a28317f1b2e0a35149dea5f7a85685ef.cnmt.nca" },
-            { "6.2.0", "1b819cb2462b4c42acc078f38abaaad2.cnmt.nca" },
+            { "6.2.0", "b95330de60c858d6e470c652e33ca79a.cnmt.nca" },
         };
 
         public static Dictionary<string, int> UPDATE_NUMBER_OF_FILES = new Dictionary<string, int>

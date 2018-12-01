@@ -2451,11 +2451,68 @@ namespace Switch_Backup_Manager
                                 ncaTarget = xe.Element("Id").Value + ".cnmt.nca";
                                 break;
                             }
-                            bool found = false;
+                        }
 
-                            FileData data_tmp = null;
-                            Dictionary<Tuple<string, string>, FileData> NSPList = Util.LoadXMLToFileDataDictionary(XML_NSP_Local);
-                            NSPList.TryGetValue(new Tuple<string, string>(data.TitleIDBaseGame, data.Version), out data_tmp); //Try to find on NSP List
+                        bool found = false;
+                            
+                        FileData data_tmp = null;
+                        Dictionary<Tuple<string, string>, FileData> NSPList = Util.LoadXMLToFileDataDictionary(XML_NSP_Local);
+                        NSPList.TryGetValue(new Tuple<string, string>(data.TitleIDBaseGame, data.Version), out data_tmp); //Try to find on NSP List
+                        if (data_tmp != null)
+                        {
+                            data.Region_Icon = data_tmp.Region_Icon;
+                            data.Languages = data_tmp.Languages;
+                            //data.GameRevision = data_tmp.GameRevision;
+                            data.ProductCode = data_tmp.ProductCode;
+                            data.GameName = data_tmp.GameName;// + " [DLC]";
+                            data.Developer = data_tmp.Developer;
+                            data.Group = data_tmp.Group;
+                            data.IdScene = data_tmp.IdScene;
+                            data.Region = data_tmp.Region;
+                            data.Version = data_tmp.Version;
+                            data.Serial = data_tmp.Serial;
+                            found = true;
+                            logger.Debug("Found extra info for DLC on NSP local database");
+                        }
+
+                        if (!found)
+                        {
+                            data_tmp = null;
+                            Dictionary<Tuple<string, string>, FileData> SceneList = Util.LoadSceneXMLToFileDataDictionary(XML_NSWDB);
+                            List<Tuple<string, string>> keys = Enumerable.ToList(SceneList.Keys);
+                            int index = keys.FindIndex(key => key.Item1 == data.TitleIDBaseGame);
+                            if (index != -1)
+                            {
+                                SceneList.TryGetValue(keys[index], out data_tmp); //Try to find on Scene List
+                            }
+                            if (data_tmp != null)
+                            {
+                                data.Region_Icon = data_tmp.Region_Icon;
+                                data.Languages = data_tmp.Languages;
+                                //data.GameRevision = data_tmp.GameRevision;
+                                data.ProductCode = data_tmp.ProductCode;
+                                data.GameName = data_tmp.GameName;// + " [DLC]";
+                                data.Developer = data_tmp.Developer;
+                                data.Group = data_tmp.Group;
+                                data.IdScene = data_tmp.IdScene;
+                                data.Region = data_tmp.Region;
+                                data.Version = data_tmp.Version;
+                                data.Serial = data_tmp.Serial;
+                                found = true;
+                                logger.Debug("Found extra info for DLC on Scene database");
+                            }
+                        }
+
+                        if (!found)
+                        {
+                            data_tmp = null;
+                            Dictionary<Tuple<string, string>, FileData> XCIList = Util.LoadXMLToFileDataDictionary(XML_Local);
+                            List<Tuple<string, string>> keys = Enumerable.ToList(XCIList.Keys);
+                            int index = keys.FindIndex(key => key.Item1 == data.TitleIDBaseGame);
+                            if (index != -1)
+                            {
+                                XCIList.TryGetValue(keys[index], out data_tmp); //Try to find on Local XCI List
+                            }
                             if (data_tmp != null)
                             {
                                 data.Region_Icon = data_tmp.Region_Icon;
@@ -2465,89 +2522,43 @@ namespace Switch_Backup_Manager
                                 data.GameName = data_tmp.GameName;// + " [DLC]";
                                 data.Developer = data_tmp.Developer;
                                 found = true;
-                                logger.Debug("Found extra info for DLC on NSP local database");
+                                logger.Debug("Found extra info for DLC on XCI local database");
+                            }
+                        }
+
+                        //Always look at titlekeys for proper DLC name
+                        if (UseTitleKeys && File.Exists(TITLE_KEYS))
+                        {
+                            string gameName = "";
+                            try
+                            {
+                                gameName = (from x in File.ReadAllLines(TITLE_KEYS)
+                                            select x.Split('|') into x
+                                            where x.Length > 1
+                                            select x).GroupBy(x => x[0].Trim().Substring(0, 16)).ToDictionary(x => x.Key, x => x.ToList()[0][2])[data.TitleID.ToLower()];
+                                data.GameName = gameName.Replace("[DLC] ", "");
+                                found = true;
+                            }
+                            catch (Exception e)
+                            {
+                                logger.Warning("Could not find game name! Don't worry, will try again later\n" + e.StackTrace);
                             }
 
                             if (!found)
                             {
-                                data_tmp = null;
-                                Dictionary<Tuple<string, string>, FileData> SceneList = Util.LoadSceneXMLToFileDataDictionary(XML_NSWDB);
-                                List<Tuple<string, string>> keys = Enumerable.ToList(SceneList.Keys);
-                                int index = keys.FindIndex(key => key.Item1 == data.TitleIDBaseGame);
-                                if (index != -1)
-                                {
-                                    SceneList.TryGetValue(keys[index], out data_tmp); //Try to find on Scene List
-                                }
-                                if (data_tmp != null)
-                                {
-                                    data.Region_Icon = data_tmp.Region_Icon;
-                                    data.Languages = data_tmp.Languages;
-                                    //data.GameRevision = data_tmp.GameRevision;
-                                    data.ProductCode = data_tmp.ProductCode;
-                                    data.GameName = data_tmp.GameName;// + " [DLC]";
-                                    data.Developer = data_tmp.Developer;
-                                    found = true;
-                                    logger.Debug("Found extra info for DLC on Scene database");
-                                }
-                            }
-
-                            if (!found)
-                            {
-                                data_tmp = null;
-                                Dictionary<Tuple<string, string>, FileData> XCIList = Util.LoadXMLToFileDataDictionary(XML_Local);
-                                List<Tuple<string, string>> keys = Enumerable.ToList(XCIList.Keys);
-                                int index = keys.FindIndex(key => key.Item1 == data.TitleIDBaseGame);
-                                if (index != -1)
-                                {
-                                    XCIList.TryGetValue(keys[index], out data_tmp); //Try to find on Local XCI List
-                                }
-                                if (data_tmp != null)
-                                {
-                                    data.Region_Icon = data_tmp.Region_Icon;
-                                    data.Languages = data_tmp.Languages;
-                                    //data.GameRevision = data_tmp.GameRevision;
-                                    data.ProductCode = data_tmp.ProductCode;
-                                    data.GameName = data_tmp.GameName;// + " [DLC]";
-                                    data.Developer = data_tmp.Developer;
-                                    found = true;
-                                    logger.Debug("Found extra info for DLC on XCI local database");
-                                }
-                            }
-
-                            //Always look at titlekeys for proper DLC name
-                            if (UseTitleKeys && File.Exists(TITLE_KEYS))
-                            {
-                                string gameName = "";
                                 try
                                 {
                                     gameName = (from x in File.ReadAllLines(TITLE_KEYS)
                                                 select x.Split('|') into x
                                                 where x.Length > 1
-                                                select x).GroupBy(x => x[0].Trim().Substring(0, 16)).ToDictionary(x => x.Key, x => x.ToList()[0][2])[data.TitleID.ToLower()];
-                                    data.GameName = gameName.Replace("[DLC] ", "");
-                                    found = true;
+                                                select x).GroupBy(x => x[0].Trim().Substring(0, 16)).ToDictionary(x => x.Key, x => x.ToList()[0][2])[data.TitleIDBaseGame.ToLower()];
                                 }
                                 catch (Exception e)
                                 {
                                     logger.Warning("Could not find game name! Don't worry, will try again later\n" + e.StackTrace);
                                 }
 
-                                if (!found)
-                                {
-                                    try
-                                    {
-                                        gameName = (from x in File.ReadAllLines(TITLE_KEYS)
-                                                    select x.Split('|') into x
-                                                    where x.Length > 1
-                                                    select x).GroupBy(x => x[0].Trim().Substring(0, 16)).ToDictionary(x => x.Key, x => x.ToList()[0][2])[data.TitleIDBaseGame.ToLower()];
-                                    }
-                                    catch (Exception e)
-                                    {
-                                        logger.Warning("Could not find game name! Don't worry, will try again later\n" + e.StackTrace);
-                                    }
-
-                                    data.GameName = gameName.Replace("[DLC] ", "");
-                                }
+                                data.GameName = gameName.Replace("[DLC] ", "");
                             }
                         }
 

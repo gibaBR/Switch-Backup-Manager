@@ -2742,7 +2742,7 @@ namespace Switch_Backup_Manager
 
         private void deleteSelectedFilesToolStripMenuItemEshop_Click(object sender, EventArgs e)
         {
-            DialogResult dialogResult = MessageBox.Show("Are you sure you wnat to delete the selected files from disk?", "Switch Backup Manager", MessageBoxButtons.YesNo);
+            DialogResult dialogResult = MessageBox.Show("Are you sure you want to delete the selected files from disk?", "Switch Backup Manager", MessageBoxButtons.YesNo);
             if (dialogResult == DialogResult.Yes)
             {
                 OperationDeleteSelectedEshopFiles();

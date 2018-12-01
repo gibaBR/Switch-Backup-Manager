@@ -1659,6 +1659,33 @@ namespace Switch_Backup_Manager
             }
         }
 
+        public class TagayaHeader
+        {
+            public string firmware { get; set; }
+            public string platform { get; set; }
+            public string did { get; set; }
+            public string eid { get; set; }
+        }
+
+        public class TagayaConfig
+        {
+            public TagayaHeader header { get; set; }
+        }
+
+        public class VersionTitles
+        {
+            public string id { get; set; }
+            public int version { get; set; }
+            public int required_version { get; set; }
+        }
+
+        public class VersionList
+        {
+            public List<VersionTitles> titles { get; set; }
+            public int format_version { get; set; }
+            public int last_modified { get; set; }
+        }
+
         public static Dictionary<string, int> LoadVersionListToDictionary()
         {
             Dictionary<string, int> result = new Dictionary<string, int>();
@@ -1669,7 +1696,7 @@ namespace Switch_Backup_Manager
 
                 if (!String.IsNullOrEmpty(versionlist))
                 {
-                    dynamic titles = JsonConvert.DeserializeObject(versionlist);
+                    var titles = JsonConvert.DeserializeObject<VersionList>(versionlist);
 
                     foreach (var title in titles.titles)
                     {
@@ -1716,7 +1743,7 @@ namespace Switch_Backup_Manager
 
                     if (!String.IsNullOrEmpty(header))
                     {
-                        dynamic config = JsonConvert.DeserializeObject(header);
+                        var config = JsonConvert.DeserializeObject<TagayaConfig>(header);
 
                         using (var httpsClient = new HttpsWebClient())
                         {
@@ -1733,7 +1760,7 @@ namespace Switch_Backup_Manager
 
                                 if (!String.IsNullOrEmpty(versionlist))
                                 {
-                                    dynamic titles = JsonConvert.DeserializeObject(versionlist);
+                                    var titles = JsonConvert.DeserializeObject<VersionList>(versionlist);
 
                                     if (Convert.ToInt32(titles.last_modified) > FrmMain.TitleVersionUpdate)
                                     {
@@ -1772,7 +1799,7 @@ namespace Switch_Backup_Manager
 
                     if (!String.IsNullOrEmpty(versionlist))
                     {
-                        dynamic titles = JsonConvert.DeserializeObject(versionlist);
+                        var titles = JsonConvert.DeserializeObject<VersionList>(versionlist);
 
                         if (Convert.ToInt32(titles.last_modified) > FrmMain.TitleVersionUpdate)
                         {

@@ -1309,7 +1309,7 @@ namespace Switch_Backup_Manager
             }
             catch (Exception e)
             {
-                logger.Error("Problem writing Title ID " + data.TitleID + " in xml");
+                logger.Error("Problem writing Title ID " + data.TitleID + " to xml");
                 logger.Error(e.Message + "\n" + e.StackTrace);
             }
             return result;

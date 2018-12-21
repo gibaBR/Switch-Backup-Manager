@@ -431,7 +431,7 @@ namespace Switch_Backup_Manager
         {
             int filesCount = files.Count();
             int i = 0;
-            logger.Info("Started getting extra info from web.");
+            logger.Info("Started to get extra info from web.");
 
             Dictionary<Tuple<string, string>, FileData> _files =  CloneDictionary(files);
 
@@ -591,15 +591,15 @@ namespace Switch_Backup_Manager
                 RemoveMissingFilesFromXML(XML_NSP_Local, LOCAL_NSP_FILES_DB);
             }
 
-            // DLC NSP Files, have no info about the game thay belong to, other then Title ID. So, if we add them prior to adding the main game, there will be problems.
+            // DLC NSP Files, have no info about the game they belong to, other than Title ID. So, if we add them prior to adding the main game, there will be problems.
             // So, we create a list of those files, and try to add them after processing all other files.
             filesWithNoName = new List<string>();
 
             foreach (string dir in ListDirectoriesToUpdate())
             {
-                logger.Info("Searchng for new files in " + dir);
+                logger.Info("Searching for new files in " + dir);
                 int added_files = UpdateDirectory(dir);
-                logger.Info("Finished search for new files in " + dir + ". " + added_files + " files added.");
+                logger.Info("Finished the search for new files in " + dir + ". " + added_files + " files added.");
             }
 
             //As explained above
@@ -701,7 +701,7 @@ namespace Switch_Backup_Manager
             int i = 0;
             FrmMain.progressPercent = 0;
 
-            logger.Info("Started splitting files.");
+            logger.Info("Started to split files.");
 
             if (source == "local")
             {
@@ -792,7 +792,7 @@ namespace Switch_Backup_Manager
         {
             int filesCount = files.Count();
             int i = 0;
-            logger.Info("Started trimming " + source + " files.");
+            logger.Info("Started to trim " + source + " files.");
 
             if (source == "local")
             {
@@ -828,7 +828,7 @@ namespace Switch_Backup_Manager
         {
             int filesCount = files.Count();
             int i = 0;
-            logger.Info("Started AutoRename " + source + " files.");
+            logger.Info("Started to autorename " + source + " files.");
 
             if (source != "sdcard")
             {
@@ -864,7 +864,7 @@ namespace Switch_Backup_Manager
                     FrmMain.progressPercent = (int)(i * 100) / filesCount;
                 }
             }
-            logger.Info("Finished AutoRename " + source + " files.");
+            logger.Info("Finished autorenaming " + source + " files.");
         }
 
         private static bool AutoRenameXCIFile(FileData file)
@@ -1062,7 +1062,7 @@ namespace Switch_Backup_Manager
             XDocument xml_ = XDocument.Load(@source_xml);
 
             string removeFrom = (source_xml == LOCAL_FILES_DB ? "local" : "e-shop");
-            logger.Info("Started removing missing files from "+ removeFrom + " database");
+            logger.Info("Started to remove missing files from "+ removeFrom + " database");
 
             int i = 0;
             foreach (XElement xe in xml_.Descendants("Game"))
@@ -2010,7 +2010,7 @@ namespace Switch_Backup_Manager
                         FrmMain.progressPercent = (int)(i * 100) / filesCount;
                     }
                     sw.Stop();
-                    logger.Info("Finished adding files. Total time were " + sw.Elapsed.ToString("mm\\:ss\\.ff") + ".");
+                    logger.Info("Finished adding files. Total time spent: " + sw.Elapsed.ToString("mm\\:ss\\.ff") + ".");
                 }
             }
             catch (Exception e)
@@ -2071,7 +2071,7 @@ namespace Switch_Backup_Manager
                     FrmMain.progressPercent = (int)(i * 100) / filesCount;
                 }
                 sw.Stop();
-                logger.Info("Finished adding files. Total time were " + sw.Elapsed.ToString("mm\\:ss\\.ff") + ".");
+                logger.Info("Finished adding files. Total time spent: " + sw.Elapsed.ToString("mm\\:ss\\.ff") + ".");
             } catch (Exception e)
             {
                 logger.Error(e.StackTrace);
@@ -2154,14 +2154,14 @@ namespace Switch_Backup_Manager
                         foreach (string file_path in list)
                         {
                             FrmMain.progressCurrentfile = file_path;
-                            logger.Info("Started copy of file " + file_path + " to " + destiny + ".");
+                            logger.Info("Started to copy the file: " + file_path + " to " + destiny + ".");
                             FileSystem.CopyFile(file_path, destiny + Path.GetFileName(file_path), UIOption.AllDialogs);
                             i++;
                         }                        
                     } else
                     {
                         FrmMain.progressCurrentfile = data.FilePath;
-                        logger.Info("Started copy of file " + data.FilePath + " to " + destiny + ".");
+                        logger.Info("Started to copy the file: " + data.FilePath + " to " + destiny + ".");
                         FileSystem.CopyFile(data.FilePath, destiny + data.FileNameWithExt, UIOption.AllDialogs);
                         i++;
                     }
@@ -2174,7 +2174,7 @@ namespace Switch_Backup_Manager
                         foreach (string file_path in list)
                         {
                             FrmMain.progressCurrentfile = file_path;
-                            logger.Info("Started move of file " + file_path + " to " + destiny + ".");
+                            logger.Info("Started to move the file: " + file_path + " to " + destiny + ".");
                             FileSystem.MoveFile(file_path, destiny + Path.GetFileName(file_path), UIOption.AllDialogs);
                             i++;
                         }
@@ -2182,7 +2182,7 @@ namespace Switch_Backup_Manager
                     else
                     {
                         FrmMain.progressCurrentfile = data.FilePath;
-                        logger.Info("Started move of file " + data.FileNameWithExt + " to " + destiny + ".");
+                        logger.Info("Started to move the file: " + data.FileNameWithExt + " to " + destiny + ".");
                         FileSystem.MoveFile(data.FilePath, destiny + data.FileNameWithExt, UIOption.AllDialogs);
                         i++;
                     }

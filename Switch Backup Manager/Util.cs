@@ -431,7 +431,7 @@ namespace Switch_Backup_Manager
         {
             int filesCount = files.Count();
             int i = 0;
-            logger.Info("Start getting extra info from web.");
+            logger.Info("Started getting extra info from web.");
 
             Dictionary<Tuple<string, string>, FileData> _files =  CloneDictionary(files);
 
@@ -597,9 +597,9 @@ namespace Switch_Backup_Manager
 
             foreach (string dir in ListDirectoriesToUpdate())
             {
-                logger.Info("Searchng for new files on " + dir);
+                logger.Info("Searchng for new files in " + dir);
                 int added_files = UpdateDirectory(dir);
-                logger.Info("Finished search for new files on " + dir + ". " + added_files + " files added.");
+                logger.Info("Finished search for new files in " + dir + ". " + added_files + " files added.");
             }
 
             //As explained above
@@ -701,7 +701,7 @@ namespace Switch_Backup_Manager
             int i = 0;
             FrmMain.progressPercent = 0;
 
-            logger.Info("Starting splitting files.");
+            logger.Info("Started splitting files.");
 
             if (source == "local")
             {
@@ -782,7 +782,7 @@ namespace Switch_Backup_Manager
                     result = true;
                 } else
                 {
-                    logger.Info("File was already trimmed");
+                    logger.Info("File is already trimmed");
                 }
             }
             return result;
@@ -792,7 +792,7 @@ namespace Switch_Backup_Manager
         {
             int filesCount = files.Count();
             int i = 0;
-            logger.Info("Starting trimming " + source + " files.");
+            logger.Info("Started trimming " + source + " files.");
 
             if (source == "local")
             {
@@ -828,7 +828,7 @@ namespace Switch_Backup_Manager
         {
             int filesCount = files.Count();
             int i = 0;
-            logger.Info("Starting autorename " + source + " files.");
+            logger.Info("Started AutoRename " + source + " files.");
 
             if (source != "sdcard")
             {
@@ -864,7 +864,7 @@ namespace Switch_Backup_Manager
                     FrmMain.progressPercent = (int)(i * 100) / filesCount;
                 }
             }
-            logger.Info("Finished autorename " + source + " files.");
+            logger.Info("Finished AutoRename " + source + " files.");
         }
 
         private static bool AutoRenameXCIFile(FileData file)
@@ -905,7 +905,7 @@ namespace Switch_Backup_Manager
                         }
                         break;
                     case ".nsp":
-                        logger.Info("Old name: " + file.FileNameWithExt + ". New name: " + illegalInFileName.Replace(GetRenamingString(file, autoRenamingPattern), ""));
+                        logger.Info("Old name: " + file.FileNameWithExt + ". New name: " + illegalInFileName.Replace(GetRenamingString(file, autoRenamingPatternNSP), ""));
                         try
                         {
                             FileSystem.MoveFile(originalFile, newFileName, false);
@@ -953,7 +953,7 @@ namespace Switch_Backup_Manager
         {
             int filesCount = files.Count();
             int i = 0;
-            logger.Info("Starting to delete selected " + source + " files.");
+            logger.Info("Started to delete selected " + source + " files.");
 
             if (source != "sdcard")
             {
@@ -1062,7 +1062,7 @@ namespace Switch_Backup_Manager
             XDocument xml_ = XDocument.Load(@source_xml);
 
             string removeFrom = (source_xml == LOCAL_FILES_DB ? "local" : "e-shop");
-            logger.Info("Start removing missing files from "+ removeFrom + " database");
+            logger.Info("Started removing missing files from "+ removeFrom + " database");
 
             int i = 0;
             foreach (XElement xe in xml_.Descendants("Game"))
@@ -1190,11 +1190,11 @@ namespace Switch_Backup_Manager
             {
                 if (data != null)
                 {
-                    logger.Debug("searching for " + data.TitleID + " on database.");
+                    logger.Debug("searching for " + data.TitleID + " in database.");
                     //Try to find the game. If exists, do nothing. If not, Append
                     if (!IsTitleIDOnXML(data.TitleID, xml == LOCAL_FILES_DB ? data.Firmware : data.Version, xml))
                     {
-                        logger.Debug(data.TitleID + " not found on database. Adding...");
+                        logger.Debug(data.TitleID + " not found in database. Adding...");
                         string languages = "";
                         if (data.Languages != null)
                         {
@@ -1303,13 +1303,13 @@ namespace Switch_Backup_Manager
                     }
                     else
                     {
-                        logger.Info(data.TitleID + " was already on database. Ignoring.");
+                        logger.Info(data.TitleID + " is already in database. Ignoring.");
                     }
                 }
             }
             catch (Exception e)
             {
-                logger.Error("Problem writing Title ID " + data.TitleID + " on xml");
+                logger.Error("Problem writing Title ID " + data.TitleID + " in xml");
                 logger.Error(e.Message + "\n" + e.StackTrace);
             }
             return result;
@@ -1731,7 +1731,7 @@ namespace Switch_Backup_Manager
             {
                 if (File.Exists(CLIENT_CERT_FILE))
                 {
-                    logger.Info("Certificate " + CLIENT_CERT_FILE + " found. Starting download version list from nintendo");
+                    logger.Info("Certificate " + CLIENT_CERT_FILE + " found. Started to download version list from Nintendo");
 
                     string header = "";
 
@@ -1790,7 +1790,7 @@ namespace Switch_Backup_Manager
 
                 if (!File.Exists(CLIENT_CERT_FILE))
                 {
-                    logger.Info("No certificates " + CLIENT_CERT_FILE + " found. Starting download cached version list from pastebin");
+                    logger.Info("No certificates " + CLIENT_CERT_FILE + " found. Started to download cached version list from pastebin");
                 }
 
                 try
@@ -1971,11 +1971,11 @@ namespace Switch_Backup_Manager
                     int i = 0;
                     if (fileType == "xci")
                     {
-                        logger.Info("Adding " + filesCount + " files on local database");
+                        logger.Info("Adding " + filesCount + " files in local database");
                     }
                     else
                     {
-                        logger.Info("Adding " + filesCount + " files on local Eshop database");
+                        logger.Info("Adding " + filesCount + " files in local Eshop database");
                     }
                     
                     Stopwatch sw = Stopwatch.StartNew();
@@ -2002,7 +2002,7 @@ namespace Switch_Backup_Manager
                             }
                             catch (ArgumentException ex)
                             {
-                                logger.Error("TitleID " + data.TitleID + " is already on database");
+                                logger.Error("TitleID " + data.TitleID + " is already in database");
                             }
                         }
 
@@ -2010,7 +2010,7 @@ namespace Switch_Backup_Manager
                         FrmMain.progressPercent = (int)(i * 100) / filesCount;
                     }
                     sw.Stop();
-                    logger.Info("Finished adding files. Total time was " + sw.Elapsed.ToString("mm\\:ss\\.ff") + ".");
+                    logger.Info("Finished adding files. Total time were " + sw.Elapsed.ToString("mm\\:ss\\.ff") + ".");
                 }
             }
             catch (Exception e)
@@ -2034,10 +2034,10 @@ namespace Switch_Backup_Manager
                 int i = 0;
                 if (fileType == "xci")
                 {
-                    logger.Info("Adding " + filesCount + " files on local database.");
+                    logger.Info("Adding " + filesCount + " files in local database.");
                 } else
                 {
-                    logger.Info("Adding " + filesCount + " files on local Eshop database.");
+                    logger.Info("Adding " + filesCount + " files in local Eshop database.");
                 }
                 
                 Stopwatch sw = Stopwatch.StartNew();
@@ -2063,7 +2063,7 @@ namespace Switch_Backup_Manager
                         }
                         catch (ArgumentException ex)
                         {
-                            logger.Error("TitleID " + data.TitleID + " is already on database.");
+                            logger.Error("TitleID " + data.TitleID + " is already in database.");
                         }
                     }
 
@@ -2071,7 +2071,7 @@ namespace Switch_Backup_Manager
                     FrmMain.progressPercent = (int)(i * 100) / filesCount;
                 }
                 sw.Stop();
-                logger.Info("Finished adding files. Total time was " + sw.Elapsed.ToString("mm\\:ss\\.ff") + ".");
+                logger.Info("Finished adding files. Total time were " + sw.Elapsed.ToString("mm\\:ss\\.ff") + ".");
             } catch (Exception e)
             {
                 logger.Error(e.StackTrace);
@@ -2117,7 +2117,7 @@ namespace Switch_Backup_Manager
 
                 if (element != null)
                 {
-                    logger.Info("Removing Title ID " + titleID + " from local database.");
+                    logger.Info("Removing Title ID " + titleID + " from local XCI database.");
                     element.Remove();
                 }
             }
@@ -2154,14 +2154,14 @@ namespace Switch_Backup_Manager
                         foreach (string file_path in list)
                         {
                             FrmMain.progressCurrentfile = file_path;
-                            logger.Info("Starting copy of file " + file_path + " to " + destiny + ".");
+                            logger.Info("Started copy of file " + file_path + " to " + destiny + ".");
                             FileSystem.CopyFile(file_path, destiny + Path.GetFileName(file_path), UIOption.AllDialogs);
                             i++;
                         }                        
                     } else
                     {
                         FrmMain.progressCurrentfile = data.FilePath;
-                        logger.Info("Starting copy of file " + data.FilePath + " to " + destiny + ".");
+                        logger.Info("Started copy of file " + data.FilePath + " to " + destiny + ".");
                         FileSystem.CopyFile(data.FilePath, destiny + data.FileNameWithExt, UIOption.AllDialogs);
                         i++;
                     }
@@ -2174,7 +2174,7 @@ namespace Switch_Backup_Manager
                         foreach (string file_path in list)
                         {
                             FrmMain.progressCurrentfile = file_path;
-                            logger.Info("Starting move of file " + file_path + " to " + destiny + ".");
+                            logger.Info("Started move of file " + file_path + " to " + destiny + ".");
                             FileSystem.MoveFile(file_path, destiny + Path.GetFileName(file_path), UIOption.AllDialogs);
                             i++;
                         }
@@ -2182,7 +2182,7 @@ namespace Switch_Backup_Manager
                     else
                     {
                         FrmMain.progressCurrentfile = data.FilePath;
-                        logger.Info("Starting move of file " + data.FileNameWithExt + " to " + destiny + ".");
+                        logger.Info("Started move of file " + data.FileNameWithExt + " to " + destiny + ".");
                         FileSystem.MoveFile(data.FilePath, destiny + data.FileNameWithExt, UIOption.AllDialogs);
                         i++;
                     }
@@ -2541,7 +2541,7 @@ namespace Switch_Backup_Manager
                             }
                             catch (Exception e)
                             {
-                                logger.Warning("Could not find game name! Don't worry, will try again later\n" + e.StackTrace);
+                                logger.Info("Could not find game name! Don't worry, will try again later\n" + e.StackTrace);
                             }
 
                             if (!found)
@@ -2555,7 +2555,7 @@ namespace Switch_Backup_Manager
                                 }
                                 catch (Exception e)
                                 {
-                                    logger.Warning("Could not find game name! Don't worry, will try again later\n" + e.StackTrace);
+                                    logger.Info("Could not find game name! Don't worry, will try again later\n" + e.StackTrace);
                                 }
 
                                 data.GameName = gameName.Replace("[DLC] ", "");
@@ -2776,7 +2776,7 @@ namespace Switch_Backup_Manager
                                             }
                                             catch (Exception e)
                                             {
-                                                logger.Warning("Could not find game name! Don't worry, will try again later\n" + e.StackTrace);
+                                                logger.Info("Could not find game name! Don't worry, will try again later\n" + e.StackTrace);
                                             }
 
                                             if (!found)
@@ -2790,7 +2790,7 @@ namespace Switch_Backup_Manager
                                                 }
                                                 catch (Exception e)
                                                 {
-                                                    logger.Warning("Could not find game name! Don't worry, will try again later\n" + e.StackTrace);
+                                                    logger.Info("Could not find game name! Don't worry, will try again later\n" + e.StackTrace);
                                                 }
 
                                                 data.GameName = gameName.Replace("[DLC] ", "");

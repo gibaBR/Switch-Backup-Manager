@@ -1971,11 +1971,11 @@ namespace Switch_Backup_Manager
                     int i = 0;
                     if (fileType == "xci")
                     {
-                        logger.Info("Adding " + filesCount + " files in local database");
+                        logger.Info("Adding " + filesCount + " files to local XCI database");
                     }
                     else
                     {
-                        logger.Info("Adding " + filesCount + " files in local Eshop database");
+                        logger.Info("Adding " + filesCount + " files to local Eshop database");
                     }
                     
                     Stopwatch sw = Stopwatch.StartNew();
@@ -2002,7 +2002,7 @@ namespace Switch_Backup_Manager
                             }
                             catch (ArgumentException ex)
                             {
-                                logger.Error("TitleID " + data.TitleID + " is already in database");
+                                logger.Error("TitleID " + data.TitleID + " is already in the database");
                             }
                         }
 
@@ -2034,10 +2034,10 @@ namespace Switch_Backup_Manager
                 int i = 0;
                 if (fileType == "xci")
                 {
-                    logger.Info("Adding " + filesCount + " files in local database.");
+                    logger.Info("Adding " + filesCount + " files to local XCI database.");
                 } else
                 {
-                    logger.Info("Adding " + filesCount + " files in local Eshop database.");
+                    logger.Info("Adding " + filesCount + " files to local Eshop database.");
                 }
                 
                 Stopwatch sw = Stopwatch.StartNew();
@@ -2063,7 +2063,7 @@ namespace Switch_Backup_Manager
                         }
                         catch (ArgumentException ex)
                         {
-                            logger.Error("TitleID " + data.TitleID + " is already in database.");
+                            logger.Error("TitleID " + data.TitleID + " is already in the database.");
                         }
                     }
 

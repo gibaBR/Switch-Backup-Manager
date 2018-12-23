@@ -1716,8 +1716,15 @@ namespace Switch_Backup_Manager
             {
                 HttpWebRequest request = (HttpWebRequest) base.GetWebRequest(address);
 
-                X509Certificate2 certificate = new X509Certificate2(CLIENT_CERT_FILE, "switch");
-                request.ClientCertificates.Add(certificate);
+                try
+                {
+                    X509Certificate2 certificate = new X509Certificate2(CLIENT_CERT_FILE, "switch");
+                    request.ClientCertificates.Add(certificate);
+                }
+                catch (CryptographicException)
+                {
+                    logger.Error("Certificate is not a valid PFX certificate.");
+                }
 
                 request.KeepAlive = true;
 
@@ -1779,13 +1786,33 @@ namespace Switch_Backup_Manager
                             }
                             catch (Exception ex)
                             {
-                                logger.Error("Could not download version list. " + ex.StackTrace);
-                                MessageBox.Show("Could not download version list! \n Please check your internet connection.");
+                                bool banned = false;
+
+                                if (ex is WebException)
+                                {
+                                    if (((WebException)ex).Status == WebExceptionStatus.ProtocolError)
+                                    {
+                                        HttpWebResponse response = ((WebException)ex).Response as HttpWebResponse;
+                                        if (response != null)
+                                        {
+                                            if (response.StatusCode == HttpStatusCode.Forbidden)
+                                            {
+                                                logger.Error("Could not download version list. Certificate is banned or not a valid PFX certificate.");
+                                                banned = true;
+                                            }
+                                        }
+                                    }
+                                }
+
+                                if (!banned)
+                                {
+                                    logger.Error("Could not download version list. " + ex.StackTrace);
+                                }
                             }
                         }
                     }
 
-                    logger.Error("Could not download version list from nintendo. Starting download cached version list from pastebin");
+                    logger.Error("Failed to download version list from Nintendo. Starting download cached version list from Pastebin");
                 }
 
                 if (!File.Exists(CLIENT_CERT_FILE))
@@ -1819,10 +1846,9 @@ namespace Switch_Backup_Manager
                 catch (Exception ex)
                 {
                     logger.Error("Could not download cached version list. " + ex.StackTrace);
-                    MessageBox.Show("Could not download cached version list! \n Please check your internet connection.");
                 }
 
-                logger.Error("Could not download cached version list from pastebin. Please check your internet connection.");
+                logger.Error("Failed to download cached version list from Pastebin. Please check your internet connection.");
             }
         }
 

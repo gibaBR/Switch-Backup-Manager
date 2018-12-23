@@ -22,7 +22,7 @@ namespace Switch_Backup_Manager
     internal static class Util
     {
         public const string VERSION = "1.2.1";   //Actual application version
-        public const string MIN_DB_Version = "1.1.9"; //This is the minimum version of the DB that can work
+        public const string MIN_DB_Version = "1.2.1"; //This is the minimum version of the DB that can work
 
         public const string INI_FILE = "sbm.ini";
         public static string TITLE_KEYS = "titlekeys.txt";
@@ -2522,7 +2522,7 @@ namespace Switch_Backup_Manager
                                 data.Group = data_tmp.Group;
                                 data.IdScene = data_tmp.IdScene;
                                 data.Region = data_tmp.Region;
-                                data.Version = data_tmp.Version;
+                                //data.Version = data_tmp.Version; //This was empty, and then breaking #111
                                 data.Serial = data_tmp.Serial;
                                 found = true;
                                 logger.Debug("Found extra info for DLC on Scene database");

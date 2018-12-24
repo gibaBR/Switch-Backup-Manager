@@ -178,4 +178,7 @@
   <data name="EN_FileOperationSplit" xml:space="preserve">
     <value>Splitting files...</value>
   </data>
+  <data name="EN_FileOperationInstallUSB" xml:space="preserve">
+    <value>Installing NSP...</value>
+  </data>
 </root>

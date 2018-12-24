@@ -1,4 +1,7 @@
-﻿namespace Switch_Backup_Manager
+﻿using System;
+using System.ComponentModel;
+
+namespace Switch_Backup_Manager
 {
     partial class FrmMain
     {
@@ -84,6 +87,7 @@
             this.moveFilesToToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.sDCardToolStripMenuItem3 = new System.Windows.Forms.ToolStripMenuItem();
             this.folderToolStripMenuItem3 = new System.Windows.Forms.ToolStripMenuItem();
+            this.usbInstallTF = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItemXCISplitFiles = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem68 = new System.Windows.Forms.ToolStripSeparator();
             this.copyInfoToClipboardToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
@@ -351,6 +355,7 @@
             this.toolStripMenuItemEShopMoveToFolder = new System.Windows.Forms.ToolStripMenuItem();
             this.sDCardToolStripMenuItem5 = new System.Windows.Forms.ToolStripMenuItem();
             this.folderToolStripMenuItem6 = new System.Windows.Forms.ToolStripMenuItem();
+            this.usbTFInstall = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem64 = new System.Windows.Forms.ToolStripSeparator();
             this.copyInfoToClipboardToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.updateGameInfoFromWebToolStripMenuItemEshop = new System.Windows.Forms.ToolStripMenuItem();
@@ -465,6 +470,7 @@
             this.backgroundWorkerUpdateFiles = new System.ComponentModel.BackgroundWorker();
             this.backgroundWorkerScrapExtraInfo = new System.ComponentModel.BackgroundWorker();
             this.backgroundWorkerUpdateVersionList = new System.ComponentModel.BackgroundWorker();
+            this.backgroundWorkerUSBInstallNSP = new System.ComponentModel.BackgroundWorker();
             this.backgroundWorkerSplitFiles = new System.ComponentModel.BackgroundWorker();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
@@ -980,6 +986,7 @@
             this.toolStripMenuItem96,
             this.copyFilesToolStripMenuItem2,
             this.moveFilesToToolStripMenuItem,
+            this.usbInstallTF,
             this.toolStripMenuItemXCISplitFiles,
             this.toolStripMenuItem68,
             this.copyInfoToClipboardToolStripMenuItem1,
@@ -987,7 +994,7 @@
             this.toolStripMenuItem97LocalFiles,
             this.deleteSelectedFileserasesFromDiskToolStripMenuItemLocalFiles});
             this.contextMenuLocalList.Name = "contextMenuLocalList";
-            this.contextMenuLocalList.Size = new System.Drawing.Size(277, 226);
+            this.contextMenuLocalList.Size = new System.Drawing.Size(277, 248);
             this.contextMenuLocalList.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuLocalList_Opening);
             // 
             // showInExplorerToolStripMenuItem
@@ -1033,14 +1040,14 @@
             // sDCardToolStripMenuItem2
             // 
             this.sDCardToolStripMenuItem2.Name = "sDCardToolStripMenuItem2";
-            this.sDCardToolStripMenuItem2.Size = new System.Drawing.Size(180, 22);
+            this.sDCardToolStripMenuItem2.Size = new System.Drawing.Size(116, 22);
             this.sDCardToolStripMenuItem2.Text = "SD card";
             this.sDCardToolStripMenuItem2.Click += new System.EventHandler(this.sDCardToolStripMenuItem2_Click);
             // 
             // folderToolStripMenuItem2
             // 
             this.folderToolStripMenuItem2.Name = "folderToolStripMenuItem2";
-            this.folderToolStripMenuItem2.Size = new System.Drawing.Size(180, 22);
+            this.folderToolStripMenuItem2.Size = new System.Drawing.Size(116, 22);
             this.folderToolStripMenuItem2.Text = "Folder...";
             this.folderToolStripMenuItem2.Click += new System.EventHandler(this.folderToolStripMenuItem2_Click);
             // 
@@ -1066,6 +1073,12 @@
             this.folderToolStripMenuItem3.Size = new System.Drawing.Size(116, 22);
             this.folderToolStripMenuItem3.Text = "Folder...";
             this.folderToolStripMenuItem3.Click += new System.EventHandler(this.folderToolStripMenuItem3_Click);
+            // 
+            // usbInstallTF
+            // 
+            this.usbInstallTF.Name = "usbInstallTF";
+            this.usbInstallTF.Size = new System.Drawing.Size(276, 22);
+            this.usbInstallTF.Text = "USB install nsp";
             // 
             // toolStripMenuItemXCISplitFiles
             // 
@@ -3188,13 +3201,14 @@
             this.toolStripSeparator10,
             this.toolStripMenuItemEShopCopyToFolder,
             this.toolStripMenuItemEShopMoveToFolder,
+            this.usbTFInstall,
             this.toolStripMenuItem64,
             this.copyInfoToClipboardToolStripMenuItem,
             this.updateGameInfoFromWebToolStripMenuItemEshop,
             this.toolStripMenuItem97Eshop,
             this.deleteSelectedFilesToolStripMenuItemEshop});
             this.contextMenuEShopList.Name = "contextMenuStripSDCard";
-            this.contextMenuEShopList.Size = new System.Drawing.Size(277, 204);
+            this.contextMenuEShopList.Size = new System.Drawing.Size(277, 226);
             this.contextMenuEShopList.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStripEShop_Opening);
             // 
             // toolStripMenuItemEShopShowInExplorer
@@ -3274,6 +3288,13 @@
             this.folderToolStripMenuItem6.Size = new System.Drawing.Size(116, 22);
             this.folderToolStripMenuItem6.Text = "Folder...";
             this.folderToolStripMenuItem6.Click += new System.EventHandler(this.folderToolStripMenuItem6_Click);
+            // 
+            // usbTFInstall
+            // 
+            this.usbTFInstall.Name = "usbTFInstall";
+            this.usbTFInstall.Size = new System.Drawing.Size(276, 22);
+            this.usbTFInstall.Text = "USB install";
+            this.usbTFInstall.Click += new System.EventHandler(this.usbTFInstall_Click);
             // 
             // toolStripMenuItem64
             // 
@@ -4221,6 +4242,11 @@
             this.backgroundWorkerUpdateVersionList.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorkerUpdateVersionList_DoWork);
             this.backgroundWorkerUpdateVersionList.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backgroundWorkerUpdateVersionList_RunWorkerCompleted);
             // 
+            // backgroundWorkerUSBInstallNSP
+            // 
+            this.backgroundWorkerUSBInstallNSP.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorkerUSBInstallNSP_DoWork);
+            this.backgroundWorkerUSBInstallNSP.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backgroundWorkerScanNewFiles_RunWorkerCompleted);
+            // 
             // backgroundWorkerSplitFiles
             // 
             this.backgroundWorkerSplitFiles.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorkerSplitFiles_DoWork);
@@ -4487,6 +4513,7 @@
         private System.ComponentModel.BackgroundWorker backgroundWorkerAddFile;
         private System.ComponentModel.BackgroundWorker backgroundWorkerCopyFiles;
         private System.ComponentModel.BackgroundWorker backgroundWorkerLoadSDCardFiles;
+        private System.ComponentModel.BackgroundWorker backgroundWorkerUSBInstallNSP;
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem toolsToolStripMenuItem1;
@@ -4763,6 +4790,8 @@
         private System.ComponentModel.BackgroundWorker backgroundWorkerUpdateVersionList;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemXCISplitFiles;
         private System.ComponentModel.BackgroundWorker backgroundWorkerSplitFiles;
+        private System.Windows.Forms.ToolStripMenuItem usbInstallTF;
+        private System.Windows.Forms.ToolStripMenuItem usbTFInstall;
     }
 }
 

@@ -10,6 +10,7 @@ using BrightIdeasSoftware;
 using HtmlAgilityPack;
 using Microsoft.WindowsAPICodePack.Dialogs;
 using System.Text.RegularExpressions;
+using NspUsbInstall;
 
 namespace Switch_Backup_Manager
 {
@@ -4163,7 +4164,7 @@ namespace Switch_Backup_Manager
                     try
                     {
                         updates.Add(new Tuple<string, int>(file.TitleID, Convert.ToInt32(file.Version)), file);
-                    } catch (Exception ex)
+                    } catch (Exception)
                     {
                         Util.logger.Error("Error on " + file.TitleID + ", " + file.Version);
                     }                    
@@ -4329,5 +4330,86 @@ namespace Switch_Backup_Manager
 
             Util.SplitXCIFiles(filesList, destinyPath, source);
         }
+
+        private void usbTFInstall_Click(object sender, EventArgs e)
+        {
+
+            if (LocalNSPFilesListSelectedItems.Count == 0)
+            {
+                MessageBox.Show("No files selected");
+                return;
+            }
+
+            string files = "";
+            foreach (FileData data in LocalNSPFilesListSelectedItems.Values)
+            {
+                files += data.FilePath + "\n";
+            }
+       
+            if (!backgroundWorkerUSBInstallNSP.IsBusy)
+            {
+                updateCbxRemoveableFiles = true;
+                menuEShop.Enabled = false;
+                toolStripStatusFilesOperation.Text = Properties.Resources.EN_FileOperationInstallUSB;
+                toolStripStatusFilesOperation.Visible = true;
+                toolStripProgressAddingFiles.Visible = true;
+                toolStripProgressAddingFiles.Maximum = 100;
+                toolStripStatusLabelGame.Text = "";
+                toolStripStatusLabelGame.Visible = true;
+                toolStripProgressAddingFiles.Value = 0;
+                progressPercent = 0;
+                progressCurrentfile = "";
+                object[] parameters = { files}; 
+                backgroundWorkerUSBInstallNSP.RunWorkerAsync(parameters);
+            }
+
+        }
+
+        private void backgroundWorkerUSBInstallNSP_DoWork(object sender, DoWorkEventArgs e)
+        {
+            object[] parameters = e.Argument as object[];
+            string files = (string)parameters[0];
+            try
+            {
+               new NspUsbInstaller().SendFile(files, (new NSPUSBListenerLocal(toolStripProgressAddingFiles, toolStripStatusLabelGame)));
+            }
+            catch (Exception ee)
+            {
+                MessageBox.Show(ee.Message);
+            }
+        }
+
+        public class NSPUSBListenerLocal : INspUsbInstallListener      
+        {
+            ToolStripProgressBar progress;
+            ToolStripStatusLabel label;
+            public NSPUSBListenerLocal(ToolStripProgressBar progress, ToolStripStatusLabel label)
+            {
+                this.progress = progress;
+                this.label = label;
+            }
+                    public void End(int encode)
+                    {
+                        //no nedded
+                    }
+
+                    public void Error(string descriptor)
+                    {
+                        MessageBox.Show(descriptor);
+                    }
+
+                    public void ProgressUpdate(int progressPercent)
+                    {
+                          this.progress.ProgressBar.Invoke(new MethodInvoker(() => progress.Value = progressPercent));
+                    }
+
+                    public void Start(string filename)
+                    {
+                        label.Text = filename; 
+                    }
     }
+
+    }
+
+       
 }

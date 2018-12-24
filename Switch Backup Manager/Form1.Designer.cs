@@ -1033,14 +1033,14 @@
             // sDCardToolStripMenuItem2
             // 
             this.sDCardToolStripMenuItem2.Name = "sDCardToolStripMenuItem2";
-            this.sDCardToolStripMenuItem2.Size = new System.Drawing.Size(180, 22);
+            this.sDCardToolStripMenuItem2.Size = new System.Drawing.Size(116, 22);
             this.sDCardToolStripMenuItem2.Text = "SD card";
             this.sDCardToolStripMenuItem2.Click += new System.EventHandler(this.sDCardToolStripMenuItem2_Click);
             // 
             // folderToolStripMenuItem2
             // 
             this.folderToolStripMenuItem2.Name = "folderToolStripMenuItem2";
-            this.folderToolStripMenuItem2.Size = new System.Drawing.Size(180, 22);
+            this.folderToolStripMenuItem2.Size = new System.Drawing.Size(116, 22);
             this.folderToolStripMenuItem2.Text = "Folder...";
             this.folderToolStripMenuItem2.Click += new System.EventHandler(this.folderToolStripMenuItem2_Click);
             // 
@@ -3194,7 +3194,7 @@
             this.toolStripMenuItem97Eshop,
             this.deleteSelectedFilesToolStripMenuItemEshop});
             this.contextMenuEShopList.Name = "contextMenuStripSDCard";
-            this.contextMenuEShopList.Size = new System.Drawing.Size(277, 204);
+            this.contextMenuEShopList.Size = new System.Drawing.Size(277, 226);
             this.contextMenuEShopList.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStripEShop_Opening);
             // 
             // toolStripMenuItemEShopShowInExplorer

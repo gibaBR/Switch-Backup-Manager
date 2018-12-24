@@ -2748,6 +2748,7 @@ namespace Switch_Backup_Manager
                 OperationDeleteSelectedEshopFiles();
                 UpdateLocalNSPGamesList();
                 toolStripStatusLabel1.Text = "0 Selected (0MB)";
+                MessageBox.Show("Done.");
             }
 
         }
@@ -3002,7 +3003,11 @@ namespace Switch_Backup_Manager
                 FileData data = (FileData)OLVLocalFiles.SelectedObject;
                 if (data != null)
                 {
-                    System.Diagnostics.Process.Start("explorer.exe", Path.GetDirectoryName(data.FilePath));
+                    if (File.Exists(data.FilePath))
+                    {
+                        string argument = "/select, \"" + @data.FilePath +"\"";
+                        System.Diagnostics.Process.Start("explorer.exe", argument);
+                    }                    
                 } else
                 {
                     MessageBox.Show("Select one item from the list.");
@@ -3020,7 +3025,35 @@ namespace Switch_Backup_Manager
                 FileData data = (FileData)OLV_SDCard.SelectedObject;
                 if (data != null)
                 {
-                    System.Diagnostics.Process.Start("explorer.exe", Path.GetDirectoryName(data.FilePath));
+                    if (File.Exists(data.FilePath))
+                    {
+                        string argument = "/select, \"" + @data.FilePath + "\"";
+                        System.Diagnostics.Process.Start("explorer.exe", argument);
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("Select one item from the list.");
+                }
+            }
+            else
+            {
+                MessageBox.Show("Select one item from the list.");
+            }
+        }
+
+        private void toolStripMenuItemEShopShowInExplorer_Click(object sender, EventArgs e)
+        {
+            if ((OLVEshop.Items.Count > 0) && (OLVEshop.SelectedItems.Count == 1))
+            {
+                FileData data = (FileData)OLVEshop.SelectedObject;
+                if (data != null)
+                {
+                    if (File.Exists(data.FilePath))
+                    {
+                        string argument = "/select, \"" + @data.FilePath + "\"";
+                        System.Diagnostics.Process.Start("explorer.exe", argument);
+                    }                        
                 }
                 else
                 {
@@ -3523,26 +3556,6 @@ namespace Switch_Backup_Manager
         private void toolStripMenuItemMoveFilesToFolderEShop_Click(object sender, EventArgs e)
         {
             OperationMoveSelectedFilesFromEshopListToFolder();
-        }
-
-        private void toolStripMenuItemEShopShowInExplorer_Click(object sender, EventArgs e)
-        {
-            if ((OLVEshop.Items.Count > 0) && (OLVEshop.SelectedItems.Count == 1))
-            {
-                FileData data = (FileData)OLVEshop.SelectedObject;
-                if (data != null)
-                {
-                    System.Diagnostics.Process.Start("explorer.exe", Path.GetDirectoryName(data.FilePath));
-                }
-                else
-                {
-                    MessageBox.Show("Select one item from the list.");
-                }
-            }
-            else
-            {
-                MessageBox.Show("Select one item from the list.");
-            }
         }
 
         private void toolStripMenuItemEShopAutoRename_Click(object sender, EventArgs e)
@@ -4215,6 +4228,7 @@ namespace Switch_Backup_Manager
                     //Util.logger.Error("Error on " + item.Text + ", " + Convert.ToString(((FileData)((OLVListItem)item).RowObject).Version));
                 }
             }
+            MessageBox.Show(updates_to_delete.Count + " files selected.");
 //            OLVEshop.RefreshSelectedObjects();
         }
 

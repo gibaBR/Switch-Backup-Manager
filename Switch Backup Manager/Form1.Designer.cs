@@ -4245,7 +4245,7 @@ namespace Switch_Backup_Manager
             // backgroundWorkerUSBInstallNSP
             // 
             this.backgroundWorkerUSBInstallNSP.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorkerUSBInstallNSP_DoWork);
-            this.backgroundWorkerUSBInstallNSP.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backgroundWorkerScanNewFiles_RunWorkerCompleted);
+            this.backgroundWorkerUSBInstallNSP.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backgroundWorkerUSBInstallNSP_DoWork_RunWorkerCompleted);
             // 
             // backgroundWorkerSplitFiles
             // 

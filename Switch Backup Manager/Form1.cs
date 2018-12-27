@@ -4379,6 +4379,17 @@ namespace Switch_Backup_Manager
             }
         }
 
+        private void backgroundWorkerUSBInstallNSP_DoWork_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            updateCbxRemoveableFiles = false;
+            menuEShop.Enabled = true;
+            toolStripStatusFilesOperation.Text = "";
+            toolStripStatusFilesOperation.Visible = false;
+            toolStripProgressAddingFiles.Visible = false;
+            toolStripStatusLabelGame.Text = "";
+            toolStripStatusLabelGame.Visible = false;
+        }
+
         public class NSPUSBListenerLocal : INspUsbInstallListener      
         {
             ToolStripProgressBar progress;
@@ -4390,10 +4401,10 @@ namespace Switch_Backup_Manager
             }
                     public void End(int encode)
                     {
-                        //no nedded
+
                     }
 
-                    public void Error(string descriptor)
+            public void Error(string descriptor)
                     {
                         MessageBox.Show(descriptor);
                     }

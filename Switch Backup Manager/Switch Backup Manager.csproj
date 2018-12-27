@@ -38,7 +38,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -49,7 +49,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <DebugSymbols>false</DebugSymbols>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationIcon>img\SwitchIcon.ico</ApplicationIcon>
@@ -115,6 +115,7 @@
     </Compile>
     <Compile Include="HFS0.cs" />
     <Compile Include="IniFile.cs" />
+    <Compile Include="libusbK.cs" />
     <Compile Include="Logger.cs" />
     <Compile Include="MultiStream.cs" />
     <Compile Include="NACP.cs" />
@@ -187,9 +188,6 @@
     <None Include="img\EUR.jpg" />
     <None Include="img\CHN.jpg" />
     <None Include="img\SwitchIcon.ico" />
-    <Content Include="libusb-1.0.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Content Include="SwitchIcon.ico" />
   </ItemGroup>
   <ItemGroup>

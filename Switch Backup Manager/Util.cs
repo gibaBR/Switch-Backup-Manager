@@ -1869,12 +1869,20 @@ namespace Switch_Backup_Manager
 
         public static void GetKeys()
         {
-            string text = (from x in File.ReadAllLines(KEYS_FILE)
-                           select x.Split('=') into x
-                           where x.Length > 1
-                           select x).ToDictionary((string[] x) => x[0].Trim(), (string[] x) => x[1])["header_key"].Replace(" ", "");
-            NcaHeaderEncryptionKey1_Prod = StringToByteArray(text.Remove(32, 32));
-            NcaHeaderEncryptionKey2_Prod = StringToByteArray(text.Remove(0, 32));
+            try
+            {
+                string text = (from x in File.ReadAllLines(KEYS_FILE)
+                               select x.Split('=') into x
+                               where x.Length > 1
+                               select x).ToDictionary((string[] x) => x[0].Trim(), (string[] x) => x[1])["header_key"].Replace(" ", "");
+                NcaHeaderEncryptionKey1_Prod = StringToByteArray(text.Remove(32, 32));
+                NcaHeaderEncryptionKey2_Prod = StringToByteArray(text.Remove(0, 32));
+            }
+            catch (ArgumentException)
+            {
+                MessageBox.Show(KEYS_FILE + " has keys with the same value.");
+                Environment.Exit(0);
+            }
         }
 
         public static string GetMkey(byte id)
@@ -2686,11 +2694,29 @@ namespace Switch_Backup_Manager
                             {
                                 WindowStyle = ProcessWindowStyle.Hidden,
                                 FileName = "hactool.exe",
-                                Arguments = "-k keys.txt --section0dir=data meta"
+                                Arguments = "-k keys.txt --section0dir=data meta",
+                                UseShellExecute = false,
+                                RedirectStandardOutput = true,
+                                CreateNoWindow = true
                             };
                             process.Start();
+
+                            string masterkey = "";
+                            while (!process.StandardOutput.EndOfStream)
+                            {
+                                string output = process.StandardOutput.ReadLine();
+                                if (output.StartsWith("Master Key Revision"))
+                                {
+                                    masterkey = Regex.Replace(output, @"\s+", " ");
+                                }
+                            }
                             process.WaitForExit();
 
+                            if (!Directory.Exists("data"))
+                            {
+                                logger.Error("Section 0 directory missing! Please check if you have required key in " + KEYS_FILE + ". " + masterkey);
+                            }
+                            else
                             try
                             {
                                 string[] cnmt = Directory.GetFiles("data", "*.cnmt");
@@ -2847,7 +2873,7 @@ namespace Switch_Backup_Manager
                                         {
                                             fileStream3.Read(buffer2, 0, 56);
                                             array9[k] = new CNMT.CNMT_Entry(buffer2);
-                                            if (array9[k].Type == (byte)CNMT.CNMT_Entry.ContentType.DATA)
+                                            if (array9[k].Type == (byte)CNMT.CNMT_Entry.ContentType.CONTROL || array9[k].Type == (byte)CNMT.CNMT_Entry.ContentType.DATA)
                                             {
                                                 ncaTarget = BitConverter.ToString(array9[k].NcaId).ToLower().Replace("-", "") + ".nca";
                                                 break;
@@ -2989,7 +3015,7 @@ namespace Switch_Backup_Manager
                     }
                     catch (Exception e)
                     {
-                        logger.Error(data.TitleID + " seems to be broken! Some info will be missing");
+                        logger.Error(data.TitleID + " seems to be broken! Some info will be missing.\n" + e.StackTrace);
                     }
 
                     if (data.ContentType == "Patch")

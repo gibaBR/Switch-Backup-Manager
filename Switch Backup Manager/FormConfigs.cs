@@ -35,10 +35,10 @@ namespace Switch_Backup_Manager
             gameExample.ContentType = "Patch";
             gameExample.Version = "0";
 
-            gameExampleNSP = new FileData("C:\\Switch\\1-2-Switch [01000320000cc000][v0].nsp", "1-2-Switch [01000320000cc000][v0]", "1-2-Switch [01000320000cc000][v0].nsp", 
-                "1,38 GB", 1481339176, "1,38 GB", 1481339176, "01000320000CC000" , "01000320000CC000", "1-2-Switch", "Nintendo", "1.0.0", "No Prod. ID", "0.12.12.0", "e-shop", 
-                "0 (1.0.0-2.3.0)", new Dictionary<string, string> { { "American English", "cache\\icon_01000320000CC000_AmericanEnglish.bmp" }, { "Japanese", "cache\\icon_01000320000CC000_Japanese.bmp" } },
-                new List<string> { "American English", "Japanese" }, "en, ja", true, "", "", "0", "e-shop", "", false, "Download", 0, "Application", "0", "0", true, "", "Nintendo", "Mar 03, 2017", 
+            gameExampleNSP = new FileData("C:\\Switch\\1-2-Switch [01000320000CC800][v65536].nsp", "1-2-Switch [01000320000CC800][v65536]", "1-2-Switch [01000320000CC800][v65536].nsp",
+                "12,18 MB", 12770575, "12,18 MB", 12770575, "01000320000CC800", "01000320000CC000", "1-2-Switch", "Nintendo", "1.1.0", "No Prod. ID", "4.4.0.0", "e-shop",
+                "3 (4.0.0-4.1.0)", new Dictionary<string, string> { { "American English", "cache\\icon_01000320000CC000_AmericanEnglish.bmp" }, { "Japanese", "cache\\icon_01000320000CC000_Japanese.bmp" } },
+                new List<string> { "American English", "Japanese" }, "en, ja", true, "BigBlueBox", "LA-H-AACCA", "4.0.0", "e-shop", "WLD", false, "Download", 12, "Patch", "65536", "65536", true, "", "Nintendo", "Mar 03, 2017", 
                 "2 players simultaneous", new List<string> { "Party", "Multiplayer", "Action" }, 0, "");
 
             cbxTagsXCI.Items.Clear();

@@ -24,7 +24,9 @@ namespace Switch_Backup_Manager
             gameExample.Developer = "Nintendo";
             gameExample.GameRevision = "1.0.0";
             gameExample.IsTrimmed = true;
-            gameExample.FilePath = @"c:\switch\mario.xci";
+            gameExample.FilePath = @"C:\Switch\bbb-h-aaaca.xci";
+            gameExample.FileName = "bbb-h-aaaca";
+            gameExample.FileNameWithExt = "bbb-h-aaaca.xci";
             gameExample.Group = "BigBlueBox";
             gameExample.Region = "WLD";
             gameExample.Firmware = "3.0.1";
@@ -32,7 +34,7 @@ namespace Switch_Backup_Manager
                 "Latin American Spanish", "Spanish", "Italian", "Dutch", "Canadian French", "Russian" };
             gameExample.Languages_resumed = "en,fr,de,it,es,nl,ru,ja";
             gameExample.IdScene = 38;
-            gameExample.ContentType = "Patch";
+            gameExample.ContentType = "Application";
             gameExample.Version = "0";
 
             gameExampleNSP = new FileData("C:\\Switch\\1-2-Switch [01000320000CC800][v65536].nsp", "1-2-Switch [01000320000CC800][v65536]", "1-2-Switch [01000320000CC800][v65536].nsp",
@@ -45,7 +47,7 @@ namespace Switch_Backup_Manager
             cbxTagsNSP.Items.Clear();
             for (int i = 0; i < Util.AutoRenamingTags.Length; i++)
             {
-                if (Util.AutoRenamingTags[i] != "{nspversion}" && Util.AutoRenamingTags[i] != "{content_type}")
+                if (Util.AutoRenamingTags[i] != "{nspversion}" && Util.AutoRenamingTags[i] != "{content_type}" && Util.AutoRenamingTags[i] != "{nsptype}")
                     cbxTagsXCI.Items.Add(Util.AutoRenamingTags[i]);
                 cbxTagsNSP.Items.Add(Util.AutoRenamingTags[i]);
             }

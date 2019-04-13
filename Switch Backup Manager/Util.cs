@@ -69,7 +69,7 @@ namespace Switch_Backup_Manager
         public static Color HighlightNSPOnScene_color = Color.Orange;
         public static Color HighlightBothOnScene_color = Color.Yellow;
 
-        private static string[] Language = new string[16]
+        private static string[] Language = new string[]
         {
             "American English",
             "British English",
@@ -89,7 +89,7 @@ namespace Switch_Backup_Manager
             "???"
         };
 
-        public static string[] AutoRenamingTags = new string[12]
+        public static string[] AutoRenamingTags = new string[]
         {
             "{gamename}",
             "{titleid}",
@@ -102,7 +102,9 @@ namespace Switch_Backup_Manager
             "{languages}",
             "{sceneid}",
             "{nspversion}",
-            "{content_type}"
+            "{content_type}",
+            "{nsptype}",
+            "{filename}",
         };
 
         private static Image[] Icons = new Image[16];
@@ -641,15 +643,18 @@ namespace Switch_Backup_Manager
                 else
                 {
                     string content_type = ""; //Patch, AddOnContent, Application
+                    string nsptype = ""; //Patch, AddOnContent, Application
                     if (data.ContentType != "")
                     {
                         switch (data.ContentType)
                         {
                             case "Patch":
                                 content_type = "Update";
+                                nsptype = "UPD";
                                 break;
                             case "AddOnContent":
                                 content_type = "DLC";
+                                nsptype = "DLC";
                                 break;
                             case "Application":
                                 content_type = "Base Game";
@@ -669,6 +674,45 @@ namespace Switch_Backup_Manager
                     result = result.Replace(AutoRenamingTags[9], string.Format("{0:D4}", data.IdScene));
                     result = result.Replace(AutoRenamingTags[10], data.Version);
                     result = result.Replace(AutoRenamingTags[11], content_type);
+                    result = result.Replace(AutoRenamingTags[12], nsptype);
+
+                    if (result.Contains(AutoRenamingTags[13]))
+                    {
+                        string filename = "";
+                        Regex regex = new Regex(@"^(?:(?:\[[\w ]+\] ?)?(.*?) (?:\[[\w ]+\] ?)?\[[a-zA-Z0-9]{16}\] ?\[v?\d+\]|([\w\-]+?)(?:_(?:dlc|[a-zA-Z0-9]{16}|v?\d+))+)");
+                        MatchCollection matches = regex.Matches(data.FileName);
+                        if (matches.Count != 0)
+                        {
+                            GroupCollection group = matches[0].Groups;
+                            if (group.Count == 3)
+                            {
+                                if (!string.IsNullOrEmpty(group[1].ToString()))
+                                {
+                                    filename = group[1].ToString();
+                                }
+                                else if (!string.IsNullOrEmpty(group[2].ToString()))
+                                {
+                                    filename = group[2].ToString();
+                                }
+                                else
+                                {
+                                    filename = group[0].ToString();
+                                }
+                            }
+                            else
+                            {
+                                filename = matches[0].ToString();
+                            }
+                        }
+                        else
+                        {
+                            filename = data.FileName;
+                        }
+
+                        result = result.Replace(AutoRenamingTags[13], filename);
+                    }
+
+                    result = result.Replace("[]", "").Replace("  ", " ").Trim();
                 }
                 if (MaxSizeFilenameNSP != 0)
                 {

@@ -1949,9 +1949,9 @@ namespace Switch_Backup_Manager
                 case 7:
                     return "MasterKey6 (6.2.0)";
                 case 8:
-                    return "MasterKey7 (7.0.0-7.0.1)";
+                    return "MasterKey7 (7.0.0-8.0.1)";
                 case 9:
-                    return "MasterKey8 (?)";
+                    return "MasterKey8 (8.1.0)";
                 case 10:
                     return "MasterKey9 (?)";
                 case 11:
@@ -2965,15 +2965,19 @@ namespace Switch_Backup_Manager
                     }
                 }
 
-                if (nspSource == (1 << 6) - 1)
+                if ((~nspSource & (int)(Consts.NSPSource.AUTHORINGTOOLINFO_XML)) == 0)
+                {
+                    data.Source = "Homebrew";
+                }
+                else if ((~nspSource & (int)(Consts.NSPSource.LEGALINFO_XML | Consts.NSPSource.NACP_XML | Consts.NSPSource.PROGRAMINFO_XML | Consts.NSPSource.CARDSPEC_XML)) == 0)
                 {
                     data.Source = "Scene";
                 }
-                else if (nspSource == (1 << 3) - 1)
+                else if ((~nspSource & (int)(Consts.NSPSource.CERT | Consts.NSPSource.TIK)) == 0)
                 {
                     data.Source = "CDN";
                 }
-                else if (nspSource == (1 << 1) - 1)
+                else if ((~nspSource & (int)(Consts.NSPSource.CNMT_XML)) == 0)
                 {
                     data.Source = "XCI";
                 }

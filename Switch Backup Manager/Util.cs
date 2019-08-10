@@ -3296,19 +3296,6 @@ namespace Switch_Backup_Manager
                                 break;
                             }
                         }
-
-                        //Last resort, guess by Number of files in Update Partition
-                        if (String.IsNullOrEmpty(result.Firmware))
-                        {
-                            foreach (KeyValuePair<string, int> kv in Consts.UPDATE_NUMBER_OF_FILES)
-                            {
-                                if (UpdateFiles.Count == kv.Value)
-                                {
-                                    result.Firmware = kv.Key;
-                                    break;
-                                }
-                            }
-                        }
                     }
                 }
                 long num3 = -9223372036854775808L;

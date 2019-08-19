@@ -1795,7 +1795,7 @@ namespace Switch_Backup_Manager
         {
             using (var client = new WebClient())
             {
-                if (File.Exists(CLIENT_CERT_FILE))
+                if (File.Exists(CLIENT_CERT_FILE) && MessageBox.Show("Updating directly from Nintendo may no longer work and may get your certificate banned. Do you still wish to continue?", "", MessageBoxButtons.YesNo) == DialogResult.Yes)
                 {
                     logger.Info("Certificate " + CLIENT_CERT_FILE + " found. Started to download version list from Nintendo");
 

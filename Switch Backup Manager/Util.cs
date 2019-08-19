@@ -34,11 +34,8 @@ namespace Switch_Backup_Manager
         public const string NSWDB_DOWNLOAD_SITE = "http://nswdb.com/xml.php";
         public const string LOCAL_FILES_DB = "SBM_Local.xml";
         public const string LOCAL_NSP_FILES_DB = "SBM_NSP_Local.xml";
-        public const string HEADER_DOWNLOAD_SITE = "https://pastebin.com/raw/1K6nMT5y";
-        public const string TAGAYA_DOWNLOAD_SITE = "https://tagaya.hac.lp1.eshop.nintendo.net/tagaya/hac_versionlist";
         public const string VERSION_LIST_DOWNLOAD_SITE = "https://pastebin.com/raw/9N26Bx10";
         public const string VERSION_LIST_FILE = "versionlist.json";
-        public const string CLIENT_CERT_FILE = "nx_tls_client_cert.pfx";    //openssl pkcs12 -export -inkey nx_tls_client_cert.key -in nx_tls_client_cert.pem -name switch -out nx_tls_client_cert.pfx
         public const string CACHE_FOLDER = "cache";
         public const string LOG_FILE = "sbm.log";
 
@@ -1769,116 +1766,10 @@ namespace Switch_Backup_Manager
             return result;
         }
 
-        public class HttpsWebClient : WebClient
-        {
-            protected override WebRequest GetWebRequest(Uri address)
-            {
-                HttpWebRequest request = (HttpWebRequest) base.GetWebRequest(address);
-
-                try
-                {
-                    X509Certificate2 certificate = new X509Certificate2(CLIENT_CERT_FILE, "switch");
-                    request.ClientCertificates.Add(certificate);
-                }
-                catch (CryptographicException)
-                {
-                    logger.Error("Certificate is not a valid PFX certificate.");
-                }
-
-                request.KeepAlive = true;
-
-                return request;
-            }
-        }
-
         public static void UpdateVersionList()
         {
             using (var client = new WebClient())
             {
-                if (File.Exists(CLIENT_CERT_FILE) && MessageBox.Show("Updating directly from Nintendo may no longer work and may get your certificate banned. Do you still wish to continue?", "", MessageBoxButtons.YesNo) == DialogResult.Yes)
-                {
-                    logger.Info("Certificate " + CLIENT_CERT_FILE + " found. Started to download version list from Nintendo");
-
-                    string header = "";
-
-                    try
-                    {
-                        header = client.DownloadString(HEADER_DOWNLOAD_SITE);
-                    }
-                    catch { }
-
-                    if (!String.IsNullOrEmpty(header))
-                    {
-                        var config = JsonConvert.DeserializeObject<TagayaConfig>(header);
-
-                        using (var httpsClient = new HttpsWebClient())
-                        {
-                            ServicePointManager.ServerCertificateValidationCallback = delegate { return true; };
-
-                            httpsClient.Headers.Add("User-Agent", string.Format("NintendoSDK Firmware/{0} (platform:{1}; did:{2}; eid:{3})",
-                                config.header.firmware, config.header.platform, config.header.did, config.header.eid));
-                            //httpsClient.Headers.Add("Accept-Encoding", "gzip, deflate");
-                            httpsClient.Headers.Add("Accept", "*/*");
-
-                            try
-                            {
-                                string versionlist = httpsClient.DownloadString(TAGAYA_DOWNLOAD_SITE);
-
-                                if (!String.IsNullOrEmpty(versionlist))
-                                {
-                                    var titles = JsonConvert.DeserializeObject<VersionList>(versionlist);
-
-                                    if (Convert.ToInt32(titles.last_modified) > FrmMain.TitleVersionUpdate)
-                                    {
-                                        File.WriteAllText(VERSION_LIST_FILE, versionlist);
-
-                                        FrmMain.TitleVersionUpdate = Convert.ToInt32(titles.last_modified);
-                                        logger.Info("Version list last updated at " + String.Format("{0:F}", new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc).AddSeconds(FrmMain.TitleVersionUpdate)));
-                                    }
-                                    else
-                                    {
-                                        logger.Info("No updates available.");
-                                    }
-
-                                    return;
-                                }
-                            }
-                            catch (Exception ex)
-                            {
-                                bool banned = false;
-
-                                if (ex is WebException)
-                                {
-                                    if (((WebException)ex).Status == WebExceptionStatus.ProtocolError)
-                                    {
-                                        HttpWebResponse response = ((WebException)ex).Response as HttpWebResponse;
-                                        if (response != null)
-                                        {
-                                            if (response.StatusCode == HttpStatusCode.Forbidden)
-                                            {
-                                                logger.Error("Could not download version list. Certificate is banned or not a valid PFX certificate.");
-                                                banned = true;
-                                            }
-                                        }
-                                    }
-                                }
-
-                                if (!banned)
-                                {
-                                    logger.Error("Could not download version list. " + ex.StackTrace);
-                                }
-                            }
-                        }
-                    }
-
-                    logger.Error("Failed to download version list from Nintendo. Starting download cached version list from Pastebin");
-                }
-
-                if (!File.Exists(CLIENT_CERT_FILE))
-                {
-                    logger.Info("No certificates " + CLIENT_CERT_FILE + " found. Started to download cached version list from pastebin");
-                }
-
                 try
                 {
                     string versionlist = client.DownloadString(VERSION_LIST_DOWNLOAD_SITE);

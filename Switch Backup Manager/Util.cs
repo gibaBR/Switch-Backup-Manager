@@ -916,7 +916,7 @@ namespace Switch_Backup_Manager
             {
                 string renamingPattern = "";
                 string extension = Path.GetExtension(file.FilePath);
-                renamingPattern = extension.ToLower() == ".nsp" ? autoRenamingPatternNSP : autoRenamingPattern;
+                renamingPattern = extension.ToLower() == ".nsp" || extension.ToLower() == ".nsz" ? autoRenamingPatternNSP : autoRenamingPattern;
 
                 Regex illegalInFileName = new Regex(@"[\\/:*?""<>|™®]");
                 string newFileName = Path.GetDirectoryName(file.FilePath) + "\\" + illegalInFileName.Replace(GetRenamingString(file, renamingPattern), "");
@@ -946,6 +946,7 @@ namespace Switch_Backup_Manager
                         }
                         break;
                     case ".nsp":
+                    case ".nsz":
                         logger.Info("Old name: " + file.FileNameWithExt + ". New name: " + illegalInFileName.Replace(GetRenamingString(file, autoRenamingPatternNSP), ""));
                         try
                         {
@@ -3947,7 +3948,7 @@ namespace Switch_Backup_Manager
 
             try
             {
-                foreach (string f in Directory.GetFiles(folder, "*.nsp", System.IO.SearchOption.AllDirectories))
+                foreach (string f in Directory.GetFiles(folder, "*.ns*", System.IO.SearchOption.AllDirectories).Where(x => x.ToLower().EndsWith(".nsp") || x.ToLower().EndsWith(".nsz")))
                 {
                     list.Add(f);
                 }

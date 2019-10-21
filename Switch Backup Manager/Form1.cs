@@ -1806,7 +1806,7 @@ namespace Switch_Backup_Manager
         private void filesToolStripMenuItem_Click(object sender, EventArgs e)
         {            
             OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.Filter = "XCI Files (*.XCI;*.XC0)|*.xci;*.xc0";
+            openFileDialog.Filter = "XCI Files (*.XCI;*.XC0;*.XCZ)|*.xci;*.xc0;*.xcz";
             openFileDialog.Multiselect = true;
             openFileDialog.Title = "Switch Backup Manager - Add Files";
             openFileDialog.RestoreDirectory = true;
@@ -3296,7 +3296,7 @@ namespace Switch_Backup_Manager
         private void filesToolStripMenuItem1_Click(object sender, EventArgs e)
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.Filter = "NSP Files (*.NSP)|*.nsp";
+            openFileDialog.Filter = "NSP Files (*.NSP;*.NSZ)|*.nsp;*.nsz";
             openFileDialog.Multiselect = true;
             openFileDialog.Title = "Switch Backup Manager - Add Files";
             openFileDialog.RestoreDirectory = true;

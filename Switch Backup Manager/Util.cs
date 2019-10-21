@@ -916,7 +916,7 @@ namespace Switch_Backup_Manager
             {
                 string renamingPattern = "";
                 string extension = Path.GetExtension(file.FilePath);
-                renamingPattern = extension.ToLower() == ".nsp" ? autoRenamingPatternNSP : autoRenamingPattern;
+                renamingPattern = extension.ToLower() == ".nsp" || extension.ToLower() == ".nsz" ? autoRenamingPatternNSP : autoRenamingPattern;
 
                 Regex illegalInFileName = new Regex(@"[\\/:*?""<>|™®]");
                 string newFileName = Path.GetDirectoryName(file.FilePath) + "\\" + illegalInFileName.Replace(GetRenamingString(file, renamingPattern), "");
@@ -933,6 +933,7 @@ namespace Switch_Backup_Manager
                 switch (extension.ToLower())
                 {
                     case ".xci":
+                    case ".xcz":
                         logger.Info("Old name: " + file.FileNameWithExt + ". New name: " + illegalInFileName.Replace(GetRenamingString(file, autoRenamingPattern), ""));
                         try
                         {
@@ -946,6 +947,7 @@ namespace Switch_Backup_Manager
                         }
                         break;
                     case ".nsp":
+                    case ".nsz":
                         logger.Info("Old name: " + file.FileNameWithExt + ". New name: " + illegalInFileName.Replace(GetRenamingString(file, autoRenamingPatternNSP), ""));
                         try
                         {
@@ -1756,7 +1758,12 @@ namespace Switch_Backup_Manager
 
                     foreach (var title in titles.titles)
                     {
-                        result.Add(Convert.ToString(title.id).Substring(0, 13).ToUpper() + "000", Convert.ToInt32(title.version));
+                        string id = Convert.ToString(title.id).Substring(0, 13).ToUpper() + "000";
+                        result.TryGetValue(id, out int version);
+                        if (title.version > version)
+                        {
+                            result[id] = title.version;
+                        }
                     }
 
                     FrmMain.TitleVersionUpdate = Convert.ToInt32(titles.last_modified);
@@ -1844,7 +1851,7 @@ namespace Switch_Backup_Manager
                 case 9:
                     return "MasterKey8 (8.1.0)";
                 case 10:
-                    return "MasterKey9 (?)";
+                    return "MasterKey9 (9.0.0-9.0.1)";
                 case 11:
                     return "MasterKey10 (?)";
                 case 12:
@@ -2221,6 +2228,11 @@ namespace Switch_Backup_Manager
 
         public static FileData GetFileDataNSP(string file)
         {
+            if (Path.GetExtension(file).ToLower() == ".nsz")
+            {
+                logger.Warning("NSZ format is only partially supported");
+            }
+
             FileData data = new FileData();
             data.ImportedDate = DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss");
             data.FilePath = file;
@@ -2332,62 +2344,6 @@ namespace Switch_Backup_Manager
                         else if (Firmware <= 262164)
                         {
                             data.Firmware = "2.3.0";
-                        }
-                        else if (Firmware <= 201327002)
-                        {
-                            data.Firmware = "3.0.0";
-                        }
-                        else if (Firmware <= 201392178)
-                        {
-                            data.Firmware = "3.0.1";
-                        }
-                        else if (Firmware <= 201457684)
-                        {
-                            data.Firmware = "3.0.2";
-                        }
-                        else if (Firmware <= 268435656)
-                        {
-                            data.Firmware = "4.0.0";
-                        }
-                        else if (Firmware <= 268501002)
-                        {
-                            data.Firmware = "4.0.1";
-                        }
-                        else if (Firmware <= 269484082)
-                        {
-                            data.Firmware = "4.1.0";
-                        }
-                        else if (Firmware <= 335544750)
-                        {
-                            data.Firmware = "5.0.0";
-                        }
-                        else if (Firmware <= 335609886)
-                        {
-                            data.Firmware = "5.0.1";
-                        }
-                        else if (Firmware <= 335675432)
-                        {
-                            data.Firmware = "5.0.2";
-                        }
-                        else if (Firmware <= 336592976)
-                        {
-                            data.Firmware = "5.1.0";
-                        }
-                        else if (Firmware <= 402653544)
-                        {
-                            data.Firmware = "6.0.0";
-                        }
-                        else if (Firmware <= 402718730)
-                        {
-                            data.Firmware = "6.0.1";
-                        }
-                        else if (Firmware <= 403701850)
-                        {
-                            data.Firmware = "6.1.0";
-                        }
-                        else if (Firmware <= 404750376)
-                        {
-                            data.Firmware = "6.2.0";
                         }
                         else
                         {
@@ -2659,11 +2615,11 @@ namespace Switch_Backup_Manager
                                 {
                                     using (FileStream fileStream3 = File.OpenRead(cnmt[0]))
                                     {
-                                        byte[] buffer = new byte[32];
+                                        byte[] buffer = new byte[44];
                                         byte[] buffer2 = new byte[56];
                                         CNMT.CNMT_Header[] array7 = new CNMT.CNMT_Header[1];
 
-                                        fileStream3.Read(buffer, 0, 32);
+                                        fileStream3.Read(buffer, 0, 44);
                                         array7[0] = new CNMT.CNMT_Header(buffer);
 
                                         byte[] TitleID = BitConverter.GetBytes(array7[0].TitleID);
@@ -2682,6 +2638,39 @@ namespace Switch_Backup_Manager
                                         else if (array7[0].Type == (byte)CNMT.CNMT_Header.TitleType.ADD_ON_CONTENT)
                                         {
                                             data.ContentType = "AddOnContent";
+                                        }
+
+                                        if (data.ContentType != "AddOnContent")
+                                        {
+                                            long Firmware = array7[0].ExtendedData.RequiredSystemVersion;
+                                            if (Firmware == 0)
+                                            {
+                                                data.Firmware = "0";
+                                            }
+                                            else if (Firmware <= 450)
+                                            {
+                                                data.Firmware = "1.0.0";
+                                            }
+                                            else if (Firmware <= 65796)
+                                            {
+                                                data.Firmware = "2.0.0";
+                                            }
+                                            else if (Firmware <= 131162)
+                                            {
+                                                data.Firmware = "2.1.0";
+                                            }
+                                            else if (Firmware <= 196628)
+                                            {
+                                                data.Firmware = "2.2.0";
+                                            }
+                                            else if (Firmware <= 262164)
+                                            {
+                                                data.Firmware = "2.3.0";
+                                            }
+                                            else
+                                            {
+                                                data.Firmware = ((Firmware >> 26) & 0x3F) + "." + ((Firmware >> 20) & 0x3F) + "." + ((Firmware >> 16) & 0x0F);
+                                            }
                                         }
 
                                         string titleIDBaseGame = data.TitleID;
@@ -3042,6 +3031,11 @@ namespace Switch_Backup_Manager
 
         public static FileData GetFileData(string filepath)
         {
+            if (Path.GetExtension(filepath).ToLower() == ".xcz")
+            {
+                logger.Warning("XCZ format is only partially supported");
+            }
+
             FileData result = new FileData();
             result.ImportedDate = DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss");
             //Basic Info
@@ -3889,7 +3883,7 @@ namespace Switch_Backup_Manager
             {
                 FrmMain.progressCurrentfile = file;
                 FileData data;
-                if (Path.GetExtension(file) == ".xci")
+                if (Array.Exists(new string[] { ".xci", ".xcz" }, x => x == Path.GetExtension(file).ToLower()))
                 {
                     data = GetFileData(file);
                 }
@@ -3902,7 +3896,7 @@ namespace Switch_Backup_Manager
                 {
                     if (!String.IsNullOrEmpty(data.TitleID))
                     {
-                        result.Add(new Tuple<string, string>(data.TitleID, Path.GetExtension(file) == ".xci" ? data.Firmware : data.Version), data);
+                        result.Add(new Tuple<string, string>(data.TitleID, Array.Exists(new string[] { ".xci", ".xcz" }, x => x == Path.GetExtension(file).ToLower()) ? data.Firmware : data.Version), data);
                     }
                 }
                 catch
@@ -3923,12 +3917,7 @@ namespace Switch_Backup_Manager
 
             try
             {
-                foreach (string f in Directory.GetFiles(folder, "*.xci", System.IO.SearchOption.AllDirectories))
-                {
-                    list.Add(f);
-                }
-
-                foreach (string f in Directory.GetFiles(folder, "*.xc0", System.IO.SearchOption.AllDirectories))
+                foreach (string f in Directory.GetFiles(folder, "*.xc*", System.IO.SearchOption.AllDirectories).Where(x => x.ToLower().EndsWith(".xci") || x.ToLower().EndsWith(".xc0") || x.ToLower().EndsWith(".xcz")))
                 {
                     list.Add(f);
                 }
@@ -3947,7 +3936,7 @@ namespace Switch_Backup_Manager
 
             try
             {
-                foreach (string f in Directory.GetFiles(folder, "*.nsp", System.IO.SearchOption.AllDirectories))
+                foreach (string f in Directory.GetFiles(folder, "*.ns*", System.IO.SearchOption.AllDirectories).Where(x => x.ToLower().EndsWith(".nsp") || x.ToLower().EndsWith(".nsz")))
                 {
                     list.Add(f);
                 }

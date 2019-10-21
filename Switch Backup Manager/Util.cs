@@ -1845,7 +1845,7 @@ namespace Switch_Backup_Manager
                 case 9:
                     return "MasterKey8 (8.1.0)";
                 case 10:
-                    return "MasterKey9 (?)";
+                    return "MasterKey9 (9.0.0-9.0.1)";
                 case 11:
                     return "MasterKey10 (?)";
                 case 12:
@@ -2334,62 +2334,6 @@ namespace Switch_Backup_Manager
                         {
                             data.Firmware = "2.3.0";
                         }
-                        else if (Firmware <= 201327002)
-                        {
-                            data.Firmware = "3.0.0";
-                        }
-                        else if (Firmware <= 201392178)
-                        {
-                            data.Firmware = "3.0.1";
-                        }
-                        else if (Firmware <= 201457684)
-                        {
-                            data.Firmware = "3.0.2";
-                        }
-                        else if (Firmware <= 268435656)
-                        {
-                            data.Firmware = "4.0.0";
-                        }
-                        else if (Firmware <= 268501002)
-                        {
-                            data.Firmware = "4.0.1";
-                        }
-                        else if (Firmware <= 269484082)
-                        {
-                            data.Firmware = "4.1.0";
-                        }
-                        else if (Firmware <= 335544750)
-                        {
-                            data.Firmware = "5.0.0";
-                        }
-                        else if (Firmware <= 335609886)
-                        {
-                            data.Firmware = "5.0.1";
-                        }
-                        else if (Firmware <= 335675432)
-                        {
-                            data.Firmware = "5.0.2";
-                        }
-                        else if (Firmware <= 336592976)
-                        {
-                            data.Firmware = "5.1.0";
-                        }
-                        else if (Firmware <= 402653544)
-                        {
-                            data.Firmware = "6.0.0";
-                        }
-                        else if (Firmware <= 402718730)
-                        {
-                            data.Firmware = "6.0.1";
-                        }
-                        else if (Firmware <= 403701850)
-                        {
-                            data.Firmware = "6.1.0";
-                        }
-                        else if (Firmware <= 404750376)
-                        {
-                            data.Firmware = "6.2.0";
-                        }
                         else
                         {
                             data.Firmware = ((Firmware >> 26) & 0x3F) + "." + ((Firmware >> 20) & 0x3F) + "." + ((Firmware >> 16) & 0x0F);
@@ -2660,11 +2604,11 @@ namespace Switch_Backup_Manager
                                 {
                                     using (FileStream fileStream3 = File.OpenRead(cnmt[0]))
                                     {
-                                        byte[] buffer = new byte[32];
+                                        byte[] buffer = new byte[44];
                                         byte[] buffer2 = new byte[56];
                                         CNMT.CNMT_Header[] array7 = new CNMT.CNMT_Header[1];
 
-                                        fileStream3.Read(buffer, 0, 32);
+                                        fileStream3.Read(buffer, 0, 44);
                                         array7[0] = new CNMT.CNMT_Header(buffer);
 
                                         byte[] TitleID = BitConverter.GetBytes(array7[0].TitleID);
@@ -2683,6 +2627,39 @@ namespace Switch_Backup_Manager
                                         else if (array7[0].Type == (byte)CNMT.CNMT_Header.TitleType.ADD_ON_CONTENT)
                                         {
                                             data.ContentType = "AddOnContent";
+                                        }
+
+                                        if (data.ContentType != "AddOnContent")
+                                        {
+                                            long Firmware = array7[0].ExtendedData.RequiredSystemVersion;
+                                            if (Firmware == 0)
+                                            {
+                                                data.Firmware = "0";
+                                            }
+                                            else if (Firmware <= 450)
+                                            {
+                                                data.Firmware = "1.0.0";
+                                            }
+                                            else if (Firmware <= 65796)
+                                            {
+                                                data.Firmware = "2.0.0";
+                                            }
+                                            else if (Firmware <= 131162)
+                                            {
+                                                data.Firmware = "2.1.0";
+                                            }
+                                            else if (Firmware <= 196628)
+                                            {
+                                                data.Firmware = "2.2.0";
+                                            }
+                                            else if (Firmware <= 262164)
+                                            {
+                                                data.Firmware = "2.3.0";
+                                            }
+                                            else
+                                            {
+                                                data.Firmware = ((Firmware >> 26) & 0x3F) + "." + ((Firmware >> 20) & 0x3F) + "." + ((Firmware >> 16) & 0x0F);
+                                            }
                                         }
 
                                         string titleIDBaseGame = data.TitleID;

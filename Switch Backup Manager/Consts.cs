@@ -30,6 +30,8 @@ namespace Switch_Backup_Manager
             { "8.0.0", "91b479d7df0bf1208299ce886af4d924.cnmt.nca" },
             { "8.0.1", "083cc22d83fd121484fb6f5903434b00.cnmt.nca" },
             { "8.1.0", "23930617edcd63e6415ac12d88b3ff69.cnmt.nca" },
+            { "9.0.0", "639f559130a79648aa313ae5cbecce3c.cnmt.nca" },
+            { "9.0.1", "48f6fd812daffc80970314eee2072eb6.cnmt.nca" },
         };
 
         public static Dictionary<string, int> UPDATE_NUMBER_OF_FILES = new Dictionary<string, int>
@@ -59,6 +61,8 @@ namespace Switch_Backup_Manager
             { "8.0.0", 213 },
             { "8.0.1", 213 },
             { "8.1.0", 213 },
+            { "9.0.0", 216 },
+            { "9.0.1", 216 },
         };
 
         public enum NSPSource

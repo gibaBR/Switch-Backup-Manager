@@ -1757,7 +1757,12 @@ namespace Switch_Backup_Manager
 
                     foreach (var title in titles.titles)
                     {
-                        result.Add(Convert.ToString(title.id).Substring(0, 13).ToUpper() + "000", Convert.ToInt32(title.version));
+                        string id = Convert.ToString(title.id).Substring(0, 13).ToUpper() + "000";
+                        result.TryGetValue(id, out int version);
+                        if (title.version > version)
+                        {
+                            result[id] = title.version;
+                        }
                     }
 
                     FrmMain.TitleVersionUpdate = Convert.ToInt32(titles.last_modified);

@@ -933,6 +933,7 @@ namespace Switch_Backup_Manager
                 switch (extension.ToLower())
                 {
                     case ".xci":
+                    case ".xcz":
                         logger.Info("Old name: " + file.FileNameWithExt + ". New name: " + illegalInFileName.Replace(GetRenamingString(file, autoRenamingPattern), ""));
                         try
                         {
@@ -2227,6 +2228,11 @@ namespace Switch_Backup_Manager
 
         public static FileData GetFileDataNSP(string file)
         {
+            if (Path.GetExtension(file).ToLower() == ".nsz")
+            {
+                logger.Warning("NSZ format is only partially supported");
+            }
+
             FileData data = new FileData();
             data.ImportedDate = DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss");
             data.FilePath = file;
@@ -3025,6 +3031,11 @@ namespace Switch_Backup_Manager
 
         public static FileData GetFileData(string filepath)
         {
+            if (Path.GetExtension(filepath).ToLower() == ".xcz")
+            {
+                logger.Warning("XCZ format is only partially supported");
+            }
+
             FileData result = new FileData();
             result.ImportedDate = DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss");
             //Basic Info
@@ -3872,7 +3883,7 @@ namespace Switch_Backup_Manager
             {
                 FrmMain.progressCurrentfile = file;
                 FileData data;
-                if (Path.GetExtension(file) == ".xci")
+                if (Array.Exists(new string[] { ".xci", ".xcz" }, x => x == Path.GetExtension(file).ToLower()))
                 {
                     data = GetFileData(file);
                 }
@@ -3885,7 +3896,7 @@ namespace Switch_Backup_Manager
                 {
                     if (!String.IsNullOrEmpty(data.TitleID))
                     {
-                        result.Add(new Tuple<string, string>(data.TitleID, Path.GetExtension(file) == ".xci" ? data.Firmware : data.Version), data);
+                        result.Add(new Tuple<string, string>(data.TitleID, Array.Exists(new string[] { ".xci", ".xcz" }, x => x == Path.GetExtension(file).ToLower()) ? data.Firmware : data.Version), data);
                     }
                 }
                 catch
@@ -3906,12 +3917,7 @@ namespace Switch_Backup_Manager
 
             try
             {
-                foreach (string f in Directory.GetFiles(folder, "*.xci", System.IO.SearchOption.AllDirectories))
-                {
-                    list.Add(f);
-                }
-
-                foreach (string f in Directory.GetFiles(folder, "*.xc0", System.IO.SearchOption.AllDirectories))
+                foreach (string f in Directory.GetFiles(folder, "*.xc*", System.IO.SearchOption.AllDirectories).Where(x => x.ToLower().EndsWith(".xci") || x.ToLower().EndsWith(".xc0") || x.ToLower().EndsWith(".xcz")))
                 {
                     list.Add(f);
                 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 
 namespace Switch_Backup_Manager
@@ -17,6 +18,17 @@ namespace Switch_Backup_Manager
             public short ContentCount;
             public short MetaCount;
             public byte[] Reserved2;
+
+            [StructLayout(LayoutKind.Explicit)]
+            public struct Extended
+            {
+                [FieldOffset(0)] public long PatchID;
+                [FieldOffset(0)] public long ApplicationID;
+                [FieldOffset(4)] public int RequiredSystemVersion;
+                [FieldOffset(4)] public int RequiredApplicationVersion;
+            }
+
+            public Extended ExtendedData;
 
             public enum TitleType
             {
@@ -40,8 +52,10 @@ namespace Switch_Backup_Manager
                 Reserved1 = Data[13];
                 Offset = BitConverter.ToInt16(data, 14);
                 ContentCount = BitConverter.ToInt16(data, 16);
-                MetaCount = BitConverter.ToInt16(data, 16);
+                MetaCount = BitConverter.ToInt16(data, 18);
                 Reserved2 = Data.Skip(20).Take(12).ToArray();
+                ExtendedData.PatchID = BitConverter.ToInt64(data, 32);
+                ExtendedData.RequiredSystemVersion = BitConverter.ToInt32(data, 40);
             }
         }
 

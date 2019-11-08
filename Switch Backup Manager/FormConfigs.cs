@@ -196,7 +196,7 @@ namespace Switch_Backup_Manager
             this.btnColorEshop.BackColor = Util.HighlightNSPOnScene_color;
             this.btnColorBoth.BackColor = Util.HighlightBothOnScene_color;
 
-            for (int i = 1; i <= 5; i++ )
+            for (int i = 1; i <= 6; i++ )
             {
                 string value = Util.ini.IniReadValue("AutoScan", "Folder_0" + i);
                 if (value.Trim() != "")
@@ -243,7 +243,7 @@ namespace Switch_Backup_Manager
 
         private void btnAddFolderAutoScan_Click(object sender, EventArgs e)
         {
-            if (checkedListBoxAutoScanFolders.Items.Count >= 5)
+            if (checkedListBoxAutoScanFolders.Items.Count >= 6)
             {
                 MessageBox.Show("Too many folders selected!");
                 return;

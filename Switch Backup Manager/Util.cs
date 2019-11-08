@@ -21,7 +21,7 @@ namespace Switch_Backup_Manager
 {
     internal static class Util
     {
-        public const string VERSION = "1.2.3";   //Actual application version
+        public const string VERSION = "1.2.4";   //Actual application version
         public const string MIN_DB_Version = "1.2.1"; //This is the minimum version of the DB that can work
 
         public const string INI_FILE = "sbm.ini";
@@ -459,7 +459,7 @@ namespace Switch_Backup_Manager
         private static List<string> ListDirectoriesToUpdate()
         {
             List<string> list = new List<string>();
-            for (int i = 0; i <= 5; i++)
+            for (int i = 0; i <= 6; i++)
             {
                 string value = ini.IniReadValue("AutoScan", "Folder_0" + (i + 1));
                 if (value.Trim() != "")

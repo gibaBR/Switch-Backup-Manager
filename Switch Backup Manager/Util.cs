@@ -803,6 +803,14 @@ namespace Switch_Backup_Manager
 
             if (file != null)
             {
+                string extension = Path.GetExtension(file.FilePath).ToLower();
+
+                if (extension == ".xcz")
+                {
+                    logger.Warning(".XCZ files are not supposed to be trimmed! Aborting!!");
+                    return result;
+                }
+
                 if (!file.IsTrimmed)
                 {
                     logger.Info("Trimming file "+file.FileNameWithExt+". Old size: "+Convert.ToString(file.ROMSizeBytes)+". New size: "+Convert.ToString(file.UsedSpaceBytes));
@@ -3073,7 +3081,7 @@ namespace Switch_Backup_Manager
                 }
                 result.UsedSpace = $"{num3_fs:0.##} {array_fs[num2_fs]}";
 
-                result.IsTrimmed = (result.UsedSpaceBytes == result.ROMSizeBytes);
+                result.IsTrimmed = Path.GetExtension(filepath).ToLower() == ".xcz" ? true : (result.UsedSpaceBytes == result.ROMSizeBytes);
                 result.CartSize = GetCapacity(XCI.XCI_Headers[0].CardSize1);
 
                 //Load Deep File Info (Probably we should clean it a bit more)

@@ -21,7 +21,7 @@ namespace Switch_Backup_Manager
 {
     internal static class Util
     {
-        public const string VERSION = "1.2.4";   //Actual application version
+        public const string VERSION = "1.2.5";   //Actual application version
         public const string MIN_DB_Version = "1.2.1"; //This is the minimum version of the DB that can work
 
         public const string INI_FILE = "sbm.ini";
@@ -3224,7 +3224,8 @@ namespace Switch_Backup_Manager
                 {
                     fileStream.Position = PFS0Offset + 16 + 24 * PFS0.PFS0_Headers[0].FileCount + array8[n].Name_ptr;
                     int num4;
-                    while ((num4 = fileStream.ReadByte()) != 0 && num4 != 0)
+                    //while ((num4 = fileStream.ReadByte()) != 0 && num4 != 0)
+                    while((num4 = fileStream.ReadByte()) > 0 && num4 > 0)
                     {
                         chars.Add((char)num4);
                     }

@@ -3293,11 +3293,11 @@ namespace Switch_Backup_Manager
                                 {
                                     using (FileStream fileStream3 = File.OpenRead(cnmt[0]))
                                     {
-                                        byte[] buffer = new byte[44];
+                                        byte[] buffer = new byte[32];
                                         byte[] buffer2 = new byte[56];
                                         CNMT.CNMT_Header[] array7 = new CNMT.CNMT_Header[1];
 
-                                        fileStream3.Read(buffer, 0, 44);
+                                        fileStream3.Read(buffer, 0, 32);
                                         array7[0] = new CNMT.CNMT_Header(buffer);
 
                                         if (array7[0].TitleVersion > version)

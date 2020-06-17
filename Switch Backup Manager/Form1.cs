@@ -4327,6 +4327,7 @@ namespace Switch_Backup_Manager
             toolStripProgressAddingFiles.Visible = false;
             toolStripStatusLabelGame.Text = "";
             toolStripStatusLabelGame.Visible = false;
+            menuLocalFiles.Enabled = true;
 
             MessageBox.Show("Done");
         }

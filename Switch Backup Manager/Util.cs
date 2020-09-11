@@ -2328,7 +2328,21 @@ namespace Switch_Backup_Manager
 
                         //0100000000000816,ALL,v65796 v131162 v196628 v262164 v201327002 v201392178 v201457684 v268435656 v268501002 v269484082 v335544750 v335609886 v335675432 v336592976 v402653544 v402718730 v403701850 v404750376,2.0.0 2.1.0 2.2.0 2.3.0 3.0.0 3.0.1 3.0.2 4.0.0 4.0.1 4.1.0 5.0.0 5.0.1 5.0.2 5.1.0 6.0.0 6.0.1 6.1.0 6.2.0
                         data.Firmware = "";
-                        long Firmware = Convert.ToInt64(xml.Element("ContentMeta").Element("RequiredSystemVersion").Value) % 0x100000000;
+                        long Firmware = 0;
+                        try
+                        {
+                            Firmware = Convert.ToInt64(xml.Element("ContentMeta").Element("RequiredSystemVersion").Value) % 0x100000000;
+                        }
+                        catch (NullReferenceException)
+                        {
+                            try
+                            {
+                                Firmware = Convert.ToInt64(xml.Element("ContentMeta").Element("RequiredDownloadSystemVersion").Value) % 0x100000000;
+                            }
+                            catch (NullReferenceException)
+                            {
+                            }
+                        }
                         if (Firmware == 0)
                         {
                             data.Firmware = "0";
